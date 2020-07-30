@@ -1,8 +1,7 @@
 name: flutter_fast_forms
 description: A Flutter package for implemeting lightning-fast forms
 version: 0.0.1
-author:
-homepage:
+repository: https://github.com/udos86/flutter-fast-forms
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
