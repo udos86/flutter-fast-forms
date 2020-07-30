@@ -1,6 +1,6 @@
-# example
+# Flutter Fast Forms Example
 
-A new Flutter project.
+A Flutter example project showing the usage of Flutter Fast Forms
 
 ## Getting Started
 

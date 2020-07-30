@@ -1,6 +1,6 @@
 # Flutter Fast Forms
 
-A Flutter package for implementing lightning-fast forms
+Flutter Fast Forms is a library for building forms in Flutter with a efficient model-based approach
 
 ## Getting Started
 
