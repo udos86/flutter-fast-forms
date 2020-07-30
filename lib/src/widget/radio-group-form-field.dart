@@ -28,9 +28,8 @@ class RadioGroupFormField<T> extends FormField<T> {
               final InputDecoration effectiveDecoration = decoration
                   .applyDefaults(Theme.of(field.context).inputDecorationTheme);
               return InputDecorator(
-                decoration: effectiveDecoration.copyWith(
-                  errorText: field.errorText,
-                ),
+                decoration:
+                    effectiveDecoration.copyWith(errorText: field.errorText),
                 child: orientation == RadioGroupOrientation.vertical
                     ? Column(
                         children: _buildOptions<T>(options, field),

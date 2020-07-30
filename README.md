@@ -3,7 +3,7 @@
 ![CI](https://github.com/udos86/flutter-fast-forms/workflows/CI/badge.svg)
 ![Pub Version](https://img.shields.io/pub/v/flutter_fast_forms)
 
-Flutter Fast Forms is a library for building forms in Flutter with a efficient model-based approach
+Flutter Fast Forms is a library for building model-driven forms in Flutter
 
 ## Getting Started
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'form_builder.dart';
 import 'form_model.dart';
-import 'model/form_field_group_model.dart';
+import 'model/form_field_model_group.dart';
 import 'model/form_field_model.dart';
 
 class FormFieldState {
@@ -38,7 +38,7 @@ class FormContainer extends StatefulWidget {
 
   final InputDecorationBuilder decorationBuilder;
   final GlobalKey<FormState> formKey;
-  final List<FormFieldGroup> formModel;
+  final List<FormFieldModelGroup> formModel;
 
   @override
   State<StatefulWidget> createState() => FormContainerState();
@@ -156,7 +156,7 @@ class FormContainerState extends State<FormContainer> {
     return widget.decorationBuilder(context, model);
   }
 
-  Widget _buildFormFieldGroup(BuildContext context, FormFieldGroup group) {
+  Widget _buildFormFieldGroup(BuildContext context, FormFieldModelGroup group) {
     return Column(
       children: <Widget>[
         if (group.title != null)

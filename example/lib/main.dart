@@ -3,6 +3,49 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import 'custom_form_field.dart';
 
+final formModel = [
+  FormFieldModelGroup(
+    title: 'Form Group 1',
+    fields: [
+      TextFormFieldModel(
+        id: 42,
+        label: 'Sample Text Field',
+        hint: 'MM/JJJJ',
+        validator: Validators.compose([
+          Validators.required(),
+          Validators.minLength(6),
+        ]),
+        keyboardType: TextInputType.datetime,
+        inputFormatters: [
+          InputFormatters.maskText('##/####'),
+        ],
+      ),
+      DropdownFormFieldModel(
+        id: 23,
+        label: 'Sample Dropdown Field',
+        items: [
+          'Norway',
+          'Sweden',
+          'Finland',
+          'Denmark',
+          'Iceland',
+        ],
+        initialValue: 'Finland',
+        validator: Validators.required(),
+      ),
+      FormFieldModel<dynamic>(
+        id: 47,
+        label: 'Sample Custom Form Field',
+        builder: (context, form, model) {
+          return CustomFormField(
+            decoration: FormBuilder.buildInputDecoration(context, model),
+          );
+        },
+      ),
+    ],
+  )
+];
+
 void main() {
   runApp(App());
 }
@@ -41,49 +84,7 @@ class _FormPageState extends State<FormPage> {
         padding: EdgeInsets.all(8.0),
         child: FormContainer(
           formKey: GlobalKey<FormState>(),
-          formModel: [
-            FormFieldGroup(
-              title: 'Form Group 1',
-              fields: [
-                TextFormFieldModel(
-                  id: 42,
-                  label: 'TextField',
-                  hint: 'MM/JJJJ',
-                  validator: Validators.compose([
-                    Validators.required(),
-                    Validators.minLength(6),
-                  ]),
-                  keyboardType: TextInputType.datetime,
-                  inputFormatters: [
-                    InputFormatters.maskText('##/####'),
-                  ],
-                ),
-                DropdownFormFieldModel(
-                  id: 23,
-                  label: 'Dropdown',
-                  items: [
-                    'Norway',
-                    'Sweden',
-                    'Finland',
-                    'Denmark',
-                    'Iceland',
-                  ],
-                  initialValue: 'Finland',
-                  validator: Validators.required(),
-                ),
-                FormFieldModel<dynamic>(
-                  id: 47,
-                  label: 'Custom Form Field',
-                  builder: (context, form, model) {
-                    return CustomFormField(
-                      decoration:
-                          FormBuilder.buildInputDecoration(context, model),
-                    );
-                  },
-                ),
-              ],
-            )
-          ],
+          formModel: formModel,
         ),
       ),
     );
