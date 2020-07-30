@@ -33,7 +33,7 @@ final formModel = [
         initialValue: 'Finland',
         validator: Validators.required(),
       ),
-      FormFieldModel<dynamic>(
+      FormFieldModel<CustomFormFieldValue>(
         id: 47,
         label: 'Sample Custom Form Field',
         builder: (context, form, model) {
@@ -74,6 +74,8 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +85,7 @@ class _FormPageState extends State<FormPage> {
       body: Container(
         padding: EdgeInsets.all(8.0),
         child: FormContainer(
-          formKey: GlobalKey<FormState>(),
+          formKey: formKey,
           formModel: formModel,
         ),
       ),
