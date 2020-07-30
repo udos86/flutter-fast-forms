@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'form_field_model.dart';
 
-import '../form_builder.dart';
-
 @immutable
 class TextFormFieldModel extends FormFieldModel<String> {
   TextFormFieldModel({

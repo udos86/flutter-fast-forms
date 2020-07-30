@@ -17,8 +17,8 @@ class CheckboxFormField extends FormField<bool> {
             initialValue: value ?? false,
             validator: validator,
             builder: (field) {
-              final InputDecoration effectiveDecoration =
-                  decoration.applyDefaults(Theme.of(field.context).inputDecorationTheme);
+              final InputDecoration effectiveDecoration = decoration
+                  .applyDefaults(Theme.of(field.context).inputDecorationTheme);
               return InputDecorator(
                 decoration: effectiveDecoration.copyWith(
                   errorText: field.errorText,
