@@ -54,7 +54,7 @@ class FormContainerState extends State<FormContainer> {
     super.initState();
     FormModel.flatten(widget.formModel).forEach((model) {
       _fields[model.id] = FormFieldState(
-        value: model.value ?? model.initialValue,
+        value: model.value,
       );
     });
   }

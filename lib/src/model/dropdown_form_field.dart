@@ -8,6 +8,7 @@ import '../form_builder.dart';
 class DropdownFormFieldModel extends FormFieldModel<String> {
   DropdownFormFieldModel({
     builder,
+    decoration,
     helper,
     hint,
     id,
@@ -19,7 +20,8 @@ class DropdownFormFieldModel extends FormFieldModel<String> {
           builder: builder ??
               (context, form, model) {
                 return DropdownButtonFormField(
-                  decoration: form.buildInputDecoration(context, model),
+                  decoration:
+                      decoration ?? form.buildInputDecoration(context, model),
                   autovalidate: form.autovalidate(id),
                   items: FormBuilder.buildDropdownMenuItems(items),
                   value: form.getFieldValue(id),

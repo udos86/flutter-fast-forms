@@ -7,6 +7,12 @@ final formModel = [
   FormFieldModelGroup(
     title: 'Form Group 1',
     fields: [
+      DateTimeFormFieldModel(
+        id: 97,
+        label: 'Sample Date Time Field',
+        firstDate: DateTime(1997),
+        lastDate: DateTime(2021),
+      ),
       TextFormFieldModel(
         id: 42,
         label: 'Sample Text Field',
@@ -100,11 +106,13 @@ class _FormPageState extends State<FormPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        padding: EdgeInsets.all(8.0),
-        child: FormContainer(
-          formKey: formKey,
-          formModel: formModel,
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(12.0),
+          child: FormContainer(
+            formKey: formKey,
+            formModel: formModel,
+          ),
         ),
       ),
     );

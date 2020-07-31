@@ -7,6 +7,7 @@ import 'form_field_model.dart';
 class TextFormFieldModel extends FormFieldModel<String> {
   TextFormFieldModel({
     builder,
+    decoration,
     helper,
     hint,
     id,
@@ -20,7 +21,8 @@ class TextFormFieldModel extends FormFieldModel<String> {
           builder: builder ??
               (context, form, model) {
                 return TextFormField(
-                  decoration: form.buildInputDecoration(context, model),
+                  decoration:
+                      decoration ?? form.buildInputDecoration(context, model),
                   autovalidate: form.autovalidate(id),
                   keyboardType: keyboardType ?? TextInputType.text,
                   inputFormatters: [...inputFormatters],

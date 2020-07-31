@@ -1,3 +1,4 @@
+export 'src/model/date_time_form_field.dart';
 export 'src/model/dropdown_form_field.dart';
 export 'src/model/form_field_model_group.dart';
 export 'src/model/form_field_model.dart';
@@ -5,6 +6,7 @@ export 'src/model/radio_group_form_field_model.dart';
 export 'src/model/text_form_field_model.dart';
 
 export 'src/widget/checkbox-form-field.dart';
+export 'src/widget/datetime-form-field.dart';
 export 'src/widget/radio-group-form-field.dart';
 export 'src/widget/slider-form-field.dart';
 

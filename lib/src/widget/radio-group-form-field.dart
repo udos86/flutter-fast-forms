@@ -17,7 +17,6 @@ class RadioGroupFormField<T> extends FormField<T> {
     InputDecoration decoration = const InputDecoration(),
     FormFieldSetter<T> onSaved,
     FormFieldValidator<T> validator,
-    Widget hint,
   })  : assert(decoration != null),
         super(
           key: key,

@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  intl: ^0.16.1
   mask_text_input_formatter: ^1.0.7
 
 dev_dependencies:

@@ -1,41 +1,30 @@
 import 'package:flutter/material.dart';
 
-import '../widget/radio-group-form-field.dart';
+import '../widget/datetime-form-field.dart';
 
 import 'form_field_model.dart';
 
 @immutable
-class FormFieldOption<T> {
-  FormFieldOption({
-    @required this.title,
-    @required this.value,
-  });
-
-  final T value;
-  final String title;
-}
-
-@immutable
-class RadioGroupModel extends FormFieldModel<String> {
-  RadioGroupModel({
+class DateTimeFormFieldModel extends FormFieldModel<DateTime> {
+  DateTimeFormFieldModel({
     builder,
     decoration,
     helper,
     hint,
     id,
-    String initialValue,
+    DateTime initialValue,
     label,
     validator,
-    this.options,
-    this.orientation,
+    @required this.firstDate,
+    @required this.lastDate,
   }) : super(
           builder: builder ??
               (context, form, model) {
-                return RadioGroupFormField(
+                return DateTimeFormField(
                   decoration:
                       decoration ?? form.buildInputDecoration(context, model),
-                  options: options,
-                  orientation: orientation,
+                  firstDate: firstDate,
+                  lastDate: lastDate,
                   value: form.getFieldValue(id),
                   validator: validator,
                   onChanged: (value) => form.save(id, value),
@@ -49,6 +38,6 @@ class RadioGroupModel extends FormFieldModel<String> {
           validator: validator,
         );
 
-  final List<FormFieldOption<String>> options;
-  final RadioGroupOrientation orientation;
+  final DateTime firstDate;
+  final DateTime lastDate;
 }

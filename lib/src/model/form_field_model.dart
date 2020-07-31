@@ -9,21 +9,25 @@ typedef FormFieldModelBuilder<T> = Widget Function(
 class FormFieldModel<T> {
   const FormFieldModel({
     @required this.builder,
+    this.decoration,
     this.helper,
     this.hint,
     @required this.id,
     this.initialValue,
     this.label,
+    this.savedValue,
     this.validator,
-    this.value,
   });
 
   final FormFieldModelBuilder builder;
+  final InputDecoration decoration;
   final String helper;
   final String hint;
   final int id;
   final T initialValue;
   final String label;
+  final T savedValue;
   final FormFieldValidator validator;
-  final T value;
+
+  T get value => savedValue ?? initialValue;
 }
