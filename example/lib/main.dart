@@ -33,6 +33,24 @@ final formModel = [
         initialValue: 'Finland',
         validator: Validators.required(),
       ),
+      RadioGroupModel(
+        id: 7,
+        label: 'Sample Radio Group Model',
+        options: [
+          FormFieldOption(
+            title: 'Option 1',
+            value: 'option-1',
+          ),
+          FormFieldOption(
+            title: 'Option 2',
+            value: 'option-2',
+          ),
+          FormFieldOption(
+            title: 'Option 3',
+            value: 'option-3',
+          )
+        ],
+      ),
       FormFieldModel<CustomFormFieldValue>(
         id: 47,
         label: 'Sample Custom Form Field',

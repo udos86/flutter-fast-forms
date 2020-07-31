@@ -20,26 +20,27 @@ class RadioGroupFormField<T> extends FormField<T> {
     Widget hint,
   })  : assert(decoration != null),
         super(
-            key: key,
-            onSaved: onSaved,
-            initialValue: value ?? options[0].value,
-            validator: validator,
-            builder: (field) {
-              final InputDecoration effectiveDecoration = decoration
-                  .applyDefaults(Theme.of(field.context).inputDecorationTheme);
-              return InputDecorator(
-                decoration:
-                    effectiveDecoration.copyWith(errorText: field.errorText),
-                child: orientation == RadioGroupOrientation.vertical
-                    ? Column(
-                        children: _buildOptions<T>(options, field),
-                      )
-                    : Row(
-                        children: _buildOptions<T>(
-                            options, field, RadioGroupOrientation.horizontal),
-                      ),
-              );
-            });
+          key: key,
+          onSaved: onSaved,
+          initialValue: value ?? options[0].value,
+          validator: validator,
+          builder: (field) {
+            final InputDecoration effectiveDecoration = decoration
+                .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+            return InputDecorator(
+              decoration:
+                  effectiveDecoration.copyWith(errorText: field.errorText),
+              child: orientation == RadioGroupOrientation.horizontal
+                  ? Row(
+                      children: _buildOptions<T>(
+                          options, field, RadioGroupOrientation.horizontal),
+                    )
+                  : Column(
+                      children: _buildOptions<T>(options, field),
+                    ),
+            );
+          },
+        );
 
   final ValueChanged<T> onChanged;
 
@@ -47,10 +48,8 @@ class RadioGroupFormField<T> extends FormField<T> {
   FormFieldState<T> createState() => _RadioGroupFormFieldState<T>();
 
   static List<Widget> _buildOptions<T>(
-    List<FormFieldOption<T>> options,
-    FormFieldState<T> field, [
-    RadioGroupOrientation orientation = RadioGroupOrientation.vertical,
-  ]) {
+      List<FormFieldOption<T>> options, FormFieldState<T> field,
+      [RadioGroupOrientation orientation = RadioGroupOrientation.vertical]) {
     return options.map((option) {
       final tile = RadioListTile<T>(
         title: Text(option.title),
