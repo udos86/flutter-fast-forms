@@ -16,6 +16,8 @@ class DateTimeFormFieldModel extends FormFieldModel<DateTime> {
     label,
     validator,
     @required this.firstDate,
+    this.initialDatePickerMode,
+    this.initialEntryMode,
     @required this.lastDate,
   }) : super(
           builder: builder ??
@@ -39,5 +41,7 @@ class DateTimeFormFieldModel extends FormFieldModel<DateTime> {
         );
 
   final DateTime firstDate;
+  final DatePickerMode initialDatePickerMode;
+  final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
 }

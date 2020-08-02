@@ -7,6 +7,8 @@ class DateTimeFormField extends FormField<DateTime> {
     DateTime firstDate,
     DateFormat format,
     Widget hint,
+    DatePickerMode initialDatePickerMode = DatePickerMode.day,
+    DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
     Key key,
     String label,
     DateTime lastDate,
@@ -14,46 +16,54 @@ class DateTimeFormField extends FormField<DateTime> {
     FormFieldValidator validator,
     DateTime value,
     this.onChanged,
-  })  : assert(decoration != null),
+  })
+      : assert(decoration != null),
         this.dateFormat = format ?? DateFormat.yMMMd(),
         super(
-            key: key,
-            onSaved: onSaved,
-            initialValue: value,
-            validator: validator,
-            builder: (_field) {
-              final field = _field as _DateTimeFormFieldState;
-              final InputDecoration effectiveDecoration = decoration
-                  .applyDefaults(Theme.of(field.context).inputDecorationTheme);
-              return InputDecorator(
-                decoration: effectiveDecoration.copyWith(
-                  errorText: field.errorText,
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextField(
-                        readOnly: true,
-                        controller: field.controller,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.date_range),
-                            onPressed: () {
-                              showDatePicker(
-                                context: field.context,
-                                initialDate: field.value ?? DateTime.now(),
-                                firstDate: firstDate,
-                                lastDate: lastDate,
-                              ).then((value) => field.didChange(value));
-                            },
-                          ),
-                        ),
+          key: key,
+          onSaved: onSaved,
+          initialValue: value,
+          validator: validator,
+          builder: (_field) {
+            final field = _field as _DateTimeFormFieldState;
+            final InputDecoration effectiveDecoration = decoration
+                .applyDefaults(Theme
+                .of(field.context)
+                .inputDecorationTheme);
+            return InputDecorator(
+              decoration: effectiveDecoration.copyWith(
+                errorText: field.errorText,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: field.controller,
+                      decoration: InputDecoration(
                       ),
+                      textAlign: TextAlign.right,
                     ),
-                  ],
-                ),
-              );
-            });
+                  ),
+                  IconButton(
+                    alignment: Alignment.centerRight,
+                    icon: Icon(Icons.date_range),
+                    onPressed: () {
+                      showDatePicker(
+                        context: field.context,
+                        initialDatePickerMode: initialDatePickerMode,
+                        initialEntryMode: initialEntryMode,
+                        initialDate: field.value ?? DateTime.now(),
+                        firstDate: firstDate,
+                        lastDate: lastDate,
+                      ).then((value) => field.didChange(value));
+                    },
+                  ),
+                ],
+              ),
+            );
+          });
 
   final DateFormat dateFormat;
   final ValueChanged onChanged;
@@ -68,7 +78,7 @@ class _DateTimeFormFieldState extends FormFieldState<DateTime> {
   @override
   void initState() {
     super.initState();
-    controller.text = value != null ? widget.dateFormat.format(value) : null;
+    controller.text = _formatValue(value);
   }
 
   @override
@@ -83,7 +93,11 @@ class _DateTimeFormFieldState extends FormFieldState<DateTime> {
   @override
   void didChange(DateTime value) {
     super.didChange(value);
-    controller.text = widget.dateFormat.format(value);
+    controller.text = _formatValue(value);
     if (widget.onChanged != null) widget.onChanged(value);
+  }
+
+  String _formatValue(DateTime value) {
+    return value != null ? widget.dateFormat.format(value) : null;
   }
 }

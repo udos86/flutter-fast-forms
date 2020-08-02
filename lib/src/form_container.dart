@@ -32,6 +32,7 @@ class FormContainer extends StatefulWidget {
     @required this.formKey,
     @required this.formModel,
     Key key,
+    this.padding = const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
   })  : this.decorationBuilder =
             decorationBuilder ?? FormBuilder.buildInputDecoration,
         super(key: key);
@@ -39,6 +40,7 @@ class FormContainer extends StatefulWidget {
   final InputDecorationBuilder decorationBuilder;
   final GlobalKey<FormState> formKey;
   final List<FormFieldModelGroup> formModel;
+  final EdgeInsets padding;
 
   @override
   State<StatefulWidget> createState() => FormContainerState();
@@ -68,7 +70,14 @@ class FormContainerState extends State<FormContainer> {
           child: Column(
             children: [
               for (final group in widget.formModel)
-                _buildFormFieldGroup(context, group),
+                Column(
+                  children: <Widget>[
+                    if (group.title != null) _buildFormFieldGroupTitle(group),
+                    group.orientation == FormFieldModelGroupOrientation.vertical
+                        ? _buildVerticalFormFieldGroup(context, group)
+                        : _buildHorizontalFormFieldGroup(context, group)
+                  ],
+                ),
             ],
           ),
         ),
@@ -156,23 +165,42 @@ class FormContainerState extends State<FormContainer> {
     return widget.decorationBuilder(context, model);
   }
 
-  Widget _buildFormFieldGroup(BuildContext context, FormFieldModelGroup group) {
+  Widget _buildVerticalFormFieldGroup(
+      BuildContext context, FormFieldModelGroup group) {
     return Column(
       children: <Widget>[
-        if (group.title != null)
-          Text(
-            group.title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         for (final model in group.fields)
           Container(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+            padding: widget.padding,
             child: model.builder(context, this, model),
           ),
       ],
+    );
+  }
+
+  Widget _buildHorizontalFormFieldGroup(
+      BuildContext context, FormFieldModelGroup group) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        for (final model in group.fields)
+          Expanded(
+            child: Container(
+              padding: widget.padding,
+              child: model.builder(context, this, model),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildFormFieldGroupTitle(FormFieldModelGroup group) {
+    return Text(
+      group.title,
+      style: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+      ),
     );
   }
 
