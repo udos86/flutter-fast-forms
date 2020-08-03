@@ -13,7 +13,7 @@ class CustomFormFieldValue {
 }
 
 @immutable
-class CustomFormFieldModel extends FormFieldModel<CustomFormFieldValue> {
+class CustomFormFieldModel extends FastFormField<CustomFormFieldValue> {
   CustomFormFieldModel({
     builder,
     id,
@@ -22,7 +22,7 @@ class CustomFormFieldModel extends FormFieldModel<CustomFormFieldValue> {
 
   @override
   State<StatefulWidget> createState() =>
-      FormFieldModelState<CustomFormFieldValue>();
+      FastFormFieldState<CustomFormFieldValue>();
 }
 
 class CustomFormField extends FormField<CustomFormFieldValue> {

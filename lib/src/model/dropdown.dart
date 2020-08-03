@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../form_container.dart';
-import 'form_field_model.dart';
+import 'form_field.dart';
 
 import '../form_style.dart';
 
 @immutable
-class DropdownModel extends FormFieldModel<String> {
-  DropdownModel({
+class FastDropdown extends FastFormField<String> {
+  FastDropdown({
     builder,
     decoration,
     helper,
@@ -54,5 +54,5 @@ class DropdownModel extends FormFieldModel<String> {
   }
 
   @override
-  State<StatefulWidget> createState() => FormFieldModelState<String>();
+  State<StatefulWidget> createState() => FastFormFieldState<String>();
 }

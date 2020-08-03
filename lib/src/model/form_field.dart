@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 typedef FormFieldWidgetBuilder<T> = Widget Function(
-    BuildContext context, FormFieldModelState state);
+    BuildContext context, FastFormFieldState state);
 
 @immutable
-abstract class FormFieldModel<T> extends StatefulWidget {
-  const FormFieldModel({
+abstract class FastFormField<T> extends StatefulWidget {
+  const FastFormField({
     @required this.builder,
     this.decoration,
     this.helper,
@@ -30,7 +30,7 @@ abstract class FormFieldModel<T> extends StatefulWidget {
   T get value => savedValue ?? initialValue;
 }
 
-class FormFieldModelState<T> extends State<FormFieldModel> {
+class FastFormFieldState<T> extends State<FastFormField> {
   T value;
 
   @override

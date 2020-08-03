@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 typedef InputDecorationCreator = InputDecoration Function(
-    BuildContext context, FormFieldModel model);
+    BuildContext context, FastFormField model);
 
 final InputDecorationCreator defaultInputDecorationCreator =
-    (BuildContext context, FormFieldModel model) {
+    (BuildContext context, FastFormField model) {
   return InputDecoration(
     labelText: model.label,
     helperText: model.helper,

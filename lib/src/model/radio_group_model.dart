@@ -5,7 +5,7 @@ import '../form_style.dart';
 import '../form_container.dart';
 import '../widget/radio-group-form-field.dart';
 
-import 'form_field_model.dart';
+import 'form_field.dart';
 
 @immutable
 class RadioOption<T> {
@@ -19,8 +19,8 @@ class RadioOption<T> {
 }
 
 @immutable
-class RadioGroupModel extends FormFieldModel<String> {
-  RadioGroupModel({
+class FastRadioGroup extends FastFormField<String> {
+  FastRadioGroup({
     builder,
     decoration,
     helper,
@@ -59,5 +59,5 @@ class RadioGroupModel extends FormFieldModel<String> {
   final RadioGroupOrientation orientation;
 
   @override
-  State<StatefulWidget> createState() => FormFieldModelState<String>();
+  State<StatefulWidget> createState() => FastFormFieldState<String>();
 }

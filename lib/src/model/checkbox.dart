@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import '../form_style.dart';
 import '../widget/checkbox-form-field.dart';
 
-import 'form_field_model.dart';
+import 'form_field.dart';
 
 @immutable
-class CheckboxModel extends FormFieldModel<bool> {
-  CheckboxModel({
+class FastCheckbox extends FastFormField<bool> {
+  FastCheckbox({
     builder,
     decoration,
     helper,
@@ -46,5 +46,5 @@ class CheckboxModel extends FormFieldModel<bool> {
   final String title;
 
   @override
-  State<StatefulWidget> createState() => FormFieldModelState<bool>();
+  State<StatefulWidget> createState() => FastFormFieldState<bool>();
 }

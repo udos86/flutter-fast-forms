@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
 
-import 'model/form_field_model_group.dart';
+import 'model/form_field_group.dart';
 
 class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
   final Map<int, dynamic> fields = {};

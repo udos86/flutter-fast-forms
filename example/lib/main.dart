@@ -16,7 +16,9 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FormPage(title: 'Flutter Fast Forms Demo Page'),
+      home: FormPage(
+        title: 'Flutter Fast Forms Demo',
+      ),
     );
   }
 }
@@ -47,13 +49,13 @@ class _FormPageState extends State<FormPage> {
       body: SingleChildScrollView(
         child: FastForm(
           formKey: formKey,
-          formModel: buildFormFields(context),
+          formModel: buildFormModel(context),
         ),
       ),
     );
   }
 
-  List<FormFieldModelGroup> buildFormFields(BuildContext context) {
+  List<FormFieldModelGroup> buildFormModel(BuildContext context) {
     return <FormFieldModelGroup>[
       FormFieldModelGroup(
         title: Text(
@@ -65,13 +67,13 @@ class _FormPageState extends State<FormPage> {
         ),
         orientation: FormFieldModelGroupOrientation.horizontal,
         fields: [
-          DateTimeModel(
+          FastDateTime(
             id: 97,
             label: 'Arrival',
             firstDate: DateTime(1997),
             lastDate: DateTime(2021),
           ),
-          DateTimeModel(
+          FastDateTime(
             id: 99,
             label: 'Departure',
             firstDate: DateTime(1997),
@@ -88,7 +90,7 @@ class _FormPageState extends State<FormPage> {
           ),
         ),
         fields: [
-          TextFieldModel(
+          FastTextField(
             id: 42,
             label: 'Text Field',
             hint: 'MM/JJJJ',
@@ -101,7 +103,7 @@ class _FormPageState extends State<FormPage> {
               InputFormatters.maskText('##/####'),
             ],
           ),
-          DropdownModel(
+          FastDropdown(
             id: 23,
             label: 'Dropdown Field',
             items: [
@@ -114,7 +116,7 @@ class _FormPageState extends State<FormPage> {
             initialValue: 'Finland',
             validator: Validators.required(),
           ),
-          RadioGroupModel(
+          FastRadioGroup(
             id: 7,
             label: 'Radio Group Model',
             options: [
@@ -136,16 +138,16 @@ class _FormPageState extends State<FormPage> {
             id: 47,
             label: 'Custom Form Field',
             builder: (context, state) {
-              final styler = FormStyle.of(context);
+              final style = FormStyle.of(context);
               return CustomFormField(
-                decoration: styler.createInputDecoration(context, state.widget),
+                decoration: style.createInputDecoration(context, state.widget),
               );
             },
           ),
-          CheckboxModel(
+          FastCheckbox(
             id: 999,
             title: 'I accept',
-          )
+          ),
         ],
       ),
     ];

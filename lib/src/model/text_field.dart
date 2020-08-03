@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../form_style.dart';
 import '../form_container.dart';
-import 'form_field_model.dart';
+import 'form_field.dart';
 
 @immutable
-class TextFieldModel extends FormFieldModel<String> {
-  TextFieldModel({
+class FastTextField extends FastFormField<String> {
+  FastTextField({
     builder,
     decoration,
     helper,
@@ -55,7 +55,7 @@ class TextFieldModel extends FormFieldModel<String> {
   State<StatefulWidget> createState() => TextFieldModelState();
 }
 
-class TextFieldModelState extends FormFieldModelState<String> {
+class TextFieldModelState extends FastFormFieldState<String> {
   bool focused = false;
   bool touched = false;
 

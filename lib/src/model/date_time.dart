@@ -5,11 +5,11 @@ import '../form_style.dart';
 import '../form_container.dart';
 import '../widget/date-time-form-field.dart';
 
-import 'form_field_model.dart';
+import 'form_field.dart';
 
 @immutable
-class DateTimeModel extends FormFieldModel<DateTime> {
-  DateTimeModel({
+class FastDateTime extends FastFormField<DateTime> {
+  FastDateTime({
     builder,
     decoration,
     helper,
@@ -52,5 +52,5 @@ class DateTimeModel extends FormFieldModel<DateTime> {
   final DateTime lastDate;
 
   @override
-  State<StatefulWidget> createState() => FormFieldModelState<DateTime>();
+  State<StatefulWidget> createState() => FastFormFieldState<DateTime>();
 }

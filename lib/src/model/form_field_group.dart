@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form_style.dart';
 
-import 'form_field_model.dart';
+import 'form_field.dart';
 
 enum FormFieldModelGroupOrientation {
   horizontal,
@@ -18,7 +18,7 @@ class FormFieldModelGroup extends StatelessWidget {
     this.title,
   });
 
-  final List<FormFieldModel> fields;
+  final List<FastFormField> fields;
   final FormFieldModelGroupOrientation orientation;
   final EdgeInsets padding;
   final Widget title;
