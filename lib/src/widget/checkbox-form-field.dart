@@ -4,10 +4,10 @@ class CheckboxFormField extends FormField<bool> {
   CheckboxFormField({
     Key key,
     bool value,
-    String label,
     this.onChanged,
     InputDecoration decoration = const InputDecoration(),
     FormFieldSetter onSaved,
+    String title,
     FormFieldValidator validator,
     Widget hint,
   })  : assert(decoration != null),
@@ -23,20 +23,17 @@ class CheckboxFormField extends FormField<bool> {
                 decoration: effectiveDecoration.copyWith(
                   errorText: field.errorText,
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Checkbox(
-                      value: field.value,
-                      onChanged: field.didChange,
+                child: CheckboxListTile(
+                  selected: field.value,
+                  value: field.value,
+                  onChanged: field.didChange,
+                  title: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: field.value ? Colors.black : Colors.grey,
                     ),
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: field.value ? Colors.black : Colors.grey,
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               );
             });

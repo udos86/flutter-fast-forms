@@ -130,7 +130,6 @@ class FormContainerState extends State<FormContainer> {
 
   void save(fieldId, value) {
     _fields[fieldId].value = value;
-    print(_fields.toString());
   }
 
   void reset() {

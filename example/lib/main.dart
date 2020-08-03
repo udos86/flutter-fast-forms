@@ -8,13 +8,13 @@ final FormModelGetter createFormModel = (BuildContext context) => [
         title: 'Form Group 1',
         orientation: FormFieldModelGroupOrientation.horizontal,
         fields: [
-          DateTimeFormFieldModel(
+          DateTimeModel(
             id: 97,
             label: 'Arrival',
             firstDate: DateTime(1997),
             lastDate: DateTime(2021),
           ),
-          DateTimeFormFieldModel(
+          DateTimeModel(
             id: 99,
             label: 'Departure',
             firstDate: DateTime(1997),
@@ -25,7 +25,7 @@ final FormModelGetter createFormModel = (BuildContext context) => [
       FormFieldModelGroup(
         title: 'Form Group 2',
         fields: [
-          TextFormFieldModel(
+          TextFieldModel(
             id: 42,
             label: 'Sample Text Field',
             hint: 'MM/JJJJ',
@@ -38,7 +38,7 @@ final FormModelGetter createFormModel = (BuildContext context) => [
               InputFormatters.maskText('##/####'),
             ],
           ),
-          DropdownFormFieldModel(
+          DropdownModel(
             id: 23,
             label: 'Sample Dropdown Field',
             items: [
@@ -55,15 +55,15 @@ final FormModelGetter createFormModel = (BuildContext context) => [
             id: 7,
             label: 'Sample Radio Group Model',
             options: [
-              FormFieldOption(
+              RadioOption(
                 title: 'Option 1',
                 value: 'option-1',
               ),
-              FormFieldOption(
+              RadioOption(
                 title: 'Option 2',
                 value: 'option-2',
               ),
-              FormFieldOption(
+              RadioOption(
                 title: 'Option 3',
                 value: 'option-3',
               )
@@ -78,6 +78,10 @@ final FormModelGetter createFormModel = (BuildContext context) => [
               );
             },
           ),
+          CheckboxModel(
+            id: 999,
+            title: 'I accept',
+          )
         ],
       ),
     ];

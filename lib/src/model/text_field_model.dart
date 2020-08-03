@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'form_field_model.dart';
 
 @immutable
-class TextFormFieldModel extends FormFieldModel<String> {
-  TextFormFieldModel({
+class TextFieldModel extends FormFieldModel<String> {
+  TextFieldModel({
     builder,
     decoration,
     helper,

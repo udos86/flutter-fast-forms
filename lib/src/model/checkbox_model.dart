@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
 
-import '../widget/date-time-form-field.dart';
+import '../widget/checkbox-form-field.dart';
 
 import 'form_field_model.dart';
 
 @immutable
-class DateTimeFormFieldModel extends FormFieldModel<DateTime> {
-  DateTimeFormFieldModel({
+class CheckboxModel extends FormFieldModel<bool> {
+  CheckboxModel({
     builder,
     decoration,
     helper,
     hint,
     id,
-    DateTime initialValue,
+    bool initialValue,
     label,
+    this.title,
     validator,
-    @required this.firstDate,
-    this.initialDatePickerMode,
-    this.initialEntryMode,
-    @required this.lastDate,
   }) : super(
           builder: builder ??
               (context, form, model) {
-                return DateTimeFormField(
+                return CheckboxFormField(
                   decoration:
                       decoration ?? form.buildInputDecoration(context, model),
-                  firstDate: firstDate,
-                  lastDate: lastDate,
+                  title: title,
                   value: form.getFieldValue(id),
                   validator: validator,
                   onChanged: (value) => form.save(id, value),
@@ -40,8 +36,5 @@ class DateTimeFormFieldModel extends FormFieldModel<DateTime> {
           validator: validator,
         );
 
-  final DateTime firstDate;
-  final DatePickerMode initialDatePickerMode;
-  final DatePickerEntryMode initialEntryMode;
-  final DateTime lastDate;
+  final String title;
 }

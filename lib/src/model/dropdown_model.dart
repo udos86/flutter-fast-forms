@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../widget/radio-group-form-field.dart';
-
 import 'form_field_model.dart';
 
-@immutable
-class FormFieldOption<T> {
-  FormFieldOption({
-    @required this.title,
-    @required this.value,
-  });
-
-  final T value;
-  final String title;
-}
+import '../form_builder.dart';
 
 @immutable
-class RadioGroupModel extends FormFieldModel<String> {
-  RadioGroupModel({
+class DropdownModel extends FormFieldModel<String> {
+  DropdownModel({
     builder,
     decoration,
     helper,
@@ -26,16 +15,15 @@ class RadioGroupModel extends FormFieldModel<String> {
     String initialValue,
     label,
     validator,
-    this.options,
-    this.orientation,
+    this.items,
   }) : super(
           builder: builder ??
               (context, form, model) {
-                return RadioGroupFormField(
+                return DropdownButtonFormField(
                   decoration:
                       decoration ?? form.buildInputDecoration(context, model),
-                  options: options,
-                  orientation: orientation,
+                  autovalidate: form.autovalidate(id),
+                  items: FormBuilder.buildDropdownMenuItems(items),
                   value: form.getFieldValue(id),
                   validator: validator,
                   onChanged: (value) => form.save(id, value),
@@ -49,6 +37,5 @@ class RadioGroupModel extends FormFieldModel<String> {
           validator: validator,
         );
 
-  final List<FormFieldOption<String>> options;
-  final RadioGroupOrientation orientation;
+  final List<String> items;
 }

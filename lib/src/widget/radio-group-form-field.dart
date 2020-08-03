@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/radio_group_form_field_model.dart';
+import '../model/radio_group_model.dart';
 
 enum RadioGroupOrientation {
   horizontal,
@@ -11,7 +11,7 @@ class RadioGroupFormField<T> extends FormField<T> {
   RadioGroupFormField({
     Key key,
     T value,
-    @required List<FormFieldOption<T>> options,
+    @required List<RadioOption<T>> options,
     RadioGroupOrientation orientation = RadioGroupOrientation.vertical,
     this.onChanged,
     InputDecoration decoration = const InputDecoration(),
@@ -47,7 +47,7 @@ class RadioGroupFormField<T> extends FormField<T> {
   FormFieldState<T> createState() => _RadioGroupFormFieldState<T>();
 
   static List<Widget> _buildOptions<T>(
-      List<FormFieldOption<T>> options, FormFieldState<T> field,
+      List<RadioOption<T>> options, FormFieldState<T> field,
       [RadioGroupOrientation orientation = RadioGroupOrientation.vertical]) {
     return options.map((option) {
       final tile = RadioListTile<T>(
