@@ -10,13 +10,13 @@ final FormModelGetter createFormModel = (BuildContext context) => [
         fields: [
           DateTimeFormFieldModel(
             id: 97,
-            label: 'Sample Date Time Field',
+            label: 'Arrival',
             firstDate: DateTime(1997),
             lastDate: DateTime(2021),
           ),
           DateTimeFormFieldModel(
             id: 99,
-            label: 'Sample Date Time Field',
+            label: 'Departure',
             firstDate: DateTime(1997),
             lastDate: DateTime(2021),
           ),

@@ -181,7 +181,6 @@ class FormContainerState extends State<FormContainer> {
   Widget _buildHorizontalFormFieldGroup(
       BuildContext context, FormFieldModelGroup group) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         for (final model in group.fields)
           Expanded(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form_container.dart';
 
-typedef FormFieldModelBuilder<T> = Widget Function(
+typedef FormFieldBuilder<T> = Widget Function(
     BuildContext context, FormContainerState state, FormFieldModel model);
 
 @immutable
@@ -19,7 +19,7 @@ class FormFieldModel<T> {
     this.validator,
   });
 
-  final FormFieldModelBuilder builder;
+  final FormFieldBuilder builder;
   final InputDecoration decoration;
   final String helper;
   final String hint;
