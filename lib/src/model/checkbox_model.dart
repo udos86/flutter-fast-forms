@@ -22,11 +22,12 @@ class CheckboxModel extends FormFieldModel<bool> {
   }) : super(
           builder: builder ??
               (context, state) {
-                final store = Provider.of<FastFormStore>(context, listen: false,);
-                final styler = FormStyle.of(context);
+                final store =
+                    Provider.of<FastFormStore>(context, listen: false);
+                final style = FormStyle.of(context);
                 return CheckboxFormField(
                   decoration: decoration ??
-                      styler.createInputDecoration(context, state.widget),
+                      style.createInputDecoration(context, state.widget),
                   title: title,
                   value: state.value,
                   validator: validator,

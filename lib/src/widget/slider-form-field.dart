@@ -15,46 +15,47 @@ class SliderFormField extends FormField<double> {
     Widget hint,
   })  : assert(decoration != null),
         super(
-            key: key,
-            onSaved: onSaved,
-            initialValue: value ?? min,
-            validator: validator,
-            builder: (field) {
-              final InputDecoration effectiveDecoration = decoration
-                  .applyDefaults(Theme.of(field.context).inputDecorationTheme);
-              return InputDecorator(
-                decoration: effectiveDecoration.copyWith(
-                  errorText: field.errorText,
-                  labelStyle: TextStyle(
-                    fontSize: 16.0,
-                  ),
+          key: key,
+          onSaved: onSaved,
+          initialValue: value ?? min,
+          validator: validator,
+          builder: (field) {
+            final InputDecoration effectiveDecoration = decoration
+                .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+            return InputDecorator(
+              decoration: effectiveDecoration.copyWith(
+                errorText: field.errorText,
+                labelStyle: TextStyle(
+                  fontSize: 16.0,
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Slider(
-                        value: field.value,
-                        min: min,
-                        max: max,
-                        divisions: divisions ?? (max - min).toInt(),
-                        label: label ?? "${_valueToString(field.value)}",
-                        onChanged: field.didChange,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Slider(
+                      value: field.value,
+                      min: min,
+                      max: max,
+                      divisions: divisions ?? (max - min).toInt(),
+                      label: label ?? "${_valueToString(field.value)}",
+                      onChanged: field.didChange,
+                    ),
+                  ),
+                  Container(
+                    width: 32.0,
+                    child: Text(
+                      "${_valueToString(field.value)}",
+                      style: TextStyle(
+                        fontSize: 16.0,
                       ),
                     ),
-                    Container(
-                      width: 32.0,
-                      child: Text(
-                        "${_valueToString(field.value)}",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            });
+                  )
+                ],
+              ),
+            );
+          },
+        );
 
   final ValueChanged onChanged;
 

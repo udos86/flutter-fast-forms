@@ -36,10 +36,10 @@ class RadioGroupModel extends FormFieldModel<String> {
               (context, state) {
                 final store =
                     Provider.of<FastFormStore>(context, listen: false);
-                final styler = FormStyle.of(context);
+                final style = FormStyle.of(context);
                 return RadioGroupFormField(
                     decoration: decoration ??
-                        styler.createInputDecoration(context, state.widget),
+                        style.createInputDecoration(context, state.widget),
                     options: options,
                     orientation: orientation,
                     value: state.value,

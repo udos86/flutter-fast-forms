@@ -26,10 +26,10 @@ class TextFieldModel extends FormFieldModel<String> {
                 final state = _state as TextFieldModelState;
                 final store =
                     Provider.of<FastFormStore>(context, listen: false);
-                final styler = FormStyle.of(context);
+                final style = FormStyle.of(context);
                 return TextFormField(
                   decoration: decoration ??
-                      styler.createInputDecoration(context, state.widget),
+                      style.createInputDecoration(context, state.widget),
                   autovalidate: state.autovalidate,
                   keyboardType: keyboardType ?? TextInputType.text,
                   inputFormatters: [...inputFormatters],

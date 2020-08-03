@@ -27,10 +27,10 @@ class DateTimeModel extends FormFieldModel<DateTime> {
               (context, state) {
                 final store =
                     Provider.of<FastFormStore>(context, listen: false);
-                final styler = FormStyle.of(context);
+                final style = FormStyle.of(context);
                 return DateTimeFormField(
                     decoration: decoration ??
-                        styler.createInputDecoration(context, state.widget),
+                        style.createInputDecoration(context, state.widget),
                     firstDate: firstDate,
                     lastDate: lastDate,
                     value: state.value,

@@ -4,7 +4,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 typedef InputDecorationCreator = InputDecoration Function(
     BuildContext context, FormFieldModel model);
 
-final InputDecorationCreator _defaultInputDecorationCreator =
+final InputDecorationCreator defaultInputDecorationCreator =
     (BuildContext context, FormFieldModel model) {
   return InputDecoration(
     labelText: model.label,
@@ -30,18 +30,23 @@ final InputDecorationCreator _defaultInputDecorationCreator =
   );
 };
 
+const defaultPadding =
+    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0);
+
 class FormStyle extends InheritedWidget {
   FormStyle({
     @required Widget child,
-    InputDecorator inputDecorator,
+    InputDecorationCreator decorationCreator,
     Key key,
     EdgeInsets padding,
   })  : assert(child != null),
         this.createInputDecoration =
-            inputDecorator ?? _defaultInputDecorationCreator,
+            decorationCreator ?? defaultInputDecorationCreator,
+        this.padding = padding ?? defaultPadding,
         super(key: key, child: child);
 
   final InputDecorationCreator createInputDecoration;
+  final EdgeInsets padding;
 
   static FormStyle of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<FormStyle>();

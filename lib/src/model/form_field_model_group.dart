@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../form_style.dart';
+
 import 'form_field_model.dart';
 
 enum FormFieldModelGroupOrientation {
@@ -12,7 +14,7 @@ class FormFieldModelGroup extends StatelessWidget {
   FormFieldModelGroup({
     @required this.fields,
     this.orientation = FormFieldModelGroupOrientation.vertical,
-    this.padding = const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+    this.padding,
     this.title,
   });
 
@@ -34,11 +36,12 @@ class FormFieldModelGroup extends StatelessWidget {
   }
 
   Widget _buildVerticalFormFieldGroup(BuildContext context) {
+    final style = FormStyle.of(context);
     return Column(
       children: <Widget>[
         for (final field in fields)
           Container(
-            padding: padding,
+            padding: padding ?? style.padding,
             child: field,
           ),
       ],
@@ -46,12 +49,13 @@ class FormFieldModelGroup extends StatelessWidget {
   }
 
   Widget _buildHorizontalFormFieldGroup(BuildContext context) {
+    final style = FormStyle.of(context);
     return Row(
       children: <Widget>[
         for (final field in fields)
           Expanded(
             child: Container(
-              padding: padding,
+              padding: padding ?? style.padding,
               child: field,
             ),
           ),
