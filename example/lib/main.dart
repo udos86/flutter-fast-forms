@@ -11,53 +11,42 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Fast Forms Demo',
+      title: 'Flutter Fast Forms Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: FormPage(
-        title: 'Flutter Fast Forms Demo',
+        title: 'Flutter Fast Forms Example',
       ),
     );
   }
 }
 
-class FormPage extends StatefulWidget {
+class FormPage extends StatelessWidget {
   FormPage({Key key, this.title}) : super(key: key);
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final String title;
-
-  @override
-  _FormPageState createState() => _FormPageState();
-}
-
-class _FormPageState extends State<FormPage> {
-  final formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: SingleChildScrollView(
         child: FastForm(
           formKey: formKey,
-          formModel: buildFormModel(context),
+          model: buildFormModel(context),
         ),
       ),
     );
   }
 
-  List<FormFieldModelGroup> buildFormModel(BuildContext context) {
-    return <FormFieldModelGroup>[
-      FormFieldModelGroup(
+  List<FastFormFieldGroup> buildFormModel(BuildContext context) {
+    return <FastFormFieldGroup>[
+      FastFormFieldGroup(
         title: Text(
           'Form Group 1',
           style: TextStyle(
@@ -65,7 +54,7 @@ class _FormPageState extends State<FormPage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        orientation: FormFieldModelGroupOrientation.horizontal,
+        orientation: FormFieldGroupOrientation.horizontal,
         fields: [
           FastDateTime(
             id: 97,
@@ -81,7 +70,7 @@ class _FormPageState extends State<FormPage> {
           ),
         ],
       ),
-      FormFieldModelGroup(
+      FastFormFieldGroup(
         title: Text(
           'Form Group 2',
           style: TextStyle(

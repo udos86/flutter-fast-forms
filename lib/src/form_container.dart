@@ -3,42 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
 
-import 'model/form_field_group.dart';
-
-class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
-  final Map<int, dynamic> fields = {};
-
-  setValue(fieldId, dynamic value) {
-    fields[fieldId] = value;
-    notifyListeners();
-  }
-}
+import 'form_store.dart';
+import 'form_field_group.dart';
 
 class FastForm extends StatelessWidget {
   FastForm({
     this.decorationCreator,
     @required this.formKey,
-    @required this.formModel,
+    @required this.model,
     Key key,
     this.padding,
   }) : super(key: key);
 
   final InputDecorationCreator decorationCreator;
   final GlobalKey<FormState> formKey;
-  final List<FormFieldModelGroup> formModel;
+  final List<FastFormFieldGroup> model;
   final EdgeInsets padding;
+  final FastFormStore _store = FastFormStore();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => FastFormStore(),
+    return ChangeNotifierProvider.value(
+      value: _store,
       child: Form(
+        onChanged: () => print(_store.fields.toString()),
         key: formKey,
         child: FormStyle(
           decorationCreator: decorationCreator,
           padding: padding,
           child: Column(
-            children: formModel,
+            children: model,
           ),
         ),
       ),

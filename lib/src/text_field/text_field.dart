@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../form_field.dart';
+import '../form_store.dart';
 import '../form_style.dart';
-import '../form_container.dart';
-import 'form_field.dart';
 
 @immutable
 class FastTextField extends FastFormField<String> {
@@ -36,7 +36,12 @@ class FastTextField extends FastFormField<String> {
                   validator: validator,
                   controller: state.textController,
                   focusNode: state.focusNode,
-                  onSaved: (value) => store.setValue(id, value),
+                  onSaved: (value) {
+                    store.setValue(id, value);
+                  },
+                  onChanged: (value) {
+                    store.setValue(id, value);
+                  },
                 );
               },
           helper: helper,

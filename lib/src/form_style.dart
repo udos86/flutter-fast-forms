@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
+
+import 'form_field.dart';
 
 typedef InputDecorationCreator = InputDecoration Function(
     BuildContext context, FastFormField model);

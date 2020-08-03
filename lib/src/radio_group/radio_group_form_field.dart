@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/radio_group_model.dart';
+import '../radio_group/radio_group_model.dart';
 
 enum RadioGroupOrientation {
   horizontal,

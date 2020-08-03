@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../form_field.dart';
+import '../form_store.dart';
 import '../form_style.dart';
-import '../form_container.dart';
-import '../widget/date-time-form-field.dart';
 
-import 'form_field.dart';
+import 'date_time_form_field.dart';
 
 @immutable
 class FastDateTime extends FastFormField<DateTime> {
@@ -29,14 +29,19 @@ class FastDateTime extends FastFormField<DateTime> {
                     Provider.of<FastFormStore>(context, listen: false);
                 final style = FormStyle.of(context);
                 return DateTimeFormField(
-                    decoration: decoration ??
-                        style.createInputDecoration(context, state.widget),
-                    firstDate: firstDate,
-                    lastDate: lastDate,
-                    value: state.value,
-                    validator: validator,
-                    onSaved: (value) => store.setValue(id, value),
-                    onChanged: state.save);
+                  decoration: decoration ??
+                      style.createInputDecoration(context, state.widget),
+                  firstDate: firstDate,
+                  lastDate: lastDate,
+                  value: state.value,
+                  validator: validator,
+                  onSaved: (value) {
+                    store.setValue(id, value);
+                  },
+                  onChanged: (value) {
+                    store.setValue(id, value);
+                  },
+                );
               },
           helper: helper,
           hint: hint,

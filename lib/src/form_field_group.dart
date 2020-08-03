@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../form_style.dart';
-
 import 'form_field.dart';
+import 'form_style.dart';
 
-enum FormFieldModelGroupOrientation {
+enum FormFieldGroupOrientation {
   horizontal,
   vertical,
 }
 
 @immutable
-class FormFieldModelGroup extends StatelessWidget {
-  FormFieldModelGroup({
+class FastFormFieldGroup extends StatelessWidget {
+  FastFormFieldGroup({
     @required this.fields,
-    this.orientation = FormFieldModelGroupOrientation.vertical,
+    this.orientation = FormFieldGroupOrientation.vertical,
     this.padding,
     this.title,
   });
 
   final List<FastFormField> fields;
-  final FormFieldModelGroupOrientation orientation;
+  final FormFieldGroupOrientation orientation;
   final EdgeInsets padding;
   final Widget title;
 
@@ -28,7 +27,7 @@ class FormFieldModelGroup extends StatelessWidget {
     return Column(
       children: <Widget>[
         if (title != null) title,
-        orientation == FormFieldModelGroupOrientation.vertical
+        orientation == FormFieldGroupOrientation.vertical
             ? _buildVerticalFormFieldGroup(context)
             : _buildHorizontalFormFieldGroup(context),
       ],

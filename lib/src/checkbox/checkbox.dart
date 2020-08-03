@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/src/form_container.dart';
 import 'package:provider/provider.dart';
 
+import '../form_field.dart';
+import '../form_store.dart';
 import '../form_style.dart';
-import '../widget/checkbox-form-field.dart';
 
-import 'form_field.dart';
+import 'checkbox_form_field.dart';
 
 @immutable
 class FastCheckbox extends FastFormField<bool> {
@@ -31,8 +31,12 @@ class FastCheckbox extends FastFormField<bool> {
                   title: title,
                   value: state.value,
                   validator: validator,
-                  onSaved: (value) => store.setValue(id, value),
-                  onChanged: state.save,
+                  onSaved: (value) {
+                    store.setValue(id, value);
+                  },
+                  onChanged: (value) {
+                    store.setValue(id, value);
+                  },
                 );
               },
           helper: helper,
