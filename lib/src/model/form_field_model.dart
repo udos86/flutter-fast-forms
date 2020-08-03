@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-typedef FormFieldBuilder<T> = Widget Function(
-    BuildContext context, FormFieldModelState state, FormFieldModel model);
+typedef FormFieldWidgetBuilder<T> = Widget Function(
+    BuildContext context, FormFieldModelState state);
 
 @immutable
 abstract class FormFieldModel<T> extends StatefulWidget {
@@ -17,7 +17,7 @@ abstract class FormFieldModel<T> extends StatefulWidget {
     this.validator,
   });
 
-  final FormFieldBuilder builder;
+  final FormFieldWidgetBuilder builder;
   final InputDecoration decoration;
   final String helper;
   final String hint;
@@ -41,7 +41,7 @@ class FormFieldModelState<T> extends State<FormFieldModel> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, this, widget);
+    return widget.builder(context, this);
   }
 
   bool get autovalidate => true;

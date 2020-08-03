@@ -1,9 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
+import 'package:provider/provider.dart';
 
 import 'model/form_field_model_group.dart';
 
-class FormContainer extends StatefulWidget {
-  FormContainer({
+class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
+  final Map<int, dynamic> fields = {};
+
+  setValue(fieldId, dynamic value) {
+    fields[fieldId] = value;
+    notifyListeners();
+  }
+}
+
+class FastForm extends StatelessWidget {
+  FastForm({
     @required this.formKey,
     @required this.formModel,
     Key key,
@@ -13,21 +25,17 @@ class FormContainer extends StatefulWidget {
   final List<FormFieldModelGroup> formModel;
 
   @override
-  State<StatefulWidget> createState() => FormContainerState();
-}
-
-class FormContainerState extends State<FormContainer> {
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Form(
-          key: widget.formKey,
+    return ChangeNotifierProvider(
+      create: (_) => FastFormStore(),
+      child: Form(
+        key: formKey,
+        child: FormStyle(
           child: Column(
-            children: widget.formModel,
+            children: formModel,
           ),
         ),
-      ],
+      ),
     );
   }
 }

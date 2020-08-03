@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/src/form_container.dart';
+import 'package:provider/provider.dart';
 
-import '../form_builder.dart';
+import '../form_style.dart';
 import '../widget/checkbox-form-field.dart';
 
 import 'form_field_model.dart';
@@ -19,14 +21,17 @@ class CheckboxModel extends FormFieldModel<bool> {
     validator,
   }) : super(
           builder: builder ??
-              (context, state, model) {
+              (context, state) {
+                final store = Provider.of<FastFormStore>(context, listen: false,);
+                final styler = FormStyle.of(context);
                 return CheckboxFormField(
                   decoration: decoration ??
-                      FormBuilder.buildInputDecoration(context, model),
+                      styler.createInputDecoration(context, state.widget),
                   title: title,
                   value: state.value,
                   validator: validator,
-                  onChanged: (value) => state.save(value),
+                  onSaved: (value) => store.setValue(id, value),
+                  onChanged: state.save,
                 );
               },
           helper: helper,

@@ -19,13 +19,13 @@ class FormFieldModelGroup extends StatelessWidget {
   final List<FormFieldModel> fields;
   final FormFieldModelGroupOrientation orientation;
   final EdgeInsets padding;
-  final String title;
+  final Widget title;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        if (title != null) _buildFormFieldGroupTitle(),
+        if (title != null) title,
         orientation == FormFieldModelGroupOrientation.vertical
             ? _buildVerticalFormFieldGroup(context)
             : _buildHorizontalFormFieldGroup(context),
@@ -56,16 +56,6 @@ class FormFieldModelGroup extends StatelessWidget {
             ),
           ),
       ],
-    );
-  }
-
-  Widget _buildFormFieldGroupTitle() {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-      ),
     );
   }
 }

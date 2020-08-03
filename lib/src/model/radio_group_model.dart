@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../form_builder.dart';
+import '../form_style.dart';
+import '../form_container.dart';
 import '../widget/radio-group-form-field.dart';
 
 import 'form_field_model.dart';
@@ -31,16 +33,19 @@ class RadioGroupModel extends FormFieldModel<String> {
     this.orientation,
   }) : super(
           builder: builder ??
-              (context, state, model) {
+              (context, state) {
+                final store =
+                    Provider.of<FastFormStore>(context, listen: false);
+                final styler = FormStyle.of(context);
                 return RadioGroupFormField(
-                  decoration: decoration ??
-                      FormBuilder.buildInputDecoration(context, model),
-                  options: options,
-                  orientation: orientation,
-                  value: state.value,
-                  validator: validator,
-                  onChanged: (value) => state.save(value),
-                );
+                    decoration: decoration ??
+                        styler.createInputDecoration(context, state.widget),
+                    options: options,
+                    orientation: orientation,
+                    value: state.value,
+                    validator: validator,
+                    onSaved: (value) => store.setValue(id, value),
+                    onChanged: state.save);
               },
           helper: helper,
           hint: hint,

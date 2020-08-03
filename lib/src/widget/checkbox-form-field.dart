@@ -7,7 +7,7 @@ class CheckboxFormField extends FormField<bool> {
     this.onChanged,
     InputDecoration decoration = const InputDecoration(),
     FormFieldSetter onSaved,
-    String title,
+    dynamic title,
     FormFieldValidator validator,
     Widget hint,
   })  : assert(decoration != null),
@@ -27,13 +27,15 @@ class CheckboxFormField extends FormField<bool> {
                   selected: field.value,
                   value: field.value,
                   onChanged: field.didChange,
-                  title: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: field.value ? Colors.black : Colors.grey,
-                    ),
-                  ),
+                  title: title is Widget
+                      ? title
+                      : Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: field.value ? Colors.black : Colors.grey,
+                          ),
+                        ),
                 ),
               );
             });

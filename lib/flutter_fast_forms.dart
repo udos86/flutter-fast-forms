@@ -11,8 +11,8 @@ export 'src/widget/date-time-form-field.dart';
 export 'src/widget/radio-group-form-field.dart';
 export 'src/widget/slider-form-field.dart';
 
-export 'src/form_builder.dart';
 export 'src/form_container.dart';
 export 'src/form_formatters.dart';
 export 'src/form_model.dart';
+export 'src/form_style.dart';
 export 'src/form_validators.dart';

@@ -74,8 +74,7 @@ class CustomFormField extends FormField<CustomFormFieldValue> {
   FormFieldState<CustomFormFieldValue> createState() => CustomFormFieldState();
 }
 
-class CustomFormFieldState extends FormFieldState<CustomFormFieldValue>
-    with SingleTickerProviderStateMixin {
+class CustomFormFieldState extends FormFieldState<CustomFormFieldValue> {
   bool _isActive = false;
 
   bool get active => _isActive;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-import '../form_builder.dart';
+import '../form_style.dart';
+import '../form_container.dart';
 import 'form_field_model.dart';
 
 @immutable
@@ -20,17 +22,21 @@ class TextFieldModel extends FormFieldModel<String> {
     this.maxLength,
   }) : super(
           builder: builder ??
-              (context, _state, model) {
+              (context, _state) {
                 final state = _state as TextFieldModelState;
+                final store =
+                    Provider.of<FastFormStore>(context, listen: false);
+                final styler = FormStyle.of(context);
                 return TextFormField(
                   decoration: decoration ??
-                      FormBuilder.buildInputDecoration(context, model),
+                      styler.createInputDecoration(context, state.widget),
                   autovalidate: state.autovalidate,
                   keyboardType: keyboardType ?? TextInputType.text,
                   inputFormatters: [...inputFormatters],
                   validator: validator,
                   controller: state.textController,
                   focusNode: state.focusNode,
+                  onSaved: (value) => store.setValue(id, value),
                 );
               },
           helper: helper,
