@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../form_container.dart';
-
 typedef FormFieldBuilder<T> = Widget Function(
-    BuildContext context, FormContainerState state, FormFieldModel model);
+    BuildContext context, FormFieldModelState state, FormFieldModel model);
 
 @immutable
-class FormFieldModel<T> {
+abstract class FormFieldModel<T> extends StatefulWidget {
   const FormFieldModel({
     @required this.builder,
     this.decoration,
@@ -30,4 +28,29 @@ class FormFieldModel<T> {
   final FormFieldValidator validator;
 
   T get value => savedValue ?? initialValue;
+}
+
+class FormFieldModelState<T> extends State<FormFieldModel> {
+  T value;
+
+  @override
+  void initState() {
+    super.initState();
+    value = widget.value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(context, this, widget);
+  }
+
+  bool get autovalidate => true;
+
+  void reset() {
+    this.value = widget.initialValue;
+  }
+
+  void save(T value) {
+    this.value = value;
+  }
 }

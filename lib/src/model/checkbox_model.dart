@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../form_builder.dart';
 import '../widget/checkbox-form-field.dart';
 
 import 'form_field_model.dart';
@@ -18,14 +19,14 @@ class CheckboxModel extends FormFieldModel<bool> {
     validator,
   }) : super(
           builder: builder ??
-              (context, form, model) {
+              (context, state, model) {
                 return CheckboxFormField(
-                  decoration:
-                      decoration ?? form.buildInputDecoration(context, model),
+                  decoration: decoration ??
+                      FormBuilder.buildInputDecoration(context, model),
                   title: title,
-                  value: form.getFieldValue(id),
+                  value: state.value,
                   validator: validator,
-                  onChanged: (value) => form.save(id, value),
+                  onChanged: (value) => state.save(value),
                 );
               },
           helper: helper,
@@ -37,4 +38,7 @@ class CheckboxModel extends FormFieldModel<bool> {
         );
 
   final String title;
+
+  @override
+  State<StatefulWidget> createState() => FormFieldModelState<bool>();
 }

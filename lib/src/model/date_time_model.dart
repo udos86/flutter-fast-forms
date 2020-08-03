@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../form_builder.dart';
 import '../widget/date-time-form-field.dart';
 
 import 'form_field_model.dart';
@@ -21,15 +22,15 @@ class DateTimeModel extends FormFieldModel<DateTime> {
     @required this.lastDate,
   }) : super(
           builder: builder ??
-              (context, form, model) {
+              (context, state, model) {
                 return DateTimeFormField(
-                  decoration:
-                      decoration ?? form.buildInputDecoration(context, model),
+                  decoration: decoration ??
+                      FormBuilder.buildInputDecoration(context, model),
                   firstDate: firstDate,
                   lastDate: lastDate,
-                  value: form.getFieldValue(id),
+                  value: state.value,
                   validator: validator,
-                  onChanged: (value) => form.save(id, value),
+                  onChanged: (value) => state.save(value),
                 );
               },
           helper: helper,
@@ -44,4 +45,7 @@ class DateTimeModel extends FormFieldModel<DateTime> {
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
+
+  @override
+  State<StatefulWidget> createState() => FormFieldModelState<DateTime>();
 }

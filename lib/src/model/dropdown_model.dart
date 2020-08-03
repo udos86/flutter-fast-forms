@@ -18,15 +18,15 @@ class DropdownModel extends FormFieldModel<String> {
     this.items,
   }) : super(
           builder: builder ??
-              (context, form, model) {
+              (context, state, model) {
                 return DropdownButtonFormField(
-                  decoration:
-                      decoration ?? form.buildInputDecoration(context, model),
-                  autovalidate: form.autovalidate(id),
+                  decoration: decoration ??
+                      FormBuilder.buildInputDecoration(context, model),
+                  autovalidate: state.autovalidate,
                   items: FormBuilder.buildDropdownMenuItems(items),
-                  value: form.getFieldValue(id),
+                  value: state.value,
                   validator: validator,
-                  onChanged: (value) => form.save(id, value),
+                  onChanged: (value) => state.save(value),
                 );
               },
           helper: helper,
@@ -38,4 +38,7 @@ class DropdownModel extends FormFieldModel<String> {
         );
 
   final List<String> items;
+
+  @override
+  State<StatefulWidget> createState() => FormFieldModelState<String>();
 }

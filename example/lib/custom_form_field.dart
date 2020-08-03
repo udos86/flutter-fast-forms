@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 @immutable
 class CustomFormFieldValue {
@@ -9,6 +10,19 @@ class CustomFormFieldValue {
 
   final bool checkboxA;
   final bool checkboxB;
+}
+
+@immutable
+class CustomFormFieldModel extends FormFieldModel<CustomFormFieldValue> {
+  CustomFormFieldModel({
+    builder,
+    id,
+    label,
+  }) : super(builder: builder, id: id, label: label);
+
+  @override
+  State<StatefulWidget> createState() =>
+      FormFieldModelState<CustomFormFieldValue>();
 }
 
 class CustomFormField extends FormField<CustomFormFieldValue> {
@@ -29,7 +43,7 @@ class CustomFormField extends FormField<CustomFormFieldValue> {
           initialValue: value ?? CustomFormFieldValue(),
           validator: validator,
           builder: (_field) {
-            final field = _field as _CustomFormFieldState;
+            final field = _field as CustomFormFieldState;
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
             return InputDecorator(
@@ -57,10 +71,10 @@ class CustomFormField extends FormField<CustomFormFieldValue> {
   final ValueChanged onChanged;
 
   @override
-  FormFieldState<CustomFormFieldValue> createState() => _CustomFormFieldState();
+  FormFieldState<CustomFormFieldValue> createState() => CustomFormFieldState();
 }
 
-class _CustomFormFieldState extends FormFieldState<CustomFormFieldValue>
+class CustomFormFieldState extends FormFieldState<CustomFormFieldValue>
     with SingleTickerProviderStateMixin {
   bool _isActive = false;
 

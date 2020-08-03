@@ -69,7 +69,7 @@ final FormModelGetter createFormModel = (BuildContext context) => [
               )
             ],
           ),
-          FormFieldModel<CustomFormFieldValue>(
+          CustomFormFieldModel(
             id: 47,
             label: 'Sample Custom Form Field',
             builder: (context, form, model) {

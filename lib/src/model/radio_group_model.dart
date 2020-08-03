@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../form_builder.dart';
 import '../widget/radio-group-form-field.dart';
 
 import 'form_field_model.dart';
@@ -30,15 +31,15 @@ class RadioGroupModel extends FormFieldModel<String> {
     this.orientation,
   }) : super(
           builder: builder ??
-              (context, form, model) {
+              (context, state, model) {
                 return RadioGroupFormField(
-                  decoration:
-                      decoration ?? form.buildInputDecoration(context, model),
+                  decoration: decoration ??
+                      FormBuilder.buildInputDecoration(context, model),
                   options: options,
                   orientation: orientation,
-                  value: form.getFieldValue(id),
+                  value: state.value,
                   validator: validator,
-                  onChanged: (value) => form.save(id, value),
+                  onChanged: (value) => state.save(value),
                 );
               },
           helper: helper,
@@ -51,4 +52,7 @@ class RadioGroupModel extends FormFieldModel<String> {
 
   final List<RadioOption<String>> options;
   final RadioGroupOrientation orientation;
+
+  @override
+  State<StatefulWidget> createState() => FormFieldModelState<String>();
 }
