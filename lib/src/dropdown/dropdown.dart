@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../form_field.dart';
-import '../form_store.dart';
 import '../form_style.dart';
 
 @immutable
@@ -20,8 +18,6 @@ class FastDropdown extends FastFormField<String> {
   }) : super(
           builder: builder ??
               (context, state) {
-                final store =
-                    Provider.of<FastFormStore>(context, listen: false);
                 final style = FormStyle.of(context);
                 return DropdownButtonFormField(
                   decoration: decoration ??
@@ -30,12 +26,8 @@ class FastDropdown extends FastFormField<String> {
                   items: buildDropdownMenuItems(items),
                   value: state.value,
                   validator: validator,
-                  onSaved: (value) {
-                    store.setValue(id, value);
-                  },
-                  onChanged: (value) {
-                    store.setValue(id, value);
-                  },
+                  onChanged: state.onChanged,
+                  onSaved: state.onSaved,
                 );
               },
           helper: helper,

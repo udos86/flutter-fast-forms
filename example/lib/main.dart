@@ -17,7 +17,7 @@ class App extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: FormPage(
-        title: 'Flutter Fast Forms Example',
+        title: 'Flutter Fast Forms Example X',
       ),
     );
   }
@@ -39,6 +39,7 @@ class FormPage extends StatelessWidget {
         child: FastForm(
           formKey: formKey,
           model: buildFormModel(context),
+          onChanged: (value) => print('Form changed: ${value.toString()}'),
         ),
       ),
     );
@@ -122,6 +123,13 @@ class FormPage extends StatelessWidget {
                 value: 'option-3',
               )
             ],
+          ),
+          FastSlider(
+            id: 666,
+            label: 'Slider',
+            min: 0,
+            max: 10,
+            hint: 'Just a hint',
           ),
           CustomFormFieldModel(
             id: 47,

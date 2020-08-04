@@ -40,7 +40,7 @@ class CheckboxFormField extends FormField<bool> {
               );
             });
 
-  final ValueChanged onChanged;
+  final ValueChanged<bool> onChanged;
 
   @override
   FormFieldState<bool> createState() => _CheckboxFormFieldState();

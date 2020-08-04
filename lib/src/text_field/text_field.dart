@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 import '../form_field.dart';
-import '../form_store.dart';
 import '../form_style.dart';
 
 @immutable
@@ -24,8 +22,6 @@ class FastTextField extends FastFormField<String> {
           builder: builder ??
               (context, _state) {
                 final state = _state as TextFieldModelState;
-                final store =
-                    Provider.of<FastFormStore>(context, listen: false);
                 final style = FormStyle.of(context);
                 return TextFormField(
                   decoration: decoration ??
@@ -36,18 +32,14 @@ class FastTextField extends FastFormField<String> {
                   validator: validator,
                   controller: state.textController,
                   focusNode: state.focusNode,
-                  onSaved: (value) {
-                    store.setValue(id, value);
-                  },
-                  onChanged: (value) {
-                    store.setValue(id, value);
-                  },
+                  onChanged: state.onChanged,
+                  onSaved: state.onSaved,
                 );
               },
           helper: helper,
           hint: hint,
           id: id,
-          initialValue: initialValue,
+          initialValue: initialValue ?? '',
           label: label,
           validator: validator,
         );
@@ -73,7 +65,6 @@ class TextFieldModelState extends FastFormFieldState<String> {
 
     textController = TextEditingController(text: value ?? '');
     textController.addListener(_onTextChanged);
-    save(textController.text);
 
     focusNode = FocusNode();
     focusNode.addListener(_onFocusChanged);
@@ -110,7 +101,7 @@ class TextFieldModelState extends FastFormFieldState<String> {
   }
 
   void _onTextChanged() {
-    save(textController.text);
+    onChanged(textController.text);
   }
 
   void _onFocusChanged() {

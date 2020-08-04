@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../form_field.dart';
-import '../form_store.dart';
 import '../form_style.dart';
 
 import 'radio_group_form_field.dart';
@@ -34,8 +32,6 @@ class FastRadioGroup extends FastFormField<String> {
   }) : super(
           builder: builder ??
               (context, state) {
-                final store =
-                    Provider.of<FastFormStore>(context, listen: false);
                 final style = FormStyle.of(context);
                 return RadioGroupFormField(
                   decoration: decoration ??
@@ -44,18 +40,14 @@ class FastRadioGroup extends FastFormField<String> {
                   orientation: orientation,
                   value: state.value,
                   validator: validator,
-                  onSaved: (value) {
-                    store.setValue(id, value);
-                  },
-                  onChanged: (value) {
-                    store.setValue(id, value);
-                  },
+                  onChanged: state.onChanged,
+                  onSaved: state.onSaved,
                 );
               },
           helper: helper,
           hint: hint,
           id: id,
-          initialValue: initialValue,
+          initialValue: initialValue ?? options.first.value,
           label: label,
           validator: validator,
         );

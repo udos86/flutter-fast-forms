@@ -62,7 +62,7 @@ class DateTimeFormField extends FormField<DateTime> {
             });
 
   final DateFormat dateFormat;
-  final ValueChanged onChanged;
+  final ValueChanged<DateTime> onChanged;
 
   @override
   FormFieldState<DateTime> createState() => _DateTimeFormFieldState();

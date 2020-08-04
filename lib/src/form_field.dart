@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
+import 'package:provider/provider.dart';
 
 typedef FormFieldWidgetBuilder<T> = Widget Function(
     BuildContext context, FastFormFieldState state);
@@ -13,7 +15,6 @@ abstract class FastFormField<T> extends StatefulWidget {
     @required this.id,
     this.initialValue,
     this.label,
-    this.savedValue,
     this.validator,
   });
 
@@ -24,19 +25,22 @@ abstract class FastFormField<T> extends StatefulWidget {
   final int id;
   final T initialValue;
   final String label;
-  final T savedValue;
   final FormFieldValidator validator;
 
-  T get value => savedValue ?? initialValue;
+  T get value => initialValue;
 }
 
 class FastFormFieldState<T> extends State<FastFormField> {
   T value;
 
+  bool get autovalidate => true;
+
+  FastFormStore get store => Provider.of<FastFormStore>(context, listen: false);
+
   @override
   void initState() {
     super.initState();
-    value = widget.value;
+    value = store.getValue(widget.id) ?? widget.value;
   }
 
   @override
@@ -44,13 +48,20 @@ class FastFormFieldState<T> extends State<FastFormField> {
     return widget.builder(context, this);
   }
 
-  bool get autovalidate => true;
-
   void reset() {
     this.value = widget.initialValue;
   }
 
-  void save(T value) {
+  void onSaved(T value) {
+    _store(value);
+  }
+
+  void onChanged(T value) {
+    _store(value);
+  }
+
+  void _store(T value) {
     this.value = value;
+    store.setValue(widget.id, value);
   }
 }

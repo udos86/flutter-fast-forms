@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../radio_group/radio_group_model.dart';
+import '../radio_group/radio_group.dart';
 
 enum RadioGroupOrientation {
   horizontal,
@@ -21,7 +21,7 @@ class RadioGroupFormField<T> extends FormField<T> {
         super(
           key: key,
           onSaved: onSaved,
-          initialValue: value ?? options[0].value,
+          initialValue: value ?? options.first.value,
           validator: validator,
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
@@ -32,11 +32,8 @@ class RadioGroupFormField<T> extends FormField<T> {
               child: orientation == RadioGroupOrientation.horizontal
                   ? Row(
                       children: _buildOptions<T>(
-                          options, field, RadioGroupOrientation.horizontal),
-                    )
-                  : Column(
-                      children: _buildOptions<T>(options, field),
-                    ),
+                          options, field, RadioGroupOrientation.horizontal))
+                  : Column(children: _buildOptions<T>(options, field)),
             );
           },
         );

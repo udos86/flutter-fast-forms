@@ -33,7 +33,7 @@ class SliderFormField extends FormField<double> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: Slider(
+                    child: Slider.adaptive(
                       value: field.value,
                       min: min,
                       max: max,
@@ -57,7 +57,7 @@ class SliderFormField extends FormField<double> {
           },
         );
 
-  final ValueChanged onChanged;
+  final ValueChanged<double> onChanged;
 
   static String _valueToString(double value) {
     return value.toStringAsFixed(0);
