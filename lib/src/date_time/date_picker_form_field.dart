@@ -17,7 +17,7 @@ class DatePickerFormField extends FormField<DateTime> {
     DateTime value,
     this.onChanged,
   })  : assert(decoration != null),
-        this.dateFormat = format ?? DateFormat.yMd(),
+        this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
         super(
             key: key,
             onSaved: onSaved,
@@ -39,8 +39,8 @@ class DatePickerFormField extends FormField<DateTime> {
                         readOnly: true,
                         controller: field.controller,
                         decoration: InputDecoration(
-                          // border: InputBorder.none,
-                        ),
+                            // border: InputBorder.none,
+                            ),
                         textAlign: TextAlign.right,
                       ),
                     ),

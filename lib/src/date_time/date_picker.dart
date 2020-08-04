@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../form_field.dart';
 import '../form_style.dart';
@@ -10,6 +11,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
     builder,
     decoration,
+    this.format,
     helper,
     hint,
     id,
@@ -29,6 +31,7 @@ class FastDatePicker extends FastFormField<DateTime> {
                       style.createInputDecoration(context, state.widget),
                   firstDate: firstDate,
                   lastDate: lastDate,
+                  format: format,
                   value: state.value,
                   validator: validator,
                   onChanged: state.onChanged,
@@ -44,6 +47,7 @@ class FastDatePicker extends FastFormField<DateTime> {
         );
 
   final DateTime firstDate;
+  final DateFormat format;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;

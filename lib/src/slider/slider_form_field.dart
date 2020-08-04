@@ -25,9 +25,6 @@ class SliderFormField extends FormField<double> {
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
-                labelStyle: TextStyle(
-                  fontSize: 16.0,
-                ),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

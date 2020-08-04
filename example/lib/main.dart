@@ -55,7 +55,7 @@ class FormPage extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        fields: [
+        children: [
           FastDatePicker(
             id: 97,
             label: 'Arrival',

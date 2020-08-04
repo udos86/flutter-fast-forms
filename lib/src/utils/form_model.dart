@@ -4,7 +4,7 @@ import '../form_field.dart';
 abstract class FormModel {
   static List<FastFormField> flatten(List<FastFormFieldGroup> formModel) {
     return formModel.fold<List<FastFormField>>([], (fields, group) {
-      return [...fields, ...group.fields];
+      return [...fields, ...group.children];
     });
   }
 

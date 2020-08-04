@@ -9,7 +9,7 @@ class FastTextField extends FastFormField<String> {
   FastTextField({
     builder,
     decoration,
-    enabled,
+    this.enabled,
     helper,
     hint,
     id,
@@ -46,8 +46,9 @@ class FastTextField extends FastFormField<String> {
           validator: validator,
         );
 
-  final TextInputType keyboardType;
+  final bool enabled;
   final List<TextInputFormatter> inputFormatters;
+  final TextInputType keyboardType;
   final int maxLength;
 
   @override
