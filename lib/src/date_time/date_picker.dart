@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_style.dart';
 
-import 'date_time_form_field.dart';
+import 'date_picker_form_field.dart';
 
 @immutable
-class FastDateTime extends FastFormField<DateTime> {
-  FastDateTime({
+class FastDatePicker extends FastFormField<DateTime> {
+  FastDatePicker({
     builder,
     decoration,
     helper,
@@ -24,7 +24,7 @@ class FastDateTime extends FastFormField<DateTime> {
           builder: builder ??
               (context, state) {
                 final style = FormStyle.of(context);
-                return DateTimeFormField(
+                return DatePickerFormField(
                   decoration: decoration ??
                       style.createInputDecoration(context, state.widget),
                   firstDate: firstDate,

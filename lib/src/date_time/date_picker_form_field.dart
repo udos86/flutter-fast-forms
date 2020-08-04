@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DateTimeFormField extends FormField<DateTime> {
-  DateTimeFormField({
+class DatePickerFormField extends FormField<DateTime> {
+  DatePickerFormField({
     InputDecoration decoration = const InputDecoration(),
     DateTime firstDate,
     DateFormat format,
@@ -17,14 +17,14 @@ class DateTimeFormField extends FormField<DateTime> {
     DateTime value,
     this.onChanged,
   })  : assert(decoration != null),
-        this.dateFormat = format ?? DateFormat.yMMMd(),
+        this.dateFormat = format ?? DateFormat.yMd(),
         super(
             key: key,
             onSaved: onSaved,
             initialValue: value,
             validator: validator,
             builder: (_field) {
-              final field = _field as _DateTimeFormFieldState;
+              final field = _field as _DatePickerFormFieldState;
               final InputDecoration effectiveDecoration = decoration
                   .applyDefaults(Theme.of(field.context).inputDecorationTheme);
               return InputDecorator(
@@ -38,13 +38,15 @@ class DateTimeFormField extends FormField<DateTime> {
                       child: TextFormField(
                         readOnly: true,
                         controller: field.controller,
-                        decoration: InputDecoration(),
+                        decoration: InputDecoration(
+                          // border: InputBorder.none,
+                        ),
                         textAlign: TextAlign.right,
                       ),
                     ),
                     IconButton(
                       alignment: Alignment.centerRight,
-                      icon: Icon(Icons.date_range),
+                      icon: Icon(Icons.today),
                       onPressed: () {
                         showDatePicker(
                           context: field.context,
@@ -65,10 +67,10 @@ class DateTimeFormField extends FormField<DateTime> {
   final ValueChanged<DateTime> onChanged;
 
   @override
-  FormFieldState<DateTime> createState() => _DateTimeFormFieldState();
+  FormFieldState<DateTime> createState() => _DatePickerFormFieldState();
 }
 
-class _DateTimeFormFieldState extends FormFieldState<DateTime> {
+class _DatePickerFormFieldState extends FormFieldState<DateTime> {
   final controller = TextEditingController();
 
   @override
@@ -84,7 +86,7 @@ class _DateTimeFormFieldState extends FormFieldState<DateTime> {
   }
 
   @override
-  DateTimeFormField get widget => super.widget;
+  DatePickerFormField get widget => super.widget;
 
   @override
   void didChange(DateTime value) {

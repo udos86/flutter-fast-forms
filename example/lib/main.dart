@@ -17,7 +17,7 @@ class App extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: FormPage(
-        title: 'Flutter Fast Forms Example X',
+        title: 'Flutter Fast Forms Example',
       ),
     );
   }
@@ -55,31 +55,17 @@ class FormPage extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        orientation: FormFieldGroupOrientation.horizontal,
         fields: [
-          FastDateTime(
+          FastDatePicker(
             id: 97,
             label: 'Arrival',
             firstDate: DateTime(1997),
             lastDate: DateTime(2021),
           ),
-          FastDateTime(
-            id: 99,
-            label: 'Departure',
-            firstDate: DateTime(1997),
-            lastDate: DateTime(2021),
+          FastTimePicker(
+            id: 1000,
+            label: 'Time Picker',
           ),
-        ],
-      ),
-      FastFormFieldGroup(
-        title: Text(
-          'Form Group 2',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        fields: [
           FastTextField(
             id: 42,
             label: 'Text Field',

@@ -50,7 +50,7 @@ class SliderFormField extends FormField<double> {
                         fontSize: 16.0,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );

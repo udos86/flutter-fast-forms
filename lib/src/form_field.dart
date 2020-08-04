@@ -10,6 +10,7 @@ abstract class FastFormField<T> extends StatefulWidget {
   const FastFormField({
     @required this.builder,
     this.decoration,
+    this.enabled = true,
     this.helper,
     this.hint,
     @required this.id,
@@ -20,6 +21,7 @@ abstract class FastFormField<T> extends StatefulWidget {
 
   final FormFieldWidgetBuilder builder;
   final InputDecoration decoration;
+  final bool enabled;
   final String helper;
   final String hint;
   final int id;

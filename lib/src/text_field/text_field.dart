@@ -9,6 +9,7 @@ class FastTextField extends FastFormField<String> {
   FastTextField({
     builder,
     decoration,
+    enabled,
     helper,
     hint,
     id,
@@ -27,6 +28,7 @@ class FastTextField extends FastFormField<String> {
                   decoration: decoration ??
                       style.createInputDecoration(context, state.widget),
                   autovalidate: state.autovalidate,
+                  enabled: enabled,
                   keyboardType: keyboardType ?? TextInputType.text,
                   inputFormatters: [...inputFormatters],
                   validator: validator,
