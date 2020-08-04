@@ -46,12 +46,12 @@ class FormStyle extends InheritedWidget {
     Key key,
     EdgeInsets padding,
   })  : assert(child != null),
-        this.createInputDecoration =
+        this.getInputDecoration =
             decorationCreator ?? defaultInputDecorationCreator,
         this.padding = padding ?? defaultPadding,
         super(key: key, child: child);
 
-  final InputDecorationCreator createInputDecoration;
+  final InputDecorationCreator getInputDecoration;
   final EdgeInsets padding;
 
   static FormStyle of(BuildContext context) {

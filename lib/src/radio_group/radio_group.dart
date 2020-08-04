@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 import '../form_style.dart';
@@ -19,31 +20,19 @@ class RadioOption<T> {
 @immutable
 class FastRadioGroup extends FastFormField<String> {
   FastRadioGroup({
-    builder,
-    decoration,
-    helper,
-    hint,
-    id,
+    FastFormFieldBuilder builder,
+    InputDecoration decoration,
+    String helper,
+    String hint,
+    @required int id,
     String initialValue,
-    label,
-    validator,
-    this.options,
-    this.orientation,
+    String label,
+    FormFieldValidator validator,
+    @required this.options,
+    this.orientation = RadioGroupOrientation.vertical,
   }) : super(
-          builder: builder ??
-              (context, state) {
-                final style = FormStyle.of(context);
-                return RadioGroupFormField(
-                  decoration: decoration ??
-                      style.createInputDecoration(context, state.widget),
-                  options: options,
-                  orientation: orientation,
-                  value: state.value,
-                  validator: validator,
-                  onChanged: state.onChanged,
-                  onSaved: state.onSaved,
-                );
-              },
+          builder: builder ?? _builder,
+          decoration: decoration,
           helper: helper,
           hint: hint,
           id: id,
@@ -58,3 +47,18 @@ class FastRadioGroup extends FastFormField<String> {
   @override
   State<StatefulWidget> createState() => FastFormFieldState<String>();
 }
+
+final FastFormFieldBuilder _builder = (context, state) {
+  final style = FormStyle.of(context);
+  final widget = state.widget as FastRadioGroup;
+
+  return RadioGroupFormField(
+    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    options: widget.options,
+    orientation: widget.orientation,
+    validator: widget.validator,
+    value: state.value,
+    onChanged: state.onChanged,
+    onSaved: state.onSaved,
+  );
+};

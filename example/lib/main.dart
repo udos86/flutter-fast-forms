@@ -123,7 +123,7 @@ class FormPage extends StatelessWidget {
             builder: (context, state) {
               final style = FormStyle.of(context);
               return CustomFormField(
-                decoration: style.createInputDecoration(context, state.widget),
+                decoration: style.getInputDecoration(context, state.widget),
               );
             },
           ),

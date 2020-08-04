@@ -6,30 +6,18 @@ import '../form_style.dart';
 @immutable
 class FastDropdown extends FastFormField<String> {
   FastDropdown({
-    builder,
-    decoration,
-    helper,
-    hint,
-    id,
+    FastFormFieldBuilder builder,
+    InputDecoration decoration,
+    String helper,
+    String hint,
+    @required int id,
     String initialValue,
-    label,
-    validator,
+    String label,
+    FormFieldValidator validator,
     this.items,
   }) : super(
-          builder: builder ??
-              (context, state) {
-                final style = FormStyle.of(context);
-                return DropdownButtonFormField(
-                  decoration: decoration ??
-                      style.createInputDecoration(context, state.widget),
-                  autovalidate: state.autovalidate,
-                  items: buildDropdownMenuItems(items),
-                  value: state.value,
-                  validator: validator,
-                  onChanged: state.onChanged,
-                  onSaved: state.onSaved,
-                );
-              },
+          builder: builder ?? _builder,
+          decoration: decoration,
           helper: helper,
           hint: hint,
           id: id,
@@ -52,3 +40,18 @@ class FastDropdown extends FastFormField<String> {
   @override
   State<StatefulWidget> createState() => FastFormFieldState<String>();
 }
+
+final FastFormFieldBuilder _builder = (context, state) {
+  final style = FormStyle.of(context);
+  final widget = state.widget as FastDropdown;
+
+  return DropdownButtonFormField(
+    autovalidate: state.autovalidate,
+    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    items: FastDropdown.buildDropdownMenuItems(widget.items),
+    validator: widget.validator,
+    value: state.value,
+    onChanged: state.onChanged,
+    onSaved: state.onSaved,
+  );
+};

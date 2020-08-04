@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 @immutable
-class CustomFormFieldValue {
-  CustomFormFieldValue({
+class CustomValue {
+  CustomValue({
     this.checkboxA = false,
     this.checkboxB = false,
   });
@@ -13,22 +13,21 @@ class CustomFormFieldValue {
 }
 
 @immutable
-class CustomFormFieldModel extends FastFormField<CustomFormFieldValue> {
+class CustomFormFieldModel extends FastFormField<CustomValue> {
   CustomFormFieldModel({
-    builder,
-    id,
-    label,
+    FastFormFieldBuilder builder,
+    @required int id,
+    String label,
   }) : super(builder: builder, id: id, label: label);
 
   @override
-  State<StatefulWidget> createState() =>
-      FastFormFieldState<CustomFormFieldValue>();
+  State<StatefulWidget> createState() => FastFormFieldState<CustomValue>();
 }
 
-class CustomFormField extends FormField<CustomFormFieldValue> {
+class CustomFormField extends FormField<CustomValue> {
   CustomFormField({
     Key key,
-    CustomFormFieldValue value,
+    CustomValue value,
     String label,
     String placeholder,
     this.onChanged,
@@ -40,7 +39,7 @@ class CustomFormField extends FormField<CustomFormFieldValue> {
         super(
           key: key,
           onSaved: onSaved,
-          initialValue: value ?? CustomFormFieldValue(),
+          initialValue: value ?? CustomValue(),
           validator: validator,
           builder: (_field) {
             final field = _field as CustomFormFieldState;
@@ -71,10 +70,10 @@ class CustomFormField extends FormField<CustomFormFieldValue> {
   final ValueChanged onChanged;
 
   @override
-  FormFieldState<CustomFormFieldValue> createState() => CustomFormFieldState();
+  FormFieldState<CustomValue> createState() => CustomFormFieldState();
 }
 
-class CustomFormFieldState extends FormFieldState<CustomFormFieldValue> {
+class CustomFormFieldState extends FormFieldState<CustomValue> {
   bool _isActive = false;
 
   bool get active => _isActive;
@@ -89,7 +88,7 @@ class CustomFormFieldState extends FormFieldState<CustomFormFieldValue> {
   CustomFormField get widget => super.widget;
 
   @override
-  void didChange(CustomFormFieldValue value) {
+  void didChange(CustomValue value) {
     super.didChange(value);
     if (widget.onChanged != null) widget.onChanged(value);
   }
@@ -105,7 +104,7 @@ class CustomFormFieldState extends FormFieldState<CustomFormFieldValue> {
           title: Text('Checkbox A'),
           value: value.checkboxA,
           onChanged: (bool checked) {
-            didChange(CustomFormFieldValue(
+            didChange(CustomValue(
               checkboxA: checked,
               checkboxB: value.checkboxB,
             ));
@@ -115,7 +114,7 @@ class CustomFormFieldState extends FormFieldState<CustomFormFieldValue> {
           title: Text('Checkbox B'),
           value: value.checkboxB,
           onChanged: (bool checked) {
-            didChange(CustomFormFieldValue(
+            didChange(CustomValue(
               checkboxA: value.checkboxA,
               checkboxB: checked,
             ));

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
 
-typedef FormFieldWidgetBuilder<T> = Widget Function(
+typedef FastFormFieldBuilder = Widget Function(
     BuildContext context, FastFormFieldState state);
 
 @immutable
@@ -19,7 +19,7 @@ abstract class FastFormField<T> extends StatefulWidget {
     this.validator,
   });
 
-  final FormFieldWidgetBuilder builder;
+  final FastFormFieldBuilder builder;
   final InputDecoration decoration;
   final bool enabled;
   final String helper;

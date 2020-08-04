@@ -8,27 +8,16 @@ import 'time_picker_form_field.dart';
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePicker({
-    builder,
-    decoration,
-    helper,
-    hint,
-    id,
+    FastFormFieldBuilder builder,
+    InputDecoration decoration,
+    String helper,
+    String hint,
+    @required int id,
     TimeOfDay initialValue,
-    label,
-    validator,
+    String label,
+    FormFieldValidator validator,
   }) : super(
-          builder: builder ??
-              (context, state) {
-                final style = FormStyle.of(context);
-                return TimePickerFormField(
-                  decoration: decoration ??
-                      style.createInputDecoration(context, state.widget),
-                  value: state.value,
-                  validator: validator,
-                  onChanged: state.onChanged,
-                  onSaved: state.onSaved,
-                );
-              },
+          builder: builder ?? _builder,
           helper: helper,
           hint: hint,
           id: id,
@@ -40,3 +29,16 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   @override
   State<StatefulWidget> createState() => FastFormFieldState<TimeOfDay>();
 }
+
+final FastFormFieldBuilder _builder = (context, state) {
+  final style = FormStyle.of(context);
+  final widget = state.widget as FastTimePicker;
+
+  return TimePickerFormField(
+    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    validator: widget.validator,
+    value: state.value,
+    onChanged: state.onChanged,
+    onSaved: state.onSaved,
+  );
+};

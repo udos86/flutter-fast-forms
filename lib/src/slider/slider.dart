@@ -8,33 +8,20 @@ import 'slider_form_field.dart';
 @immutable
 class FastSlider extends FastFormField<double> {
   FastSlider({
-    builder,
-    decoration,
-    this.divisions,
-    helper,
-    hint,
-    id,
+    FastFormFieldBuilder builder,
+    InputDecoration decoration,
+    String helper,
+    String hint,
+    @required int id,
     double initialValue,
-    label,
+    String label,
+    FormFieldValidator validator,
+    this.divisions,
     @required this.max,
     @required this.min,
-    validator,
   }) : super(
-          builder: builder ??
-              (context, state) {
-                final style = FormStyle.of(context);
-                return SliderFormField(
-                  decoration: decoration ??
-                      style.createInputDecoration(context, state.widget),
-                  divisions: divisions,
-                  max: max,
-                  min: min,
-                  value: state.value,
-                  validator: validator,
-                  onChanged: state.onChanged,
-                  onSaved: state.onSaved,
-                );
-              },
+          builder: builder ?? _builder,
+          decoration: decoration,
           helper: helper,
           hint: hint,
           id: id,
@@ -50,3 +37,19 @@ class FastSlider extends FastFormField<double> {
   @override
   State<StatefulWidget> createState() => FastFormFieldState<double>();
 }
+
+final FastFormFieldBuilder _builder = (context, state) {
+  final style = FormStyle.of(context);
+  final widget = state.widget as FastSlider;
+
+  return SliderFormField(
+    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    divisions: widget.divisions,
+    max: widget.max,
+    min: widget.min,
+    validator: widget.validator,
+    value: state.value,
+    onChanged: state.onChanged,
+    onSaved: state.onSaved,
+  );
+};

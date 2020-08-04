@@ -7,37 +7,24 @@ import '../form_style.dart';
 @immutable
 class FastTextField extends FastFormField<String> {
   FastTextField({
-    builder,
-    decoration,
-    this.enabled,
-    helper,
-    hint,
-    id,
+    FastFormFieldBuilder builder,
+    InputDecoration decoration,
+    bool enabled = true,
+    String helper,
+    String hint,
+    @required int id,
     String initialValue,
-    label,
-    validator,
+    String label,
+    FormFieldValidator validator,
+    this.autofocus = false,
+    this.autocorrect = true,
     this.keyboardType,
     this.inputFormatters,
     this.maxLength,
   }) : super(
-          builder: builder ??
-              (context, _state) {
-                final state = _state as TextFieldModelState;
-                final style = FormStyle.of(context);
-                return TextFormField(
-                  decoration: decoration ??
-                      style.createInputDecoration(context, state.widget),
-                  autovalidate: state.autovalidate,
-                  enabled: enabled,
-                  keyboardType: keyboardType ?? TextInputType.text,
-                  inputFormatters: [...inputFormatters],
-                  validator: validator,
-                  controller: state.textController,
-                  focusNode: state.focusNode,
-                  onChanged: state.onChanged,
-                  onSaved: state.onSaved,
-                );
-              },
+          builder: builder ?? _builder,
+          decoration: decoration,
+          enabled: enabled,
           helper: helper,
           hint: hint,
           id: id,
@@ -46,7 +33,8 @@ class FastTextField extends FastFormField<String> {
           validator: validator,
         );
 
-  final bool enabled;
+  final bool autocorrect;
+  final bool autofocus;
   final List<TextInputFormatter> inputFormatters;
   final TextInputType keyboardType;
   final int maxLength;
@@ -118,3 +106,25 @@ class TextFieldModelState extends FastFormFieldState<String> {
     }
   }
 }
+
+final FastFormFieldBuilder _builder = (context, _state) {
+  final state = _state as TextFieldModelState;
+  final style = FormStyle.of(context);
+  final widget = state.widget as FastTextField;
+
+  return TextFormField(
+    autocorrect: widget.autocorrect,
+    autofocus: widget.autofocus,
+    autovalidate: state.autovalidate,
+    controller: state.textController,
+    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    enabled: widget.enabled,
+    focusNode: state.focusNode,
+    keyboardType: widget.keyboardType ?? TextInputType.text,
+    inputFormatters: [...widget.inputFormatters],
+    maxLength: widget.maxLength,
+    validator: widget.validator,
+    onChanged: state.onChanged,
+    onSaved: state.onSaved,
+  );
+};

@@ -9,35 +9,22 @@ import 'date_picker_form_field.dart';
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
-    builder,
-    decoration,
-    this.format,
-    helper,
-    hint,
-    id,
+    FastFormFieldBuilder builder,
+    InputDecoration decoration,
+    String helper,
+    String hint,
+    @required int id,
     DateTime initialValue,
-    label,
-    validator,
+    String label,
+    FormFieldValidator validator,
     @required this.firstDate,
+    this.format,
     this.initialDatePickerMode,
     this.initialEntryMode,
     @required this.lastDate,
   }) : super(
-          builder: builder ??
-              (context, state) {
-                final style = FormStyle.of(context);
-                return DatePickerFormField(
-                  decoration: decoration ??
-                      style.createInputDecoration(context, state.widget),
-                  firstDate: firstDate,
-                  lastDate: lastDate,
-                  format: format,
-                  value: state.value,
-                  validator: validator,
-                  onChanged: state.onChanged,
-                  onSaved: state.onSaved,
-                );
-              },
+          builder: builder ?? _builder,
+          decoration: decoration,
           helper: helper,
           hint: hint,
           id: id,
@@ -55,3 +42,19 @@ class FastDatePicker extends FastFormField<DateTime> {
   @override
   State<StatefulWidget> createState() => FastFormFieldState<DateTime>();
 }
+
+final FastFormFieldBuilder _builder = (context, state) {
+  final style = FormStyle.of(context);
+  final widget = state.widget as FastDatePicker;
+
+  return DatePickerFormField(
+    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    firstDate: widget.firstDate,
+    lastDate: widget.lastDate,
+    format: widget.format,
+    value: state.value,
+    validator: widget.validator,
+    onChanged: state.onChanged,
+    onSaved: state.onSaved,
+  );
+};

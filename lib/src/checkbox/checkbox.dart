@@ -8,39 +8,45 @@ import 'checkbox_form_field.dart';
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   FastCheckbox({
-    builder,
-    decoration,
-    helper,
-    hint,
-    id,
+    FastFormFieldBuilder builder,
+    InputDecoration decoration,
+    String helper,
+    String hint,
+    @required int id,
     bool initialValue,
-    label,
+    String label,
+    FormFieldValidator validator,
     this.title,
-    validator,
+    this.tristate = false,
   }) : super(
-          builder: builder ??
-              (context, state) {
-                final style = FormStyle.of(context);
-                return CheckboxFormField(
-                  decoration: decoration ??
-                      style.createInputDecoration(context, state.widget),
-                  title: title,
-                  value: state.value,
-                  validator: validator,
-                  onChanged: state.onChanged,
-                  onSaved: state.onSaved,
-                );
-              },
+          builder: builder ?? _builder,
+          decoration: decoration,
           helper: helper,
           hint: hint,
           id: id,
-          initialValue: initialValue,
+          initialValue:
+              initialValue == null && !tristate ? false : initialValue,
           label: label,
           validator: validator,
         );
 
   final String title;
+  final bool tristate;
 
   @override
   State<StatefulWidget> createState() => FastFormFieldState<bool>();
 }
+
+final FastFormFieldBuilder _builder = (context, state) {
+  final style = FormStyle.of(context);
+  final widget = state.widget as FastCheckbox;
+
+  return CheckboxFormField(
+    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    title: widget.title,
+    value: state.value,
+    validator: widget.validator,
+    onChanged: state.onChanged,
+    onSaved: state.onSaved,
+  );
+};
