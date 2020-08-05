@@ -3,9 +3,16 @@ import 'package:intl/intl.dart';
 
 class DatePickerFormField extends FormField<DateTime> {
   DatePickerFormField({
+    String cancelText,
+    String confirmText,
     InputDecoration decoration = const InputDecoration(),
+    String errorFormatText,
+    String errorInvalidText,
+    String fieldHintText,
+    String fieldLabelText,
     DateTime firstDate,
     DateFormat format,
+    String helpText,
     Widget hint,
     DatePickerMode initialDatePickerMode = DatePickerMode.day,
     DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
@@ -25,8 +32,28 @@ class DatePickerFormField extends FormField<DateTime> {
             validator: validator,
             builder: (_field) {
               final field = _field as _DatePickerFormFieldState;
-              final InputDecoration effectiveDecoration = decoration
-                  .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+              final theme = Theme.of(field.context);
+              final InputDecoration effectiveDecoration =
+                  decoration.applyDefaults(theme.inputDecorationTheme);
+              print('test ${theme.inputDecorationTheme.contentPadding}');
+              final _showDatePicker = (DatePickerEntryMode entryMode) {
+                showDatePicker(
+                  cancelText: cancelText,
+                  confirmText: confirmText,
+                  context: field.context,
+                  errorFormatText: errorFormatText,
+                  errorInvalidText: errorInvalidText,
+                  fieldHintText: fieldHintText,
+                  fieldLabelText: fieldLabelText,
+                  helpText: helpText,
+                  initialDatePickerMode: initialDatePickerMode,
+                  initialEntryMode: entryMode,
+                  initialDate: field.value ?? DateTime.now(),
+                  firstDate: firstDate,
+                  lastDate: lastDate,
+                ).then(field.didChange);
+              };
+
               return InputDecorator(
                 decoration: effectiveDecoration.copyWith(
                   errorText: field.errorText,
@@ -36,27 +63,20 @@ class DatePickerFormField extends FormField<DateTime> {
                   children: <Widget>[
                     Expanded(
                       child: TextFormField(
-                        readOnly: true,
                         controller: field.controller,
                         decoration: InputDecoration(
-                            // border: InputBorder.none,
-                            ),
+                          border: InputBorder.none,
+                        ),
+                        focusNode: field.focusNode,
+                        readOnly: true,
                         textAlign: TextAlign.right,
+                        onTap: () => _showDatePicker(DatePickerEntryMode.input),
                       ),
                     ),
                     IconButton(
                       alignment: Alignment.centerRight,
                       icon: Icon(Icons.today),
-                      onPressed: () {
-                        showDatePicker(
-                          context: field.context,
-                          initialDatePickerMode: initialDatePickerMode,
-                          initialEntryMode: initialEntryMode,
-                          initialDate: field.value ?? DateTime.now(),
-                          firstDate: firstDate,
-                          lastDate: lastDate,
-                        ).then((value) => field.didChange(value));
-                      },
+                      onPressed: () => _showDatePicker(initialEntryMode),
                     ),
                   ],
                 ),
@@ -72,17 +92,19 @@ class DatePickerFormField extends FormField<DateTime> {
 
 class _DatePickerFormFieldState extends FormFieldState<DateTime> {
   final controller = TextEditingController();
+  final focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    controller.text = _formatValue(value);
+    controller.text = formatValue(value);
   }
 
   @override
   void dispose() {
     super.dispose();
     controller.dispose();
+    focusNode.dispose();
   }
 
   @override
@@ -91,11 +113,11 @@ class _DatePickerFormFieldState extends FormFieldState<DateTime> {
   @override
   void didChange(DateTime value) {
     super.didChange(value);
-    controller.text = _formatValue(value);
+    controller.text = formatValue(value);
     if (widget.onChanged != null) widget.onChanged(value);
   }
 
-  String _formatValue(DateTime value) {
+  String formatValue(DateTime value) {
     return value != null ? widget.dateFormat.format(value) : null;
   }
 }

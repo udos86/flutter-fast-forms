@@ -17,8 +17,15 @@ class FastDatePicker extends FastFormField<DateTime> {
     DateTime initialValue,
     String label,
     FormFieldValidator validator,
+    this.cancelText,
+    this.confirmText,
+    this.errorFormatText,
+    this.errorInvalidText,
+    this.fieldHintText,
+    this.fieldLabelText,
     @required this.firstDate,
     this.format,
+    this.helpText,
     this.initialDatePickerMode,
     this.initialEntryMode,
     @required this.lastDate,
@@ -33,8 +40,15 @@ class FastDatePicker extends FastFormField<DateTime> {
           validator: validator,
         );
 
+  final String cancelText;
+  final String confirmText;
+  final String errorFormatText;
+  final String errorInvalidText;
+  final String fieldHintText;
+  final String fieldLabelText;
   final DateTime firstDate;
   final DateFormat format;
+  final String helpText;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
@@ -48,8 +62,15 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastDatePicker;
 
   return DatePickerFormField(
+    cancelText: widget.cancelText,
+    confirmText: widget.confirmText,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    errorFormatText: widget.errorFormatText,
+    errorInvalidText: widget.errorInvalidText,
+    fieldHintText: widget.fieldHintText,
+    fieldLabelText: widget.fieldLabelText,
     firstDate: widget.firstDate,
+    helpText: widget.helpText,
     lastDate: widget.lastDate,
     format: widget.format,
     value: state.value,

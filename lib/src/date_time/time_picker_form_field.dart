@@ -18,8 +18,15 @@ class TimePickerFormField extends FormField<TimeOfDay> {
           validator: validator,
           builder: (_field) {
             final field = _field as _TimePickerFormFieldState;
-            final InputDecoration effectiveDecoration = decoration
-                .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+            final theme = Theme.of(field.context);
+            final InputDecoration effectiveDecoration =
+                decoration.applyDefaults(theme.inputDecorationTheme);
+            final _showTimePicker = () {
+              showTimePicker(
+                context: field.context,
+                initialTime: field.value ?? TimeOfDay.now(),
+              ).then((value) => field.didChange(value));
+            };
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
@@ -29,20 +36,19 @@ class TimePickerFormField extends FormField<TimeOfDay> {
                 children: <Widget>[
                   Expanded(
                     child: TextFormField(
-                      readOnly: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
                       controller: field.controller,
+                      readOnly: true,
                       textAlign: TextAlign.right,
+                      onTap: _showTimePicker,
                     ),
                   ),
                   IconButton(
                     alignment: Alignment.centerRight,
                     icon: Icon(Icons.schedule),
-                    onPressed: () {
-                      showTimePicker(
-                        context: field.context,
-                        initialTime: field.value ?? TimeOfDay.now(),
-                      ).then((value) => field.didChange(value));
-                    },
+                    onPressed: _showTimePicker,
                   ),
                 ],
               ),

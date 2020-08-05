@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import 'form_field.dart';
 
@@ -9,7 +10,10 @@ final InputDecorationCreator defaultInputDecorationCreator =
     (BuildContext context, FastFormField model) {
   final theme = Theme.of(context);
   return InputDecoration(
-    labelText: model.label,
+    contentPadding: (model is FastDropdown || model is FastTextField)
+        ? EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
+        : EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+   labelText: model.label,
     helperText: model.helper,
     hintText: model.hint,
     labelStyle: TextStyle(
@@ -31,13 +35,13 @@ final InputDecorationCreator defaultInputDecorationCreator =
     focusedErrorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.red[500], width: 2),
     ),
-    filled: true,
+    filled: false,
     fillColor: Colors.white,
   );
 };
 
 const defaultPadding =
-    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
+const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
 
 class FormStyle extends InheritedWidget {
   FormStyle({
@@ -45,7 +49,8 @@ class FormStyle extends InheritedWidget {
     InputDecorationCreator decorationCreator,
     Key key,
     EdgeInsets padding,
-  })  : assert(child != null),
+  })
+      : assert(child != null),
         this.getInputDecoration =
             decorationCreator ?? defaultInputDecorationCreator,
         this.padding = padding ?? defaultPadding,
