@@ -6,25 +6,23 @@ typedef SliderLabelBuilder = String Function(
 class SliderFormField extends FormField<double> {
   SliderFormField({
     Key key,
-    double value,
+    InputDecoration decoration = const InputDecoration(),
+    int divisions,
     @required double min,
     @required double max,
-    int divisions,
     SliderLabelBuilder labelBuilder,
-    this.onChanged,
-    InputDecoration decoration = const InputDecoration(),
     FormFieldSetter onSaved,
     FormFieldValidator validator,
-    Widget hint,
+    double value,
+    this.onChanged,
   })  : assert(decoration != null),
         super(
-          key: key,
-          onSaved: onSaved,
-          initialValue: value ?? min,
-          validator: validator,
           builder: (field) {
-            final InputDecoration effectiveDecoration = decoration
+            final effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+            final label = labelBuilder != null
+                ? labelBuilder(field.context, field.value)
+                : _labelBuilder(field.context, field.value);
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
@@ -34,20 +32,18 @@ class SliderFormField extends FormField<double> {
                 children: <Widget>[
                   Expanded(
                     child: Slider.adaptive(
-                      value: field.value,
-                      min: min,
-                      max: max,
                       divisions: divisions ?? (max - min).toInt(),
-                      label: labelBuilder != null
-                          ? labelBuilder(field.context, field.value)
-                          : _valueToString(field.value),
+                      label: label,
+                      max: max,
+                      min: min,
+                      value: field.value,
                       onChanged: field.didChange,
                     ),
                   ),
                   Container(
                     width: 32.0,
                     child: Text(
-                      _valueToString(field.value),
+                      label,
                       style: TextStyle(
                         fontSize: 16.0,
                       ),
@@ -57,13 +53,13 @@ class SliderFormField extends FormField<double> {
               ),
             );
           },
+          key: key,
+          initialValue: value ?? min,
+          onSaved: onSaved,
+          validator: validator,
         );
 
   final ValueChanged<double> onChanged;
-
-  static String _valueToString(double value) {
-    return value.toStringAsFixed(0);
-  }
 
   @override
   FormFieldState<double> createState() => _SliderFormFieldState();
@@ -79,3 +75,7 @@ class _SliderFormFieldState extends FormFieldState<double> {
     if (widget.onChanged != null) widget.onChanged(value);
   }
 }
+
+final SliderLabelBuilder _labelBuilder = (BuildContext context, double value) {
+  return value.toStringAsFixed(0);
+};
