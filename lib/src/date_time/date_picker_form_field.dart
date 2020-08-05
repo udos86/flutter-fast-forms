@@ -35,7 +35,6 @@ class DatePickerFormField extends FormField<DateTime> {
               final theme = Theme.of(field.context);
               final InputDecoration effectiveDecoration =
                   decoration.applyDefaults(theme.inputDecorationTheme);
-              print('test ${theme.inputDecorationTheme.contentPadding}');
               final _showDatePicker = (DatePickerEntryMode entryMode) {
                 showDatePicker(
                   cancelText: cancelText,
@@ -69,7 +68,7 @@ class DatePickerFormField extends FormField<DateTime> {
                         ),
                         focusNode: field.focusNode,
                         readOnly: true,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.left,
                         onTap: () => _showDatePicker(DatePickerEntryMode.input),
                       ),
                     ),

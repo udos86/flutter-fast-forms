@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+typedef SliderLabelBuilder = String Function(
+    BuildContext context, double value);
+
 class SliderFormField extends FormField<double> {
   SliderFormField({
     Key key,
@@ -7,7 +10,7 @@ class SliderFormField extends FormField<double> {
     @required double min,
     @required double max,
     int divisions,
-    String label,
+    SliderLabelBuilder labelBuilder,
     this.onChanged,
     InputDecoration decoration = const InputDecoration(),
     FormFieldSetter onSaved,
@@ -35,14 +38,16 @@ class SliderFormField extends FormField<double> {
                       min: min,
                       max: max,
                       divisions: divisions ?? (max - min).toInt(),
-                      label: label ?? "${_valueToString(field.value)}",
+                      label: labelBuilder != null
+                          ? labelBuilder(field.context, field.value)
+                          : _valueToString(field.value),
                       onChanged: field.didChange,
                     ),
                   ),
                   Container(
                     width: 32.0,
                     child: Text(
-                      "${_valueToString(field.value)}",
+                      _valueToString(field.value),
                       style: TextStyle(
                         fontSize: 16.0,
                       ),

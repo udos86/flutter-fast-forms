@@ -41,7 +41,7 @@ class TimePickerFormField extends FormField<TimeOfDay> {
                       ),
                       controller: field.controller,
                       readOnly: true,
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.left,
                       onTap: _showTimePicker,
                     ),
                   ),

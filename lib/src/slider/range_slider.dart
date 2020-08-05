@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_style.dart';
 
-import 'slider_form_field.dart';
+import 'range_slider_form_field.dart';
 
 @immutable
-class FastSlider extends FastFormField<double> {
-  FastSlider({
+class FastRangeSlider extends FastFormField<RangeValues> {
+  FastRangeSlider({
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
     String hint,
     @required int id,
-    double initialValue,
+    RangeValues initialValue,
     String label,
     FormFieldValidator validator,
     this.divisions,
-    this.labelBuilder,
+    this.labelsBuilder,
     @required this.max,
     @required this.min,
   }) : super(
@@ -32,21 +32,22 @@ class FastSlider extends FastFormField<double> {
         );
 
   final int divisions;
-  final SliderLabelBuilder labelBuilder;
+  final RangeLabelsBuilder labelsBuilder;
   final double max;
   final double min;
 
   @override
-  State<StatefulWidget> createState() => FastFormFieldState<double>();
+  State<StatefulWidget> createState() => FastFormFieldState<RangeValues>();
 }
 
 final FastFormFieldBuilder _builder = (context, state) {
   final style = FormStyle.of(context);
-  final widget = state.widget as FastSlider;
+  final widget = state.widget as FastRangeSlider;
 
-  return SliderFormField(
+  return RangeSliderFormField(
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     divisions: widget.divisions,
+    labelsBuilder: widget.labelsBuilder,
     max: widget.max,
     min: widget.min,
     validator: widget.validator,

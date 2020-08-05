@@ -126,5 +126,6 @@ final FastFormFieldBuilder _builder = (context, _state) {
     validator: widget.validator,
     onChanged: state.onChanged,
     onSaved: state.onSaved,
+    onTap: () => print(context.size.height),
   );
 };

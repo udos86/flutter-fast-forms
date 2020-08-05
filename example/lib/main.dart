@@ -117,6 +117,12 @@ class FormPage extends StatelessWidget {
             max: 10,
             hint: 'Just a hint',
           ),
+          FastRangeSlider(
+            id: 667,
+            label: 'Range Slider',
+            min: 0,
+            max: 10,
+          ),
           CustomFormFieldModel(
             id: 47,
             label: 'Custom Form Field',
