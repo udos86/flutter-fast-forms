@@ -19,7 +19,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
     RangeSliderFixBuilder prefixBuilder,
     RangeSliderFixBuilder suffixBuilder,
     FormFieldSetter onSaved,
-    FormFieldValidator validator,
+    FormFieldValidator<RangeValues> validator,
     RangeValues value,
     this.onChanged,
   })  : assert(decoration != null),
@@ -89,7 +89,7 @@ final RangeSliderLabelsBuilder rangeSliderLabelsBuilder =
 final RangeSliderFixBuilder rangeSliderPrefixBuilder =
     (BuildContext context, FormFieldState<RangeValues> state) {
   return Container(
-    width: 32.0,
+    width: 48.0,
     child: Center(
       child: Text(
         state.value.start.toStringAsFixed(0),
@@ -104,7 +104,7 @@ final RangeSliderFixBuilder rangeSliderPrefixBuilder =
 final RangeSliderFixBuilder rangeSliderSuffixBuilder =
     (BuildContext context, FormFieldState<RangeValues> state) {
   return Container(
-    width: 32.0,
+    width: 48.0,
     child: Center(
       child: Text(
         state.value.end.toStringAsFixed(0),

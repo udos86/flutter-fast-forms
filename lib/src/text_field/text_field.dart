@@ -44,66 +44,29 @@ class FastTextField extends FastFormField<String> {
 }
 
 class TextFieldModelState extends FastFormFieldState<String> {
-  bool focused = false;
-  bool touched = false;
-
   TextEditingController textController;
-  FocusNode focusNode;
 
   @override
   void initState() {
     super.initState();
-
     textController = TextEditingController(text: value ?? '');
     textController.addListener(_onTextChanged);
-
-    focusNode = FocusNode();
-    focusNode.addListener(_onFocusChanged);
   }
 
   @override
   void dispose() {
     super.dispose();
     textController.dispose();
-    focusNode.dispose();
   }
 
   @override
   void reset() {
     super.reset();
-    this.focused = false;
-    this.touched = false;
     this.textController.text = widget.initialValue ?? '';
-  }
-
-  @override
-  bool get autovalidate => touched;
-
-  void markAsFocused([bool focused = true]) {
-    if (this.focused != focused) {
-      setState(() => this.focused = focused);
-    }
-  }
-
-  void markAsTouched([bool touched = true]) {
-    if (this.touched != touched) {
-      setState(() => this.touched = touched);
-    }
   }
 
   void _onTextChanged() {
     onChanged(textController.text);
-  }
-
-  void _onFocusChanged() {
-    if (focusNode.hasFocus) {
-      markAsFocused();
-    } else {
-      markAsFocused(false);
-      if (!touched) {
-        markAsTouched();
-      }
-    }
   }
 }
 

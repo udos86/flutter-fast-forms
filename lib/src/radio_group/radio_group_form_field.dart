@@ -10,13 +10,13 @@ enum RadioGroupOrientation {
 class RadioGroupFormField<T> extends FormField<T> {
   RadioGroupFormField({
     Key key,
-    T value,
+    InputDecoration decoration = const InputDecoration(),
     @required List<RadioOption<T>> options,
     RadioGroupOrientation orientation = RadioGroupOrientation.vertical,
-    this.onChanged,
-    InputDecoration decoration = const InputDecoration(),
     FormFieldSetter<T> onSaved,
+    T value,
     FormFieldValidator<T> validator,
+    this.onChanged,
   })  : assert(decoration != null),
         super(
           key: key,
@@ -26,16 +26,14 @@ class RadioGroupFormField<T> extends FormField<T> {
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+            final _options = _buildOptions<T>(options, field, orientation);
             return InputDecorator(
-              decoration: effectiveDecoration.copyWith(
-                errorText: field.errorText,
-              ),
-              child: orientation == RadioGroupOrientation.horizontal
-                  ? Row(
-                      children: _buildOptions<T>(
-                          options, field, RadioGroupOrientation.horizontal))
-                  : Column(children: _buildOptions<T>(options, field)),
-            );
+                decoration: effectiveDecoration.copyWith(
+                  errorText: field.errorText,
+                ),
+                child: orientation == RadioGroupOrientation.horizontal
+                    ? Row(children: _options)
+                    : Column(children: _options));
           },
         );
 
@@ -57,9 +55,7 @@ class RadioGroupFormField<T> extends FormField<T> {
 
       return orientation == RadioGroupOrientation.vertical
           ? tile
-          : Expanded(
-              child: tile,
-            );
+          : Expanded(child: tile);
     }).toList();
   }
 }

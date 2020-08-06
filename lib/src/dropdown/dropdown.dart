@@ -49,6 +49,7 @@ final FastFormFieldBuilder _builder = (context, state) {
     autofocus: widget.autofocus,
     autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    focusNode: state.focusNode,
     items: FastDropdown.buildDropdownMenuItems(widget.items),
     validator: widget.validator,
     value: state.value,

@@ -39,7 +39,7 @@ class FormPage extends StatelessWidget {
         child: FastForm(
           formKey: formKey,
           model: buildFormModel(context),
-          onChanged: (value) => print('Form changed: ${value.toString()}'),
+          // onChanged: (value) => print('Form changed: ${value.toString()}'),
         ),
       ),
     );

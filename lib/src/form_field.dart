@@ -33,16 +33,28 @@ abstract class FastFormField<T> extends StatefulWidget {
 }
 
 class FastFormFieldState<T> extends State<FastFormField> {
-  T value;
+  bool focused = false;
+  bool touched = false;
 
-  bool get autovalidate => true;
+  T value;
+  FocusNode focusNode;
+
+  bool get autovalidate => touched;
 
   FastFormStore get store => Provider.of<FastFormStore>(context, listen: false);
 
   @override
   void initState() {
     super.initState();
+    focusNode = FocusNode();
+    focusNode.addListener(_onFocusChanged);
     value = store.getValue(widget.id) ?? widget.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    focusNode.dispose();
   }
 
   @override
@@ -51,7 +63,30 @@ class FastFormFieldState<T> extends State<FastFormField> {
   }
 
   void reset() {
+    this.focused = false;
+    this.touched = false;
     this.value = widget.initialValue;
+  }
+
+  void markAsFocused([bool focused = true]) {
+    if (this.focused != focused) {
+      setState(() => this.focused = focused);
+    }
+  }
+
+  void markAsTouched([bool touched = true]) {
+    if (this.touched != touched) {
+      setState(() => this.touched = touched);
+    }
+  }
+
+  void _onFocusChanged() {
+    if (focusNode.hasFocus) {
+      markAsFocused();
+    } else {
+      markAsFocused(false);
+      if (!touched) markAsTouched();
+    }
   }
 
   void onSaved(T value) {
@@ -59,7 +94,12 @@ class FastFormFieldState<T> extends State<FastFormField> {
   }
 
   void onChanged(T value) {
+    if (!this.touched) markAsTouched();
     _store(value);
+  }
+
+  void onTouched() {
+    markAsTouched();
   }
 
   void _store(T value) {
