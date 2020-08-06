@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
+
+import 'dropdown/dropdown.dart';
+import 'text_field/text_field.dart';
 
 import 'form_field.dart';
 
@@ -13,7 +15,7 @@ final InputDecorationCreator defaultInputDecorationCreator =
     contentPadding: (model is FastDropdown || model is FastTextField)
         ? EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
         : EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
-   labelText: model.label,
+    labelText: model.label,
     helperText: model.helper,
     hintText: model.hint,
     labelStyle: TextStyle(
@@ -41,7 +43,7 @@ final InputDecorationCreator defaultInputDecorationCreator =
 };
 
 const defaultPadding =
-const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
+    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
 
 class FormStyle extends InheritedWidget {
   FormStyle({
@@ -49,8 +51,7 @@ class FormStyle extends InheritedWidget {
     InputDecorationCreator decorationCreator,
     Key key,
     EdgeInsets padding,
-  })
-      : assert(child != null),
+  })  : assert(child != null),
         this.getInputDecoration =
             decorationCreator ?? defaultInputDecorationCreator,
         this.padding = padding ?? defaultPadding,

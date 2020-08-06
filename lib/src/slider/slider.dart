@@ -20,6 +20,8 @@ class FastSlider extends FastFormField<double> {
     this.labelBuilder,
     @required this.max,
     @required this.min,
+    this.prefixBuilder,
+    this.suffixBuilder,
   }) : super(
           builder: builder ?? _builder,
           decoration: decoration,
@@ -35,6 +37,8 @@ class FastSlider extends FastFormField<double> {
   final SliderLabelBuilder labelBuilder;
   final double max;
   final double min;
+  final SliderFixBuilder prefixBuilder;
+  final SliderFixBuilder suffixBuilder;
 
   @override
   State<StatefulWidget> createState() => FastFormFieldState<double>();
@@ -47,8 +51,11 @@ final FastFormFieldBuilder _builder = (context, state) {
   return SliderFormField(
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     divisions: widget.divisions,
+    labelBuilder: widget.labelBuilder,
     max: widget.max,
     min: widget.min,
+    prefixBuilder: widget.prefixBuilder,
+    suffixBuilder: widget.suffixBuilder,
     validator: widget.validator,
     value: state.value,
     onChanged: state.onChanged,

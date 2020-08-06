@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-typedef RangeLabelsBuilder = RangeLabels Function(
-    BuildContext context, RangeValues values);
+typedef RangeSliderLabelsBuilder = RangeLabels Function(
+    BuildContext context, FormFieldState<RangeValues> state);
+
+typedef RangeSliderFixBuilder = Widget Function(
+    BuildContext context, FormFieldState<RangeValues> state);
 
 class RangeSliderFormField extends FormField<RangeValues> {
   RangeSliderFormField({
@@ -10,9 +13,11 @@ class RangeSliderFormField extends FormField<RangeValues> {
     int divisions,
     Widget hint,
     String label,
-    RangeLabelsBuilder labelsBuilder,
+    RangeSliderLabelsBuilder labelsBuilder,
     @required double min,
     @required double max,
+    RangeSliderFixBuilder prefixBuilder,
+    RangeSliderFixBuilder suffixBuilder,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
     RangeValues value,
@@ -26,6 +31,9 @@ class RangeSliderFormField extends FormField<RangeValues> {
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+            final labels = labelsBuilder != null
+                ? labelsBuilder(field.context, field)
+                : null;
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
@@ -33,43 +41,20 @@ class RangeSliderFormField extends FormField<RangeValues> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: 32.0,
-                    child: Center(
-                      child: Text(
-                        _valueToString(field.value.start),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
-                  ),
+                  if (prefixBuilder != null)
+                    prefixBuilder(field.context, field),
                   Expanded(
                     child: RangeSlider(
-                      values: field.value,
+                      divisions: divisions,
+                      labels: labels,
                       min: min,
                       max: max,
-                      divisions: divisions ?? (max - min).toInt(),
-                      labels: labelsBuilder != null
-                          ? labelsBuilder(field.context, field.value)
-                          : RangeLabels(
-                              _valueToString(field.value.start),
-                              _valueToString(field.value.end),
-                            ),
+                      values: field.value,
                       onChanged: field.didChange,
                     ),
                   ),
-                  Container(
-                    width: 32.0,
-                    child: Center(
-                      child: Text(
-                        _valueToString(field.value.end),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
-                  ),
+                  if (suffixBuilder != null)
+                    suffixBuilder(field.context, field),
                 ],
               ),
             );
@@ -77,10 +62,6 @@ class RangeSliderFormField extends FormField<RangeValues> {
         );
 
   final ValueChanged<RangeValues> onChanged;
-
-  static String _valueToString(double value) {
-    return value.toStringAsFixed(0);
-  }
 
   @override
   FormFieldState<RangeValues> createState() => _SliderFormFieldState();
@@ -96,3 +77,41 @@ class _SliderFormFieldState extends FormFieldState<RangeValues> {
     if (widget.onChanged != null) widget.onChanged(value);
   }
 }
+
+final RangeSliderLabelsBuilder rangeSliderLabelsBuilder =
+    (BuildContext context, FormFieldState<RangeValues> state) {
+  return RangeLabels(
+    state.value.start.toStringAsFixed(0),
+    state.value.end.toStringAsFixed(0),
+  );
+};
+
+final RangeSliderFixBuilder rangeSliderPrefixBuilder =
+    (BuildContext context, FormFieldState<RangeValues> state) {
+  return Container(
+    width: 32.0,
+    child: Center(
+      child: Text(
+        state.value.start.toStringAsFixed(0),
+        style: TextStyle(
+          fontSize: 16.0,
+        ),
+      ),
+    ),
+  );
+};
+
+final RangeSliderFixBuilder rangeSliderSuffixBuilder =
+    (BuildContext context, FormFieldState<RangeValues> state) {
+  return Container(
+    width: 32.0,
+    child: Center(
+      child: Text(
+        state.value.end.toStringAsFixed(0),
+        style: TextStyle(
+          fontSize: 16.0,
+        ),
+      ),
+    ),
+  );
+};

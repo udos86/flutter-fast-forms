@@ -112,16 +112,28 @@ class FormPage extends StatelessWidget {
           ),
           FastSlider(
             id: 666,
-            label: 'Slider',
+            label: 'Sample Slider',
+            helper: 'A Slider with prefix and suffix widgets',
             min: 0,
             max: 10,
-            hint: 'Just a hint',
+            prefixBuilder: (context, state) => IconButton(
+              icon: Icon(Icons.volume_off),
+              onPressed: () => state.didChange(0),
+            ),
+            suffixBuilder: (context, state) => IconButton(
+              icon: Icon(Icons.volume_up),
+              onPressed: () => state.didChange(10),
+            ),
           ),
           FastRangeSlider(
             id: 667,
             label: 'Range Slider',
             min: 0,
             max: 10,
+            divisions: 10,
+            labelsBuilder: rangeSliderLabelsBuilder,
+            prefixBuilder: rangeSliderPrefixBuilder,
+            suffixBuilder: rangeSliderSuffixBuilder,
           ),
           CustomFormFieldModel(
             id: 47,

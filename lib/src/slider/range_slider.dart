@@ -20,6 +20,8 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     this.labelsBuilder,
     @required this.max,
     @required this.min,
+    this.prefixBuilder,
+    this.suffixBuilder,
   }) : super(
           builder: builder ?? _builder,
           decoration: decoration,
@@ -32,9 +34,11 @@ class FastRangeSlider extends FastFormField<RangeValues> {
         );
 
   final int divisions;
-  final RangeLabelsBuilder labelsBuilder;
+  final RangeSliderLabelsBuilder labelsBuilder;
   final double max;
   final double min;
+  final RangeSliderFixBuilder prefixBuilder;
+  final RangeSliderFixBuilder suffixBuilder;
 
   @override
   State<StatefulWidget> createState() => FastFormFieldState<RangeValues>();
@@ -50,6 +54,8 @@ final FastFormFieldBuilder _builder = (context, state) {
     labelsBuilder: widget.labelsBuilder,
     max: widget.max,
     min: widget.min,
+    prefixBuilder: widget.prefixBuilder,
+    suffixBuilder: widget.suffixBuilder,
     validator: widget.validator,
     value: state.value,
     onChanged: state.onChanged,

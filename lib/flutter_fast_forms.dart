@@ -3,6 +3,8 @@ export 'src/checkbox/checkbox_form_field.dart';
 
 export 'src/date_time/date_picker.dart';
 export 'src/date_time/date_picker_form_field.dart';
+export 'src/date_time/date_range_picker.dart';
+export 'src/date_time/date_range_picker_form_field.dart';
 export 'src/date_time/time_picker.dart';
 export 'src/date_time/time_picker_form_field.dart';
 
