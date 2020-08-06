@@ -12,7 +12,6 @@ abstract class FastFormField<T> extends StatefulWidget {
     this.decoration,
     this.enabled = true,
     this.helper,
-    this.hint,
     @required this.id,
     this.initialValue,
     this.label,
@@ -23,8 +22,7 @@ abstract class FastFormField<T> extends StatefulWidget {
   final InputDecoration decoration;
   final bool enabled;
   final String helper;
-  final String hint;
-  final int id;
+  final String id;
   final T initialValue;
   final String label;
   final FormFieldValidator validator;

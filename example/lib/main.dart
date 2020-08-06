@@ -57,17 +57,17 @@ class FormPage extends StatelessWidget {
         ),
         children: [
           FastDatePicker(
-            id: 97,
+            id: 'date_picker_1',
             label: 'Arrival',
             firstDate: DateTime(1997),
             lastDate: DateTime(2021),
           ),
           FastTimePicker(
-            id: 1000,
+            id: 'time_picker_1',
             label: 'Time Picker',
           ),
           FastTextField(
-            id: 42,
+            id: 'text_field_1',
             label: 'Text Field',
             hint: 'MM/JJJJ',
             validator: Validators.compose([
@@ -80,7 +80,7 @@ class FormPage extends StatelessWidget {
             ],
           ),
           FastDropdown(
-            id: 23,
+            id: 'dropdown_1',
             label: 'Dropdown Field',
             items: [
               'Norway',
@@ -93,7 +93,7 @@ class FormPage extends StatelessWidget {
             validator: Validators.required(),
           ),
           FastRadioGroup(
-            id: 7,
+            id: 'radio_group_1',
             label: 'Radio Group Model',
             options: [
               RadioOption(
@@ -111,7 +111,7 @@ class FormPage extends StatelessWidget {
             ],
           ),
           FastSlider(
-            id: 666,
+            id: 'slider_1',
             label: 'Sample Slider',
             helper: 'A Slider with prefix and suffix widgets',
             min: 0,
@@ -126,7 +126,7 @@ class FormPage extends StatelessWidget {
             ),
           ),
           FastRangeSlider(
-            id: 667,
+            id: 'range_slider_1',
             label: 'Range Slider',
             min: 0,
             max: 10,
@@ -136,7 +136,7 @@ class FormPage extends StatelessWidget {
             suffixBuilder: rangeSliderSuffixBuilder,
           ),
           CustomFormFieldModel(
-            id: 47,
+            id: 'custom_form_field',
             label: 'Custom Form Field',
             builder: (context, state) {
               final style = FormStyle.of(context);
@@ -146,7 +146,7 @@ class FormPage extends StatelessWidget {
             },
           ),
           FastCheckbox(
-            id: 999,
+            id: 'checkbox_1',
             title: 'I accept',
           ),
         ],

@@ -17,11 +17,10 @@ final InputDecorationCreator defaultInputDecorationCreator =
         : EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
     labelText: model.label,
     helperText: model.helper,
-    hintText: model.hint,
+    hintText: model is FastTextField ? model.hint : null,
     labelStyle: TextStyle(
       color: theme.textTheme.bodyText1.color,
     ),
-    floatingLabelBehavior: FloatingLabelBehavior.always,
     disabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.grey[700], width: 1),
     ),

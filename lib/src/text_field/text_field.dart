@@ -11,13 +11,13 @@ class FastTextField extends FastFormField<String> {
     InputDecoration decoration,
     bool enabled = true,
     String helper,
-    String hint,
-    @required int id,
+    @required String id,
     String initialValue,
     String label,
     FormFieldValidator validator,
     this.autofocus = false,
     this.autocorrect = true,
+    this.hint,
     this.keyboardType,
     this.inputFormatters,
     this.maxLength,
@@ -26,7 +26,6 @@ class FastTextField extends FastFormField<String> {
           decoration: decoration,
           enabled: enabled,
           helper: helper,
-          hint: hint,
           id: id,
           initialValue: initialValue ?? '',
           label: label,
@@ -35,6 +34,7 @@ class FastTextField extends FastFormField<String> {
 
   final bool autocorrect;
   final bool autofocus;
+  final String hint;
   final List<TextInputFormatter> inputFormatters;
   final TextInputType keyboardType;
   final int maxLength;

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'form_store.dart';
 import 'form_field_group.dart';
 
-typedef FormChanged = void Function(Map<int, dynamic> value);
+typedef FormChanged = void Function(Map<String, dynamic> value);
 
 class FastForm extends StatefulWidget {
   FastForm({
@@ -21,7 +21,7 @@ class FastForm extends StatefulWidget {
 
   final InputDecorationCreator decorationCreator;
   final GlobalKey<FormState> formKey;
-  final Map<int, dynamic> initialState;
+  final Map<String, dynamic> initialState;
   final List<FastFormFieldGroup> model;
   final FormChanged onChanged;
   final EdgeInsets padding;

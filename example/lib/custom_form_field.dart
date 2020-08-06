@@ -16,7 +16,7 @@ class CustomValue {
 class CustomFormFieldModel extends FastFormField<CustomValue> {
   CustomFormFieldModel({
     FastFormFieldBuilder builder,
-    @required int id,
+    @required String id,
     String label,
   }) : super(builder: builder, id: id, label: label);
 

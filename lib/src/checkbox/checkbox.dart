@@ -11,8 +11,7 @@ class FastCheckbox extends FastFormField<bool> {
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
-    String hint,
-    @required int id,
+    @required String id,
     bool initialValue,
     String label,
     FormFieldValidator validator,
@@ -22,7 +21,6 @@ class FastCheckbox extends FastFormField<bool> {
           builder: builder ?? _builder,
           decoration: decoration,
           helper: helper,
-          hint: hint,
           id: id,
           initialValue:
               initialValue == null && !tristate ? false : initialValue,

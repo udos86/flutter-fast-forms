@@ -7,19 +7,20 @@ import 'utils/form_model.dart';
 
 class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
   FastFormStore({
-    Map<int, dynamic> initialState,
+    Map<String, dynamic> initialState,
   }) : this._fields = initialState ?? {};
 
-  final Map<int, dynamic> _fields;
+  final Map<String, dynamic> _fields;
 
-  UnmodifiableMapView<int, dynamic> get fields => UnmodifiableMapView(_fields);
+  UnmodifiableMapView<String, dynamic> get fields =>
+      UnmodifiableMapView(_fields);
 
-  setValue(int fieldId, dynamic value) {
+  setValue(String fieldId, dynamic value) {
     _fields[fieldId] = value;
     notifyListeners();
   }
 
-  getValue(int fieldId) {
+  getValue(String fieldId) {
     return _fields[fieldId];
   }
 
