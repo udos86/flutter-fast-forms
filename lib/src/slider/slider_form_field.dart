@@ -9,6 +9,7 @@ typedef SliderFixBuilder = Widget Function(
 class SliderFormField extends FormField<double> {
   SliderFormField({
     Key key,
+    bool autofocus,
     InputDecoration decoration = const InputDecoration(),
     int divisions,
     @required double min,
@@ -39,6 +40,7 @@ class SliderFormField extends FormField<double> {
                     prefixBuilder(field.context, field),
                   Expanded(
                     child: Slider.adaptive(
+                      autofocus: autofocus,
                       divisions: divisions,
                       label: label,
                       max: max,

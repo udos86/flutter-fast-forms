@@ -6,6 +6,7 @@ import '../form_style.dart';
 @immutable
 class FastDropdown extends FastFormField<String> {
   FastDropdown({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
@@ -15,6 +16,7 @@ class FastDropdown extends FastFormField<String> {
     FormFieldValidator validator,
     this.items,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
           helper: helper,
@@ -44,6 +46,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastDropdown;
 
   return DropdownButtonFormField(
+    autofocus: widget.autofocus,
     autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     items: FastDropdown.buildDropdownMenuItems(widget.items),

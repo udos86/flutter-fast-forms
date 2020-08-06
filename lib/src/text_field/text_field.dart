@@ -7,6 +7,7 @@ import '../form_style.dart';
 @immutable
 class FastTextField extends FastFormField<String> {
   FastTextField({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     bool enabled = true,
@@ -15,13 +16,13 @@ class FastTextField extends FastFormField<String> {
     String initialValue,
     String label,
     FormFieldValidator validator,
-    this.autofocus = false,
     this.autocorrect = true,
     this.hint,
     this.keyboardType,
     this.inputFormatters,
     this.maxLength,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
           enabled: enabled,
@@ -33,7 +34,6 @@ class FastTextField extends FastFormField<String> {
         );
 
   final bool autocorrect;
-  final bool autofocus;
   final String hint;
   final List<TextInputFormatter> inputFormatters;
   final TextInputType keyboardType;

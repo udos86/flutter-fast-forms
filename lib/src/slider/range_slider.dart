@@ -8,6 +8,7 @@ import 'range_slider_form_field.dart';
 @immutable
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
@@ -22,6 +23,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     this.prefixBuilder,
     this.suffixBuilder,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
           helper: helper,

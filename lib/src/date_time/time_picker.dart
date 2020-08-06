@@ -8,6 +8,7 @@ import 'time_picker_form_field.dart';
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePicker({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
@@ -16,6 +17,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     String label,
     FormFieldValidator validator,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           helper: helper,
           id: id,

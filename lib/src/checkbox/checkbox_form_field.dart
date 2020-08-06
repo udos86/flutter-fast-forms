@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CheckboxFormField extends FormField<bool> {
   CheckboxFormField({
     Key key,
+    bool autofocus,
     bool value,
     this.onChanged,
     InputDecoration decoration = const InputDecoration(),
@@ -24,6 +25,7 @@ class CheckboxFormField extends FormField<bool> {
                   errorText: field.errorText,
                 ),
                 child: CheckboxListTile(
+                  autofocus: autofocus,
                   selected: field.value,
                   value: field.value,
                   onChanged: field.didChange,

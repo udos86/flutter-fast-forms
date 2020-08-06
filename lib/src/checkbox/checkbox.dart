@@ -8,6 +8,7 @@ import 'checkbox_form_field.dart';
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   FastCheckbox({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
@@ -18,6 +19,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.title,
     this.tristate = false,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
           helper: helper,
@@ -40,6 +42,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastCheckbox;
 
   return CheckboxFormField(
+    autofocus: widget.autofocus,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     title: widget.title,
     value: state.value,

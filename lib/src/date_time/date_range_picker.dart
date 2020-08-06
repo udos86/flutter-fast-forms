@@ -9,6 +9,7 @@ import 'date_range_picker_form_field.dart';
 @immutable
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
@@ -32,6 +33,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.initialEntryMode,
     @required this.lastDate,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
           helper: helper,

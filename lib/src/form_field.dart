@@ -8,6 +8,7 @@ typedef FastFormFieldBuilder = Widget Function(
 @immutable
 abstract class FastFormField<T> extends StatefulWidget {
   const FastFormField({
+    this.autofocus = false,
     @required this.builder,
     this.decoration,
     this.enabled = true,
@@ -18,6 +19,7 @@ abstract class FastFormField<T> extends StatefulWidget {
     this.validator,
   });
 
+  final bool autofocus;
   final FastFormFieldBuilder builder;
   final InputDecoration decoration;
   final bool enabled;

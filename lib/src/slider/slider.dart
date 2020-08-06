@@ -8,6 +8,7 @@ import 'slider_form_field.dart';
 @immutable
 class FastSlider extends FastFormField<double> {
   FastSlider({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
@@ -22,6 +23,7 @@ class FastSlider extends FastFormField<double> {
     this.prefixBuilder,
     this.suffixBuilder,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
           helper: helper,
@@ -47,6 +49,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastSlider;
 
   return SliderFormField(
+    autofocus: widget.autofocus,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     divisions: widget.divisions,
     labelBuilder: widget.labelBuilder,

@@ -20,6 +20,7 @@ class RadioOption<T> {
 @immutable
 class FastRadioGroup extends FastFormField<String> {
   FastRadioGroup({
+    bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
@@ -30,6 +31,7 @@ class FastRadioGroup extends FastFormField<String> {
     @required this.options,
     this.orientation = RadioGroupOrientation.vertical,
   }) : super(
+          autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
           helper: helper,
