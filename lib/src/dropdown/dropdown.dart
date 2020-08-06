@@ -12,9 +12,9 @@ class FastDropdown extends FastFormField<String> {
     String helper,
     @required String id,
     String initialValue,
+    this.items,
     String label,
     FormFieldValidator validator,
-    this.items,
   }) : super(
           autofocus: autofocus,
           builder: builder ?? _builder,

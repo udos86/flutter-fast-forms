@@ -2,34 +2,31 @@ import 'package:flutter/material.dart';
 
 class TimePickerFormField extends FormField<TimeOfDay> {
   TimePickerFormField({
+    bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
-    Widget hint,
     Key key,
     String label,
+    this.onChanged,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
     TimeOfDay value,
-    this.onChanged,
   })  : assert(decoration != null),
         super(
-          key: key,
-          onSaved: onSaved,
-          initialValue: value,
-          validator: validator,
-          builder: (_field) {
-            final field = _field as _TimePickerFormFieldState;
-            final theme = Theme.of(field.context);
+          autovalidate: autovalidate,
+          builder: (field) {
+            final state = field as TimePickerFormFieldState;
+            final theme = Theme.of(state.context);
             final InputDecoration effectiveDecoration =
                 decoration.applyDefaults(theme.inputDecorationTheme);
             final _showTimePicker = () {
               showTimePicker(
-                context: field.context,
-                initialTime: field.value ?? TimeOfDay.now(),
-              ).then((value) => field.didChange(value));
+                context: state.context,
+                initialTime: state.value ?? TimeOfDay.now(),
+              ).then((value) => state.didChange(value));
             };
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
-                errorText: field.errorText,
+                errorText: state.errorText,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -39,7 +36,7 @@ class TimePickerFormField extends FormField<TimeOfDay> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                       ),
-                      controller: field.controller,
+                      controller: state.controller,
                       readOnly: true,
                       textAlign: TextAlign.left,
                       onTap: _showTimePicker,
@@ -54,15 +51,19 @@ class TimePickerFormField extends FormField<TimeOfDay> {
               ),
             );
           },
+          initialValue: value,
+          key: key,
+          onSaved: onSaved,
+          validator: validator,
         );
 
   final ValueChanged<TimeOfDay> onChanged;
 
   @override
-  FormFieldState<TimeOfDay> createState() => _TimePickerFormFieldState();
+  FormFieldState<TimeOfDay> createState() => TimePickerFormFieldState();
 }
 
-class _TimePickerFormFieldState extends FormFieldState<TimeOfDay> {
+class TimePickerFormFieldState extends FormFieldState<TimeOfDay> {
   final controller = TextEditingController();
 
   @override

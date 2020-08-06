@@ -9,20 +9,18 @@ enum RadioGroupOrientation {
 
 class RadioGroupFormField<T> extends FormField<T> {
   RadioGroupFormField({
-    Key key,
+    bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    Key key,
     @required List<RadioOption<T>> options,
     RadioGroupOrientation orientation = RadioGroupOrientation.vertical,
-    FormFieldSetter<T> onSaved,
-    T value,
-    FormFieldValidator<T> validator,
     this.onChanged,
+    FormFieldSetter onSaved,
+    FormFieldValidator validator,
+    T value,
   })  : assert(decoration != null),
         super(
-          key: key,
-          onSaved: onSaved,
-          initialValue: value ?? options.first.value,
-          validator: validator,
+          autovalidate: autovalidate,
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
@@ -35,12 +33,16 @@ class RadioGroupFormField<T> extends FormField<T> {
                     ? Row(children: _options)
                     : Column(children: _options));
           },
+          initialValue: value ?? options.first.value,
+          key: key,
+          onSaved: onSaved,
+          validator: validator,
         );
 
-  final ValueChanged<T> onChanged;
+  final ValueChanged onChanged;
 
   @override
-  FormFieldState<T> createState() => _RadioGroupFormFieldState<T>();
+  FormFieldState<T> createState() => RadioGroupFormFieldState<T>();
 
   static List<Widget> _buildOptions<T>(
       List<RadioOption<T>> options, FormFieldState<T> field,
@@ -60,7 +62,7 @@ class RadioGroupFormField<T> extends FormField<T> {
   }
 }
 
-class _RadioGroupFormFieldState<T> extends FormFieldState<T> {
+class RadioGroupFormFieldState<T> extends FormFieldState<T> {
   @override
   RadioGroupFormField<T> get widget => super.widget;
 

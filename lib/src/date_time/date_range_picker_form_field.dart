@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 class DateRangePickerFormField extends FormField<DateTimeRange> {
   DateRangePickerFormField({
+    bool autovalidate,
     String cancelText,
     String confirmText,
     DateTime currentDate,
@@ -17,86 +18,88 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
     DateTime firstDate,
     DateFormat format,
     String helpText,
-    Widget hint,
     DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
     Key key,
     String label,
     DateTime lastDate,
+    this.onChanged,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
     DateTimeRange value,
-    this.onChanged,
   })  : assert(decoration != null),
         this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
         super(
-            key: key,
-            onSaved: onSaved,
-            initialValue: value,
-            validator: validator,
-            builder: (_field) {
-              final field = _field as _DatePickerFormFieldState;
-              final theme = Theme.of(field.context);
-              final InputDecoration effectiveDecoration =
-                  decoration.applyDefaults(theme.inputDecorationTheme);
-              final _showDateRangePicker = (DatePickerEntryMode entryMode) {
-                showDateRangePicker(
-                  cancelText: cancelText,
-                  confirmText: confirmText,
-                  context: field.context,
-                  currentDate: currentDate,
-                  errorFormatText: errorFormatText,
-                  errorInvalidRangeText: errorInvalidRangeText,
-                  errorInvalidText: errorInvalidText,
-                  fieldEndHintText: fieldEndHintText,
-                  fieldEndLabelText: fieldEndLabelText,
-                  fieldStartHintText: fieldStartHintText,
-                  fieldStartLabelText: fieldStartLabelText,
-                  helpText: helpText,
-                  initialEntryMode: entryMode,
-                  initialDateRange: field.value,
-                  firstDate: firstDate,
-                  lastDate: lastDate,
-                ).then(field.didChange);
-              };
+          autovalidate: autovalidate,
+          builder: (field) {
+            final state = field as DateRangePickerFormFieldState;
+            final theme = Theme.of(state.context);
+            final InputDecoration effectiveDecoration =
+                decoration.applyDefaults(theme.inputDecorationTheme);
+            final _showDateRangePicker = (DatePickerEntryMode entryMode) {
+              showDateRangePicker(
+                cancelText: cancelText,
+                confirmText: confirmText,
+                context: state.context,
+                currentDate: currentDate,
+                errorFormatText: errorFormatText,
+                errorInvalidRangeText: errorInvalidRangeText,
+                errorInvalidText: errorInvalidText,
+                fieldEndHintText: fieldEndHintText,
+                fieldEndLabelText: fieldEndLabelText,
+                fieldStartHintText: fieldStartHintText,
+                fieldStartLabelText: fieldStartLabelText,
+                helpText: helpText,
+                initialEntryMode: entryMode,
+                initialDateRange: state.value,
+                firstDate: firstDate,
+                lastDate: lastDate,
+              ).then(state.didChange);
+            };
 
-              return InputDecorator(
-                decoration: effectiveDecoration.copyWith(
-                  errorText: field.errorText,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                        controller: field.controller,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        focusNode: field.focusNode,
-                        readOnly: true,
-                        textAlign: TextAlign.left,
-                        onTap: () =>
-                            _showDateRangePicker(DatePickerEntryMode.input),
+            return InputDecorator(
+              decoration: effectiveDecoration.copyWith(
+                errorText: state.errorText,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      controller: state.controller,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
                       ),
+                      focusNode: state.focusNode,
+                      readOnly: true,
+                      textAlign: TextAlign.left,
+                      onTap: () =>
+                          _showDateRangePicker(DatePickerEntryMode.input),
                     ),
-                    IconButton(
-                      alignment: Alignment.centerRight,
-                      icon: Icon(Icons.today),
-                      onPressed: () => _showDateRangePicker(initialEntryMode),
-                    ),
-                  ],
-                ),
-              );
-            });
+                  ),
+                  IconButton(
+                    alignment: Alignment.centerRight,
+                    icon: Icon(Icons.today),
+                    onPressed: () => _showDateRangePicker(initialEntryMode),
+                  ),
+                ],
+              ),
+            );
+          },
+          initialValue: value,
+          key: key,
+          onSaved: onSaved,
+          validator: validator,
+        );
 
   final DateFormat dateFormat;
   final ValueChanged<DateTimeRange> onChanged;
 
   @override
-  FormFieldState<DateTimeRange> createState() => _DatePickerFormFieldState();
+  FormFieldState<DateTimeRange> createState() =>
+      DateRangePickerFormFieldState();
 }
 
-class _DatePickerFormFieldState extends FormFieldState<DateTimeRange> {
+class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
   final controller = TextEditingController();
   final focusNode = FocusNode();
 

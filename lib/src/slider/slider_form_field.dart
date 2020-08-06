@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 
 typedef SliderLabelBuilder = String Function(
-    BuildContext context, FormFieldState<double> state);
+    BuildContext context, SliderFormFieldState state);
 
 typedef SliderFixBuilder = Widget Function(
-    BuildContext context, FormFieldState<double> state);
+    BuildContext context, SliderFormFieldState state);
 
 class SliderFormField extends FormField<double> {
   SliderFormField({
-    Key key,
     bool autofocus,
+    bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
     int divisions,
     FocusNode focusNode,
-    @required double min,
-    @required double max,
+    Key key,
+    @required this.max,
+    @required this.min,
     SliderLabelBuilder labelBuilder,
     SliderFixBuilder prefixBuilder,
+    this.onChanged,
     FormFieldSetter onSaved,
     SliderFixBuilder suffixBuilder,
-    FormFieldValidator<double> validator,
+    FormFieldValidator validator,
     double value,
-    this.onChanged,
   })  : assert(decoration != null),
         super(
+          autovalidate: autovalidate,
           builder: (field) {
             final effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
@@ -57,19 +59,21 @@ class SliderFormField extends FormField<double> {
               ),
             );
           },
-          key: key,
           initialValue: value ?? min,
+          key: key,
           onSaved: onSaved,
           validator: validator,
         );
 
+  final double max;
+  final double min;
   final ValueChanged<double> onChanged;
 
   @override
-  FormFieldState<double> createState() => _SliderFormFieldState();
+  FormFieldState<double> createState() => SliderFormFieldState();
 }
 
-class _SliderFormFieldState extends FormFieldState<double> {
+class SliderFormFieldState extends FormFieldState<double> {
   @override
   SliderFormField get widget => super.widget;
 

@@ -15,9 +15,9 @@ class FastCheckbox extends FastFormField<bool> {
     @required String id,
     bool initialValue,
     String label,
-    FormFieldValidator validator,
     this.title,
     this.tristate = false,
+    FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
           builder: builder ?? _builder,
@@ -42,6 +42,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastCheckbox;
 
   return CheckboxFormField(
+    autovalidate: state.autovalidate,
     autofocus: widget.autofocus,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     title: widget.title,

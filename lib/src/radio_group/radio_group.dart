@@ -27,9 +27,9 @@ class FastRadioGroup extends FastFormField<String> {
     @required String id,
     String initialValue,
     String label,
-    FormFieldValidator validator,
     @required this.options,
     this.orientation = RadioGroupOrientation.vertical,
+    FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
           builder: builder ?? _builder,
@@ -53,6 +53,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastRadioGroup;
 
   return RadioGroupFormField(
+    autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     options: widget.options,
     orientation: widget.orientation,

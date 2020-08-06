@@ -35,6 +35,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastTimePicker;
 
   return TimePickerFormField(
+    autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     validator: widget.validator,
     value: state.value,

@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
 
 typedef RangeSliderLabelsBuilder = RangeLabels Function(
-    BuildContext context, FormFieldState<RangeValues> state);
+    BuildContext context, RangeSliderFormFieldState state);
 
 typedef RangeSliderFixBuilder = Widget Function(
-    BuildContext context, FormFieldState<RangeValues> state);
+    BuildContext context, RangeSliderFormFieldState state);
 
 class RangeSliderFormField extends FormField<RangeValues> {
   RangeSliderFormField({
+    bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
-    Key key,
     int divisions,
-    Widget hint,
+    Key key,
     String label,
     RangeSliderLabelsBuilder labelsBuilder,
     @required double min,
     @required double max,
     RangeSliderFixBuilder prefixBuilder,
     RangeSliderFixBuilder suffixBuilder,
-    FormFieldSetter onSaved,
-    FormFieldValidator<RangeValues> validator,
-    RangeValues value,
     this.onChanged,
+    FormFieldSetter onSaved,
+    FormFieldValidator validator,
+    RangeValues value,
   })  : assert(decoration != null),
         super(
-          key: key,
-          onSaved: onSaved,
-          initialValue: value ?? RangeValues(0.0, 10.0),
-          validator: validator,
+          autovalidate: autovalidate,
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
@@ -59,15 +56,19 @@ class RangeSliderFormField extends FormField<RangeValues> {
               ),
             );
           },
+          key: key,
+          initialValue: value ?? RangeValues(0.0, 10.0),
+          onSaved: onSaved,
+          validator: validator,
         );
 
   final ValueChanged<RangeValues> onChanged;
 
   @override
-  FormFieldState<RangeValues> createState() => _SliderFormFieldState();
+  FormFieldState<RangeValues> createState() => RangeSliderFormFieldState();
 }
 
-class _SliderFormFieldState extends FormFieldState<RangeValues> {
+class RangeSliderFormFieldState extends FormFieldState<RangeValues> {
   @override
   RangeSliderFormField get widget => super.widget;
 

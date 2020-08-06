@@ -11,17 +11,17 @@ class FastSlider extends FastFormField<double> {
     bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
+    this.divisions,
     String helper,
     @required String id,
     double initialValue,
     String label,
-    FormFieldValidator<double> validator,
-    this.divisions,
     this.labelBuilder,
     @required this.max,
     @required this.min,
     this.prefixBuilder,
     this.suffixBuilder,
+    FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
           builder: builder ?? _builder,
@@ -50,6 +50,7 @@ final FastFormFieldBuilder _builder = (context, state) {
 
   return SliderFormField(
     autofocus: widget.autofocus,
+    autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     divisions: widget.divisions,
     focusNode: state.focusNode,

@@ -11,15 +11,10 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
     bool autofocus = false,
     FastFormFieldBuilder builder,
-    InputDecoration decoration,
-    String helper,
-    @required String id,
-    DateTimeRange initialValue,
-    String label,
-    FormFieldValidator validator,
     this.cancelText,
     this.confirmText,
     this.currentDate,
+    InputDecoration decoration,
     this.errorFormatText,
     this.errorInvalidRangeText,
     this.errorInvalidText,
@@ -29,9 +24,14 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.fieldStartLabelText,
     @required this.firstDate,
     this.format,
+    String helper,
     this.helpText,
+    @required String id,
     this.initialEntryMode,
+    DateTimeRange initialValue,
+    String label,
     @required this.lastDate,
+    FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
           builder: builder ?? _builder,
@@ -68,6 +68,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastDateRangePicker;
 
   return DateRangePickerFormField(
+    autovalidate: state.autovalidate,
     cancelText: widget.cancelText,
     confirmText: widget.confirmText,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),

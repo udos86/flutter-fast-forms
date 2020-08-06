@@ -7,20 +7,20 @@ import '../form_style.dart';
 @immutable
 class FastTextField extends FastFormField<String> {
   FastTextField({
+    this.autocorrect = true,
     bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     bool enabled = true,
     String helper,
+    this.hint,
     @required String id,
     String initialValue,
-    String label,
-    FormFieldValidator validator,
-    this.autocorrect = true,
-    this.hint,
-    this.keyboardType,
     this.inputFormatters,
+    this.keyboardType,
+    String label,
     this.maxLength,
+    FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
           builder: builder ?? _builder,
@@ -40,10 +40,10 @@ class FastTextField extends FastFormField<String> {
   final int maxLength;
 
   @override
-  State<StatefulWidget> createState() => TextFieldModelState();
+  State<StatefulWidget> createState() => FastTextFieldState();
 }
 
-class TextFieldModelState extends FastFormFieldState<String> {
+class FastTextFieldState extends FastFormFieldState<String> {
   TextEditingController textController;
 
   @override
@@ -71,7 +71,7 @@ class TextFieldModelState extends FastFormFieldState<String> {
 }
 
 final FastFormFieldBuilder _builder = (context, _state) {
-  final state = _state as TextFieldModelState;
+  final state = _state as FastTextFieldState;
   final style = FormStyle.of(context);
   final widget = state.widget as FastTextField;
 
@@ -89,6 +89,5 @@ final FastFormFieldBuilder _builder = (context, _state) {
     validator: widget.validator,
     onChanged: state.onChanged,
     onSaved: state.onSaved,
-    onTap: () => print(context.size.height),
   );
 };

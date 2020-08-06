@@ -118,12 +118,13 @@ class FormPage extends StatelessWidget {
             max: 10,
             prefixBuilder: (context, state) => IconButton(
               icon: Icon(Icons.volume_off),
-              onPressed: () => state.didChange(0),
+              onPressed: () => state.didChange(state.widget.min),
             ),
             suffixBuilder: (context, state) => IconButton(
               icon: Icon(Icons.volume_up),
-              onPressed: () => state.didChange(10),
+              onPressed: () => state.didChange(state.widget.max),
             ),
+            validator: (value) => value > 8 ? 'Volume is too high' : null,
           ),
           FastRangeSlider(
             id: 'range_slider_1',

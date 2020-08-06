@@ -9,19 +9,19 @@ import 'range_slider_form_field.dart';
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
     bool autofocus = false,
+    this.divisions,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     String helper,
     @required String id,
     RangeValues initialValue,
     String label,
-    FormFieldValidator validator,
-    this.divisions,
     this.labelsBuilder,
     @required this.max,
     @required this.min,
     this.prefixBuilder,
     this.suffixBuilder,
+    FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
           builder: builder ?? _builder,
@@ -49,6 +49,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   final widget = state.widget as FastRangeSlider;
 
   return RangeSliderFormField(
+    autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     divisions: widget.divisions,
     labelsBuilder: widget.labelsBuilder,
