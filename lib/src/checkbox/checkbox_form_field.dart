@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+typedef CheckboxTitleBuilder = Widget Function(
+    BuildContext context, CheckboxFormFieldState state);
+
 class CheckboxFormField extends FormField<bool> {
   CheckboxFormField({
     bool autofocus,
@@ -8,7 +11,9 @@ class CheckboxFormField extends FormField<bool> {
     Key key,
     this.onChanged,
     FormFieldSetter onSaved,
-    dynamic title,
+    this.title,
+    CheckboxTitleBuilder titleBuilder,
+    bool tristate = false,
     FormFieldValidator validator,
     bool value,
   })  : assert(decoration != null),
@@ -17,24 +22,18 @@ class CheckboxFormField extends FormField<bool> {
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+            final _titleBuilder = titleBuilder ?? checkboxTitleBuilder;
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
               ),
               child: CheckboxListTile(
                 autofocus: autofocus,
-                selected: field.value,
-                value: field.value,
                 onChanged: field.didChange,
-                title: title is Widget
-                    ? title
-                    : Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color: field.value ? Colors.black : Colors.grey,
-                        ),
-                      ),
+                selected: field.value,
+                tristate: tristate,
+                title: _titleBuilder(field.context, field),
+                value: field.value,
               ),
             );
           },
@@ -44,6 +43,7 @@ class CheckboxFormField extends FormField<bool> {
           validator: validator,
         );
 
+  final String title;
   final ValueChanged<bool> onChanged;
 
   @override
@@ -60,3 +60,14 @@ class CheckboxFormFieldState extends FormFieldState<bool> {
     if (widget.onChanged != null) widget.onChanged(value);
   }
 }
+
+final CheckboxTitleBuilder checkboxTitleBuilder =
+    (BuildContext context, CheckboxFormFieldState state) {
+  return Text(
+    state.widget.title,
+    style: TextStyle(
+      fontSize: 14.0,
+      color: state.value ? Colors.black : Colors.grey,
+    ),
+  );
+};

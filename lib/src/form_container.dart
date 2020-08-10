@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
 
 import 'form_store.dart';
 import 'form_field_group.dart';
+import 'form_style.dart';
 
 typedef FormChanged = void Function(Map<String, dynamic> value);
 
@@ -36,9 +36,9 @@ class _FastFormState extends State<FastForm> {
   @override
   void initState() {
     super.initState();
-    store = widget.initialState != null
-        ? FastFormStore(initialState: widget.initialState)
-        : FastFormStore.fromModel(widget.model);
+    final _initialState = FastFormStore.fromModel(widget.model)
+      ..addAll(FastFormStore.fromValues(widget.initialState, true));
+    store = FastFormStore(initialState: _initialState);
     store.addListener(_onStoreChanged);
   }
 
@@ -67,6 +67,6 @@ class _FastFormState extends State<FastForm> {
   }
 
   _onStoreChanged() {
-    if (widget.onChanged != null) widget.onChanged(store.fields);
+    if (widget.onChanged != null) widget.onChanged(store.values);
   }
 }

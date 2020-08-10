@@ -39,7 +39,7 @@ class FormPage extends StatelessWidget {
         child: FastForm(
           formKey: formKey,
           model: buildFormModel(context),
-          // onChanged: (value) => print('Form changed: ${value.toString()}'),
+          onChanged: (value) => print('Form changed: ${value.toString()}'),
         ),
       ),
     );
@@ -58,7 +58,13 @@ class FormPage extends StatelessWidget {
         children: [
           FastDatePicker(
             id: 'date_picker_1',
-            label: 'Arrival',
+            label: 'Date Picker',
+            firstDate: DateTime(1997),
+            lastDate: DateTime(2021),
+          ),
+          FastDateRangePicker(
+            id: 'date_range_picker_1',
+            label: 'Date Range Picker',
             firstDate: DateTime(1997),
             lastDate: DateTime(2021),
           ),

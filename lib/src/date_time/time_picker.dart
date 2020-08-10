@@ -18,7 +18,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
-          builder: builder ?? _builder,
+          builder: builder ?? fastTimePickerBuilder,
           helper: helper,
           id: id,
           initialValue: initialValue,
@@ -30,7 +30,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   State<StatefulWidget> createState() => FastFormFieldState<TimeOfDay>();
 }
 
-final FastFormFieldBuilder _builder = (context, state) {
+final FastFormFieldBuilder fastTimePickerBuilder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastTimePicker;
 

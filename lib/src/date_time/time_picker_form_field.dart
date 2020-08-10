@@ -22,7 +22,9 @@ class TimePickerFormField extends FormField<TimeOfDay> {
               showTimePicker(
                 context: state.context,
                 initialTime: state.value ?? TimeOfDay.now(),
-              ).then((value) => state.didChange(value));
+              ).then((value) {
+                if (value != null) state.didChange(value);
+              });
             };
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(

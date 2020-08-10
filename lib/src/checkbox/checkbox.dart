@@ -20,7 +20,7 @@ class FastCheckbox extends FastFormField<bool> {
     FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
-          builder: builder ?? _builder,
+          builder: builder ?? fastCheckboxBuilder,
           decoration: decoration,
           helper: helper,
           id: id,
@@ -37,7 +37,7 @@ class FastCheckbox extends FastFormField<bool> {
   State<StatefulWidget> createState() => FastFormFieldState<bool>();
 }
 
-final FastFormFieldBuilder _builder = (context, state) {
+final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastCheckbox;
 

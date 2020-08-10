@@ -49,7 +49,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController(text: value ?? '');
+    textController = TextEditingController(text: value);
     textController.addListener(_onTextChanged);
   }
 
@@ -62,7 +62,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   void reset() {
     super.reset();
-    this.textController.text = widget.initialValue ?? '';
+    this.textController.text = widget.initialValue;
   }
 
   void _onTextChanged() {

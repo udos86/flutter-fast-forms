@@ -28,9 +28,6 @@ class RangeSliderFormField extends FormField<RangeValues> {
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
-            final labels = labelsBuilder != null
-                ? labelsBuilder(field.context, field)
-                : null;
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
@@ -43,7 +40,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
                   Expanded(
                     child: RangeSlider(
                       divisions: divisions,
-                      labels: labels,
+                      labels: labelsBuilder?.call(field.context, field),
                       min: min,
                       max: max,
                       values: field.value,

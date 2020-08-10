@@ -31,7 +31,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
-          builder: builder ?? _builder,
+          builder: builder ?? fastDatePickerBuilder,
           decoration: decoration,
           helper: helper,
           id: id,
@@ -57,7 +57,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   State<StatefulWidget> createState() => FastFormFieldState<DateTime>();
 }
 
-final FastFormFieldBuilder _builder = (context, state) {
+final FastFormFieldBuilder fastDatePickerBuilder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastDatePicker;
 

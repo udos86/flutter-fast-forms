@@ -27,7 +27,7 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
     FormFieldValidator validator,
     DateTimeRange value,
   })  : assert(decoration != null),
-        this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
+        this.dateFormat = format ?? DateFormat.yMd(),
         super(
           autovalidate: autovalidate,
           builder: (field) {
@@ -53,7 +53,9 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
                 initialDateRange: state.value,
                 firstDate: firstDate,
                 lastDate: lastDate,
-              ).then(state.didChange);
+              ).then((value) {
+                if (value != null) state.didChange(value);
+              });
             };
 
             return InputDecorator(
@@ -106,7 +108,7 @@ class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
   @override
   void initState() {
     super.initState();
-    controller.text = formatValue(value.start);
+    controller.text = writeValue(value);
   }
 
   @override
@@ -122,11 +124,12 @@ class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
   @override
   void didChange(DateTimeRange value) {
     super.didChange(value);
-    controller.text = formatValue(value.start);
+    controller.text = writeValue(value);
     if (widget.onChanged != null) widget.onChanged(value);
   }
 
-  String formatValue(DateTime value) {
-    return value != null ? widget.dateFormat.format(value) : null;
+  String writeValue(DateTimeRange value) {
+    final format = widget.dateFormat.format;
+    return value != null ? '${format(value.start)} - ${format(value.end)}' : '';
   }
 }

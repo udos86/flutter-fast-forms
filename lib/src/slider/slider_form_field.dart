@@ -29,9 +29,6 @@ class SliderFormField extends FormField<double> {
           builder: (field) {
             final effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
-            final label = labelBuilder != null
-                ? labelBuilder(field.context, field)
-                : null;
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
@@ -46,7 +43,7 @@ class SliderFormField extends FormField<double> {
                       autofocus: autofocus,
                       divisions: divisions,
                       focusNode: focusNode,
-                      label: label,
+                      label: labelBuilder?.call(field.context, field),
                       max: max,
                       min: min,
                       value: field.value,

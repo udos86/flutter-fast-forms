@@ -47,7 +47,9 @@ class DatePickerFormField extends FormField<DateTime> {
                 initialDate: state.value ?? DateTime.now(),
                 firstDate: firstDate,
                 lastDate: lastDate,
-              ).then(state.didChange);
+              ).then((value) {
+                if (value != null) state.didChange(value);
+              });
             };
 
             return InputDecorator(
@@ -98,7 +100,7 @@ class DatePickerFormFieldState extends FormFieldState<DateTime> {
   @override
   void initState() {
     super.initState();
-    controller.text = formatValue(value);
+    controller.text = writeValue(value);
   }
 
   @override
@@ -114,11 +116,11 @@ class DatePickerFormFieldState extends FormFieldState<DateTime> {
   @override
   void didChange(DateTime value) {
     super.didChange(value);
-    controller.text = formatValue(value);
+    controller.text = writeValue(value);
     if (widget.onChanged != null) widget.onChanged(value);
   }
 
-  String formatValue(DateTime value) {
-    return value != null ? widget.dateFormat.format(value) : null;
+  String writeValue(DateTime value) {
+    return value != null ? widget.dateFormat.format(value) : '';
   }
 }

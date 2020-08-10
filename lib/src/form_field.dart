@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
+
+import 'form_store.dart';
 
 typedef FastFormFieldBuilder = Widget Function(
     BuildContext context, FastFormFieldState state);
@@ -28,27 +29,30 @@ abstract class FastFormField<T> extends StatefulWidget {
   final T initialValue;
   final String label;
   final FormFieldValidator validator;
-
-  T get value => initialValue;
 }
 
 class FastFormFieldState<T> extends State<FastFormField> {
+  bool dirty = false;
   bool focused = false;
   bool touched = false;
 
   T value;
   FocusNode focusNode;
 
-  bool get autovalidate => touched;
-
-  FastFormStore get store => Provider.of<FastFormStore>(context, listen: false);
+  bool get autovalidate => dirty || touched;
 
   @override
   void initState() {
+    final store = Provider.of<FastFormStore>(context, listen: false);
     super.initState();
     focusNode = FocusNode();
     focusNode.addListener(_onFocusChanged);
-    value = store.getValue(widget.id) ?? widget.value;
+    if (store.restored(widget.id)) {
+      dirty = true;
+      value = store.getValue(widget.id);
+    } else {
+      value = widget.initialValue;
+    }
   }
 
   @override
@@ -63,9 +67,18 @@ class FastFormFieldState<T> extends State<FastFormField> {
   }
 
   void reset() {
-    this.focused = false;
-    this.touched = false;
-    this.value = widget.initialValue;
+    setState(() {
+      dirty = false;
+      focused = false;
+      touched = false;
+      value = widget.initialValue;
+    });
+  }
+
+  void markAsDirty([bool dirty = true]) {
+    if (this.dirty != dirty) {
+      setState(() => this.dirty = dirty);
+    }
   }
 
   void markAsFocused([bool focused = true]) {
@@ -80,6 +93,20 @@ class FastFormFieldState<T> extends State<FastFormField> {
     }
   }
 
+  void onChanged(T value) {
+    if (!dirty) markAsDirty();
+    if (!touched) markAsTouched();
+    _store(value);
+  }
+
+  void onSaved(T value) {
+    _store(value);
+  }
+
+  void onTouched() {
+    markAsTouched();
+  }
+
   void _onFocusChanged() {
     if (focusNode.hasFocus) {
       markAsFocused();
@@ -89,20 +116,8 @@ class FastFormFieldState<T> extends State<FastFormField> {
     }
   }
 
-  void onSaved(T value) {
-    _store(value);
-  }
-
-  void onChanged(T value) {
-    if (!this.touched) markAsTouched();
-    _store(value);
-  }
-
-  void onTouched() {
-    markAsTouched();
-  }
-
   void _store(T value) {
+    final store = Provider.of<FastFormStore>(context, listen: false);
     this.value = value;
     store.setValue(widget.id, value);
   }
