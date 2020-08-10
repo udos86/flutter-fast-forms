@@ -32,27 +32,31 @@ abstract class FastFormField<T> extends StatefulWidget {
 }
 
 class FastFormFieldState<T> extends State<FastFormField> {
-  bool dirty = false;
   bool focused = false;
   bool touched = false;
 
   T value;
   FocusNode focusNode;
 
-  bool get autovalidate => dirty || touched;
+  bool get autovalidate => touched;
 
   @override
   void initState() {
-    final store = Provider.of<FastFormStore>(context, listen: false);
     super.initState();
-    focusNode = FocusNode();
-    focusNode.addListener(_onFocusChanged);
-    if (store.restored(widget.id)) {
-      dirty = true;
-      value = store.getValue(widget.id);
+
+    final store = Provider.of<FastFormStore>(context, listen: false);
+
+    if (store.isFieldRestored(widget.id)) {
+      value = store.getInitialValue(widget.id);
+      touched = true;
     } else {
       value = widget.initialValue;
     }
+
+    focusNode = FocusNode();
+    focusNode.addListener(_onFocusChanged);
+
+    store.initField(this);
   }
 
   @override
@@ -68,34 +72,14 @@ class FastFormFieldState<T> extends State<FastFormField> {
 
   void reset() {
     setState(() {
-      dirty = false;
       focused = false;
       touched = false;
       value = widget.initialValue;
     });
   }
 
-  void markAsDirty([bool dirty = true]) {
-    if (this.dirty != dirty) {
-      setState(() => this.dirty = dirty);
-    }
-  }
-
-  void markAsFocused([bool focused = true]) {
-    if (this.focused != focused) {
-      setState(() => this.focused = focused);
-    }
-  }
-
-  void markAsTouched([bool touched = true]) {
-    if (this.touched != touched) {
-      setState(() => this.touched = touched);
-    }
-  }
-
   void onChanged(T value) {
-    if (!dirty) markAsDirty();
-    if (!touched) markAsTouched();
+    if (!touched) setState(() => touched = true);
     _store(value);
   }
 
@@ -103,22 +87,20 @@ class FastFormFieldState<T> extends State<FastFormField> {
     _store(value);
   }
 
-  void onTouched() {
-    markAsTouched();
-  }
-
   void _onFocusChanged() {
-    if (focusNode.hasFocus) {
-      markAsFocused();
-    } else {
-      markAsFocused(false);
-      if (!touched) markAsTouched();
-    }
+    setState(() {
+      if (focusNode.hasFocus) {
+        focused = true;
+      } else {
+        focused = false;
+        touched = true;
+      }
+    });
   }
 
   void _store(T value) {
     final store = Provider.of<FastFormStore>(context, listen: false);
     this.value = value;
-    store.setValue(widget.id, value);
+    store.updateField(this);
   }
 }

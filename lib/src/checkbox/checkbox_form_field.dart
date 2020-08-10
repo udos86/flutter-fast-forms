@@ -10,6 +10,7 @@ class CheckboxFormField extends FormField<bool> {
     InputDecoration decoration = const InputDecoration(),
     Key key,
     this.onChanged,
+    this.onReset,
     FormFieldSetter onSaved,
     this.title,
     CheckboxTitleBuilder titleBuilder,
@@ -45,6 +46,7 @@ class CheckboxFormField extends FormField<bool> {
 
   final String title;
   final ValueChanged<bool> onChanged;
+  final VoidCallback onReset;
 
   @override
   FormFieldState<bool> createState() => CheckboxFormFieldState();
@@ -57,7 +59,13 @@ class CheckboxFormFieldState extends FormFieldState<bool> {
   @override
   void didChange(bool value) {
     super.didChange(value);
-    if (widget.onChanged != null) widget.onChanged(value);
+    widget.onChanged?.call(value);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    widget.onReset?.call();
   }
 }
 

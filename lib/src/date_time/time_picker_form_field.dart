@@ -7,6 +7,7 @@ class TimePickerFormField extends FormField<TimeOfDay> {
     Key key,
     String label,
     this.onChanged,
+    this.onReset,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
     TimeOfDay value,
@@ -60,6 +61,7 @@ class TimePickerFormField extends FormField<TimeOfDay> {
         );
 
   final ValueChanged<TimeOfDay> onChanged;
+  final VoidCallback onReset;
 
   @override
   FormFieldState<TimeOfDay> createState() => TimePickerFormFieldState();
@@ -75,6 +77,12 @@ class TimePickerFormFieldState extends FormFieldState<TimeOfDay> {
   }
 
   @override
+  void reset() {
+    super.reset();
+    widget.onReset?.call();
+  }
+
+  @override
   void dispose() {
     super.dispose();
     controller.dispose();
@@ -87,6 +95,6 @@ class TimePickerFormFieldState extends FormFieldState<TimeOfDay> {
   void didChange(TimeOfDay value) {
     super.didChange(value);
     controller.text = value?.format(context) ?? '';
-    if (widget.onChanged != null) widget.onChanged(value);
+    widget.onChanged?.call(value);
   }
 }

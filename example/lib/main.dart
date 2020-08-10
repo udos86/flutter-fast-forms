@@ -36,10 +36,14 @@ class FormPage extends StatelessWidget {
         title: Text(title),
       ),
       body: SingleChildScrollView(
-        child: FastForm(
-          formKey: formKey,
-          model: buildFormModel(context),
-          onChanged: (value) => print('Form changed: ${value.toString()}'),
+        child: Column(
+          children: [
+            FastForm(
+              formKey: formKey,
+              model: buildFormModel(context),
+              onChanged: (value) => print('Form changed: ${value.toString()}'),
+            ),
+          ],
         ),
       ),
     );

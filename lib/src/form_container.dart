@@ -12,7 +12,7 @@ class FastForm extends StatefulWidget {
   FastForm({
     this.decorationCreator,
     @required this.formKey,
-    this.initialState,
+    this.initialValues,
     @required this.model,
     Key key,
     this.onChanged,
@@ -21,7 +21,7 @@ class FastForm extends StatefulWidget {
 
   final InputDecorationCreator decorationCreator;
   final GlobalKey<FormState> formKey;
-  final Map<String, dynamic> initialState;
+  final Map<String, dynamic> initialValues;
   final List<FastFormFieldGroup> model;
   final FormChanged onChanged;
   final EdgeInsets padding;
@@ -36,9 +36,7 @@ class _FastFormState extends State<FastForm> {
   @override
   void initState() {
     super.initState();
-    final _initialState = FastFormStore.fromModel(widget.model)
-      ..addAll(FastFormStore.fromValues(widget.initialState, true));
-    store = FastFormStore(initialState: _initialState);
+    store = FastFormStore(initialValues: widget.initialValues);
     store.addListener(_onStoreChanged);
   }
 
@@ -46,6 +44,7 @@ class _FastFormState extends State<FastForm> {
   void dispose() {
     super.dispose();
     store.removeListener(_onStoreChanged);
+    store.dispose();
   }
 
   @override

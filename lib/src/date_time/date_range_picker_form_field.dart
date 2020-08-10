@@ -23,6 +23,7 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
     String label,
     DateTime lastDate,
     this.onChanged,
+    this.onReset,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
     DateTimeRange value,
@@ -95,6 +96,7 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
 
   final DateFormat dateFormat;
   final ValueChanged<DateTimeRange> onChanged;
+  final VoidCallback onReset;
 
   @override
   FormFieldState<DateTimeRange> createState() =>
@@ -112,6 +114,12 @@ class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
   }
 
   @override
+  void reset() {
+    super.reset();
+    widget.onReset?.call();
+  }
+
+  @override
   void dispose() {
     super.dispose();
     controller.dispose();
@@ -125,7 +133,7 @@ class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
   void didChange(DateTimeRange value) {
     super.didChange(value);
     controller.text = writeValue(value);
-    if (widget.onChanged != null) widget.onChanged(value);
+    widget.onChanged?.call(value);
   }
 
   String writeValue(DateTimeRange value) {

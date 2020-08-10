@@ -19,6 +19,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
     RangeSliderFixBuilder prefixBuilder,
     RangeSliderFixBuilder suffixBuilder,
     this.onChanged,
+    this.onReset,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
     RangeValues value,
@@ -60,6 +61,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
         );
 
   final ValueChanged<RangeValues> onChanged;
+  final VoidCallback onReset;
 
   @override
   FormFieldState<RangeValues> createState() => RangeSliderFormFieldState();
@@ -72,7 +74,13 @@ class RangeSliderFormFieldState extends FormFieldState<RangeValues> {
   @override
   void didChange(RangeValues value) {
     super.didChange(value);
-    if (widget.onChanged != null) widget.onChanged(value);
+    widget.onChanged?.call(value);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    widget.onReset?.call();
   }
 }
 

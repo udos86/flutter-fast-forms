@@ -19,6 +19,7 @@ class SliderFormField extends FormField<double> {
     SliderLabelBuilder labelBuilder,
     SliderFixBuilder prefixBuilder,
     this.onChanged,
+    this.onReset,
     FormFieldSetter onSaved,
     SliderFixBuilder suffixBuilder,
     FormFieldValidator validator,
@@ -65,6 +66,7 @@ class SliderFormField extends FormField<double> {
   final double max;
   final double min;
   final ValueChanged<double> onChanged;
+  final VoidCallback onReset;
 
   @override
   FormFieldState<double> createState() => SliderFormFieldState();
@@ -77,7 +79,13 @@ class SliderFormFieldState extends FormFieldState<double> {
   @override
   void didChange(double value) {
     super.didChange(value);
-    if (widget.onChanged != null) widget.onChanged(value);
+    widget.onChanged?.call(value);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    widget.onReset?.call();
   }
 }
 
