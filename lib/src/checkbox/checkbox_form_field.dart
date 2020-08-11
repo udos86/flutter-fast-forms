@@ -8,6 +8,7 @@ class CheckboxFormField extends FormField<bool> {
     bool autofocus,
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    bool initialValue,
     Key key,
     this.onChanged,
     this.onReset,
@@ -16,7 +17,6 @@ class CheckboxFormField extends FormField<bool> {
     CheckboxTitleBuilder titleBuilder,
     bool tristate = false,
     FormFieldValidator validator,
-    bool value,
   })  : assert(decoration != null),
         super(
           autovalidate: autovalidate,
@@ -24,6 +24,7 @@ class CheckboxFormField extends FormField<bool> {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
             final _titleBuilder = titleBuilder ?? checkboxTitleBuilder;
+            print('field value ${field.value}');
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
@@ -38,7 +39,7 @@ class CheckboxFormField extends FormField<bool> {
               ),
             );
           },
-          initialValue: value ?? false,
+          initialValue: initialValue ?? false,
           key: key,
           onSaved: onSaved,
           validator: validator,
@@ -54,7 +55,7 @@ class CheckboxFormField extends FormField<bool> {
 
 class CheckboxFormFieldState extends FormFieldState<bool> {
   @override
-  CheckboxFormField get widget => super.widget;
+  CheckboxFormField get widget => super.widget as CheckboxFormField;
 
   @override
   void didChange(bool value) {

@@ -11,6 +11,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
     int divisions,
+    RangeValues initialValue,
     Key key,
     String label,
     RangeSliderLabelsBuilder labelsBuilder,
@@ -22,7 +23,6 @@ class RangeSliderFormField extends FormField<RangeValues> {
     this.onReset,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
-    RangeValues value,
   })  : assert(decoration != null),
         super(
           autovalidate: autovalidate,
@@ -55,7 +55,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
             );
           },
           key: key,
-          initialValue: value ?? RangeValues(0.0, 10.0),
+          initialValue: initialValue ?? RangeValues(min, max),
           onSaved: onSaved,
           validator: validator,
         );
@@ -69,7 +69,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
 
 class RangeSliderFormFieldState extends FormFieldState<RangeValues> {
   @override
-  RangeSliderFormField get widget => super.widget;
+  RangeSliderFormField get widget => super.widget as RangeSliderFormField;
 
   @override
   void didChange(RangeValues value) {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+typedef DatePickerTextBuilder = Text Function(
+    BuildContext context, DateTime value, DateFormat format);
+
 class DatePickerFormField extends FormField<DateTime> {
   DatePickerFormField({
     bool autovalidate,
@@ -14,16 +17,18 @@ class DatePickerFormField extends FormField<DateTime> {
     DateTime firstDate,
     DateFormat format,
     String helpText,
+    Icon icon,
     DatePickerMode initialDatePickerMode = DatePickerMode.day,
     DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+    DateTime initialValue,
     Key key,
     String label,
     DateTime lastDate,
     this.onChanged,
     this.onReset,
     FormFieldSetter onSaved,
+    DatePickerTextBuilder textBuilder,
     FormFieldValidator validator,
-    DateTime value,
   })  : assert(decoration != null),
         this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
         super(
@@ -33,6 +38,7 @@ class DatePickerFormField extends FormField<DateTime> {
             final theme = Theme.of(state.context);
             final InputDecoration effectiveDecoration =
                 decoration.applyDefaults(theme.inputDecorationTheme);
+            final _textBuilder = textBuilder ?? datePickerTextBuilder;
             final _showDatePicker = (DatePickerEntryMode entryMode) {
               showDatePicker(
                 cancelText: cancelText,
@@ -61,27 +67,22 @@ class DatePickerFormField extends FormField<DateTime> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Expanded(
-                    child: TextFormField(
-                      controller: state.controller,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      focusNode: state.focusNode,
-                      readOnly: true,
-                      textAlign: TextAlign.left,
+                    child: GestureDetector(
                       onTap: () => _showDatePicker(DatePickerEntryMode.input),
+                      child: _textBuilder(
+                          state.context, state.value, state.widget.dateFormat),
                     ),
                   ),
                   IconButton(
                     alignment: Alignment.centerRight,
-                    icon: Icon(Icons.today),
+                    icon: icon ?? Icon(Icons.today),
                     onPressed: () => _showDatePicker(initialEntryMode),
                   ),
                 ],
               ),
             );
           },
-          initialValue: value,
+          initialValue: initialValue,
           key: key,
           onSaved: onSaved,
           validator: validator,
@@ -96,13 +97,13 @@ class DatePickerFormField extends FormField<DateTime> {
 }
 
 class DatePickerFormFieldState extends FormFieldState<DateTime> {
-  final controller = TextEditingController();
-  final focusNode = FocusNode();
+  @override
+  DatePickerFormField get widget => super.widget as DatePickerFormField;
 
   @override
-  void initState() {
-    super.initState();
-    controller.text = writeValue(value);
+  void didChange(DateTime value) {
+    super.didChange(value);
+    widget.onChanged?.call(value);
   }
 
   @override
@@ -110,25 +111,14 @@ class DatePickerFormFieldState extends FormFieldState<DateTime> {
     super.reset();
     widget.onReset?.call();
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-    focusNode.dispose();
-  }
-
-  @override
-  DatePickerFormField get widget => super.widget;
-
-  @override
-  void didChange(DateTime value) {
-    super.didChange(value);
-    controller.text = writeValue(value);
-    widget.onChanged?.call(value);
-  }
-
-  String writeValue(DateTime value) {
-    return value != null ? widget.dateFormat.format(value) : '';
-  }
 }
+
+final DatePickerTextBuilder datePickerTextBuilder =
+    (BuildContext context, DateTime value, DateFormat dateFormat) {
+  final theme = Theme.of(context);
+  return Text(
+    value != null ? dateFormat.format(value) : '',
+    style: theme.textTheme.subtitle1,
+    textAlign: TextAlign.left,
+  );
+};

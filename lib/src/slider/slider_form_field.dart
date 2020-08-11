@@ -13,6 +13,7 @@ class SliderFormField extends FormField<double> {
     InputDecoration decoration = const InputDecoration(),
     int divisions,
     FocusNode focusNode,
+    double initialValue,
     Key key,
     @required this.max,
     @required this.min,
@@ -23,7 +24,6 @@ class SliderFormField extends FormField<double> {
     FormFieldSetter onSaved,
     SliderFixBuilder suffixBuilder,
     FormFieldValidator validator,
-    double value,
   })  : assert(decoration != null),
         super(
           autovalidate: autovalidate,
@@ -57,7 +57,7 @@ class SliderFormField extends FormField<double> {
               ),
             );
           },
-          initialValue: value ?? min,
+          initialValue: initialValue ?? min,
           key: key,
           onSaved: onSaved,
           validator: validator,
@@ -74,7 +74,7 @@ class SliderFormField extends FormField<double> {
 
 class SliderFormFieldState extends FormFieldState<double> {
   @override
-  SliderFormField get widget => super.widget;
+  SliderFormField get widget => super.widget as SliderFormField;
 
   @override
   void didChange(double value) {

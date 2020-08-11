@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
+typedef TimePickerTextBuilder = Text Function(
+    BuildContext context, TimeOfDay value);
+
 class TimePickerFormField extends FormField<TimeOfDay> {
   TimePickerFormField({
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    Icon icon,
+    TimeOfDay initialValue,
     Key key,
     String label,
     this.onChanged,
     this.onReset,
     FormFieldSetter onSaved,
+    TimePickerTextBuilder textBuilder,
     FormFieldValidator validator,
-    TimeOfDay value,
   })  : assert(decoration != null),
         super(
           autovalidate: autovalidate,
@@ -19,6 +24,7 @@ class TimePickerFormField extends FormField<TimeOfDay> {
             final theme = Theme.of(state.context);
             final InputDecoration effectiveDecoration =
                 decoration.applyDefaults(theme.inputDecorationTheme);
+            final _textBuilder = textBuilder ?? timePickerTextBuilder;
             final _showTimePicker = () {
               showTimePicker(
                 context: state.context,
@@ -35,26 +41,21 @@ class TimePickerFormField extends FormField<TimeOfDay> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      controller: state.controller,
-                      readOnly: true,
-                      textAlign: TextAlign.left,
-                      onTap: _showTimePicker,
+                    child: GestureDetector(
+                      onTap: () => _showTimePicker(),
+                      child: _textBuilder(state.context, state.value),
                     ),
                   ),
                   IconButton(
                     alignment: Alignment.centerRight,
-                    icon: Icon(Icons.schedule),
+                    icon: icon ?? Icon(Icons.schedule),
                     onPressed: _showTimePicker,
                   ),
                 ],
               ),
             );
           },
-          initialValue: value,
+          initialValue: initialValue,
           key: key,
           onSaved: onSaved,
           validator: validator,
@@ -68,12 +69,13 @@ class TimePickerFormField extends FormField<TimeOfDay> {
 }
 
 class TimePickerFormFieldState extends FormFieldState<TimeOfDay> {
-  final controller = TextEditingController();
+  @override
+  TimePickerFormField get widget => super.widget as TimePickerFormField;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    controller.text = value?.format(context) ?? '';
+  void didChange(TimeOfDay value) {
+    super.didChange(value);
+    widget.onChanged?.call(value);
   }
 
   @override
@@ -81,20 +83,14 @@ class TimePickerFormFieldState extends FormFieldState<TimeOfDay> {
     super.reset();
     widget.onReset?.call();
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
-
-  @override
-  TimePickerFormField get widget => super.widget;
-
-  @override
-  void didChange(TimeOfDay value) {
-    super.didChange(value);
-    controller.text = value?.format(context) ?? '';
-    widget.onChanged?.call(value);
-  }
 }
+
+final TimePickerTextBuilder timePickerTextBuilder =
+    (BuildContext context, TimeOfDay value) {
+  final theme = Theme.of(context);
+  return Text(
+    value?.format(context) ?? '',
+    style: theme.textTheme.subtitle1,
+    textAlign: TextAlign.left,
+  );
+};

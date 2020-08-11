@@ -55,12 +55,12 @@ final FastFormFieldBuilder _builder = (context, state) {
   return RadioGroupFormField(
     autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
-    options: widget.options,
-    orientation: widget.orientation,
-    validator: widget.validator,
-    value: state.value,
+    initialValue: widget.initialValue,
     onChanged: state.onChanged,
     onReset: state.onReset,
     onSaved: state.onSaved,
+    options: widget.options,
+    orientation: widget.orientation,
+    validator: widget.validator,
   );
 };

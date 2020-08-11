@@ -50,6 +50,7 @@ final FastFormFieldBuilder fastDropdownBuilder =
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     dropdownColor: widget.dropdownColor,
     focusNode: state.focusNode,
+    initialValue: widget.initialValue,
     items: widget.items,
     itemsBuilder: widget.itemsBuilder,
     onChanged: state.onChanged,
@@ -57,6 +58,5 @@ final FastFormFieldBuilder fastDropdownBuilder =
     onSaved: state.onSaved,
     selectedItemBuilder: widget.selectedItemBuilder,
     validator: widget.validator,
-    value: state.value,
   );
 };

@@ -41,7 +41,7 @@ class FormPage extends StatelessWidget {
             FastForm(
               formKey: formKey,
               model: buildFormModel(context),
-              // onChanged: (value) => print('Form changed: ${value.toString()}'),
+              onChanged: (value) => print('Form changed: ${value.toString()}'),
             ),
             RaisedButton(
               child: Text('Reset'),
@@ -80,6 +80,7 @@ class FormPage extends StatelessWidget {
             id: 'time_picker_1',
             label: 'Time Picker',
           ),
+          /*
           FastTextField(
             id: 'text_field_1',
             label: 'Text Field',
@@ -93,6 +94,7 @@ class FormPage extends StatelessWidget {
               InputFormatters.maskText('##/####'),
             ],
           ),
+          */
           FastDropdown(
             id: 'dropdown_1',
             label: 'Dropdown Field',
@@ -106,6 +108,7 @@ class FormPage extends StatelessWidget {
             initialValue: 'Finland',
             validator: Validators.required(),
           ),
+          /*
           FastRadioGroup(
             id: 'radio_group_1',
             label: 'Radio Group Model',
@@ -164,6 +167,7 @@ class FormPage extends StatelessWidget {
             id: 'checkbox_1',
             title: 'I accept',
           ),
+           */
         ],
       ),
     ];

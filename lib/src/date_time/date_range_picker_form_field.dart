@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+typedef DateRangePickerTextBuilder = Text Function(
+    BuildContext context, DateTimeRange value, DateFormat format);
+
 class DateRangePickerFormField extends FormField<DateTimeRange> {
   DateRangePickerFormField({
     bool autovalidate,
@@ -18,15 +21,17 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
     DateTime firstDate,
     DateFormat format,
     String helpText,
+    Icon icon,
     DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+    DateTimeRange initialValue,
     Key key,
     String label,
     DateTime lastDate,
     this.onChanged,
     this.onReset,
     FormFieldSetter onSaved,
+    DateRangePickerTextBuilder textBuilder,
     FormFieldValidator validator,
-    DateTimeRange value,
   })  : assert(decoration != null),
         this.dateFormat = format ?? DateFormat.yMd(),
         super(
@@ -36,6 +41,7 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
             final theme = Theme.of(state.context);
             final InputDecoration effectiveDecoration =
                 decoration.applyDefaults(theme.inputDecorationTheme);
+            final _textBuilder = textBuilder ?? dateRangPickerTextBuilder;
             final _showDateRangePicker = (DatePickerEntryMode entryMode) {
               showDateRangePicker(
                 cancelText: cancelText,
@@ -67,28 +73,23 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Expanded(
-                    child: TextFormField(
-                      controller: state.controller,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      focusNode: state.focusNode,
-                      readOnly: true,
-                      textAlign: TextAlign.left,
+                    child: GestureDetector(
                       onTap: () =>
                           _showDateRangePicker(DatePickerEntryMode.input),
+                      child: _textBuilder(
+                          state.context, state.value, state.widget.dateFormat),
                     ),
                   ),
                   IconButton(
                     alignment: Alignment.centerRight,
-                    icon: Icon(Icons.today),
+                    icon: icon ?? Icon(Icons.today),
                     onPressed: () => _showDateRangePicker(initialEntryMode),
                   ),
                 ],
               ),
             );
           },
-          initialValue: value,
+          initialValue: initialValue,
           key: key,
           onSaved: onSaved,
           validator: validator,
@@ -104,13 +105,13 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
 }
 
 class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
-  final controller = TextEditingController();
-  final focusNode = FocusNode();
+  @override
+  DateRangePickerFormField get widget => super.widget;
 
   @override
-  void initState() {
-    super.initState();
-    controller.text = writeValue(value);
+  void didChange(DateTimeRange value) {
+    super.didChange(value);
+    widget.onChanged?.call(value);
   }
 
   @override
@@ -118,26 +119,15 @@ class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
     super.reset();
     widget.onReset?.call();
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-    focusNode.dispose();
-  }
-
-  @override
-  DateRangePickerFormField get widget => super.widget;
-
-  @override
-  void didChange(DateTimeRange value) {
-    super.didChange(value);
-    controller.text = writeValue(value);
-    widget.onChanged?.call(value);
-  }
-
-  String writeValue(DateTimeRange value) {
-    final format = widget.dateFormat.format;
-    return value != null ? '${format(value.start)} - ${format(value.end)}' : '';
-  }
 }
+
+final DateRangePickerTextBuilder dateRangPickerTextBuilder =
+    (BuildContext context, DateTimeRange value, DateFormat dateFormat) {
+  final theme = Theme.of(context);
+  final format = dateFormat.format;
+  return Text(
+    value != null ? '${format(value.start)} - ${format(value.end)}' : '',
+    style: theme.textTheme.subtitle1,
+    textAlign: TextAlign.left,
+  );
+};

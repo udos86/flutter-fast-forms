@@ -14,6 +14,7 @@ class RadioGroupFormField<T> extends FormField<T> {
   RadioGroupFormField({
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    T initialValue,
     Key key,
     @required this.options,
     this.orientation = RadioGroupOrientation.vertical,
@@ -22,7 +23,6 @@ class RadioGroupFormField<T> extends FormField<T> {
     this.optionsBuilder,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
-    T value,
   })  : assert(decoration != null),
         super(
           autovalidate: autovalidate,
@@ -38,7 +38,7 @@ class RadioGroupFormField<T> extends FormField<T> {
               child: _optionsBuilder(state.context, options, state),
             );
           },
-          initialValue: value ?? options.first.value,
+          initialValue: initialValue ?? options.first.value,
           key: key,
           onSaved: onSaved,
           validator: validator,
@@ -56,7 +56,7 @@ class RadioGroupFormField<T> extends FormField<T> {
 
 class RadioGroupFormFieldState<T> extends FormFieldState<T> {
   @override
-  RadioGroupFormField<T> get widget => super.widget;
+  RadioGroupFormField<T> get widget => super.widget as RadioGroupFormField<T>;
 
   @override
   void didChange(T value) {

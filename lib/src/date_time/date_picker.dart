@@ -22,12 +22,14 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.format,
     String helper,
     this.helpText,
+    this.icon,
     @required String id,
     this.initialDatePickerMode,
     this.initialEntryMode,
     DateTime initialValue,
     String label,
     @required this.lastDate,
+    this.textBuilder,
     FormFieldValidator validator,
   }) : super(
           autofocus: autofocus,
@@ -49,9 +51,11 @@ class FastDatePicker extends FastFormField<DateTime> {
   final DateTime firstDate;
   final DateFormat format;
   final String helpText;
+  final Icon icon;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
+  final DatePickerTextBuilder textBuilder;
 
   @override
   State<StatefulWidget> createState() => FastFormFieldState<DateTime>();
@@ -73,11 +77,13 @@ final FastFormFieldBuilder fastDatePickerBuilder = (context, state) {
     firstDate: widget.firstDate,
     format: widget.format,
     helpText: widget.helpText,
+    icon: widget.icon,
+    initialValue: widget.initialValue,
     lastDate: widget.lastDate,
     onChanged: state.onChanged,
     onReset: state.onReset,
     onSaved: state.onSaved,
-    value: state.value,
+    textBuilder: widget.textBuilder,
     validator: widget.validator,
   );
 };

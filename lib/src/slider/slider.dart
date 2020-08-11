@@ -28,7 +28,7 @@ class FastSlider extends FastFormField<double> {
           decoration: decoration,
           helper: helper,
           id: id,
-          initialValue: initialValue,
+          initialValue: initialValue ?? min,
           label: label,
           validator: validator,
         );
@@ -54,15 +54,15 @@ final FastFormFieldBuilder _builder = (context, state) {
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     divisions: widget.divisions,
     focusNode: state.focusNode,
+    initialValue: widget.initialValue,
     labelBuilder: widget.labelBuilder,
     max: widget.max,
     min: widget.min,
-    prefixBuilder: widget.prefixBuilder,
-    suffixBuilder: widget.suffixBuilder,
-    validator: widget.validator,
-    value: state.value,
     onChanged: state.onChanged,
     onReset: state.onReset,
     onSaved: state.onSaved,
+    prefixBuilder: widget.prefixBuilder,
+    suffixBuilder: widget.suffixBuilder,
+    validator: widget.validator,
   );
 };

@@ -10,6 +10,7 @@ class DropdownFormField extends FormField<String> {
     InputDecoration decoration = const InputDecoration(),
     Color dropdownColor,
     FocusNode focusNode,
+    String initialValue,
     List<dynamic> items,
     DropdownMenuItemsBuilder itemsBuilder,
     Key key,
@@ -18,7 +19,6 @@ class DropdownFormField extends FormField<String> {
     FormFieldSetter onSaved,
     DropdownButtonBuilder selectedItemBuilder,
     FormFieldValidator validator,
-    String value,
   })  : assert(decoration != null),
         super(
           autovalidate: autovalidate,
@@ -40,7 +40,7 @@ class DropdownFormField extends FormField<String> {
               value: field.value,
             );
           },
-          initialValue: value,
+          initialValue: initialValue,
           key: key,
           onSaved: onSaved,
           validator: validator,
