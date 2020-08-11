@@ -49,20 +49,25 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController(text: value);
-    textController.addListener(_onTextChanged);
+    //textController = TextEditingController(text: value);
+    //textController.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
     super.dispose();
-    textController.dispose();
+    //textController.dispose();
   }
 
   @override
-  void reset() {
+  void onChanged(String value) {
+    this.value = value;
+    store.updateField(this);
+  }
+
+  @override
+  void onReset() {
     super.onReset();
-    this.textController.text = widget.initialValue;
   }
 
   void _onTextChanged() {
@@ -79,15 +84,15 @@ final FastFormFieldBuilder _builder = (context, _state) {
     autocorrect: widget.autocorrect,
     autofocus: widget.autofocus,
     autovalidate: state.autovalidate,
-    controller: state.textController,
+    initialValue: widget.initialValue,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     enabled: widget.enabled,
     focusNode: state.focusNode,
     keyboardType: widget.keyboardType ?? TextInputType.text,
-    inputFormatters: [...widget.inputFormatters],
+    inputFormatters: widget.inputFormatters,
     maxLength: widget.maxLength,
-    validator: widget.validator,
     onChanged: state.onChanged,
     onSaved: state.onSaved,
+    validator: widget.validator,
   );
 };
