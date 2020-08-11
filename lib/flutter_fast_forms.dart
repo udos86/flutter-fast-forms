@@ -9,6 +9,7 @@ export 'src/date_time/time_picker.dart';
 export 'src/date_time/time_picker_form_field.dart';
 
 export 'src/dropdown/dropdown.dart';
+export 'src/dropdown/dropdown_field.dart';
 
 export 'src/radio_group/radio_group.dart';
 export 'src/radio_group/radio_group_form_field.dart';

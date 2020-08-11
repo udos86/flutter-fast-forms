@@ -60,6 +60,7 @@ final FastFormFieldBuilder _builder = (context, state) {
     validator: widget.validator,
     value: state.value,
     onChanged: state.onChanged,
+    onReset: state.onReset,
     onSaved: state.onSaved,
   );
 };

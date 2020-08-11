@@ -45,10 +45,11 @@ final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
     autovalidate: state.autovalidate,
     autofocus: widget.autofocus,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    onChanged: state.onChanged,
+    onReset: state.onReset,
+    onSaved: state.onSaved,
     title: widget.title,
     value: state.value,
     validator: widget.validator,
-    onChanged: state.onChanged,
-    onSaved: state.onSaved,
   );
 };

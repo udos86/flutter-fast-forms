@@ -71,12 +71,13 @@ final FastFormFieldBuilder fastDatePickerBuilder = (context, state) {
     fieldHintText: widget.fieldHintText,
     fieldLabelText: widget.fieldLabelText,
     firstDate: widget.firstDate,
+    format: widget.format,
     helpText: widget.helpText,
     lastDate: widget.lastDate,
-    format: widget.format,
+    onChanged: state.onChanged,
+    onReset: state.onReset,
+    onSaved: state.onSaved,
     value: state.value,
     validator: widget.validator,
-    onChanged: state.onChanged,
-    onSaved: state.onSaved,
   );
 };

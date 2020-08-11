@@ -61,7 +61,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
 
   @override
   void reset() {
-    super.reset();
+    super.onReset();
     this.textController.text = widget.initialValue;
   }
 

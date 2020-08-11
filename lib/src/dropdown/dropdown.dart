@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 import '../form_style.dart';
-
-typedef FastDropdownMenuItemsBuilder = List<DropdownMenuItem> Function(
-    BuildContext context, List<dynamic> items);
+import 'dropdown_field.dart';
 
 @immutable
 class FastDropdown extends FastFormField<String> {
@@ -33,7 +31,7 @@ class FastDropdown extends FastFormField<String> {
         );
 
   final Color dropdownColor;
-  final FastDropdownMenuItemsBuilder itemsBuilder;
+  final DropdownMenuItemsBuilder itemsBuilder;
   final DropdownButtonBuilder selectedItemBuilder;
   final List<dynamic> items;
 
@@ -41,30 +39,21 @@ class FastDropdown extends FastFormField<String> {
   State<StatefulWidget> createState() => FastFormFieldState<String>();
 }
 
-final FastDropdownMenuItemsBuilder fastDropdownMenuItemsBuilder =
-    (BuildContext context, List<dynamic> items) {
-  return items.map((item) {
-    return DropdownMenuItem(
-      value: item.toString(),
-      child: Text(item.toString()),
-    );
-  }).toList();
-};
-
 final FastFormFieldBuilder fastDropdownBuilder =
     (BuildContext context, FastFormFieldState state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastDropdown;
-  final _itemsBuilder = widget.itemsBuilder ?? fastDropdownMenuItemsBuilder;
 
-  return DropdownButtonFormField(
+  return DropdownFormField(
     autofocus: widget.autofocus,
     autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
     dropdownColor: widget.dropdownColor,
     focusNode: state.focusNode,
-    items: _itemsBuilder(context, widget.items),
+    items: widget.items,
+    itemsBuilder: widget.itemsBuilder,
     onChanged: state.onChanged,
+    onReset: state.onReset,
     onSaved: state.onSaved,
     selectedItemBuilder: widget.selectedItemBuilder,
     validator: widget.validator,

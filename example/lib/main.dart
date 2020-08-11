@@ -41,8 +41,12 @@ class FormPage extends StatelessWidget {
             FastForm(
               formKey: formKey,
               model: buildFormModel(context),
-              onChanged: (value) => print('Form changed: ${value.toString()}'),
+              // onChanged: (value) => print('Form changed: ${value.toString()}'),
             ),
+            RaisedButton(
+              child: Text('Reset'),
+              onPressed: () => formKey.currentState.reset(),
+            )
           ],
         ),
       ),
