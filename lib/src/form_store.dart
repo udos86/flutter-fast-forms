@@ -16,15 +16,15 @@ class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
   UnmodifiableMapView<String, dynamic> get values => UnmodifiableMapView(
       _fields.map((id, state) => MapEntry(id, state.value)));
 
-  void initField(FastFormFieldState state) {
+  void register(FastFormFieldState state) {
     _fields[state.widget.id] = state;
   }
 
-  void disposeField(String id) {
+  void unregister(String id) {
     _fields.remove(id);
   }
 
-  void updateField(FastFormFieldState state) {
+  void update(FastFormFieldState state) {
     _fields[state.widget.id] = state;
     notifyListeners();
   }
@@ -33,7 +33,7 @@ class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
     return _initialValues[id];
   }
 
-  bool isFieldRestored(String id) {
+  bool isRestored(String id) {
     return _initialValues?.containsKey(id) ?? false;
   }
 }

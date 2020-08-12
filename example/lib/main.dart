@@ -80,7 +80,6 @@ class FormPage extends StatelessWidget {
             id: 'time_picker_1',
             label: 'Time Picker',
           ),
-          /*
           FastTextField(
             id: 'text_field_1',
             label: 'Text Field',
@@ -90,11 +89,8 @@ class FormPage extends StatelessWidget {
               Validators.minLength(6),
             ]),
             keyboardType: TextInputType.datetime,
-            inputFormatters: [
-              InputFormatters.maskText('##/####'),
-            ],
+            mask: '##/####',
           ),
-          */
           FastDropdown(
             id: 'dropdown_1',
             label: 'Dropdown Field',
@@ -108,7 +104,6 @@ class FormPage extends StatelessWidget {
             initialValue: 'Finland',
             validator: Validators.required(),
           ),
-          /*
           FastRadioGroup(
             id: 'radio_group_1',
             label: 'Radio Group Model',
@@ -160,6 +155,7 @@ class FormPage extends StatelessWidget {
               final style = FormStyle.of(context);
               return CustomFormField(
                 decoration: style.getInputDecoration(context, state.widget),
+                onReset: state.onReset,
               );
             },
           ),
@@ -167,7 +163,6 @@ class FormPage extends StatelessWidget {
             id: 'checkbox_1',
             title: 'I accept',
           ),
-           */
         ],
       ),
     ];

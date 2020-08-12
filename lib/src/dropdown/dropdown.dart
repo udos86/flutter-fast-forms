@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 import '../form_style.dart';
-import 'dropdown_field.dart';
+import 'dropdown_form_field.dart';
 
 @immutable
 class FastDropdown extends FastFormField<String> {

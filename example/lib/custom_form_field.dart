@@ -18,7 +18,11 @@ class CustomFormFieldModel extends FastFormField<CustomValue> {
     FastFormFieldBuilder builder,
     @required String id,
     String label,
-  }) : super(builder: builder, id: id, label: label);
+  }) : super(
+          builder: builder,
+          id: id,
+          label: label,
+        );
 
   @override
   State<StatefulWidget> createState() => FastFormFieldState<CustomValue>();
@@ -26,21 +30,17 @@ class CustomFormFieldModel extends FastFormField<CustomValue> {
 
 class CustomFormField extends FormField<CustomValue> {
   CustomFormField({
+    InputDecoration decoration = const InputDecoration(),
     Key key,
-    CustomValue value,
     String label,
     String placeholder,
     this.onChanged,
-    InputDecoration decoration = const InputDecoration(),
+    this.onReset,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
-    Widget hint,
+    CustomValue initialValue,
   })  : assert(decoration != null),
         super(
-          key: key,
-          onSaved: onSaved,
-          initialValue: value ?? CustomValue(),
-          validator: validator,
           builder: (_field) {
             final field = _field as CustomFormFieldState;
             final InputDecoration effectiveDecoration = decoration
@@ -65,9 +65,14 @@ class CustomFormField extends FormField<CustomValue> {
               ),
             );
           },
+          initialValue: initialValue ?? CustomValue(),
+          key: key,
+          onSaved: onSaved,
+          validator: validator,
         );
 
   final ValueChanged onChanged;
+  final VoidCallback onReset;
 
   @override
   FormFieldState<CustomValue> createState() => CustomFormFieldState();
@@ -91,6 +96,13 @@ class CustomFormFieldState extends FormFieldState<CustomValue> {
   void didChange(CustomValue value) {
     super.didChange(value);
     if (widget.onChanged != null) widget.onChanged(value);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    active = false;
+    widget.onReset?.call();
   }
 
   Widget buildActiveSegment() {
