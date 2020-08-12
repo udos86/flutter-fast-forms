@@ -11,6 +11,7 @@ class SliderFormField extends FormField<double> {
     bool autofocus,
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
     int divisions,
     FocusNode focusNode,
     double initialValue,
@@ -48,7 +49,7 @@ class SliderFormField extends FormField<double> {
                       max: max,
                       min: min,
                       value: field.value,
-                      onChanged: field.didChange,
+                      onChanged: enabled ? field.didChange : null,
                     ),
                   ),
                   if (suffixBuilder != null)
@@ -57,6 +58,7 @@ class SliderFormField extends FormField<double> {
               ),
             );
           },
+          enabled: enabled,
           initialValue: initialValue ?? min,
           key: key,
           onSaved: onSaved,

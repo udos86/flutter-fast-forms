@@ -10,6 +10,7 @@ class DatePickerFormField extends FormField<DateTime> {
     String cancelText,
     String confirmText,
     InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
     String errorFormatText,
     String errorInvalidText,
     String fieldHintText,
@@ -58,7 +59,6 @@ class DatePickerFormField extends FormField<DateTime> {
                 if (value != null) state.didChange(value);
               });
             };
-
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: state.errorText,
@@ -68,7 +68,9 @@ class DatePickerFormField extends FormField<DateTime> {
                 children: <Widget>[
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => _showDatePicker(DatePickerEntryMode.input),
+                      onTap: enabled
+                          ? () => _showDatePicker(DatePickerEntryMode.input)
+                          : null,
                       child: _textBuilder(
                           state.context, state.value, state.widget.dateFormat),
                     ),
@@ -76,12 +78,15 @@ class DatePickerFormField extends FormField<DateTime> {
                   IconButton(
                     alignment: Alignment.centerRight,
                     icon: icon ?? Icon(Icons.today),
-                    onPressed: () => _showDatePicker(initialEntryMode),
+                    onPressed: enabled
+                        ? () => _showDatePicker(initialEntryMode)
+                        : null,
                   ),
                 ],
               ),
             );
           },
+          enabled: enabled,
           initialValue: initialValue,
           key: key,
           onSaved: onSaved,

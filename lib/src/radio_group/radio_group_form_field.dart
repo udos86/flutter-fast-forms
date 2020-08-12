@@ -14,6 +14,7 @@ class RadioGroupFormField<T> extends FormField<T> {
   RadioGroupFormField({
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
     T initialValue,
     Key key,
     @required this.options,
@@ -38,6 +39,7 @@ class RadioGroupFormField<T> extends FormField<T> {
               child: _optionsBuilder(state.context, options, state),
             );
           },
+          enabled: enabled,
           initialValue: initialValue ?? options.first.value,
           key: key,
           onSaved: onSaved,
@@ -74,12 +76,13 @@ class RadioGroupFormFieldState<T> extends FormFieldState<T> {
 final RadioOptionsBuilder radioOptionsBuilder =
     (BuildContext context, options, RadioGroupFormFieldState state) {
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
+  final enabled = state.widget.enabled;
   final _tiles = options.map((option) {
     final tile = RadioListTile(
       title: Text(option.title),
       value: option.value,
       groupValue: state.value,
-      onChanged: state.didChange,
+      onChanged: enabled ? state.didChange : null,
     );
     return vertical ? tile : Expanded(child: tile);
   }).toList();

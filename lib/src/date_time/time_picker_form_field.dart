@@ -7,6 +7,7 @@ class TimePickerFormField extends FormField<TimeOfDay> {
   TimePickerFormField({
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
     Icon icon,
     TimeOfDay initialValue,
     Key key,
@@ -42,19 +43,20 @@ class TimePickerFormField extends FormField<TimeOfDay> {
                 children: <Widget>[
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => _showTimePicker(),
+                      onTap: enabled ? () => _showTimePicker() : null,
                       child: _textBuilder(state.context, state.value),
                     ),
                   ),
                   IconButton(
                     alignment: Alignment.centerRight,
                     icon: icon ?? Icon(Icons.schedule),
-                    onPressed: _showTimePicker,
+                    onPressed: enabled ? _showTimePicker : null,
                   ),
                 ],
               ),
             );
           },
+          enabled: enabled,
           initialValue: initialValue,
           key: key,
           onSaved: onSaved,

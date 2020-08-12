@@ -11,6 +11,7 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
     String confirmText,
     DateTime currentDate,
     InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
     String errorFormatText,
     String errorInvalidRangeText,
     String errorInvalidText,
@@ -64,7 +65,6 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
                 if (value != null) state.didChange(value);
               });
             };
-
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: state.errorText,
@@ -74,8 +74,10 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
                 children: <Widget>[
                   Expanded(
                     child: GestureDetector(
-                      onTap: () =>
-                          _showDateRangePicker(DatePickerEntryMode.input),
+                      onTap: enabled
+                          ? () =>
+                              _showDateRangePicker(DatePickerEntryMode.input)
+                          : null,
                       child: _textBuilder(
                           state.context, state.value, state.widget.dateFormat),
                     ),
@@ -83,12 +85,15 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
                   IconButton(
                     alignment: Alignment.centerRight,
                     icon: icon ?? Icon(Icons.today),
-                    onPressed: () => _showDateRangePicker(initialEntryMode),
+                    onPressed: enabled
+                        ? () => _showDateRangePicker(initialEntryMode)
+                        : null,
                   ),
                 ],
               ),
             );
           },
+          enabled: enabled,
           initialValue: initialValue,
           key: key,
           onSaved: onSaved,

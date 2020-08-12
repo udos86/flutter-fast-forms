@@ -96,13 +96,13 @@ final FastFormFieldBuilder _builder = (context, _state) {
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
     focusNode: state.focusNode,
-    keyboardType: widget.keyboardType ?? TextInputType.text,
     initialValue: widget.initialValue,
     inputFormatters: [
       // workaround to avoid appearance of memoized value on re-entering text field after reset
       if (widget.mask != null) InputFormatters.maskText(widget.mask),
-      ...widget.inputFormatters,
+      if (widget.inputFormatters is List) ...widget.inputFormatters,
     ],
+    keyboardType: widget.keyboardType ?? TextInputType.text,
     maxLength: widget.maxLength,
     maxLengthEnforced: widget.maxLengthEnforced,
     maxLines: widget.maxLines,

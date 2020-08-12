@@ -23,6 +23,7 @@ class FastRadioGroup extends FastFormField<String> {
     bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
+    bool enabled = true,
     String helper,
     @required String id,
     String initialValue,
@@ -34,6 +35,7 @@ class FastRadioGroup extends FastFormField<String> {
           autofocus: autofocus,
           builder: builder ?? _builder,
           decoration: decoration,
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue: initialValue ?? options.first.value,
@@ -55,6 +57,7 @@ final FastFormFieldBuilder _builder = (context, state) {
   return RadioGroupFormField(
     autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    enabled: widget.enabled,
     initialValue: widget.initialValue,
     onChanged: state.onChanged,
     onReset: state.onReset,

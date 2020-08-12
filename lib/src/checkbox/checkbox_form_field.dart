@@ -8,6 +8,7 @@ class CheckboxFormField extends FormField<bool> {
     bool autofocus,
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
     bool initialValue,
     Key key,
     this.onChanged,
@@ -30,7 +31,7 @@ class CheckboxFormField extends FormField<bool> {
               ),
               child: CheckboxListTile(
                 autofocus: autofocus,
-                onChanged: field.didChange,
+                onChanged: enabled ? field.didChange : null,
                 selected: field.value,
                 tristate: tristate,
                 title: _titleBuilder(field.context, field),
@@ -38,6 +39,7 @@ class CheckboxFormField extends FormField<bool> {
               ),
             );
           },
+          enabled: enabled,
           initialValue: initialValue ?? false,
           key: key,
           onSaved: onSaved,

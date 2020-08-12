@@ -11,6 +11,7 @@ typedef InputDecorationCreator = InputDecoration Function(
 final InputDecorationCreator defaultInputDecorationCreator =
     (BuildContext context, FastFormField model) {
   final theme = Theme.of(context);
+  final enabled = model.enabled;
   return InputDecoration(
     contentPadding: (model is FastDropdown || model is FastTextField)
         ? EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
@@ -19,10 +20,11 @@ final InputDecorationCreator defaultInputDecorationCreator =
     helperText: model.helper,
     hintText: model is FastTextField ? model.hint : null,
     labelStyle: TextStyle(
-      color: theme.textTheme.bodyText1.color,
+      color: enabled ? theme.textTheme.bodyText1.color : theme.disabledColor,
     ),
+    enabled: enabled,
     disabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey[700], width: 1),
+      borderSide: BorderSide(color: theme.disabledColor, width: 1),
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.grey[700], width: 1),

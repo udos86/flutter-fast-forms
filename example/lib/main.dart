@@ -128,14 +128,22 @@ class FormPage extends StatelessWidget {
             helper: 'A Slider with prefix and suffix widgets',
             min: 0,
             max: 10,
-            prefixBuilder: (context, state) => IconButton(
-              icon: Icon(Icons.volume_off),
-              onPressed: () => state.didChange(state.widget.min),
-            ),
-            suffixBuilder: (context, state) => IconButton(
-              icon: Icon(Icons.volume_up),
-              onPressed: () => state.didChange(state.widget.max),
-            ),
+            prefixBuilder: (context, state) {
+              final enabled = state.widget.enabled;
+              return IconButton(
+                icon: Icon(Icons.volume_off),
+                onPressed:
+                    enabled ? () => state.didChange(state.widget.min) : null,
+              );
+            },
+            suffixBuilder: (context, state) {
+              final enabled = state.widget.enabled;
+              return IconButton(
+                icon: Icon(Icons.volume_up),
+                onPressed:
+                    enabled ? () => state.didChange(state.widget.max) : null,
+              );
+            },
             validator: (value) => value > 8 ? 'Volume is too high' : null,
           ),
           FastRangeSlider(

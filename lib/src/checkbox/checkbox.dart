@@ -11,6 +11,7 @@ class FastCheckbox extends FastFormField<bool> {
     bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
+    bool enabled = true,
     String helper,
     @required String id,
     bool initialValue,
@@ -22,6 +23,7 @@ class FastCheckbox extends FastFormField<bool> {
           autofocus: autofocus,
           builder: builder ?? fastCheckboxBuilder,
           decoration: decoration,
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue:
@@ -44,6 +46,7 @@ final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
     autovalidate: state.autovalidate,
     autofocus: widget.autofocus,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    enabled: widget.enabled,
     initialValue: widget.initialValue,
     onChanged: state.onChanged,
     onReset: state.onReset,

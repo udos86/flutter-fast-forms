@@ -9,6 +9,7 @@ class DropdownFormField extends FormField<String> {
     bool autovalidate,
     InputDecoration decoration = const InputDecoration(),
     Color dropdownColor,
+    bool enabled = true,
     FocusNode focusNode,
     String initialValue,
     List<dynamic> items,
@@ -24,6 +25,9 @@ class DropdownFormField extends FormField<String> {
           autovalidate: autovalidate,
           builder: (field) {
             final _itemsBuilder = itemsBuilder ?? dropdownMenuItemsBuilder;
+            final _onChanged = (value) {
+              if (value != field.value) field.didChange(value);
+            };
             return DropdownButtonFormField<String>(
               autofocus: autofocus,
               autovalidate: autovalidate,
@@ -31,15 +35,14 @@ class DropdownFormField extends FormField<String> {
               dropdownColor: dropdownColor,
               focusNode: focusNode,
               items: _itemsBuilder(field.context, items),
-              onChanged: (value) {
-                if (value != field.value) field.didChange(value);
-              },
+              onChanged: enabled ? _onChanged : null,
               onSaved: onSaved,
               selectedItemBuilder: selectedItemBuilder,
               validator: validator,
               value: field.value,
             );
           },
+          enabled: enabled,
           initialValue: initialValue,
           key: key,
           onSaved: onSaved,

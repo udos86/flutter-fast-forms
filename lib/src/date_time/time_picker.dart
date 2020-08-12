@@ -11,6 +11,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     bool autofocus = false,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
+    bool enabled = true,
     String helper,
     this.icon,
     @required String id,
@@ -21,6 +22,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   }) : super(
           autofocus: autofocus,
           builder: builder ?? fastTimePickerBuilder,
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue: initialValue,
@@ -42,6 +44,7 @@ final FastFormFieldBuilder fastTimePickerBuilder = (context, state) {
   return TimePickerFormField(
     autovalidate: state.autovalidate,
     decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    enabled: widget.enabled,
     icon: widget.icon,
     initialValue: widget.initialValue,
     onChanged: state.onChanged,
