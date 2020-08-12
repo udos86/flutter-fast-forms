@@ -10,19 +10,19 @@ typedef FormChanged = void Function(Map<String, dynamic> value);
 
 class FastForm extends StatefulWidget {
   FastForm({
+    @required this.children,
     this.decorationCreator,
     @required this.formKey,
     this.initialValues,
-    @required this.model,
     Key key,
     this.onChanged,
     this.padding,
   }) : super(key: key);
 
+  final List<FastFormFieldGroup> children;
   final InputDecorationCreator decorationCreator;
   final GlobalKey<FormState> formKey;
   final Map<String, dynamic> initialValues;
-  final List<FastFormFieldGroup> model;
   final FormChanged onChanged;
   final EdgeInsets padding;
 
@@ -58,7 +58,7 @@ class _FastFormState extends State<FastForm> {
           decorationCreator: widget.decorationCreator,
           padding: widget.padding,
           child: Column(
-            children: widget.model,
+            children: widget.children,
           ),
         ),
       ),
