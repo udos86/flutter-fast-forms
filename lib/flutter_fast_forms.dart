@@ -20,6 +20,7 @@ export 'src/slider/slider.dart';
 export 'src/slider/slider_form_field.dart';
 
 export 'src/text_field/text_field.dart';
+export 'src/text_field/text_form_field.dart';
 
 export 'src/utils/form_formatters.dart';
 export 'src/utils/form_model.dart';
