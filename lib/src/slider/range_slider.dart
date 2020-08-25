@@ -49,10 +49,13 @@ class FastRangeSlider extends FastFormField<RangeValues> {
 final FastFormFieldBuilder _builder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastRangeSlider;
+  final decoration = widget.decoration ??
+      style?.getInputDecoration(context, widget) ??
+      const InputDecoration();
 
   return RangeSliderFormField(
     autovalidate: state.autovalidate,
-    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    decoration: decoration,
     divisions: widget.divisions,
     enabled: widget.enabled,
     initialValue: widget.initialValue,

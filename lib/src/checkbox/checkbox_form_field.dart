@@ -34,7 +34,9 @@ class CheckboxFormField extends FormField<bool> {
                 onChanged: enabled ? field.didChange : null,
                 selected: field.value,
                 tristate: tristate,
-                title: _titleBuilder(field.context, field),
+                title: title is String
+                    ? _titleBuilder(field.context, field)
+                    : null,
                 value: field.value,
               ),
             );

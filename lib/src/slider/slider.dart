@@ -49,11 +49,14 @@ class FastSlider extends FastFormField<double> {
 final FastFormFieldBuilder _builder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastSlider;
+  final decoration = widget.decoration ??
+      style?.getInputDecoration(context, widget) ??
+      const InputDecoration();
 
   return SliderFormField(
     autofocus: widget.autofocus,
     autovalidate: state.autovalidate,
-    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    decoration: decoration,
     divisions: widget.divisions,
     enabled: widget.enabled,
     focusNode: state.focusNode,

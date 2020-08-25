@@ -42,10 +42,14 @@ class FastCheckbox extends FastFormField<bool> {
 final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastCheckbox;
+  final decoration = widget.decoration ??
+      style?.getInputDecoration(context, widget) ??
+      const InputDecoration();
+
   return CheckboxFormField(
     autovalidate: state.autovalidate,
     autofocus: widget.autofocus,
-    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    decoration: decoration,
     enabled: widget.enabled,
     initialValue: widget.initialValue,
     onChanged: state.onChanged,
