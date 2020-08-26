@@ -25,14 +25,13 @@ void main() {
       Utils.wrapMaterial(
         FastRadioGroup(
           id: 'radio_group',
-          label: 'Radio Group',
           options: options,
         ),
       ),
     );
 
-    final type = Utils.typeOf<RadioGroupFormField<String>>();
-    final formFieldFinder = find.byType(type);
+    final formFieldFinder =
+        find.byType(Utils.typeOf<RadioGroupFormField<String>>());
     final optionsFinder = find.byType(RadioListTile);
 
     expect(formFieldFinder, findsOneWidget);

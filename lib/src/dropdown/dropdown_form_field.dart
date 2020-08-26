@@ -76,7 +76,7 @@ class DropdownFormFieldState extends FormFieldState<String> {
 final DropdownMenuItemsBuilder dropdownMenuItemsBuilder =
     (BuildContext context, List<dynamic> items) {
   return items.map((item) {
-    return DropdownMenuItem(
+    return DropdownMenuItem<String>(
       value: item.toString(),
       child: Text(item.toString()),
     );

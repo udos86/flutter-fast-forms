@@ -45,11 +45,14 @@ final FastFormFieldBuilder fastDropdownBuilder =
     (BuildContext context, FastFormFieldState state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastDropdown;
+  final decoration = widget.decoration ??
+      style?.getInputDecoration(context, widget) ??
+      const InputDecoration();
 
   return DropdownFormField(
     autofocus: widget.autofocus,
     autovalidate: state.autovalidate,
-    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    decoration: decoration,
     dropdownColor: widget.dropdownColor,
     enabled: widget.enabled,
     focusNode: state.focusNode,
