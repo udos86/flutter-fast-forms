@@ -72,12 +72,15 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
 final FastFormFieldBuilder fastDateRangerPickerBuilder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastDateRangePicker;
+  final decoration = widget.decoration ??
+      style?.getInputDecoration(context, widget) ??
+      const InputDecoration();
 
   return DateRangePickerFormField(
     autovalidate: state.autovalidate,
     cancelText: widget.cancelText,
     confirmText: widget.confirmText,
-    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    decoration: decoration,
     enabled: widget.enabled,
     errorFormatText: widget.errorFormatText,
     errorInvalidRangeText: widget.errorInvalidRangeText,

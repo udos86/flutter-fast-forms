@@ -40,10 +40,13 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
 final FastFormFieldBuilder fastTimePickerBuilder = (context, state) {
   final style = FormStyle.of(context);
   final widget = state.widget as FastTimePicker;
+  final decoration = widget.decoration ??
+      style?.getInputDecoration(context, widget) ??
+      const InputDecoration();
 
   return TimePickerFormField(
     autovalidate: state.autovalidate,
-    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    decoration: decoration,
     enabled: widget.enabled,
     icon: widget.icon,
     initialValue: widget.initialValue,
