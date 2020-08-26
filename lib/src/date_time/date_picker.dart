@@ -70,7 +70,6 @@ final FastFormFieldBuilder fastDatePickerBuilder = (context, state) {
       style?.getInputDecoration(context, widget) ??
       const InputDecoration();
 
-
   return DatePickerFormField(
     autovalidate: state.autovalidate,
     cancelText: widget.cancelText,
