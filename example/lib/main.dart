@@ -156,7 +156,7 @@ class FormPage extends StatelessWidget {
             prefixBuilder: rangeSliderPrefixBuilder,
             suffixBuilder: rangeSliderSuffixBuilder,
           ),
-          CustomFormFieldModel(
+          FastCustomFormField(
             id: 'custom_form_field',
             label: 'Custom Form Field',
             builder: (context, state) {

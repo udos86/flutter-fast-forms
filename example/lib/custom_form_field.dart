@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 @immutable
 class CustomValue {
@@ -10,22 +9,6 @@ class CustomValue {
 
   final bool checkboxA;
   final bool checkboxB;
-}
-
-@immutable
-class CustomFormFieldModel extends FastFormField<CustomValue> {
-  CustomFormFieldModel({
-    FastFormFieldBuilder builder,
-    @required String id,
-    String label,
-  }) : super(
-          builder: builder,
-          id: id,
-          label: label,
-        );
-
-  @override
-  State<StatefulWidget> createState() => FastFormFieldState<CustomValue>();
 }
 
 class CustomFormField extends FormField<CustomValue> {
