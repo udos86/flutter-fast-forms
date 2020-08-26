@@ -6,7 +6,7 @@ import 'test_utils.dart';
 void main() {
   testWidgets('FastRangeSlider', (WidgetTester tester) async {
     await tester.pumpWidget(
-      TestUtils.wrapMaterial(
+      Utils.wrapMaterial(
         FastRangeSlider(
           id: 'range_slider',
           max: 10,

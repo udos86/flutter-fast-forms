@@ -6,7 +6,7 @@ import 'test_utils.dart';
 void main() {
   testWidgets('FastSlider', (WidgetTester tester) async {
     await tester.pumpWidget(
-      TestUtils.wrapMaterial(
+      Utils.wrapMaterial(
         FastSlider(
           id: 'slider',
           min: 0,

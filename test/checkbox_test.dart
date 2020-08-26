@@ -10,7 +10,7 @@ void main() {
     final title = 'title';
 
     await tester.pumpWidget(
-      TestUtils.wrapMaterial(
+      Utils.wrapMaterial(
         FastCheckbox(
           id: 'checkbox',
           helper: helper,
