@@ -83,6 +83,9 @@ final FastFormFieldBuilder _builder = (context, _state) {
   final state = _state as FastTextFieldState;
   final style = FormStyle.of(context);
   final widget = state.widget as FastTextField;
+  final decoration = widget.decoration ??
+      style?.getInputDecoration(context, widget) ??
+      const InputDecoration();
 
   return FastTextFormField(
     autocorrect: widget.autocorrect,
@@ -90,7 +93,7 @@ final FastFormFieldBuilder _builder = (context, _state) {
     buildCounter: widget.buildCounter,
     autofocus: widget.autofocus,
     autovalidate: state.autovalidate,
-    decoration: widget.decoration ?? style.getInputDecoration(context, widget),
+    decoration: decoration,
     enabled: widget.enabled,
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
