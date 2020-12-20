@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
 abstract class Validators {
-  static FormFieldValidator<dynamic> required(
+  static FormFieldValidator required(
       [errorText = 'Field is required']) {
     return (value) {
       final hasLength = value is Iterable || value is String || value is Map;
@@ -13,12 +13,12 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<bool> requiredTrue(
+  static FormFieldValidator requiredTrue(
       [String errorText = 'Field is required']) {
     return (value) => value != true ? errorText : null;
   }
 
-  static FormFieldValidator<String> pattern(Pattern pattern,
+  static FormFieldValidator pattern(Pattern pattern,
       [String errorText = 'Field does not match pattern']) {
     return (value) {
       if (value != null && value.isNotEmpty) {
@@ -28,7 +28,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<String> maxLength(num maxLength,
+  static FormFieldValidator maxLength(num maxLength,
       [String errorText]) {
     return (value) {
       if (value != null && value.length > maxLength) {
@@ -39,7 +39,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<String> minLength(int minLength,
+  static FormFieldValidator minLength(int minLength,
       [String errorText]) {
     return (value) {
       if ((value?.length ?? 0) < minLength) {
@@ -49,7 +49,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<dynamic> max(num max, [String errorText]) {
+  static FormFieldValidator max(num max, [String errorText]) {
     return (value) {
       final _value = value is num ? value : num.tryParse(value);
       if (_value != null && _value > max) {
@@ -59,7 +59,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<dynamic> min(num min, [String errorText]) {
+  static FormFieldValidator min(num min, [String errorText]) {
     return (value) {
       final _value = value is num ? value : num.tryParse(value);
       if (value != null && _value < min) {
@@ -69,7 +69,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<String> email(
+  static FormFieldValidator email(
       [String errorText = 'Field must contain a valid email address']) {
     return (value) {
       if (value != null && value.isNotEmpty) {
@@ -79,7 +79,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<dynamic> compose(
+  static FormFieldValidator compose(
       List<FormFieldValidator> validators) {
     return (value) {
       for (var index = 0; index < validators.length; index++) {
