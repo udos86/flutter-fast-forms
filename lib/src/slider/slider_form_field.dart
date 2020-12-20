@@ -9,7 +9,7 @@ typedef SliderFixBuilder = Widget Function(
 class SliderFormField extends FormField<double> {
   SliderFormField({
     bool autofocus,
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     InputDecoration decoration = const InputDecoration(),
     bool enabled = true,
     int divisions,
@@ -27,7 +27,7 @@ class SliderFormField extends FormField<double> {
     FormFieldValidator validator,
   })  : assert(decoration != null),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);

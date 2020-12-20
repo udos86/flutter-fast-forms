@@ -8,11 +8,12 @@ import 'slider_form_field.dart';
 @immutable
 class FastSlider extends FastFormField<double> {
   FastSlider({
-    bool autofocus = false,
+    bool autofocus,
+    AutovalidateMode autovalidateMode,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     this.divisions,
-    bool enabled = true,
+    bool enabled,
     String helper,
     @required String id,
     double initialValue,
@@ -24,10 +25,12 @@ class FastSlider extends FastFormField<double> {
     this.suffixBuilder,
     FormFieldValidator validator,
   }) : super(
-          autofocus: autofocus,
+          autofocus: autofocus ?? false,
+          autovalidateMode:
+              autovalidateMode ?? AutovalidateMode.onUserInteraction,
           builder: builder ?? _builder,
           decoration: decoration,
-          enabled: enabled,
+          enabled: enabled ?? true,
           helper: helper,
           id: id,
           initialValue: initialValue ?? min,
@@ -55,7 +58,7 @@ final FastFormFieldBuilder _builder = (context, state) {
 
   return SliderFormField(
     autofocus: widget.autofocus,
-    autovalidate: state.autovalidate,
+    autovalidateMode: widget.autovalidateMode,
     decoration: decoration,
     divisions: widget.divisions,
     enabled: widget.enabled,

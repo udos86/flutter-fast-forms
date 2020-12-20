@@ -40,7 +40,7 @@ class FormPage extends StatelessWidget {
           children: [
             FastForm(
               formKey: formKey,
-              children: buildFormModel(context),
+              children: _buildFormModel(context),
               onChanged: (value) => print('Form changed: ${value.toString()}'),
             ),
             RaisedButton(
@@ -53,7 +53,7 @@ class FormPage extends StatelessWidget {
     );
   }
 
-  List<FastFormFieldGroup> buildFormModel(BuildContext context) {
+  List<FastFormFieldGroup> _buildFormModel(BuildContext context) {
     return <FastFormFieldGroup>[
       FastFormFieldGroup(
         title: Text(
@@ -84,12 +84,12 @@ class FormPage extends StatelessWidget {
             id: 'text_field_1',
             label: 'Text Field',
             hint: 'MM/JJJJ',
-            validator: Validators.compose([
-              Validators.required(),
-              Validators.minLength(6),
-            ]),
             keyboardType: TextInputType.datetime,
             mask: '##/####',
+            validator: Validators.compose([
+              Validators.required(),
+              Validators.minLength(7),
+            ]),
           ),
           FastDropdown(
             id: 'dropdown_1',

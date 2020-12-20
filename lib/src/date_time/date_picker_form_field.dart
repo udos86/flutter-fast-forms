@@ -6,7 +6,7 @@ typedef DatePickerTextBuilder = Text Function(
 
 class DatePickerFormField extends FormField<DateTime> {
   DatePickerFormField({
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     String cancelText,
     String confirmText,
     InputDecoration decoration = const InputDecoration(),
@@ -33,7 +33,7 @@ class DatePickerFormField extends FormField<DateTime> {
   })  : assert(decoration != null),
         this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final state = field as DatePickerFormFieldState;
             final theme = Theme.of(state.context);

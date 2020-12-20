@@ -5,6 +5,7 @@ repository: https://github.com/udos86/flutter-fast-forms
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
+  flutter: ">=1.22.0"
 
 dependencies:
   flutter:
@@ -19,6 +20,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  test: ^1.15.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

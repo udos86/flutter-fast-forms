@@ -5,7 +5,7 @@ typedef TimePickerTextBuilder = Text Function(
 
 class TimePickerFormField extends FormField<TimeOfDay> {
   TimePickerFormField({
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     InputDecoration decoration = const InputDecoration(),
     bool enabled = true,
     Icon icon,
@@ -19,7 +19,7 @@ class TimePickerFormField extends FormField<TimeOfDay> {
     FormFieldValidator validator,
   })  : assert(decoration != null),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final state = field as TimePickerFormFieldState;
             final theme = Theme.of(state.context);

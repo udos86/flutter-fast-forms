@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_fast_forms/src/text_field/text_form_field.dart';
 
 import '../form_field.dart';
 import '../form_style.dart';
 import '../utils/form_formatters.dart';
+
+import 'text_form_field.dart';
 
 @immutable
 class FastTextField extends FastFormField<String> {
   FastTextField({
     this.autocorrect = true,
     this.autofillHints,
-    bool autofocus = false,
+    bool autofocus,
+    AutovalidateMode autovalidateMode,
     this.buildCounter,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
-    bool enabled = true,
+    bool enabled,
     this.enableInteractiveSelection = true,
     this.enableSuggestions = true,
     this.expands = false,
@@ -37,10 +39,12 @@ class FastTextField extends FastFormField<String> {
     this.textCapitalization = TextCapitalization.none,
     FormFieldValidator validator,
   }) : super(
-          autofocus: autofocus,
+          autofocus: autofocus ?? false,
+          autovalidateMode: autovalidateMode,
+          //?? AutovalidateMode.onUserInteraction,
           builder: builder ?? _builder,
           decoration: decoration,
-          enabled: enabled,
+          enabled: enabled ?? true,
           helper: helper,
           id: id,
           initialValue: initialValue ?? '',
@@ -72,6 +76,9 @@ class FastTextField extends FastFormField<String> {
 }
 
 class FastTextFieldState extends FastFormFieldState<String> {
+  AutovalidateMode get autovalidateMode =>
+      touched ? AutovalidateMode.always : AutovalidateMode.disabled;
+
   @override
   void onChanged(String value) {
     this.value = value;
@@ -90,9 +97,9 @@ final FastFormFieldBuilder _builder = (context, _state) {
   return FastTextFormField(
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
-    buildCounter: widget.buildCounter,
     autofocus: widget.autofocus,
-    autovalidate: state.autovalidate,
+    autovalidateMode: widget.autovalidateMode ?? state.autovalidateMode,
+    buildCounter: widget.buildCounter,
     decoration: decoration,
     enabled: widget.enabled,
     enableInteractiveSelection: widget.enableInteractiveSelection,

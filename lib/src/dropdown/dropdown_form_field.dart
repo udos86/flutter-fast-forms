@@ -6,7 +6,7 @@ typedef DropdownMenuItemsBuilder = List<DropdownMenuItem> Function(
 class DropdownFormField extends FormField<String> {
   DropdownFormField({
     bool autofocus,
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     InputDecoration decoration = const InputDecoration(),
     Color dropdownColor,
     bool enabled = true,
@@ -22,7 +22,7 @@ class DropdownFormField extends FormField<String> {
     FormFieldValidator validator,
   })  : assert(decoration != null),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final _itemsBuilder = itemsBuilder ?? dropdownMenuItemsBuilder;
             final _onChanged = (value) {
@@ -30,7 +30,7 @@ class DropdownFormField extends FormField<String> {
             };
             return DropdownButtonFormField<String>(
               autofocus: autofocus,
-              autovalidate: autovalidate,
+              autovalidateMode: autovalidateMode,
               decoration: decoration,
               dropdownColor: dropdownColor,
               focusNode: focusNode,

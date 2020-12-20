@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,8 +35,8 @@ class _FastFormState extends State<FastForm> {
   @override
   void initState() {
     super.initState();
-    store = FastFormStore(initialValues: widget.initialValues);
-    store.addListener(_onStoreChanged);
+    store = FastFormStore(initialValues: widget.initialValues)
+      ..addListener(_onStoreChanged);
   }
 
   @override

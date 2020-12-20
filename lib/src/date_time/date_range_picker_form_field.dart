@@ -6,7 +6,7 @@ typedef DateRangePickerTextBuilder = Text Function(
 
 class DateRangePickerFormField extends FormField<DateTimeRange> {
   DateRangePickerFormField({
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     String cancelText,
     String confirmText,
     DateTime currentDate,
@@ -36,7 +36,7 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
   })  : assert(decoration != null),
         this.dateFormat = format ?? DateFormat.yMd(),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final state = field as DateRangePickerFormFieldState;
             final theme = Theme.of(state.context);

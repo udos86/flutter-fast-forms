@@ -6,7 +6,7 @@ class FastTextFormField extends FormField<String> {
     bool autocorrect,
     Iterable<String> autofillHints,
     bool autofocus,
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     InputCounterWidgetBuilder buildCounter,
     InputDecoration decoration = const InputDecoration(),
     bool enabled = true,
@@ -32,14 +32,14 @@ class FastTextFormField extends FormField<String> {
     FormFieldValidator validator,
   })  : assert(decoration != null),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final state = field as TextFormFieldState;
             return TextFormField(
               autocorrect: autocorrect,
               autofillHints: autofillHints,
               autofocus: autofocus,
-              autovalidate: autovalidate,
+              autovalidateMode: autovalidateMode,
               buildCounter: buildCounter,
               decoration: decoration,
               initialValue: initialValue,

@@ -8,10 +8,11 @@ import 'time_picker_form_field.dart';
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePicker({
-    bool autofocus = false,
+    bool autofocus,
+    AutovalidateMode autovalidateMode,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
-    bool enabled = true,
+    bool enabled,
     String helper,
     this.icon,
     @required String id,
@@ -20,9 +21,11 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     this.textBuilder,
     FormFieldValidator validator,
   }) : super(
-          autofocus: autofocus,
+          autofocus: autofocus ?? false,
+          autovalidateMode:
+              autovalidateMode ?? AutovalidateMode.onUserInteraction,
           builder: builder ?? fastTimePickerBuilder,
-          enabled: enabled,
+          enabled: enabled ?? true,
           helper: helper,
           id: id,
           initialValue: initialValue,
@@ -45,7 +48,7 @@ final FastFormFieldBuilder fastTimePickerBuilder = (context, state) {
       const InputDecoration();
 
   return TimePickerFormField(
-    autovalidate: state.autovalidate,
+    autovalidateMode: widget.autovalidateMode,
     decoration: decoration,
     enabled: widget.enabled,
     icon: widget.icon,

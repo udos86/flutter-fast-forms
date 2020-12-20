@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
 abstract class Validators {
-  static FormFieldValidator required(
-      [errorText = 'Field is required']) {
+  static FormFieldValidator required([errorText = 'Field is required']) {
     return (value) {
       final hasLength = value is Iterable || value is String || value is Map;
       if (value == null || (hasLength && value.length == 0)) {
@@ -28,8 +27,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator maxLength(num maxLength,
-      [String errorText]) {
+  static FormFieldValidator maxLength(num maxLength, [String errorText]) {
     return (value) {
       if (value != null && value.length > maxLength) {
         return errorText ??
@@ -39,8 +37,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator minLength(int minLength,
-      [String errorText]) {
+  static FormFieldValidator minLength(int minLength, [String errorText]) {
     return (value) {
       if ((value?.length ?? 0) < minLength) {
         return errorText ?? 'Field must be at least $minLength';
@@ -79,8 +76,7 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator compose(
-      List<FormFieldValidator> validators) {
+  static FormFieldValidator compose(List<FormFieldValidator> validators) {
     return (value) {
       for (var index = 0; index < validators.length; index++) {
         final result = validators[index](value);

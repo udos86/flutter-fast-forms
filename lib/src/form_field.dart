@@ -10,6 +10,7 @@ typedef FastFormFieldBuilder = Widget Function(
 abstract class FastFormField<T> extends StatefulWidget {
   const FastFormField({
     this.autofocus = false,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
     @required this.builder,
     this.decoration,
     this.enabled = true,
@@ -21,6 +22,7 @@ abstract class FastFormField<T> extends StatefulWidget {
   });
 
   final bool autofocus;
+  final AutovalidateMode autovalidateMode;
   final FastFormFieldBuilder builder;
   final InputDecoration decoration;
   final bool enabled;
@@ -35,16 +37,15 @@ class FastFormFieldState<T> extends State<FastFormField> {
   bool focused = false;
   bool touched = false;
 
-  T value;
   FocusNode focusNode;
-
-  bool get autovalidate => touched;
-
-  FastFormStore get store => Provider.of<FastFormStore>(context, listen: false);
+  FastFormStore store;
+  T value;
 
   @override
   void initState() {
     super.initState();
+
+    store = Provider.of<FastFormStore>(context, listen: false);
 
     if (store.isRestored(widget.id)) {
       value = store.getInitialValue(widget.id);

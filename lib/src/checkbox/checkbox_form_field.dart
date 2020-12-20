@@ -6,7 +6,7 @@ typedef CheckboxTitleBuilder = Widget Function(
 class CheckboxFormField extends FormField<bool> {
   CheckboxFormField({
     bool autofocus,
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     InputDecoration decoration = const InputDecoration(),
     bool enabled = true,
     bool initialValue,
@@ -20,7 +20,7 @@ class CheckboxFormField extends FormField<bool> {
     FormFieldValidator validator,
   })  : assert(decoration != null),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);

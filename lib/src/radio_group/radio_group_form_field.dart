@@ -12,7 +12,7 @@ enum RadioGroupOrientation {
 
 class RadioGroupFormField<T> extends FormField<T> {
   RadioGroupFormField({
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     InputDecoration decoration = const InputDecoration(),
     bool enabled = true,
     T initialValue,
@@ -26,7 +26,7 @@ class RadioGroupFormField<T> extends FormField<T> {
     FormFieldValidator validator,
   })  : assert(decoration != null),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final state = field as RadioGroupFormFieldState;
             final InputDecoration effectiveDecoration = decoration

@@ -8,7 +8,7 @@ typedef RangeSliderFixBuilder = Widget Function(
 
 class RangeSliderFormField extends FormField<RangeValues> {
   RangeSliderFormField({
-    bool autovalidate,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     InputDecoration decoration = const InputDecoration(),
     int divisions,
     bool enabled = true,
@@ -26,7 +26,7 @@ class RangeSliderFormField extends FormField<RangeValues> {
     FormFieldValidator validator,
   })  : assert(decoration != null),
         super(
-          autovalidate: autovalidate,
+          autovalidateMode: autovalidateMode,
           builder: (field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);

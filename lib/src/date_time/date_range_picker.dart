@@ -9,13 +9,14 @@ import 'date_range_picker_form_field.dart';
 @immutable
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
-    bool autofocus = false,
+    bool autofocus,
+    AutovalidateMode autovalidateMode,
     FastFormFieldBuilder builder,
     this.cancelText,
     this.confirmText,
     this.currentDate,
     InputDecoration decoration,
-    bool enabled = true,
+    bool enabled,
     this.errorFormatText,
     this.errorInvalidRangeText,
     this.errorInvalidText,
@@ -36,10 +37,12 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.textBuilder,
     FormFieldValidator validator,
   }) : super(
-          autofocus: autofocus,
+          autofocus: autofocus ?? false,
+          autovalidateMode:
+              autovalidateMode ?? AutovalidateMode.onUserInteraction,
           builder: builder ?? fastDateRangerPickerBuilder,
           decoration: decoration,
-          enabled: enabled,
+          enabled: enabled ?? true,
           helper: helper,
           id: id,
           initialValue: initialValue,
@@ -77,7 +80,7 @@ final FastFormFieldBuilder fastDateRangerPickerBuilder = (context, state) {
       const InputDecoration();
 
   return DateRangePickerFormField(
-    autovalidate: state.autovalidate,
+    autovalidateMode: widget.autovalidateMode,
     cancelText: widget.cancelText,
     confirmText: widget.confirmText,
     decoration: decoration,

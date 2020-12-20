@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 import '../form_style.dart';
+
 import 'dropdown_form_field.dart';
 
 @immutable
 class FastDropdown extends FastFormField<String> {
   FastDropdown({
-    bool autofocus = false,
+    bool autofocus,
+    AutovalidateMode autovalidateMode,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
     this.dropdownColor,
-    bool enabled = true,
+    bool enabled,
     String helper,
     @required String id,
     String initialValue,
@@ -21,10 +23,12 @@ class FastDropdown extends FastFormField<String> {
     this.selectedItemBuilder,
     FormFieldValidator validator,
   }) : super(
-          autofocus: autofocus,
+          autofocus: autofocus ?? false,
+          autovalidateMode:
+              autovalidateMode ?? AutovalidateMode.onUserInteraction,
           builder: builder ?? fastDropdownBuilder,
           decoration: decoration,
-          enabled: enabled,
+          enabled: enabled ?? true,
           helper: helper,
           id: id,
           initialValue: initialValue,
@@ -51,7 +55,7 @@ final FastFormFieldBuilder fastDropdownBuilder =
 
   return DropdownFormField(
     autofocus: widget.autofocus,
-    autovalidate: state.autovalidate,
+    autovalidateMode: widget.autovalidateMode,
     decoration: decoration,
     dropdownColor: widget.dropdownColor,
     enabled: widget.enabled,

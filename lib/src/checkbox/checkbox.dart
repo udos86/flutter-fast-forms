@@ -8,10 +8,11 @@ import 'checkbox_form_field.dart';
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   FastCheckbox({
-    bool autofocus = false,
+    bool autofocus,
+    AutovalidateMode autovalidateMode,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
-    bool enabled = true,
+    bool enabled,
     String helper,
     @required String id,
     bool initialValue,
@@ -20,10 +21,12 @@ class FastCheckbox extends FastFormField<bool> {
     this.tristate = false,
     FormFieldValidator validator,
   }) : super(
-          autofocus: autofocus,
+          autofocus: autofocus ?? false,
+          autovalidateMode:
+              autovalidateMode ?? AutovalidateMode.onUserInteraction,
           builder: builder ?? fastCheckboxBuilder,
           decoration: decoration,
-          enabled: enabled,
+          enabled: enabled ?? true,
           helper: helper,
           id: id,
           initialValue:
@@ -47,7 +50,7 @@ final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
       const InputDecoration();
 
   return CheckboxFormField(
-    autovalidate: state.autovalidate,
+    autovalidateMode: widget.autovalidateMode,
     autofocus: widget.autofocus,
     decoration: decoration,
     enabled: widget.enabled,

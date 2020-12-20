@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
@@ -20,10 +19,11 @@ class RadioOption<T> {
 @immutable
 class FastRadioGroup extends FastFormField<String> {
   FastRadioGroup({
-    bool autofocus = false,
+    bool autofocus,
+    AutovalidateMode autovalidateMode,
     FastFormFieldBuilder builder,
     InputDecoration decoration,
-    bool enabled = true,
+    bool enabled,
     String helper,
     @required String id,
     String initialValue,
@@ -32,10 +32,12 @@ class FastRadioGroup extends FastFormField<String> {
     this.orientation = RadioGroupOrientation.vertical,
     FormFieldValidator validator,
   }) : super(
-          autofocus: autofocus,
+          autofocus: autofocus ?? false,
+          autovalidateMode:
+              autovalidateMode ?? AutovalidateMode.onUserInteraction,
           builder: builder ?? _builder,
           decoration: decoration,
-          enabled: enabled,
+          enabled: enabled ?? true,
           helper: helper,
           id: id,
           initialValue: initialValue ?? options.first.value,
@@ -58,7 +60,7 @@ final FastFormFieldBuilder _builder = (context, state) {
       const InputDecoration();
 
   return RadioGroupFormField(
-    autovalidate: state.autovalidate,
+    autovalidateMode: widget.autovalidateMode,
     decoration: decoration,
     enabled: widget.enabled,
     initialValue: widget.initialValue,
