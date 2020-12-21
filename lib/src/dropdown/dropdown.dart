@@ -4,7 +4,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'dropdown_form_field.dart';
-
+/*
 @immutable
 class FastDropdown extends FastFormField<String> {
   FastDropdown({
@@ -70,3 +70,4 @@ final FastFormFieldBuilder fastDropdownBuilder =
     validator: widget.validator,
   );
 };
+*/

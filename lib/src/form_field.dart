@@ -3,37 +3,41 @@ import 'package:provider/provider.dart';
 
 import 'form_store.dart';
 
-typedef FastFormFieldBuilder = Widget Function(
-    BuildContext context, FastFormFieldState state);
-
 @immutable
-abstract class FastFormField<T> extends StatefulWidget {
+abstract class FastFormField<T> extends FormField<T> {
   const FastFormField({
     this.autofocus = false,
-    this.autovalidateMode = AutovalidateMode.onUserInteraction,
-    @required this.builder,
-    this.decoration,
-    this.enabled = true,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    @required FormFieldBuilder<T> builder,
+    bool enabled = true,
     this.helper,
     @required this.id,
-    this.initialValue,
+    T initialValue,
+    Key key,
     this.label,
-    this.validator,
-  });
+    this.onChanged,
+    this.onReset,
+    FormFieldSetter<T> onSaved,
+    FormFieldValidator<T> validator,
+  }) : super(
+          autovalidateMode: autovalidateMode,
+          builder: builder,
+          enabled: enabled,
+          key: key,
+          initialValue: initialValue,
+          onSaved: onSaved,
+          validator: validator,
+        );
 
   final bool autofocus;
-  final AutovalidateMode autovalidateMode;
-  final FastFormFieldBuilder builder;
-  final InputDecoration decoration;
-  final bool enabled;
   final String helper;
   final String id;
-  final T initialValue;
   final String label;
-  final FormFieldValidator validator;
+  final ValueChanged<T> onChanged;
+  final VoidCallback onReset;
 }
 
-class FastFormFieldState<T> extends State<FastFormField> {
+class FastFormFieldState<T> extends FormFieldState<T> {
   bool focused = false;
   bool touched = false;
 
@@ -52,8 +56,8 @@ class FastFormFieldState<T> extends State<FastFormField> {
 
   @override
   void deactivate() {
-    store.unregister(widget.id);
     super.deactivate();
+    store.unregister(widget.id);
   }
 
   @override
@@ -63,9 +67,24 @@ class FastFormFieldState<T> extends State<FastFormField> {
   }
 
   @override
+  FastFormField<T> get widget => super.widget as FastFormField<T>;
+
+  @override
   Widget build(BuildContext context) {
     store.register(this);
-    return widget.builder(context, this);
+    return super.build(context);
+  }
+
+  @override
+  void didChange(T value) {
+    super.didChange(value);
+    onChanged(value);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    onReset();
   }
 
   void onChanged(T value) {

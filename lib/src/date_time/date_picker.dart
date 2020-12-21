@@ -5,7 +5,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'date_picker_form_field.dart';
-
+/*
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
@@ -98,3 +98,4 @@ final FastFormFieldBuilder fastDatePickerBuilder = (context, state) {
     validator: widget.validator,
   );
 };
+*/

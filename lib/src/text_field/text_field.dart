@@ -6,7 +6,7 @@ import '../form_theme.dart';
 import '../utils/form_formatters.dart';
 
 import 'text_form_field.dart';
-
+/*
 @immutable
 class FastTextField extends FastFormField<String> {
   FastTextField({
@@ -127,3 +127,4 @@ final FastFormFieldBuilder _builder = (context, _state) {
     validator: widget.validator,
   );
 };
+*/

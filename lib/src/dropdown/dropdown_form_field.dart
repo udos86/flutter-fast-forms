@@ -1,76 +1,79 @@
 import 'package:flutter/material.dart';
 
+import '../form_field.dart';
+import '../form_theme.dart';
+
 typedef DropdownMenuItemsBuilder = List<DropdownMenuItem> Function(
     BuildContext context, List<dynamic> items);
 
-class DropdownFormField extends FormField<String> {
-  DropdownFormField({
-    bool autofocus,
+class FastDropdown extends FastFormField<String> {
+  FastDropdown({
+    bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    InputDecoration decoration = const InputDecoration(),
+    FormFieldBuilder<String> builder,
+    InputDecoration decoration,
     Color dropdownColor,
     bool enabled = true,
     FocusNode focusNode,
+    String helper,
+    @required String id,
     String initialValue,
     List<dynamic> items,
     DropdownMenuItemsBuilder itemsBuilder,
     Key key,
-    this.onChanged,
-    this.onReset,
+    String label,
+    ValueChanged<String> onChanged,
+    VoidCallback onReset,
     FormFieldSetter onSaved,
     DropdownButtonBuilder selectedItemBuilder,
     FormFieldValidator validator,
-  })  : assert(decoration != null),
-        super(
+  }) : super(
+          autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: (field) {
-            final _itemsBuilder = itemsBuilder ?? dropdownMenuItemsBuilder;
-            final _onChanged = (value) {
-              if (value != field.value) field.didChange(value);
-            };
-            return DropdownButtonFormField<String>(
-              autofocus: autofocus,
-              autovalidateMode: autovalidateMode,
-              decoration: decoration,
-              dropdownColor: dropdownColor,
-              focusNode: focusNode,
-              items: _itemsBuilder(field.context, items),
-              onChanged: enabled ? _onChanged : null,
-              onSaved: onSaved,
-              selectedItemBuilder: selectedItemBuilder,
-              validator: validator,
-              value: field.value,
-            );
-          },
+          builder: builder ??
+              (field) {
+                final state = field as FastDropdownState;
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final _itemsBuilder = itemsBuilder ?? dropdownMenuItemsBuilder;
+                final _onChanged = (value) {
+                  if (value != field.value) field.didChange(value);
+                };
+                return DropdownButtonFormField<String>(
+                  autofocus: autofocus,
+                  autovalidateMode: autovalidateMode,
+                  decoration: _decoration,
+                  dropdownColor: dropdownColor,
+                  focusNode: focusNode,
+                  items: _itemsBuilder(state.context, items),
+                  onChanged: enabled ? _onChanged : null,
+                  onSaved: onSaved,
+                  selectedItemBuilder: selectedItemBuilder,
+                  validator: validator,
+                  value: state.value,
+                );
+              },
           enabled: enabled,
+          helper: helper,
+          id: id,
           initialValue: initialValue,
           key: key,
+          label: label,
+          onChanged: onChanged,
+          onReset: onReset,
           onSaved: onSaved,
           validator: validator,
         );
 
-  final ValueChanged<String> onChanged;
-  final VoidCallback onReset;
-
   @override
-  FormFieldState<String> createState() => DropdownFormFieldState();
+  FormFieldState<String> createState() => FastDropdownState();
 }
 
-class DropdownFormFieldState extends FormFieldState<String> {
+class FastDropdownState extends FastFormFieldState<String> {
   @override
-  DropdownFormField get widget => super.widget as DropdownFormField;
-
-  @override
-  void didChange(String value) {
-    super.didChange(value);
-    widget.onChanged?.call(value);
-  }
-
-  @override
-  void reset() {
-    super.reset();
-    widget.onReset?.call();
-  }
+  FastDropdown get widget => super.widget as FastDropdown;
 }
 
 final DropdownMenuItemsBuilder dropdownMenuItemsBuilder =

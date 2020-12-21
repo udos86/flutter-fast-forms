@@ -1,80 +1,94 @@
 import 'package:flutter/material.dart';
 
-import '../radio_group/radio_group.dart';
+import '../form_field.dart';
+import '../form_theme.dart';
 
-typedef RadioOptionsBuilder = Widget Function(BuildContext context,
-    List<RadioOption> options, RadioGroupFormFieldState state);
+@immutable
+class RadioOption<T> {
+  RadioOption({
+    @required this.title,
+    @required this.value,
+  });
+
+  final T value;
+  final String title;
+}
+
+typedef RadioOptionsBuilder = Widget Function(
+    BuildContext context, List<RadioOption> options, FastRadioGroupState state);
 
 enum RadioGroupOrientation {
   horizontal,
   vertical,
 }
 
-class RadioGroupFormField<T> extends FormField<T> {
-  RadioGroupFormField({
+class FastRadioGroup<T> extends FastFormField<T> {
+  FastRadioGroup({
+    bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    InputDecoration decoration = const InputDecoration(),
+    FormFieldBuilder<T> builder,
+    InputDecoration decoration,
     bool enabled = true,
+    String helper,
+    @required String id,
     T initialValue,
     Key key,
+    String label,
     @required this.options,
     this.orientation = RadioGroupOrientation.vertical,
-    this.onChanged,
-    this.onReset,
+    ValueChanged<T> onChanged,
+    VoidCallback onReset,
     this.optionsBuilder,
     FormFieldSetter onSaved,
     FormFieldValidator validator,
-  })  : assert(decoration != null),
-        super(
+  }) : super(
+          autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: (field) {
-            final state = field as RadioGroupFormFieldState;
-            final InputDecoration effectiveDecoration = decoration
-                .applyDefaults(Theme.of(state.context).inputDecorationTheme);
-            final _optionsBuilder = optionsBuilder ?? radioOptionsBuilder;
-            return InputDecorator(
-              decoration: effectiveDecoration.copyWith(
-                errorText: state.errorText,
-              ),
-              child: _optionsBuilder(state.context, options, state),
-            );
-          },
+          builder: builder ??
+              (field) {
+                final state = field as FastRadioGroupState;
+                final theme = Theme.of(state.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final InputDecoration effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                final _optionsBuilder = optionsBuilder ?? radioOptionsBuilder;
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: state.errorText,
+                  ),
+                  child: _optionsBuilder(state.context, options, state),
+                );
+              },
           enabled: enabled,
+          helper: helper,
+          id: id,
           initialValue: initialValue ?? options.first.value,
           key: key,
+          label: label,
+          onChanged: onChanged,
+          onReset: onReset,
           onSaved: onSaved,
           validator: validator,
         );
 
-  final ValueChanged onChanged;
-  final VoidCallback onReset;
   final List<RadioOption<T>> options;
   final RadioOptionsBuilder optionsBuilder;
   final RadioGroupOrientation orientation;
 
   @override
-  FormFieldState<T> createState() => RadioGroupFormFieldState<T>();
+  FormFieldState<T> createState() => FastRadioGroupState<T>();
 }
 
-class RadioGroupFormFieldState<T> extends FormFieldState<T> {
+class FastRadioGroupState<T> extends FastFormFieldState<T> {
   @override
-  RadioGroupFormField<T> get widget => super.widget as RadioGroupFormField<T>;
-
-  @override
-  void didChange(T value) {
-    super.didChange(value);
-    widget.onChanged?.call(value);
-  }
-
-  @override
-  void reset() {
-    super.reset();
-    widget.onReset?.call();
-  }
+  FastRadioGroup<T> get widget => super.widget as FastRadioGroup<T>;
 }
 
 final RadioOptionsBuilder radioOptionsBuilder =
-    (BuildContext context, options, RadioGroupFormFieldState state) {
+    (BuildContext context, options, FastRadioGroupState state) {
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
   final enabled = state.widget.enabled;
   final _tiles = options.map((option) {

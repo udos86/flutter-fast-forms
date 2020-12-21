@@ -4,7 +4,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'checkbox_form_field.dart';
-
+/*
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   FastCheckbox({
@@ -62,3 +62,4 @@ final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
     validator: widget.validator,
   );
 };
+*/

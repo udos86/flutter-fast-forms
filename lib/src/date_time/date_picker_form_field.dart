@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../form_field.dart';
+import '../form_theme.dart';
+
 typedef DatePickerTextBuilder = Text Function(
     BuildContext context, DateTime value, DateFormat format);
 
-class DatePickerFormField extends FormField<DateTime> {
-  DatePickerFormField({
+class FastDatePicker extends FastFormField<DateTime> {
+  FastDatePicker({
+    bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    FormFieldBuilder<DateTime> builder,
     String cancelText,
     String confirmText,
-    InputDecoration decoration = const InputDecoration(),
+    InputDecoration decoration,
     bool enabled = true,
     String errorFormatText,
     String errorInvalidText,
@@ -17,105 +22,103 @@ class DatePickerFormField extends FormField<DateTime> {
     String fieldLabelText,
     DateTime firstDate,
     DateFormat format,
+    String helper,
     String helpText,
     Icon icon,
+    @required String id,
     DatePickerMode initialDatePickerMode = DatePickerMode.day,
     DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
     DateTime initialValue,
     Key key,
     String label,
     DateTime lastDate,
-    this.onChanged,
-    this.onReset,
-    FormFieldSetter onSaved,
+    ValueChanged<DateTime> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<DateTime> onSaved,
     DatePickerTextBuilder textBuilder,
-    FormFieldValidator validator,
-  })  : assert(decoration != null),
-        this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
+    FormFieldValidator<DateTime> validator,
+  })  : this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
         super(
+          autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: (field) {
-            final state = field as DatePickerFormFieldState;
-            final theme = Theme.of(state.context);
-            final InputDecoration effectiveDecoration =
-                decoration.applyDefaults(theme.inputDecorationTheme);
-            final _textBuilder = textBuilder ?? datePickerTextBuilder;
-            final _showDatePicker = (DatePickerEntryMode entryMode) {
-              showDatePicker(
-                cancelText: cancelText,
-                confirmText: confirmText,
-                context: state.context,
-                errorFormatText: errorFormatText,
-                errorInvalidText: errorInvalidText,
-                fieldHintText: fieldHintText,
-                fieldLabelText: fieldLabelText,
-                helpText: helpText,
-                initialDatePickerMode: initialDatePickerMode,
-                initialEntryMode: entryMode,
-                initialDate: state.value ?? DateTime.now(),
-                firstDate: firstDate,
-                lastDate: lastDate,
-              ).then((value) {
-                if (value != null) state.didChange(value);
-              });
-            };
-            return InputDecorator(
-              decoration: effectiveDecoration.copyWith(
-                errorText: state.errorText,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: enabled
-                          ? () => _showDatePicker(DatePickerEntryMode.input)
-                          : null,
-                      child: _textBuilder(
-                          state.context, state.value, state.widget.dateFormat),
-                    ),
+          builder: builder ??
+              (field) {
+                final state = field as FastDatePickerState;
+                final theme = Theme.of(state.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final InputDecoration effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                final _textBuilder = textBuilder ?? datePickerTextBuilder;
+                final _showDatePicker = (DatePickerEntryMode entryMode) {
+                  showDatePicker(
+                    cancelText: cancelText,
+                    confirmText: confirmText,
+                    context: state.context,
+                    errorFormatText: errorFormatText,
+                    errorInvalidText: errorInvalidText,
+                    fieldHintText: fieldHintText,
+                    fieldLabelText: fieldLabelText,
+                    helpText: helpText,
+                    initialDatePickerMode: initialDatePickerMode,
+                    initialEntryMode: entryMode,
+                    initialDate: state.value ?? DateTime.now(),
+                    firstDate: firstDate,
+                    lastDate: lastDate,
+                  ).then((value) {
+                    if (value != null) state.didChange(value);
+                  });
+                };
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: state.errorText,
                   ),
-                  IconButton(
-                    alignment: Alignment.centerRight,
-                    icon: icon ?? Icon(Icons.today),
-                    onPressed: enabled
-                        ? () => _showDatePicker(initialEntryMode)
-                        : null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: enabled
+                              ? () => _showDatePicker(DatePickerEntryMode.input)
+                              : null,
+                          child: _textBuilder(state.context, state.value,
+                              state.widget.dateFormat),
+                        ),
+                      ),
+                      IconButton(
+                        alignment: Alignment.centerRight,
+                        icon: icon ?? Icon(Icons.today),
+                        onPressed: enabled
+                            ? () => _showDatePicker(initialEntryMode)
+                            : null,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          },
+                );
+              },
           enabled: enabled,
+          helper: helper,
+          id: id,
           initialValue: initialValue,
           key: key,
+          label: label,
+          onChanged: onChanged,
+          onReset: onReset,
           onSaved: onSaved,
           validator: validator,
         );
 
   final DateFormat dateFormat;
-  final ValueChanged<DateTime> onChanged;
-  final VoidCallback onReset;
 
   @override
-  FormFieldState<DateTime> createState() => DatePickerFormFieldState();
+  FormFieldState<DateTime> createState() => FastDatePickerState();
 }
 
-class DatePickerFormFieldState extends FormFieldState<DateTime> {
+class FastDatePickerState extends FastFormFieldState<DateTime> {
   @override
-  DatePickerFormField get widget => super.widget as DatePickerFormField;
-
-  @override
-  void didChange(DateTime value) {
-    super.didChange(value);
-    widget.onChanged?.call(value);
-  }
-
-  @override
-  void reset() {
-    super.reset();
-    widget.onReset?.call();
-  }
+  FastDatePicker get widget => super.widget as FastDatePicker;
 }
 
 final DatePickerTextBuilder datePickerTextBuilder =

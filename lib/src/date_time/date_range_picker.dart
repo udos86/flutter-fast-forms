@@ -5,7 +5,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'date_range_picker_form_field.dart';
-
+/*
 @immutable
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
@@ -106,3 +106,4 @@ final FastFormFieldBuilder fastDateRangerPickerBuilder = (context, state) {
     validator: widget.validator,
   );
 };
+*/

@@ -85,7 +85,9 @@ class FormPage extends StatelessWidget {
             label: 'Text Field',
             hint: 'MM/JJJJ',
             keyboardType: TextInputType.datetime,
-            mask: '##/####',
+            inputFormatters: [
+              InputFormatters.maskText('##/####')
+            ],
             validator: Validators.compose([
               Validators.required(),
               Validators.minLength(7),
@@ -156,29 +158,20 @@ class FormPage extends StatelessWidget {
             prefixBuilder: rangeSliderPrefixBuilder,
             suffixBuilder: rangeSliderSuffixBuilder,
           ),
-          FastCustomFormField(
+          FastCustomField(
             id: 'custom_form_field',
             label: 'Custom Form Field',
-            builder: (context, state) {
-              final theme = FastFormTheme.of(context);
-              return CustomFormField(
-                decoration: theme.getInputDecoration(context, state.widget),
-                onChanged: state.onChanged,
-                onReset: state.onReset,
-                onSaved: state.onSaved,
-                title: Text('Add extras'),
-                options: [
-                  CustomOption(
-                    id: 'cheese',
-                    label: 'Cheese',
-                  ),
-                  CustomOption(
-                    id: 'bacon',
-                    label: 'Bacon',
-                  ),
-                ],
-              );
-            },
+            title: Text('Add extras'),
+            options: [
+              CustomOption(
+                id: 'cheese',
+                label: 'Cheese',
+              ),
+              CustomOption(
+                id: 'bacon',
+                label: 'Bacon',
+              ),
+            ],
           ),
           FastCheckbox(
             id: 'checkbox_1',

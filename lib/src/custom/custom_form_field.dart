@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-
+/*
 @immutable
 class FastCustomFormField<T> extends FastFormField<T> {
   FastCustomFormField({
-    bool autofocus,
+    bool autofocus = false,
     AutovalidateMode autovalidateMode,
-    @required FastFormFieldBuilder builder,
-    InputDecoration decoration = const InputDecoration(),
-    bool enabled,
+    @required FormFieldBuilder<T> builder,
+    bool enabled = true,
     String helper,
     @required String id,
     T initialValue,
+    Key key,
     String label,
-    FormFieldValidator validator,
+    ValueChanged<T> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<T> onSaved,
+    FormFieldValidator<T> validator,
   }) : super(
-          autofocus: autofocus ?? false,
+          autofocus: autofocus,
           autovalidateMode:
               autovalidateMode ?? AutovalidateMode.onUserInteraction,
           builder: builder,
-          decoration: decoration,
-          enabled: enabled ?? true,
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue: initialValue,
+          key: key,
           label: label,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
           validator: validator,
         );
 
   @override
-  State<StatefulWidget> createState() => FastFormFieldState<T>();
+  FormFieldState<T> createState() => FastFormFieldState<T>();
 }
+*/

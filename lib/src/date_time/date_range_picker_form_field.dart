@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../form_field.dart';
+import '../form_theme.dart';
+
 typedef DateRangePickerTextBuilder = Text Function(
     BuildContext context, DateTimeRange value, DateFormat format);
 
-class DateRangePickerFormField extends FormField<DateTimeRange> {
-  DateRangePickerFormField({
+class FastDateRangePicker extends FastFormField<DateTimeRange> {
+  FastDateRangePicker({
+    bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    FormFieldBuilder<DateTimeRange> builder,
     String cancelText,
     String confirmText,
     DateTime currentDate,
-    InputDecoration decoration = const InputDecoration(),
+    InputDecoration decoration,
     bool enabled = true,
     String errorFormatText,
     String errorInvalidRangeText,
@@ -21,109 +26,105 @@ class DateRangePickerFormField extends FormField<DateTimeRange> {
     String fieldStartLabelText,
     DateTime firstDate,
     DateFormat format,
+    String helper,
     String helpText,
+    @required String id,
     Icon icon,
     DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
     DateTimeRange initialValue,
     Key key,
     String label,
     DateTime lastDate,
-    this.onChanged,
-    this.onReset,
-    FormFieldSetter onSaved,
+    ValueChanged<DateTimeRange> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<DateTimeRange> onSaved,
     DateRangePickerTextBuilder textBuilder,
-    FormFieldValidator validator,
-  })  : assert(decoration != null),
-        this.dateFormat = format ?? DateFormat.yMd(),
+    FormFieldValidator<DateTimeRange> validator,
+  })  : this.dateFormat = format ?? DateFormat.yMd(),
         super(
+          autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: (field) {
-            final state = field as DateRangePickerFormFieldState;
-            final theme = Theme.of(state.context);
-            final InputDecoration effectiveDecoration =
-                decoration.applyDefaults(theme.inputDecorationTheme);
-            final _textBuilder = textBuilder ?? dateRangPickerTextBuilder;
-            final _showDateRangePicker = (DatePickerEntryMode entryMode) {
-              showDateRangePicker(
-                cancelText: cancelText,
-                confirmText: confirmText,
-                context: state.context,
-                currentDate: currentDate,
-                errorFormatText: errorFormatText,
-                errorInvalidRangeText: errorInvalidRangeText,
-                errorInvalidText: errorInvalidText,
-                fieldEndHintText: fieldEndHintText,
-                fieldEndLabelText: fieldEndLabelText,
-                fieldStartHintText: fieldStartHintText,
-                fieldStartLabelText: fieldStartLabelText,
-                helpText: helpText,
-                initialEntryMode: entryMode,
-                initialDateRange: state.value,
-                firstDate: firstDate,
-                lastDate: lastDate,
-              ).then((value) {
-                if (value != null) state.didChange(value);
-              });
-            };
-            return InputDecorator(
-              decoration: effectiveDecoration.copyWith(
-                errorText: state.errorText,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: enabled
-                          ? () =>
-                              _showDateRangePicker(DatePickerEntryMode.input)
-                          : null,
-                      child: _textBuilder(
-                          state.context, state.value, state.widget.dateFormat),
-                    ),
+          builder: builder ??
+              (field) {
+                final state = field as FastDateRangePickerState;
+                final theme = Theme.of(state.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final InputDecoration effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                final _textBuilder = textBuilder ?? dateRangPickerTextBuilder;
+                final _showDateRangePicker = (DatePickerEntryMode entryMode) {
+                  showDateRangePicker(
+                    cancelText: cancelText,
+                    confirmText: confirmText,
+                    context: state.context,
+                    currentDate: currentDate,
+                    errorFormatText: errorFormatText,
+                    errorInvalidRangeText: errorInvalidRangeText,
+                    errorInvalidText: errorInvalidText,
+                    fieldEndHintText: fieldEndHintText,
+                    fieldEndLabelText: fieldEndLabelText,
+                    fieldStartHintText: fieldStartHintText,
+                    fieldStartLabelText: fieldStartLabelText,
+                    helpText: helpText,
+                    initialEntryMode: entryMode,
+                    initialDateRange: state.value,
+                    firstDate: firstDate,
+                    lastDate: lastDate,
+                  ).then((value) {
+                    if (value != null) state.didChange(value);
+                  });
+                };
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: state.errorText,
                   ),
-                  IconButton(
-                    alignment: Alignment.centerRight,
-                    icon: icon ?? Icon(Icons.today),
-                    onPressed: enabled
-                        ? () => _showDateRangePicker(initialEntryMode)
-                        : null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: enabled
+                              ? () => _showDateRangePicker(
+                                  DatePickerEntryMode.input)
+                              : null,
+                          child: _textBuilder(state.context, state.value,
+                              state.widget.dateFormat),
+                        ),
+                      ),
+                      IconButton(
+                        alignment: Alignment.centerRight,
+                        icon: icon ?? Icon(Icons.today),
+                        onPressed: enabled
+                            ? () => _showDateRangePicker(initialEntryMode)
+                            : null,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          },
+                );
+              },
           enabled: enabled,
+          helper: helper,
+          id: id,
           initialValue: initialValue,
           key: key,
+          onChanged: onChanged,
+          onReset: onReset,
           onSaved: onSaved,
           validator: validator,
         );
 
   final DateFormat dateFormat;
-  final ValueChanged<DateTimeRange> onChanged;
-  final VoidCallback onReset;
 
   @override
-  FormFieldState<DateTimeRange> createState() =>
-      DateRangePickerFormFieldState();
+  FormFieldState<DateTimeRange> createState() => FastDateRangePickerState();
 }
 
-class DateRangePickerFormFieldState extends FormFieldState<DateTimeRange> {
+class FastDateRangePickerState extends FastFormFieldState<DateTimeRange> {
   @override
-  DateRangePickerFormField get widget => super.widget;
-
-  @override
-  void didChange(DateTimeRange value) {
-    super.didChange(value);
-    widget.onChanged?.call(value);
-  }
-
-  @override
-  void reset() {
-    super.reset();
-    widget.onReset?.call();
-  }
+  FastDateRangePicker get widget => super.widget;
 }
 
 final DateRangePickerTextBuilder dateRangPickerTextBuilder =

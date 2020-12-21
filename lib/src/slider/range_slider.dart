@@ -4,7 +4,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'range_slider_form_field.dart';
-
+/*
 @immutable
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
@@ -73,3 +73,4 @@ final FastFormFieldBuilder _builder = (context, state) {
     onSaved: state.onSaved,
   );
 };
+*/

@@ -4,7 +4,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'time_picker_form_field.dart';
-
+/*
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePicker({
@@ -60,3 +60,4 @@ final FastFormFieldBuilder fastTimePickerBuilder = (context, state) {
     validator: widget.validator,
   );
 };
+ */

@@ -4,7 +4,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'slider_form_field.dart';
-
+/*
 @immutable
 class FastSlider extends FastFormField<double> {
   FastSlider({
@@ -75,3 +75,4 @@ final FastFormFieldBuilder _builder = (context, state) {
     validator: widget.validator,
   );
 };
+*/

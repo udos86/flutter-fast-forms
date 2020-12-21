@@ -4,7 +4,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 import 'radio_group_form_field.dart';
-
+/*
 @immutable
 class RadioOption<T> {
   RadioOption({
@@ -72,3 +72,4 @@ final FastFormFieldBuilder _builder = (context, state) {
     validator: widget.validator,
   );
 };
+*/
