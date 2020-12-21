@@ -163,7 +163,20 @@ class FormPage extends StatelessWidget {
               final theme = FastFormTheme.of(context);
               return CustomFormField(
                 decoration: theme.getInputDecoration(context, state.widget),
+                onChanged: state.onChanged,
                 onReset: state.onReset,
+                onSaved: state.onSaved,
+                title: Text('Add extras'),
+                options: [
+                  CustomOption(
+                    id: 'cheese',
+                    label: 'Cheese',
+                  ),
+                  CustomOption(
+                    id: 'bacon',
+                    label: 'Bacon',
+                  ),
+                ],
               );
             },
           ),

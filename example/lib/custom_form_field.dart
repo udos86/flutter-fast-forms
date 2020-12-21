@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class CustomValue {
-  CustomValue({
-    this.checkboxA = false,
-    this.checkboxB = false,
+class CustomOption {
+  CustomOption({
+    @required this.label,
+    @required this.id,
   });
 
-  final bool checkboxA;
-  final bool checkboxB;
+  final String label;
+  final String id;
 }
 
-class CustomFormField extends FormField<CustomValue> {
+class CustomFormField extends FormField<Map<String, bool>> {
   CustomFormField({
     InputDecoration decoration = const InputDecoration(),
     Key key,
@@ -20,8 +20,10 @@ class CustomFormField extends FormField<CustomValue> {
     this.onChanged,
     this.onReset,
     FormFieldSetter onSaved,
+    this.options = const [],
+    Widget title,
     FormFieldValidator validator,
-    CustomValue initialValue,
+    Map<String, bool> initialValue,
   })  : assert(decoration != null),
         super(
           builder: (_field) {
@@ -36,16 +38,19 @@ class CustomFormField extends FormField<CustomValue> {
                 children: <Widget>[
                   SwitchListTile(
                     contentPadding: EdgeInsets.all(0),
-                    title: Text('Add extras'),
+                    title: title,
                     value: field.active,
-                    onChanged: (value) => field.active = value,
+                    onChanged: (active) {
+                      field.active = active;
+                      field.didChange(active ? field.activeValue : null);
+                    },
                   ),
                   if (field.active) field.buildActiveSegment(),
                 ],
               ),
             );
           },
-          initialValue: initialValue ?? CustomValue(),
+          initialValue: initialValue,
           key: key,
           onSaved: onSaved,
           validator: validator,
@@ -53,28 +58,46 @@ class CustomFormField extends FormField<CustomValue> {
 
   final ValueChanged onChanged;
   final VoidCallback onReset;
+  final List<CustomOption> options;
 
   @override
-  FormFieldState<CustomValue> createState() => CustomFormFieldState();
+  FormFieldState<Map<String, bool>> createState() => CustomFormFieldState();
 }
 
-class CustomFormFieldState extends FormFieldState<CustomValue> {
-  bool _isActive = false;
+class CustomFormFieldState extends FormFieldState<Map<String, bool>> {
+  bool _active = false;
+  Map<String, bool> _activeValue;
 
-  bool get active => _isActive;
+  bool get active => _active;
+  Map<String, bool> get activeValue => _activeValue;
 
   set active(bool value) {
     setState(() {
-      _isActive = value;
+      _active = value;
     });
+  }
+
+  Map<String, bool> get initialActiveValue {
+    return widget.initialValue ??
+        widget.options.fold({}, (value, option) {
+          value[option.id] = false;
+          return value;
+        });
   }
 
   @override
   CustomFormField get widget => super.widget;
 
   @override
-  void didChange(CustomValue value) {
+  void initState() {
+    super.initState();
+    _activeValue = initialActiveValue;
+  }
+
+  @override
+  void didChange(Map<String, bool> value) {
     super.didChange(value);
+    if (value != null) _activeValue = value;
     if (widget.onChanged != null) widget.onChanged(value);
   }
 
@@ -82,6 +105,7 @@ class CustomFormFieldState extends FormFieldState<CustomValue> {
   void reset() {
     super.reset();
     active = false;
+    _activeValue = initialActiveValue;
     widget.onReset?.call();
   }
 
@@ -92,26 +116,14 @@ class CustomFormFieldState extends FormFieldState<CustomValue> {
           height: 4.0,
           color: Colors.black,
         ),
-        CheckboxListTile(
-          title: Text('Extra A'),
-          value: value.checkboxA,
-          onChanged: (bool checked) {
-            didChange(CustomValue(
-              checkboxA: checked,
-              checkboxB: value.checkboxB,
-            ));
-          },
-        ),
-        CheckboxListTile(
-          title: Text('Extra B'),
-          value: value.checkboxB,
-          onChanged: (bool checked) {
-            didChange(CustomValue(
-              checkboxA: value.checkboxA,
-              checkboxB: checked,
-            ));
-          },
-        ),
+        for (var option in widget.options)
+          CheckboxListTile(
+            title: Text(option.label),
+            value: _activeValue[option.id],
+            onChanged: (bool checked) {
+              didChange({..._activeValue, option.id: checked});
+            },
+          ),
       ],
     );
   }
