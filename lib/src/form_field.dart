@@ -45,6 +45,7 @@ class FastFormFieldState<T> extends State<FastFormField> {
   void initState() {
     super.initState();
 
+    focusNode = FocusNode()..addListener(_onFocusChanged);
     store = Provider.of<FastFormStore>(context, listen: false);
 
     if (store.isRestored(widget.id)) {
@@ -53,9 +54,6 @@ class FastFormFieldState<T> extends State<FastFormField> {
     } else {
       value = widget.initialValue;
     }
-
-    focusNode = FocusNode();
-    focusNode.addListener(_onFocusChanged);
   }
 
   @override

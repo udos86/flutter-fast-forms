@@ -53,8 +53,8 @@ class FormPage extends StatelessWidget {
     );
   }
 
-  List<FastFormFieldGroup> _buildFormModel(BuildContext context) {
-    return <FastFormFieldGroup>[
+  List<Widget> _buildFormModel(BuildContext context) {
+    return [
       FastFormFieldGroup(
         title: Text(
           'Form Group 1',
@@ -124,7 +124,7 @@ class FormPage extends StatelessWidget {
           ),
           FastSlider(
             id: 'slider_1',
-            label: 'Sample Slider',
+            label: 'Slider',
             helper: 'A Slider with prefix and suffix widgets',
             min: 0,
             max: 10,

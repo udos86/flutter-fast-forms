@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'form_store.dart';
-import 'form_field_group.dart';
 import 'form_theme.dart';
 
 typedef FormChanged = void Function(Map<String, dynamic> value);
@@ -18,7 +17,7 @@ class FastForm extends StatefulWidget {
     this.padding,
   }) : super(key: key);
 
-  final List<FastFormFieldGroup> children;
+  final List<dynamic> children;
   final InputDecorationCreator decorationCreator;
   final GlobalKey<FormState> formKey;
   final Map<String, dynamic> initialValues;
@@ -35,8 +34,8 @@ class _FastFormState extends State<FastForm> {
   @override
   void initState() {
     super.initState();
-    store = FastFormStore(initialValues: widget.initialValues)
-      ..addListener(_onStoreChanged);
+    store = FastFormStore(initialValues: widget.initialValues);
+    store.addListener(_onStoreChanged);
   }
 
   @override

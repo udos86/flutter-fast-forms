@@ -31,15 +31,12 @@ class CustomFormField extends FormField<CustomValue> {
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
                 errorText: field.errorText,
-                labelStyle: TextStyle(
-                  fontSize: 20.0,
-                ),
               ),
               child: Column(
                 children: <Widget>[
                   SwitchListTile(
                     contentPadding: EdgeInsets.all(0),
-                    title: Text('Test'),
+                    title: Text('Add extras'),
                     value: field.active,
                     onChanged: (value) => field.active = value,
                   ),
@@ -96,7 +93,7 @@ class CustomFormFieldState extends FormFieldState<CustomValue> {
           color: Colors.black,
         ),
         CheckboxListTile(
-          title: Text('Checkbox A'),
+          title: Text('Extra A'),
           value: value.checkboxA,
           onChanged: (bool checked) {
             didChange(CustomValue(
@@ -106,7 +103,7 @@ class CustomFormFieldState extends FormFieldState<CustomValue> {
           },
         ),
         CheckboxListTile(
-          title: Text('Checkbox B'),
+          title: Text('Extra B'),
           value: value.checkboxB,
           onChanged: (bool checked) {
             didChange(CustomValue(

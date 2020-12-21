@@ -6,19 +6,19 @@ import 'text_field/text_field.dart';
 import 'form_field.dart';
 
 typedef InputDecorationCreator = InputDecoration Function(
-    BuildContext context, FastFormField model);
+    BuildContext context, FastFormField field);
 
 final InputDecorationCreator defaultInputDecorationCreator =
-    (BuildContext context, FastFormField model) {
+    (BuildContext context, FastFormField field) {
   final theme = Theme.of(context);
-  final enabled = model.enabled;
+  final enabled = field.enabled;
   return InputDecoration(
-    contentPadding: (model is FastDropdown || model is FastTextField)
+    contentPadding: (field is FastDropdown || field is FastTextField)
         ? EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
         : EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
-    labelText: model.label,
-    helperText: model.helper,
-    hintText: model is FastTextField ? model.hint : null,
+    labelText: field.label,
+    helperText: field.helper,
+    hintText: field is FastTextField ? field.hint : null,
     labelStyle: TextStyle(
       color: enabled ? theme.textTheme.bodyText1.color : theme.disabledColor,
     ),
