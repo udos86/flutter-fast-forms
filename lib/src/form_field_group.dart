@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'form_field.dart';
-import 'form_style.dart';
+import 'form_theme.dart';
 
 enum FormFieldGroupOrientation {
   horizontal,
@@ -35,12 +35,12 @@ class FastFormFieldGroup extends StatelessWidget {
   }
 
   Widget _buildVerticalFormFieldGroup(BuildContext context) {
-    final style = FormStyle.of(context);
+    final theme = FastFormTheme.of(context);
     return Column(
       children: <Widget>[
         for (final field in children)
           Container(
-            padding: padding ?? style.padding,
+            padding: padding ?? theme.padding,
             child: field,
           ),
       ],
@@ -48,13 +48,13 @@ class FastFormFieldGroup extends StatelessWidget {
   }
 
   Widget _buildHorizontalFormFieldGroup(BuildContext context) {
-    final style = FormStyle.of(context);
+    final theme = FastFormTheme.of(context);
     return Row(
       children: <Widget>[
         for (final field in children)
           Expanded(
             child: Container(
-              padding: padding ?? style.padding,
+              padding: padding ?? theme.padding,
               child: field,
             ),
           ),

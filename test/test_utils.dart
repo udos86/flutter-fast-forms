@@ -10,7 +10,7 @@ abstract class Utils {
       home: Scaffold(
         body: ChangeNotifierProvider.value(
           value: FastFormStore(),
-          child: FormStyle(
+          child: FastFormTheme(
             child: testWidget,
           ),
         ),

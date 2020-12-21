@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_style.dart';
+import '../form_theme.dart';
 
 import 'checkbox_form_field.dart';
 
@@ -43,10 +43,10 @@ class FastCheckbox extends FastFormField<bool> {
 }
 
 final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
-  final style = FormStyle.of(context);
+  final theme = FastFormTheme.of(context);
   final widget = state.widget as FastCheckbox;
   final decoration = widget.decoration ??
-      style?.getInputDecoration(context, widget) ??
+      theme?.getInputDecoration(context, widget) ??
       const InputDecoration();
 
   return CheckboxFormField(

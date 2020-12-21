@@ -32,4 +32,4 @@ export 'src/form_container.dart';
 export 'src/form_field.dart';
 export 'src/form_field_group.dart';
 export 'src/form_store.dart';
-export 'src/form_style.dart';
+export 'src/form_theme.dart';

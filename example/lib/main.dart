@@ -160,9 +160,9 @@ class FormPage extends StatelessWidget {
             id: 'custom_form_field',
             label: 'Custom Form Field',
             builder: (context, state) {
-              final style = FormStyle.of(context);
+              final theme = FastFormTheme.of(context);
               return CustomFormField(
-                decoration: style.getInputDecoration(context, state.widget),
+                decoration: theme.getInputDecoration(context, state.widget),
                 onReset: state.onReset,
               );
             },

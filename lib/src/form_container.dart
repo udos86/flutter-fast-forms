@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'form_store.dart';
 import 'form_field_group.dart';
-import 'form_style.dart';
+import 'form_theme.dart';
 
 typedef FormChanged = void Function(Map<String, dynamic> value);
 
@@ -53,7 +53,7 @@ class _FastFormState extends State<FastForm> {
       child: Form(
         // onChanged: () =>, // Current store cannot be retrieved here due to the framework calling this before widget.onChanged
         key: widget.formKey,
-        child: FormStyle(
+        child: FastFormTheme(
           decorationCreator: widget.decorationCreator,
           padding: widget.padding,
           child: Column(

@@ -46,8 +46,8 @@ final InputDecorationCreator defaultInputDecorationCreator =
 const defaultPadding =
     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
 
-class FormStyle extends InheritedWidget {
-  FormStyle({
+class FastFormTheme extends InheritedWidget {
+  FastFormTheme({
     @required Widget child,
     InputDecorationCreator decorationCreator,
     Key key,
@@ -61,8 +61,8 @@ class FormStyle extends InheritedWidget {
   final InputDecorationCreator getInputDecoration;
   final EdgeInsets padding;
 
-  static FormStyle of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FormStyle>();
+  static FastFormTheme of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FastFormTheme>();
   }
 
   @override

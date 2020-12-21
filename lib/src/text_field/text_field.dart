@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../form_field.dart';
-import '../form_style.dart';
+import '../form_theme.dart';
 import '../utils/form_formatters.dart';
 
 import 'text_form_field.dart';
@@ -88,10 +88,10 @@ class FastTextFieldState extends FastFormFieldState<String> {
 
 final FastFormFieldBuilder _builder = (context, _state) {
   final state = _state as FastTextFieldState;
-  final style = FormStyle.of(context);
+  final theme = FastFormTheme.of(context);
   final widget = state.widget as FastTextField;
   final decoration = widget.decoration ??
-      style?.getInputDecoration(context, widget) ??
+      theme?.getInputDecoration(context, widget) ??
       const InputDecoration();
 
   return FastTextFormField(

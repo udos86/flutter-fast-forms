@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../form_field.dart';
-import '../form_style.dart';
+import '../form_theme.dart';
 
 import 'date_range_picker_form_field.dart';
 
@@ -73,10 +73,10 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
 }
 
 final FastFormFieldBuilder fastDateRangerPickerBuilder = (context, state) {
-  final style = FormStyle.of(context);
+  final theme = FastFormTheme.of(context);
   final widget = state.widget as FastDateRangePicker;
   final decoration = widget.decoration ??
-      style?.getInputDecoration(context, widget) ??
+      theme?.getInputDecoration(context, widget) ??
       const InputDecoration();
 
   return DateRangePickerFormField(

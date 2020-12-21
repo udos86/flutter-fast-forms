@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_style.dart';
+import '../form_theme.dart';
 
 import 'dropdown_form_field.dart';
 
@@ -47,10 +47,10 @@ class FastDropdown extends FastFormField<String> {
 
 final FastFormFieldBuilder fastDropdownBuilder =
     (BuildContext context, FastFormFieldState state) {
-  final style = FormStyle.of(context);
+  final theme = FastFormTheme.of(context);
   final widget = state.widget as FastDropdown;
   final decoration = widget.decoration ??
-      style?.getInputDecoration(context, widget) ??
+      theme?.getInputDecoration(context, widget) ??
       const InputDecoration();
 
   return DropdownFormField(

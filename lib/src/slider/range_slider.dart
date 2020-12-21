@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_style.dart';
+import '../form_theme.dart';
 
 import 'range_slider_form_field.dart';
 
@@ -50,10 +50,10 @@ class FastRangeSlider extends FastFormField<RangeValues> {
 }
 
 final FastFormFieldBuilder _builder = (context, state) {
-  final style = FormStyle.of(context);
+  final theme = FastFormTheme.of(context);
   final widget = state.widget as FastRangeSlider;
   final decoration = widget.decoration ??
-      style?.getInputDecoration(context, widget) ??
+      theme?.getInputDecoration(context, widget) ??
       const InputDecoration();
 
   return RangeSliderFormField(
