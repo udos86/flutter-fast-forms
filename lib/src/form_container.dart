@@ -11,7 +11,6 @@ class FastForm extends StatefulWidget {
     @required this.children,
     this.decorationCreator,
     @required this.formKey,
-    this.initialValues,
     Key key,
     this.onChanged,
     this.padding,
@@ -20,7 +19,6 @@ class FastForm extends StatefulWidget {
   final List<dynamic> children;
   final InputDecorationCreator decorationCreator;
   final GlobalKey<FormState> formKey;
-  final Map<String, dynamic> initialValues;
   final FormChanged onChanged;
   final EdgeInsets padding;
 
@@ -29,12 +27,11 @@ class FastForm extends StatefulWidget {
 }
 
 class _FastFormState extends State<FastForm> {
-  FastFormStore store;
+  FastFormStore store = FastFormStore();
 
   @override
   void initState() {
     super.initState();
-    store = FastFormStore(initialValues: widget.initialValues);
     store.addListener(_onStoreChanged);
   }
 

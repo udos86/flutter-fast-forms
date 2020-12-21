@@ -47,13 +47,7 @@ class FastFormFieldState<T> extends State<FastFormField> {
 
     focusNode = FocusNode()..addListener(_onFocusChanged);
     store = Provider.of<FastFormStore>(context, listen: false);
-
-    if (store.isRestored(widget.id)) {
-      value = store.getInitialValue(widget.id);
-      touched = true;
-    } else {
-      value = widget.initialValue;
-    }
+    value = widget.initialValue;
   }
 
   @override

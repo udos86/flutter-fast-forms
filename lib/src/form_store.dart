@@ -5,13 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'form_field.dart';
 
 class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
-  FastFormStore({
-    Map<String, dynamic> initialValues,
-  })  : this._initialValues = initialValues,
-        this._fields = {};
-
-  final Map<String, dynamic> _initialValues;
-  final Map<String, FastFormFieldState> _fields;
+  final Map<String, FastFormFieldState> _fields = {};
 
   UnmodifiableMapView<String, dynamic> get values => UnmodifiableMapView(
       _fields.map((id, state) => MapEntry(id, state.value)));
@@ -27,13 +21,5 @@ class FastFormStore with ChangeNotifier, DiagnosticableTreeMixin {
   void update(FastFormFieldState state) {
     _fields[state.widget.id] = state;
     notifyListeners();
-  }
-
-  dynamic getInitialValue(String id) {
-    return _initialValues[id];
-  }
-
-  bool isRestored(String id) {
-    return _initialValues?.containsKey(id) ?? false;
   }
 }
