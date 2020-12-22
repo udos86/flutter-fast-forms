@@ -15,13 +15,23 @@ void main() {
     );
   }
 
-  testWidgets('finds a CalendarDatePicker on Icon Button tap',
+  testWidgets('renders FastDatePicker', (WidgetTester tester) async {
+    await tester.pumpWidget(getTestWidget());
+
+    final fastDatePickerFinder = find.byType(FastDatePicker);
+    final gestureDetectorFinder = find.byType(GestureDetector);
+    final iconButtonFinder = find.byType(IconButton);
+
+    expect(fastDatePickerFinder, findsOneWidget);
+    expect(gestureDetectorFinder.first, findsOneWidget);
+    expect(iconButtonFinder, findsOneWidget);
+  });
+
+  testWidgets('shows CalendarDatePicker on Icon Button tap',
       (WidgetTester tester) async {
     await tester.pumpWidget(getTestWidget());
 
     final iconButtonFinder = find.byType(IconButton);
-
-    expect(iconButtonFinder, findsOneWidget);
 
     await tester.tap(iconButtonFinder);
     await tester.pumpAndSettle();
@@ -30,13 +40,11 @@ void main() {
     expect(calendarDatePickerFinder, findsOneWidget);
   });
 
-  testWidgets('finds a CalendarDatePicker on GestureDetector tap',
+  testWidgets('shows CalendarDatePicker on GestureDetector tap',
       (WidgetTester tester) async {
     await tester.pumpWidget(getTestWidget());
 
     final gestureDetectorFinder = find.byType(GestureDetector);
-
-    expect(gestureDetectorFinder.first, findsOneWidget);
 
     await tester.tap(gestureDetectorFinder.first);
     await tester.pumpAndSettle();

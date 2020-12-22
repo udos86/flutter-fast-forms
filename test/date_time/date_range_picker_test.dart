@@ -16,8 +16,13 @@ void main() {
       ),
     );
 
+    final fastDateRangePickerFinder = find.byType(FastDateRangePicker);
     final iconButtonFinder = find.byType(IconButton);
 
+    expect(fastDateRangePickerFinder, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
+
+    await tester.tap(iconButtonFinder);
+    await tester.pumpAndSettle();
   });
 }
