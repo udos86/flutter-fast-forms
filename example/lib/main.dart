@@ -85,9 +85,9 @@ class FormPage extends StatelessWidget {
             label: 'Text Field',
             hint: 'MM/JJJJ',
             keyboardType: TextInputType.datetime,
-            inputFormatters: [
-              InputFormatters.maskText('##/####')
-            ],
+            maxLength: 7,
+            buildCounter: inputCounterWidgetBuilder,
+            inputFormatters: [InputFormatters.maskText('##/####')],
             validator: Validators.compose([
               Validators.required(),
               Validators.minLength(7),
@@ -161,7 +161,8 @@ class FormPage extends StatelessWidget {
           FastCustomField(
             id: 'custom_form_field',
             label: 'Custom Form Field',
-            title: Text('Add extras'),
+            helper: "Optionally add some extras",
+            title: Text('Extras'),
             options: [
               CustomOption(
                 id: 'cheese',

@@ -110,6 +110,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
           id: id,
           initialValue: initialValue,
           key: key,
+          label: label,
           onChanged: onChanged,
           onReset: onReset,
           onSaved: onSaved,

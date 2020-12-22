@@ -61,7 +61,7 @@ class FastTextField extends FastFormField<String> {
                   enableInteractiveSelection: enableInteractiveSelection,
                   enableSuggestions: enableSuggestions,
                   expands: expands,
-                  focusNode: focusNode,
+                  focusNode: focusNode ?? state.focusNode,
                   keyboardType: keyboardType,
                   inputFormatters: inputFormatters,
                   maxLength: maxLength,
@@ -99,6 +99,24 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   FastTextField get widget => super.widget as FastTextField;
 
+  @override
+  void onChanged(String value) {
+    setValue(value);
+    store.update(this);
+  }
+
   AutovalidateMode get autovalidateMode =>
       touched ? AutovalidateMode.always : AutovalidateMode.disabled;
 }
+
+final InputCounterWidgetBuilder inputCounterWidgetBuilder = (
+  BuildContext context, {
+  int currentLength,
+  int maxLength,
+  bool isFocused,
+}) {
+  return Text(
+    '$currentLength / $maxLength',
+    semanticsLabel: 'character input count',
+  );
+};

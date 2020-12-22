@@ -43,7 +43,6 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
   FocusNode focusNode;
   FastFormStore store;
-  T value;
 
   @override
   void initState() {
@@ -51,7 +50,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
     focusNode = FocusNode()..addListener(_onFocusChanged);
     store = Provider.of<FastFormStore>(context, listen: false);
-    value = widget.initialValue;
+    setValue(widget.initialValue);
   }
 
   @override
@@ -89,7 +88,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
   void onChanged(T value) {
     if (!touched) setState(() => touched = true);
-    this.value = value;
+    setValue(value);
     store.update(this);
   }
 
@@ -97,13 +96,13 @@ class FastFormFieldState<T> extends FormFieldState<T> {
     setState(() {
       focused = false;
       touched = false;
-      value = widget.initialValue;
+      setValue(widget.initialValue);
       store.update(this);
     });
   }
 
   void onSaved(T value) {
-    this.value = value;
+    setValue(value);
     store.update(this);
   }
 
@@ -114,6 +113,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
       } else {
         focused = false;
         touched = true;
+        print(touched);
       }
     });
   }
