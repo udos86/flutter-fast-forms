@@ -18,11 +18,19 @@ void main() {
       ),
     );
 
-    final formFieldFinder =
+    final dropdownFormFieldFinder =
         find.byType(Utils.typeOf<DropdownButtonFormField<String>>());
+    final dropdownButtonFinder =
+        find.byType(Utils.typeOf<DropdownButton<String>>());
     final itemsFinder = find.byType(Utils.typeOf<DropdownMenuItem<String>>());
 
-    expect(formFieldFinder, findsOneWidget);
+    expect(dropdownFormFieldFinder, findsOneWidget);
+    expect(dropdownButtonFinder, findsOneWidget);
     expect(itemsFinder, findsNWidgets(itemsLength));
+
+    await tester.tap(dropdownButtonFinder);
+    await tester.pumpAndSettle();
+
+    expect(itemsFinder, findsNWidgets(itemsLength * 2));
   });
 }
