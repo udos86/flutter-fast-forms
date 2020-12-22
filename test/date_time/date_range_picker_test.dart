@@ -16,10 +16,8 @@ void main() {
       ),
     );
 
-    final formFieldFinder = find.byType(DateRangePickerFormField);
     final iconButtonFinder = find.byType(IconButton);
 
-    expect(formFieldFinder, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
   });
 }

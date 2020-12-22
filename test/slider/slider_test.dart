@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,7 +16,7 @@ void main() {
       ),
     );
 
-    final formFieldFinder = find.byType(SliderFormField);
+    final formFieldFinder = find.byType(Slider);
 
     expect(formFieldFinder, findsOneWidget);
   });

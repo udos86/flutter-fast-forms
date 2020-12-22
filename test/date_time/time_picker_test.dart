@@ -14,10 +14,8 @@ void main() {
       ),
     );
 
-    final formFieldFinder = find.byType(TimePickerFormField);
     final iconButtonFinder = find.byType(IconButton);
 
-    expect(formFieldFinder, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
   });
 }

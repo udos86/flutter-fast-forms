@@ -18,7 +18,7 @@ void main() {
       ),
     );
 
-    final formFieldFinder = find.byType(DropdownFormField);
+    final formFieldFinder = find.byType(Utils.typeOf<DropdownButtonFormField<String>>());
     final itemsFinder = find.byType(Utils.typeOf<DropdownMenuItem<String>>());
 
     expect(formFieldFinder, findsOneWidget);

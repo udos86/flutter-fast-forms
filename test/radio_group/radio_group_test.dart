@@ -30,11 +30,8 @@ void main() {
       ),
     );
 
-    final formFieldFinder =
-        find.byType(Utils.typeOf<RadioGroupFormField<String>>());
     final optionsFinder = find.byType(RadioListTile);
 
-    expect(formFieldFinder, findsOneWidget);
     expect(optionsFinder, findsNWidgets(options.length));
   });
 }

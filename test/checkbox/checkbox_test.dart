@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,12 +21,12 @@ void main() {
       ),
     );
 
-    final formFieldFinder = find.byType(CheckboxFormField);
+    final checkboxFinder = find.byType(CheckboxListTile);
     final helperFinder = find.text(helper);
     final labelFinder = find.text(label);
     final titleFinder = find.text(title);
 
-    expect(formFieldFinder, findsOneWidget);
+    expect(checkboxFinder, findsOneWidget);
     expect(helperFinder, findsOneWidget);
     expect(labelFinder, findsOneWidget);
     expect(titleFinder, findsOneWidget);
