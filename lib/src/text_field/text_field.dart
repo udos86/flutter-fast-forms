@@ -3,128 +3,102 @@ import 'package:flutter/services.dart';
 
 import '../form_field.dart';
 import '../form_theme.dart';
-import '../utils/form_formatters.dart';
 
-import 'text_form_field.dart';
-/*
-@immutable
 class FastTextField extends FastFormField<String> {
   FastTextField({
-    this.autocorrect = true,
-    this.autofillHints,
-    bool autofocus,
-    AutovalidateMode autovalidateMode,
-    this.buildCounter,
-    FastFormFieldBuilder builder,
+    bool autocorrect = true,
+    Iterable<String> autofillHints,
+    bool autofocus = false,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    InputCounterWidgetBuilder buildCounter,
+    FormFieldBuilder<String> builder,
     InputDecoration decoration,
-    bool enabled,
-    this.enableInteractiveSelection = true,
-    this.enableSuggestions = true,
-    this.expands = false,
+    bool enabled = true,
+    bool enableInteractiveSelection = true,
+    bool enableSuggestions = true,
+    bool expands = false,
+    FocusNode focusNode,
     String helper,
     this.hint,
     @required String id,
     String initialValue,
-    this.inputFormatters,
-    this.keyboardType,
+    List<TextInputFormatter> inputFormatters,
+    Key key,
+    TextInputType keyboardType,
     String label,
-    this.mask,
-    this.maxLength,
-    this.maxLengthEnforced = true,
-    this.maxLines = 1,
-    this.minLines,
-    this.obscuringCharacter = '•',
-    this.obscureText = false,
-    this.readOnly = false,
-    this.textCapitalization = TextCapitalization.none,
-    FormFieldValidator validator,
+    int maxLength,
+    bool maxLengthEnforced = true,
+    int maxLines = 1,
+    int minLines,
+    bool obscureText = false,
+    String obscuringCharacter = '•',
+    ValueChanged<String> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<String> onSaved,
+    bool readOnly = false,
+    TextCapitalization textCapitalization = TextCapitalization.none,
+    FormFieldValidator<String> validator,
   }) : super(
-          autofocus: autofocus ?? false,
+          autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          //?? AutovalidateMode.onUserInteraction,
-          builder: builder ?? _builder,
-          decoration: decoration,
-          enabled: enabled ?? true,
+          builder: builder ??
+              (field) {
+                final state = field as FastTextFieldState;
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+
+                return TextFormField(
+                  autocorrect: autocorrect,
+                  autofillHints: autofillHints,
+                  autofocus: autofocus,
+                  autovalidateMode: state.autovalidateMode,
+                  buildCounter: buildCounter,
+                  decoration: _decoration,
+                  initialValue: initialValue,
+                  enabled: enabled,
+                  enableInteractiveSelection: enableInteractiveSelection,
+                  enableSuggestions: enableSuggestions,
+                  expands: expands,
+                  focusNode: focusNode,
+                  keyboardType: keyboardType,
+                  inputFormatters: inputFormatters,
+                  maxLength: maxLength,
+                  maxLengthEnforced: maxLengthEnforced,
+                  maxLines: maxLines,
+                  minLines: minLines,
+                  obscureText: obscureText,
+                  obscuringCharacter: obscuringCharacter,
+                  onChanged: enabled ? state.didChange : null,
+                  onSaved: onSaved,
+                  readOnly: readOnly,
+                  textCapitalization: textCapitalization,
+                  validator: validator,
+                );
+              },
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue: initialValue ?? '',
+          key: key,
           label: label,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
           validator: validator,
         );
 
-  final bool autocorrect;
-  final Iterable<String> autofillHints;
-  final InputCounterWidgetBuilder buildCounter;
-  final bool enableInteractiveSelection;
-  final bool enableSuggestions;
-  final bool expands;
   final String hint;
-  final List<TextInputFormatter> inputFormatters;
-  final TextInputType keyboardType;
-  final String mask;
-  final int maxLength;
-  final bool maxLengthEnforced;
-  final int maxLines;
-  final int minLines;
-  final String obscuringCharacter;
-  final bool obscureText;
-  final bool readOnly;
-  final TextCapitalization textCapitalization;
 
   @override
-  State<StatefulWidget> createState() => FastTextFieldState();
+  FormFieldState<String> createState() => FastTextFieldState();
 }
 
 class FastTextFieldState extends FastFormFieldState<String> {
+  @override
+  FastTextField get widget => super.widget as FastTextField;
+
   AutovalidateMode get autovalidateMode =>
       touched ? AutovalidateMode.always : AutovalidateMode.disabled;
-
-  @override
-  void onChanged(String value) {
-    this.value = value;
-    store.update(this);
-  }
 }
-
-final FastFormFieldBuilder _builder = (context, _state) {
-  final state = _state as FastTextFieldState;
-  final theme = FastFormTheme.of(context);
-  final widget = state.widget as FastTextField;
-  final decoration = widget.decoration ??
-      theme?.getInputDecoration(context, widget) ??
-      const InputDecoration();
-
-  return FastTextFormField(
-    autocorrect: widget.autocorrect,
-    autofillHints: widget.autofillHints,
-    autofocus: widget.autofocus,
-    autovalidateMode: widget.autovalidateMode ?? state.autovalidateMode,
-    buildCounter: widget.buildCounter,
-    decoration: decoration,
-    enabled: widget.enabled,
-    enableInteractiveSelection: widget.enableInteractiveSelection,
-    enableSuggestions: widget.enableSuggestions,
-    expands: widget.expands,
-    focusNode: state.focusNode,
-    initialValue: widget.initialValue,
-    inputFormatters: [
-      // workaround to avoid appearance of memoized value on re-entering text field after reset
-      if (widget.mask != null) InputFormatters.maskText(widget.mask),
-      if (widget.inputFormatters is List) ...widget.inputFormatters,
-    ],
-    keyboardType: widget.keyboardType ?? TextInputType.text,
-    maxLength: widget.maxLength,
-    maxLengthEnforced: widget.maxLengthEnforced,
-    maxLines: widget.maxLines,
-    minLines: widget.minLines,
-    obscureText: widget.obscureText,
-    obscuringCharacter: widget.obscuringCharacter,
-    onChanged: state.onChanged,
-    onReset: state.onReset,
-    onSaved: state.onSaved,
-    readOnly: widget.readOnly,
-    textCapitalization: widget.textCapitalization,
-    validator: widget.validator,
-  );
-};
-*/

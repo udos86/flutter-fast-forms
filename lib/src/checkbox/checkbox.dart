@@ -3,63 +3,88 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-import 'checkbox_form_field.dart';
-/*
-@immutable
+typedef CheckboxTitleBuilder = Widget Function(
+    BuildContext context, FastCheckboxState state);
+
 class FastCheckbox extends FastFormField<bool> {
   FastCheckbox({
-    bool autofocus,
-    AutovalidateMode autovalidateMode,
-    FastFormFieldBuilder builder,
+    bool autofocus = false,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    FormFieldBuilder<bool> builder,
     InputDecoration decoration,
-    bool enabled,
+    bool enabled = true,
     String helper,
     @required String id,
     bool initialValue,
+    Key key,
     String label,
+    ValueChanged<bool> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<bool> onSaved,
     this.title,
-    this.tristate = false,
-    FormFieldValidator validator,
+    CheckboxTitleBuilder titleBuilder,
+    bool tristate = false,
+    FormFieldValidator<bool> validator,
   }) : super(
-          autofocus: autofocus ?? false,
-          autovalidateMode:
-              autovalidateMode ?? AutovalidateMode.onUserInteraction,
-          builder: builder ?? fastCheckboxBuilder,
-          decoration: decoration,
-          enabled: enabled ?? true,
+          autofocus: autofocus,
+          autovalidateMode: autovalidateMode,
+          builder: builder ??
+              (field) {
+                final state = field as FastCheckboxState;
+                final theme = Theme.of(state.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final InputDecoration effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                final _titleBuilder = titleBuilder ?? checkboxTitleBuilder;
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: state.errorText,
+                  ),
+                  child: CheckboxListTile(
+                    autofocus: autofocus,
+                    onChanged: enabled ? state.didChange : null,
+                    selected: state.value,
+                    tristate: tristate,
+                    title: title is String
+                        ? _titleBuilder(state.context, state)
+                        : null,
+                    value: state.value,
+                  ),
+                );
+              },
           helper: helper,
+          enabled: enabled,
           id: id,
-          initialValue:
-              initialValue == null && !tristate ? false : initialValue,
+          initialValue: initialValue ?? false,
+          key: key,
           label: label,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
           validator: validator,
         );
 
   final String title;
-  final bool tristate;
 
   @override
-  State<StatefulWidget> createState() => FastFormFieldState<bool>();
+  FormFieldState<bool> createState() => FastCheckboxState();
 }
 
-final FastFormFieldBuilder fastCheckboxBuilder = (context, state) {
-  final theme = FastFormTheme.of(context);
-  final widget = state.widget as FastCheckbox;
-  final decoration = widget.decoration ??
-      theme?.getInputDecoration(context, widget) ??
-      const InputDecoration();
+class FastCheckboxState extends FastFormFieldState<bool> {
+  @override
+  FastCheckbox get widget => super.widget as FastCheckbox;
+}
 
-  return CheckboxFormField(
-    autovalidateMode: widget.autovalidateMode,
-    autofocus: widget.autofocus,
-    decoration: decoration,
-    enabled: widget.enabled,
-    initialValue: widget.initialValue,
-    onChanged: state.onChanged,
-    onReset: state.onReset,
-    onSaved: state.onSaved,
-    title: widget.title,
-    validator: widget.validator,
+final CheckboxTitleBuilder checkboxTitleBuilder =
+    (BuildContext context, FastCheckboxState state) {
+  return Text(
+    state.widget.title,
+    style: TextStyle(
+      fontSize: 14.0,
+      color: state.value ? Colors.black : Colors.grey,
+    ),
   );
 };
-*/

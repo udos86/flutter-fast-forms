@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'dropdown/dropdown_form_field.dart';
-import 'text_field/text_form_field.dart';
+import 'dropdown/dropdown.dart';
+import 'text_field/text_field.dart';
 
 import 'form_field.dart';
 

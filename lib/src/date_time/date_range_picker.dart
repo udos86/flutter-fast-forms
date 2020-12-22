@@ -4,106 +4,136 @@ import 'package:intl/intl.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-import 'date_range_picker_form_field.dart';
-/*
-@immutable
+typedef DateRangePickerTextBuilder = Text Function(
+    BuildContext context, DateTimeRange value, DateFormat format);
+
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
-    bool autofocus,
-    AutovalidateMode autovalidateMode,
-    FastFormFieldBuilder builder,
-    this.cancelText,
-    this.confirmText,
-    this.currentDate,
+    bool autofocus = false,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    FormFieldBuilder<DateTimeRange> builder,
+    String cancelText,
+    String confirmText,
+    DateTime currentDate,
     InputDecoration decoration,
-    bool enabled,
-    this.errorFormatText,
-    this.errorInvalidRangeText,
-    this.errorInvalidText,
-    this.fieldEndHintText,
-    this.fieldEndLabelText,
-    this.fieldStartHintText,
-    this.fieldStartLabelText,
-    @required this.firstDate,
-    this.format,
+    bool enabled = true,
+    String errorFormatText,
+    String errorInvalidRangeText,
+    String errorInvalidText,
+    String fieldEndHintText,
+    String fieldEndLabelText,
+    String fieldStartHintText,
+    String fieldStartLabelText,
+    DateTime firstDate,
+    DateFormat format,
     String helper,
-    this.helpText,
-    this.icon,
+    String helpText,
     @required String id,
-    this.initialEntryMode = DatePickerEntryMode.calendar,
+    Icon icon,
+    DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
     DateTimeRange initialValue,
+    Key key,
     String label,
-    @required this.lastDate,
-    this.textBuilder,
-    FormFieldValidator validator,
-  }) : super(
-          autofocus: autofocus ?? false,
-          autovalidateMode:
-              autovalidateMode ?? AutovalidateMode.onUserInteraction,
-          builder: builder ?? fastDateRangerPickerBuilder,
-          decoration: decoration,
-          enabled: enabled ?? true,
+    DateTime lastDate,
+    ValueChanged<DateTimeRange> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<DateTimeRange> onSaved,
+    DateRangePickerTextBuilder textBuilder,
+    FormFieldValidator<DateTimeRange> validator,
+  })  : this.dateFormat = format ?? DateFormat.yMd(),
+        super(
+          autofocus: autofocus,
+          autovalidateMode: autovalidateMode,
+          builder: builder ??
+              (field) {
+                final state = field as FastDateRangePickerState;
+                final theme = Theme.of(state.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final InputDecoration effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                final _textBuilder = textBuilder ?? dateRangPickerTextBuilder;
+                final _showDateRangePicker = (DatePickerEntryMode entryMode) {
+                  showDateRangePicker(
+                    cancelText: cancelText,
+                    confirmText: confirmText,
+                    context: state.context,
+                    currentDate: currentDate,
+                    errorFormatText: errorFormatText,
+                    errorInvalidRangeText: errorInvalidRangeText,
+                    errorInvalidText: errorInvalidText,
+                    fieldEndHintText: fieldEndHintText,
+                    fieldEndLabelText: fieldEndLabelText,
+                    fieldStartHintText: fieldStartHintText,
+                    fieldStartLabelText: fieldStartLabelText,
+                    helpText: helpText,
+                    initialEntryMode: entryMode,
+                    initialDateRange: state.value,
+                    firstDate: firstDate,
+                    lastDate: lastDate,
+                  ).then((value) {
+                    if (value != null) state.didChange(value);
+                  });
+                };
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: state.errorText,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: enabled
+                              ? () => _showDateRangePicker(
+                                  DatePickerEntryMode.input)
+                              : null,
+                          child: _textBuilder(state.context, state.value,
+                              state.widget.dateFormat),
+                        ),
+                      ),
+                      IconButton(
+                        alignment: Alignment.centerRight,
+                        icon: icon ?? Icon(Icons.today),
+                        onPressed: enabled
+                            ? () => _showDateRangePicker(initialEntryMode)
+                            : null,
+                      ),
+                    ],
+                  ),
+                );
+              },
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue: initialValue,
-          label: label,
+          key: key,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
           validator: validator,
         );
 
-  final String cancelText;
-  final String confirmText;
-  final DateTime currentDate;
-  final String errorFormatText;
-  final String errorInvalidRangeText;
-  final String errorInvalidText;
-  final String fieldEndHintText;
-  final String fieldEndLabelText;
-  final String fieldStartHintText;
-  final String fieldStartLabelText;
-  final DateTime firstDate;
-  final DateFormat format;
-  final String helpText;
-  final Icon icon;
-  final DatePickerEntryMode initialEntryMode;
-  final DateTime lastDate;
-  final DateRangePickerTextBuilder textBuilder;
+  final DateFormat dateFormat;
 
   @override
-  State<StatefulWidget> createState() => FastFormFieldState<DateTimeRange>();
+  FormFieldState<DateTimeRange> createState() => FastDateRangePickerState();
 }
 
-final FastFormFieldBuilder fastDateRangerPickerBuilder = (context, state) {
-  final theme = FastFormTheme.of(context);
-  final widget = state.widget as FastDateRangePicker;
-  final decoration = widget.decoration ??
-      theme?.getInputDecoration(context, widget) ??
-      const InputDecoration();
+class FastDateRangePickerState extends FastFormFieldState<DateTimeRange> {
+  @override
+  FastDateRangePicker get widget => super.widget;
+}
 
-  return DateRangePickerFormField(
-    autovalidateMode: widget.autovalidateMode,
-    cancelText: widget.cancelText,
-    confirmText: widget.confirmText,
-    decoration: decoration,
-    enabled: widget.enabled,
-    errorFormatText: widget.errorFormatText,
-    errorInvalidRangeText: widget.errorInvalidRangeText,
-    errorInvalidText: widget.errorInvalidText,
-    fieldEndHintText: widget.fieldEndHintText,
-    fieldEndLabelText: widget.fieldEndLabelText,
-    fieldStartHintText: widget.fieldStartHintText,
-    fieldStartLabelText: widget.fieldStartLabelText,
-    firstDate: widget.firstDate,
-    format: widget.format,
-    helpText: widget.helpText,
-    icon: widget.icon,
-    initialEntryMode: widget.initialEntryMode,
-    initialValue: widget.initialValue,
-    lastDate: widget.lastDate,
-    onChanged: state.onChanged,
-    onReset: state.onReset,
-    onSaved: state.onSaved,
-    textBuilder: widget.textBuilder,
-    validator: widget.validator,
+final DateRangePickerTextBuilder dateRangPickerTextBuilder =
+    (BuildContext context, DateTimeRange value, DateFormat dateFormat) {
+  final theme = Theme.of(context);
+  final format = dateFormat.format;
+  return Text(
+    value != null ? '${format(value.start)} - ${format(value.end)}' : '',
+    style: theme.textTheme.subtitle1,
+    textAlign: TextAlign.left,
   );
 };
-*/

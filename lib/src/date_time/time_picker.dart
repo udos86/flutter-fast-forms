@@ -3,61 +3,97 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-import 'time_picker_form_field.dart';
-/*
-@immutable
+typedef TimePickerTextBuilder = Text Function(
+    BuildContext context, TimeOfDay value);
+
 class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePicker({
-    bool autofocus,
-    AutovalidateMode autovalidateMode,
-    FastFormFieldBuilder builder,
+    bool autofocus = false,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    FormFieldBuilder<TimeOfDay> builder,
     InputDecoration decoration,
-    bool enabled,
+    bool enabled = true,
     String helper,
-    this.icon,
+    Icon icon,
     @required String id,
     TimeOfDay initialValue,
+    Key key,
     String label,
-    this.textBuilder,
-    FormFieldValidator validator,
+    ValueChanged<TimeOfDay> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<TimeOfDay> onSaved,
+    TimePickerTextBuilder textBuilder,
+    FormFieldValidator<TimeOfDay> validator,
   }) : super(
-          autofocus: autofocus ?? false,
-          autovalidateMode:
-              autovalidateMode ?? AutovalidateMode.onUserInteraction,
-          builder: builder ?? fastTimePickerBuilder,
-          enabled: enabled ?? true,
+          autovalidateMode: autovalidateMode,
+          builder: builder ??
+              (field) {
+                final state = field as FastTimePickerState;
+                final theme = Theme.of(state.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final InputDecoration effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                final _textBuilder = textBuilder ?? timePickerTextBuilder;
+                final _showTimePicker = () {
+                  showTimePicker(
+                    context: state.context,
+                    initialTime: state.value ?? TimeOfDay.now(),
+                  ).then((value) {
+                    if (value != null) state.didChange(value);
+                  });
+                };
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: state.errorText,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: enabled ? () => _showTimePicker() : null,
+                          child: _textBuilder(state.context, state.value),
+                        ),
+                      ),
+                      IconButton(
+                        alignment: Alignment.centerRight,
+                        icon: icon ?? Icon(Icons.schedule),
+                        onPressed: enabled ? _showTimePicker : null,
+                      ),
+                    ],
+                  ),
+                );
+              },
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue: initialValue,
+          key: key,
           label: label,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
           validator: validator,
         );
 
-  final Icon icon;
-  final TimePickerTextBuilder textBuilder;
-
   @override
-  State<StatefulWidget> createState() => FastFormFieldState<TimeOfDay>();
+  FormFieldState<TimeOfDay> createState() => FastTimePickerState();
 }
 
-final FastFormFieldBuilder fastTimePickerBuilder = (context, state) {
-  final theme = FastFormTheme.of(context);
-  final widget = state.widget as FastTimePicker;
-  final decoration = widget.decoration ??
-      theme?.getInputDecoration(context, widget) ??
-      const InputDecoration();
+class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
+  @override
+  FastTimePicker get widget => super.widget as FastTimePicker;
+}
 
-  return TimePickerFormField(
-    autovalidateMode: widget.autovalidateMode,
-    decoration: decoration,
-    enabled: widget.enabled,
-    icon: widget.icon,
-    initialValue: widget.initialValue,
-    onChanged: state.onChanged,
-    onReset: state.onReset,
-    onSaved: state.onSaved,
-    textBuilder: widget.textBuilder,
-    validator: widget.validator,
+final TimePickerTextBuilder timePickerTextBuilder =
+    (BuildContext context, TimeOfDay value) {
+  final theme = Theme.of(context);
+  return Text(
+    value?.format(context) ?? '',
+    style: theme.textTheme.subtitle1,
+    textAlign: TextAlign.left,
   );
 };
- */
