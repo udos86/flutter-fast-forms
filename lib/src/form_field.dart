@@ -113,7 +113,6 @@ class FastFormFieldState<T> extends FormFieldState<T> {
       } else {
         focused = false;
         touched = true;
-        print(touched);
       }
     });
   }
