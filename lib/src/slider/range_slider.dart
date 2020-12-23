@@ -3,73 +3,127 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-import 'range_slider_form_field.dart';
+typedef RangeSliderLabelsBuilder = RangeLabels Function(
+    BuildContext context, FastRangeSliderState state);
 
-@immutable
+typedef RangeSliderFixBuilder = Widget Function(
+    BuildContext context, FastRangeSliderState state);
+
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
-    bool autofocus,
-    AutovalidateMode autovalidateMode,
-    this.divisions,
-    FastFormFieldBuilder builder,
+    bool autofocus = false,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    FormFieldBuilder<RangeValues> builder,
     InputDecoration decoration,
-    bool enabled,
+    int divisions,
+    bool enabled = true,
     String helper,
     @required String id,
     RangeValues initialValue,
+    Key key,
     String label,
-    this.labelsBuilder,
-    @required this.max,
-    @required this.min,
-    this.prefixBuilder,
-    this.suffixBuilder,
-    FormFieldValidator validator,
+    RangeSliderLabelsBuilder labelsBuilder,
+    @required double min,
+    @required double max,
+    RangeSliderFixBuilder prefixBuilder,
+    RangeSliderFixBuilder suffixBuilder,
+    ValueChanged<RangeValues> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<RangeValues> onSaved,
+    FormFieldValidator<RangeValues> validator,
   }) : super(
-          autofocus: autofocus ?? false,
-          autovalidateMode:
-              autovalidateMode ?? AutovalidateMode.onUserInteraction,
-          builder: builder ?? _builder,
-          decoration: decoration,
-          enabled: enabled ?? true,
+          autofocus: autofocus,
+          autovalidateMode: autovalidateMode,
+          builder: builder ??
+              (field) {
+                final state = field as FastRangeSliderState;
+                final theme = Theme.of(field.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final InputDecoration effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: field.errorText,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      if (prefixBuilder != null)
+                        prefixBuilder(field.context, field),
+                      Expanded(
+                        child: RangeSlider(
+                          divisions: divisions,
+                          labels: labelsBuilder?.call(field.context, field),
+                          min: min,
+                          max: max,
+                          values: field.value,
+                          onChanged: enabled ? field.didChange : null,
+                        ),
+                      ),
+                      if (suffixBuilder != null)
+                        suffixBuilder(field.context, field),
+                    ],
+                  ),
+                );
+              },
+          enabled: enabled,
           helper: helper,
+          key: key,
           id: id,
           initialValue: initialValue ?? RangeValues(min, max),
           label: label,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
           validator: validator,
         );
 
-  final int divisions;
-  final RangeSliderLabelsBuilder labelsBuilder;
-  final double max;
-  final double min;
-  final RangeSliderFixBuilder prefixBuilder;
-  final RangeSliderFixBuilder suffixBuilder;
-
   @override
-  State<StatefulWidget> createState() => FastFormFieldState<RangeValues>();
+  FormFieldState<RangeValues> createState() => FastRangeSliderState();
 }
 
-final FastFormFieldBuilder _builder = (context, state) {
-  final theme = FastFormTheme.of(context);
-  final widget = state.widget as FastRangeSlider;
-  final decoration = widget.decoration ??
-      theme?.getInputDecoration(context, widget) ??
-      const InputDecoration();
+class FastRangeSliderState extends FastFormFieldState<RangeValues> {
+  @override
+  FastRangeSlider get widget => super.widget as FastRangeSlider;
+}
 
-  return RangeSliderFormField(
-    autovalidateMode: widget.autovalidateMode,
-    decoration: decoration,
-    divisions: widget.divisions,
-    enabled: widget.enabled,
-    initialValue: widget.initialValue,
-    labelsBuilder: widget.labelsBuilder,
-    max: widget.max,
-    min: widget.min,
-    prefixBuilder: widget.prefixBuilder,
-    suffixBuilder: widget.suffixBuilder,
-    validator: widget.validator,
-    onChanged: state.onChanged,
-    onReset: state.onReset,
-    onSaved: state.onSaved,
+final RangeSliderLabelsBuilder rangeSliderLabelsBuilder =
+    (BuildContext context, FormFieldState<RangeValues> state) {
+  return RangeLabels(
+    state.value.start.toStringAsFixed(0),
+    state.value.end.toStringAsFixed(0),
+  );
+};
+
+final RangeSliderFixBuilder rangeSliderPrefixBuilder =
+    (BuildContext context, FastRangeSliderState state) {
+  return Container(
+    width: 48.0,
+    child: Center(
+      child: Text(
+        state.value.start.toStringAsFixed(0),
+        style: TextStyle(
+          fontSize: 16.0,
+        ),
+      ),
+    ),
+  );
+};
+
+final RangeSliderFixBuilder rangeSliderSuffixBuilder =
+    (BuildContext context, FastRangeSliderState state) {
+  return Container(
+    width: 48.0,
+    child: Center(
+      child: Text(
+        state.value.end.toStringAsFixed(0),
+        style: TextStyle(
+          fontSize: 16.0,
+        ),
+      ),
+    ),
   );
 };

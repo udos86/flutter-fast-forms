@@ -1,74 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 @immutable
 class CustomOption {
   CustomOption({
-    @required this.label,
     @required this.id,
+    @required this.label,
   });
 
-  final String label;
   final String id;
+  final String label;
 }
 
-class CustomFormField extends FormField<Map<String, bool>> {
-  CustomFormField({
-    InputDecoration decoration = const InputDecoration(),
+class FastCustomField extends FastFormField<Map<String, bool>> {
+  FastCustomField({
+    InputDecoration decoration,
+    String helper,
+    @required String id,
     Key key,
     String label,
     String placeholder,
-    this.onChanged,
-    this.onReset,
-    FormFieldSetter onSaved,
-    this.options = const [],
+    ValueChanged<Map<String, bool>> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<Map<String, bool>> onSaved,
+    @required this.options,
     Widget title,
-    FormFieldValidator validator,
+    FormFieldValidator<Map<String, bool>> validator,
     Map<String, bool> initialValue,
-  })  : assert(decoration != null),
-        super(
-          builder: (_field) {
-            final field = _field as CustomFormFieldState;
-            final InputDecoration effectiveDecoration = decoration
-                .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+  }) : super(
+          builder: (field) {
+            final state = field as CustomFormFieldState;
+            final theme = Theme.of(state.context);
+            final formTheme = FastFormTheme.of(state.context);
+            final _decoration = decoration ??
+                formTheme.getInputDecoration(state.context, state.widget) ??
+                const InputDecoration();
+            final InputDecoration effectiveDecoration =
+                _decoration.applyDefaults(theme.inputDecorationTheme);
             return InputDecorator(
               decoration: effectiveDecoration.copyWith(
-                errorText: field.errorText,
+                errorText: state.errorText,
               ),
               child: Column(
                 children: <Widget>[
                   SwitchListTile(
                     contentPadding: EdgeInsets.all(0),
                     title: title,
-                    value: field.active,
+                    value: state.active,
                     onChanged: (active) {
-                      field.active = active;
-                      field.didChange(active ? field.activeValue : null);
+                      state.active = active;
+                      state.didChange(active ? state.activeValue : null);
                     },
                   ),
-                  if (field.active) field.buildActiveSegment(),
+                  if (state.active) state.buildActive(),
                 ],
               ),
             );
           },
+          helper: helper,
+          id: id,
           initialValue: initialValue,
           key: key,
+          label: label,
+          onChanged: onChanged,
+          onReset: onReset,
           onSaved: onSaved,
           validator: validator,
         );
 
-  final ValueChanged onChanged;
-  final VoidCallback onReset;
   final List<CustomOption> options;
 
   @override
   FormFieldState<Map<String, bool>> createState() => CustomFormFieldState();
 }
 
-class CustomFormFieldState extends FormFieldState<Map<String, bool>> {
+class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
   bool _active = false;
   Map<String, bool> _activeValue;
 
   bool get active => _active;
+
   Map<String, bool> get activeValue => _activeValue;
 
   set active(bool value) {
@@ -86,7 +97,7 @@ class CustomFormFieldState extends FormFieldState<Map<String, bool>> {
   }
 
   @override
-  CustomFormField get widget => super.widget;
+  FastCustomField get widget => super.widget as FastCustomField;
 
   @override
   void initState() {
@@ -98,7 +109,6 @@ class CustomFormFieldState extends FormFieldState<Map<String, bool>> {
   void didChange(Map<String, bool> value) {
     super.didChange(value);
     if (value != null) _activeValue = value;
-    if (widget.onChanged != null) widget.onChanged(value);
   }
 
   @override
@@ -106,10 +116,9 @@ class CustomFormFieldState extends FormFieldState<Map<String, bool>> {
     super.reset();
     active = false;
     _activeValue = initialActiveValue;
-    widget.onReset?.call();
   }
 
-  Widget buildActiveSegment() {
+  Widget buildActive() {
     return Column(
       children: <Widget>[
         Divider(

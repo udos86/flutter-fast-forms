@@ -3,75 +3,113 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-import 'slider_form_field.dart';
+typedef SliderLabelBuilder = String Function(
+    BuildContext context, FastSliderState state);
 
-@immutable
+typedef SliderFixBuilder = Widget Function(
+    BuildContext context, FastSliderState state);
+
 class FastSlider extends FastFormField<double> {
   FastSlider({
-    bool autofocus,
-    AutovalidateMode autovalidateMode,
-    FastFormFieldBuilder builder,
+    bool autofocus = false,
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    FormFieldBuilder<double> builder,
     InputDecoration decoration,
-    this.divisions,
-    bool enabled,
+    bool enabled = true,
+    int divisions,
+    FocusNode focusNode,
     String helper,
     @required String id,
     double initialValue,
+    Key key,
     String label,
-    this.labelBuilder,
     @required this.max,
     @required this.min,
-    this.prefixBuilder,
-    this.suffixBuilder,
-    FormFieldValidator validator,
+    SliderLabelBuilder labelBuilder,
+    SliderFixBuilder prefixBuilder,
+    ValueChanged<double> onChanged,
+    VoidCallback onReset,
+    FormFieldSetter<double> onSaved,
+    SliderFixBuilder suffixBuilder,
+    FormFieldValidator<double> validator,
   }) : super(
-          autofocus: autofocus ?? false,
-          autovalidateMode:
-              autovalidateMode ?? AutovalidateMode.onUserInteraction,
-          builder: builder ?? _builder,
-          decoration: decoration,
-          enabled: enabled ?? true,
+          autofocus: autofocus,
+          autovalidateMode: autovalidateMode,
+          builder: builder ??
+              (field) {
+                final state = field as FastSliderState;
+                final theme = Theme.of(field.context);
+                final formTheme = FastFormTheme.of(state.context);
+                final _decoration = decoration ??
+                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    const InputDecoration();
+                final effectiveDecoration =
+                    _decoration.applyDefaults(theme.inputDecorationTheme);
+                return InputDecorator(
+                  decoration: effectiveDecoration.copyWith(
+                    errorText: field.errorText,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      if (prefixBuilder != null)
+                        prefixBuilder(field.context, field),
+                      Expanded(
+                        child: Slider.adaptive(
+                          autofocus: autofocus,
+                          divisions: divisions,
+                          focusNode: focusNode,
+                          label: labelBuilder?.call(field.context, field),
+                          max: max,
+                          min: min,
+                          value: field.value,
+                          onChanged: enabled ? field.didChange : null,
+                        ),
+                      ),
+                      if (suffixBuilder != null)
+                        suffixBuilder(field.context, field),
+                    ],
+                  ),
+                );
+              },
+          enabled: enabled,
           helper: helper,
           id: id,
           initialValue: initialValue ?? min,
+          key: key,
           label: label,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
           validator: validator,
         );
 
-  final int divisions;
-  final SliderLabelBuilder labelBuilder;
   final double max;
   final double min;
-  final SliderFixBuilder prefixBuilder;
-  final SliderFixBuilder suffixBuilder;
 
   @override
-  State<StatefulWidget> createState() => FastFormFieldState<double>();
+  FormFieldState<double> createState() => FastSliderState();
 }
 
-final FastFormFieldBuilder _builder = (context, state) {
-  final theme = FastFormTheme.of(context);
-  final widget = state.widget as FastSlider;
-  final decoration = widget.decoration ??
-      theme?.getInputDecoration(context, widget) ??
-      const InputDecoration();
+class FastSliderState extends FastFormFieldState<double> {
+  @override
+  FastSlider get widget => super.widget as FastSlider;
+}
 
-  return SliderFormField(
-    autofocus: widget.autofocus,
-    autovalidateMode: widget.autovalidateMode,
-    decoration: decoration,
-    divisions: widget.divisions,
-    enabled: widget.enabled,
-    focusNode: state.focusNode,
-    initialValue: widget.initialValue,
-    labelBuilder: widget.labelBuilder,
-    max: widget.max,
-    min: widget.min,
-    onChanged: state.onChanged,
-    onReset: state.onReset,
-    onSaved: state.onSaved,
-    prefixBuilder: widget.prefixBuilder,
-    suffixBuilder: widget.suffixBuilder,
-    validator: widget.validator,
+final SliderLabelBuilder sliderLabelBuilder =
+    (BuildContext context, FastSliderState state) {
+  return state.value.toStringAsFixed(0);
+};
+
+final SliderFixBuilder sliderSuffixBuilder =
+    (BuildContext context, FastSliderState state) {
+  return Container(
+    width: 32.0,
+    child: Text(
+      state.value.toStringAsFixed(0),
+      style: TextStyle(
+        fontSize: 16.0,
+      ),
+    ),
   );
 };

@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
 
-abstract class Utils {
-  static Type typeOf<T>() => T;
+typedef FastTestWidgetBuilder = MaterialApp Function(Widget testWidget);
+typedef GenericTypeExtracter = Type Function<T>();
 
-  static wrapMaterial(Widget testWidget) {
-    return MaterialApp(
-      home: Scaffold(
-        body: ChangeNotifierProvider.value(
-          value: FastFormStore(),
-          child: FastFormTheme(
-            child: testWidget,
-          ),
+final GenericTypeExtracter typeOf = <T>() => T;
+
+final FastTestWidgetBuilder getFastTestWidget = (Widget testWidget) {
+  return MaterialApp(
+    home: Scaffold(
+      body: ChangeNotifierProvider.value(
+        value: FastFormStore(),
+        child: FastFormTheme(
+          child: testWidget,
         ),
       ),
-    );
-  }
-}
+    ),
+  );
+};

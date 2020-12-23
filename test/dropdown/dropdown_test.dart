@@ -5,23 +5,78 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('FastDropdown', (WidgetTester tester) async {
+  testWidgets('renders FastDropdown', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
+      FastDropdown(
+        id: 'dropdown',
+        items: [],
+      ),
+    ));
+
+    final fastDropdownFinder = find.byType(FastDropdown);
+    final dropdownFormFieldFinder =
+        find.byType(typeOf<DropdownButtonFormField<String>>());
+    final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
+
+    expect(fastDropdownFinder, findsOneWidget);
+    expect(dropdownFormFieldFinder, findsOneWidget);
+    expect(dropdownButtonFinder, findsOneWidget);
+  });
+
+  testWidgets('updates FastDropdown', (WidgetTester tester) async {
     final itemsLength = 3;
     final items = List.generate(itemsLength, (int index) => 'item $index');
+    final testIndex = 2;
 
-    await tester.pumpWidget(
-      Utils.wrapMaterial(
-        FastDropdown(
-          id: 'dropdown',
-          items: items,
-        ),
+    await tester.pumpWidget(getFastTestWidget(
+      FastDropdown(
+        id: 'dropdown',
+        items: items,
       ),
-    );
+    ));
 
-    final formFieldFinder = find.byType(DropdownFormField);
-    final itemsFinder = find.byType(Utils.typeOf<DropdownMenuItem<String>>());
+    final fastDropdownFinder = find.byType(FastDropdown);
+    final state = tester.state(fastDropdownFinder) as FastDropdownState;
 
-    expect(formFieldFinder, findsOneWidget);
+    final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
+    final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());
+
     expect(itemsFinder, findsNWidgets(itemsLength));
+
+    await tester.tap(dropdownButtonFinder);
+    await tester.pumpAndSettle();
+
+    expect(itemsFinder, findsNWidgets(itemsLength * 2));
+
+    await tester.tap(itemsFinder.at(itemsLength + testIndex));
+    await tester.pumpAndSettle();
+
+    expect(state.value, items[testIndex]);
+  });
+
+  testWidgets('validates FastDropdown', (WidgetTester tester) async {
+    final errorItem = 'Error item';
+    final errorText = 'Do not touch this';
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastDropdown(
+        id: 'dropdown',
+        items: ['item', errorItem],
+        validator: (value) => value == errorItem ? errorText : null,
+      ),
+    ));
+
+    final dropdownButtonFormFieldFinder =
+        find.byType(typeOf<DropdownButtonFormField<String>>());
+    final state =
+        tester.state(dropdownButtonFormFieldFinder) as FormFieldState<String>;
+
+    final errorTextFinder = find.text(errorText);
+    expect(errorTextFinder, findsNothing);
+
+    state.didChange(errorItem);
+    await tester.pumpAndSettle();
+
+    expect(errorTextFinder, findsOneWidget);
   });
 }

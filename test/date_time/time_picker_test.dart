@@ -5,19 +5,46 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('FastTimePicker', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      Utils.wrapMaterial(
-        FastTimePicker(
-          id: 'time_picker',
-        ),
+  testWidgets('renders FastTimePicker', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
+      FastTimePicker(
+        id: 'time_picker',
       ),
-    );
+    ));
 
-    final formFieldFinder = find.byType(TimePickerFormField);
+    final fastTimePickerFinder = find.byType(FastTimePicker);
+    final gestureDetectorFinder = find.byType(GestureDetector);
     final iconButtonFinder = find.byType(IconButton);
 
-    expect(formFieldFinder, findsOneWidget);
+    expect(fastTimePickerFinder, findsOneWidget);
+    expect(gestureDetectorFinder.first, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
+
+    await tester.tap(iconButtonFinder);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('updates FastTimePicker', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
+      FastTimePicker(
+        id: 'time_picker',
+      ),
+    ));
+
+    final fastTimePickerFinder = find.byType(FastTimePicker);
+    final widget = tester.widget(fastTimePickerFinder) as FastTimePicker;
+    final state = tester.state(fastTimePickerFinder) as FastTimePickerState;
+
+    expect(state.value, widget.initialValue);
+
+    final testValue = TimeOfDay.now();
+
+    state.didChange(testValue);
+    await tester.pumpAndSettle();
+
+    final timePickerText = timePickerTextBuilder(state.context, testValue);
+    final timePickerTextFinder = find.text(timePickerText.data);
+
+    expect(timePickerTextFinder, findsOneWidget);
   });
 }
