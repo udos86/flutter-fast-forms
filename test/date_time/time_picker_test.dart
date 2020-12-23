@@ -6,13 +6,11 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('FastTimePicker', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      Utils.wrapMaterial(
-        FastTimePicker(
-          id: 'time_picker',
-        ),
+    await tester.pumpWidget(getFastTestWidget(
+      FastTimePicker(
+        id: 'time_picker',
       ),
-    );
+    ));
 
     final iconButtonFinder = find.byType(IconButton);
 

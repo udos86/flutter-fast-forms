@@ -6,13 +6,11 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('FastTextField', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      Utils.wrapMaterial(
-        FastTextField(
-          id: 'text_field',
-        ),
+    await tester.pumpWidget(getFastTestWidget(
+      FastTextField(
+        id: 'text_field',
       ),
-    );
+    ));
 
     final formFieldFinder = find.byType(TextFormField);
 

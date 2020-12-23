@@ -6,15 +6,13 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('FastRangeSlider', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      Utils.wrapMaterial(
-        FastRangeSlider(
-          id: 'range_slider',
-          max: 10,
-          min: 0,
-        ),
+    await tester.pumpWidget(getFastTestWidget(
+      FastRangeSlider(
+        id: 'range_slider',
+        max: 10,
+        min: 0,
       ),
-    );
+    ));
 
     final formFieldFinder = find.byType(RangeSlider);
 

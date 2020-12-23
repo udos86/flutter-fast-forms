@@ -6,15 +6,13 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('FastDateRangerPicker', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      Utils.wrapMaterial(
-        FastDateRangePicker(
-          id: 'date_range_picker',
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2000),
-        ),
+    await tester.pumpWidget(getFastTestWidget(
+      FastDateRangePicker(
+        id: 'date_range_picker',
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2000),
       ),
-    );
+    ));
 
     final fastDateRangePickerFinder = find.byType(FastDateRangePicker);
     final iconButtonFinder = find.byType(IconButton);

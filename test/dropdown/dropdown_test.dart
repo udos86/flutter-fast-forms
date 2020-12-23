@@ -5,40 +5,41 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  Widget getTestWidget([List<String> items = const []]) {
-    return Utils.wrapMaterial(
+  testWidgets('renders FastDropdown widget', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
       FastDropdown(
         id: 'dropdown',
-        items: items,
+        items: [],
       ),
-    );
-  }
-
-  testWidgets('renders FastDropdown', (WidgetTester tester) async {
-    await tester.pumpWidget(getTestWidget());
+    ));
 
     final fastDropdownFinder = find.byType(FastDropdown);
     final dropdownFormFieldFinder =
-        find.byType(Utils.typeOf<DropdownButtonFormField<String>>());
-    final dropdownButtonFinder =
-        find.byType(Utils.typeOf<DropdownButton<String>>());
+        find.byType(typeOf<DropdownButtonFormField<String>>());
+    final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
 
     expect(fastDropdownFinder, findsOneWidget);
     expect(dropdownFormFieldFinder, findsOneWidget);
     expect(dropdownButtonFinder, findsOneWidget);
   });
 
-  testWidgets('selects FastDropdown item', (WidgetTester tester) async {
+  testWidgets('updates FastDropdown value', (WidgetTester tester) async {
     final itemsLength = 3;
     final items = List.generate(itemsLength, (int index) => 'item $index');
     final testIndex = 2;
 
-    await tester.pumpWidget(getTestWidget(items));
+    await tester.pumpWidget(getFastTestWidget(
+      FastDropdown(
+        id: 'dropdown',
+        items: items,
+      ),
+    ));
 
     final fastDropdownFinder = find.byType(FastDropdown);
-    final dropdownButtonFinder =
-        find.byType(Utils.typeOf<DropdownButton<String>>());
-    final itemsFinder = find.byType(Utils.typeOf<DropdownMenuItem<String>>());
+    final state = tester.state(fastDropdownFinder) as FastDropdownState;
+
+    final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
+    final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());
 
     expect(itemsFinder, findsNWidgets(itemsLength));
 
@@ -50,7 +51,6 @@ void main() {
     await tester.tap(itemsFinder.at(itemsLength + testIndex));
     await tester.pumpAndSettle();
 
-    final state = tester.state(fastDropdownFinder) as FastDropdownState;
     expect(state.value, items[testIndex]);
   });
 }

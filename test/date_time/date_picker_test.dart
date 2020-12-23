@@ -5,18 +5,14 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  Widget getTestWidget() {
-    return Utils.wrapMaterial(
+  testWidgets('renders FastDatePicker widget', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime(2999),
+        lastDate: DateTime.now()..add(Duration(days: 365)),
       ),
-    );
-  }
-
-  testWidgets('renders FastDatePicker', (WidgetTester tester) async {
-    await tester.pumpWidget(getTestWidget());
+    ));
 
     final fastDatePickerFinder = find.byType(FastDatePicker);
     final gestureDetectorFinder = find.byType(GestureDetector);
@@ -27,9 +23,15 @@ void main() {
     expect(iconButtonFinder, findsOneWidget);
   });
 
-  testWidgets('shows CalendarDatePicker on Icon Button tap',
+  testWidgets('shows CalendarDatePicker on IconButton tap',
       (WidgetTester tester) async {
-    await tester.pumpWidget(getTestWidget());
+    await tester.pumpWidget(getFastTestWidget(
+      FastDatePicker(
+        id: 'date_picker',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now()..add(Duration(days: 365)),
+      ),
+    ));
 
     final iconButtonFinder = find.byType(IconButton);
 
@@ -42,7 +44,13 @@ void main() {
 
   testWidgets('shows CalendarDatePicker on GestureDetector tap',
       (WidgetTester tester) async {
-    await tester.pumpWidget(getTestWidget());
+    await tester.pumpWidget(getFastTestWidget(
+      FastDatePicker(
+        id: 'date_picker',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now()..add(Duration(days: 365)),
+      ),
+    ));
 
     final gestureDetectorFinder = find.byType(GestureDetector);
 
