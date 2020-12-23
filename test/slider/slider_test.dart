@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastSlider widget', (WidgetTester tester) async {
+  testWidgets('renders FastSlider', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
       FastSlider(
         id: 'slider',
@@ -30,5 +30,52 @@ void main() {
 
     expect(prefixFinder, findsOneWidget);
     expect(suffixFinder, findsOneWidget);
+  });
+
+  testWidgets('updates FastSlider', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
+      FastSlider(
+        id: 'slider',
+        min: 0,
+        max: 10,
+        suffixBuilder: sliderSuffixBuilder,
+      ),
+    ));
+
+    final fastSliderFinder = find.byType(FastSlider);
+    final widget = tester.widget(fastSliderFinder) as FastSlider;
+    final state = tester.state(fastSliderFinder) as FastSliderState;
+
+    state.didChange(widget.max);
+    await tester.pumpAndSettle();
+
+    final suffixFinder = find.text(widget.max.toStringAsFixed(0));
+
+    expect(suffixFinder, findsOneWidget);
+  });
+
+  testWidgets('validates FastSlider', (WidgetTester tester) async {
+    final errorText = 'Value is too high';
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastSlider(
+        id: 'slider',
+        min: 0,
+        max: 10,
+        validator: (value) => value > 0 ? errorText : null,
+      ),
+    ));
+
+    final fastSliderFinder = find.byType(FastSlider);
+    final widget = tester.widget(fastSliderFinder) as FastSlider;
+    final state = tester.state(fastSliderFinder) as FastSliderState;
+
+    final errorTextFinder = find.text(errorText);
+    expect(errorTextFinder, findsNothing);
+
+    state.didChange(widget.max);
+    await tester.pumpAndSettle();
+
+    expect(errorTextFinder, findsOneWidget);
   });
 }

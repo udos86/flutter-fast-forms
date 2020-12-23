@@ -78,4 +78,34 @@ void main() {
 
     expect(state.value, options.last.value);
   });
+
+  testWidgets('validates FastRadioGroup', (WidgetTester tester) async {
+    final errorOption =
+        RadioOption(title: 'Error Option', value: 'error-option');
+    final errorText = 'Do not touch this';
+    final options = [
+      RadioOption(title: 'Option 1', value: 'option-1'),
+      errorOption,
+    ];
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastRadioGroup<String>(
+        id: 'radio_group',
+        options: options,
+        validator: (value) => value == errorOption.value ? errorText : null,
+      ),
+    ));
+
+    final fastRadioGroupFinder = find.byType(typeOf<FastRadioGroup<String>>());
+    final state =
+        tester.state(fastRadioGroupFinder) as FastRadioGroupState<String>;
+
+    final errorTextFinder = find.text(errorText);
+    expect(errorTextFinder, findsNothing);
+
+    state.didChange(errorOption.value);
+    await tester.pumpAndSettle();
+
+    expect(errorTextFinder, findsOneWidget);
+  });
 }

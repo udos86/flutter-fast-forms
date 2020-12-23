@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastDatePicker widget', (WidgetTester tester) async {
+  testWidgets('renders FastDatePicker', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
       FastDatePicker(
         id: 'date_picker',
@@ -60,5 +60,32 @@ void main() {
     final inputDatePickerFormFieldFinder =
         find.byType(InputDatePickerFormField);
     expect(inputDatePickerFormFieldFinder, findsOneWidget);
+  });
+
+  testWidgets('updates FastDatePicker', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
+      FastDatePicker(
+        id: 'date_picker',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now()..add(Duration(days: 365)),
+      ),
+    ));
+
+    final fastDatePickerFinder = find.byType(FastDatePicker);
+    final widget = tester.widget(fastDatePickerFinder) as FastDatePicker;
+    final state = tester.state(fastDatePickerFinder) as FastDatePickerState;
+
+    expect(state.value, widget.initialValue);
+
+    final testValue = DateTime.now();
+
+    state.didChange(testValue);
+    await tester.pumpAndSettle();
+
+    final datePickerText =
+        datePickerTextBuilder(state.context, testValue, widget.dateFormat);
+    final datePickerTextFinder = find.text(datePickerText.data);
+
+    expect(datePickerTextFinder, findsOneWidget);
   });
 }

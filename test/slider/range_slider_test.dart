@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('FastRangeSlider', (WidgetTester tester) async {
+  testWidgets('renders FastRangeSlider', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
       FastRangeSlider(
         id: 'range_slider',
@@ -31,5 +31,55 @@ void main() {
 
     expect(prefixFinder, findsOneWidget);
     expect(suffixFinder, findsOneWidget);
+  });
+
+  testWidgets('updates FastRangeSlider', (WidgetTester tester) async {
+    await tester.pumpWidget(getFastTestWidget(
+      FastRangeSlider(
+        id: 'range_slider',
+        max: 10,
+        min: 0,
+        prefixBuilder: rangeSliderPrefixBuilder,
+        suffixBuilder: rangeSliderSuffixBuilder,
+      ),
+    ));
+
+    final fastRangeSliderFinder = find.byType(FastRangeSlider);
+    final state = tester.state(fastRangeSliderFinder) as FastRangeSliderState;
+
+    final testValues = RangeValues(5, 7);
+    state.didChange(testValues);
+    await tester.pumpAndSettle();
+
+    final prefixFinder = find.text(testValues.start.toStringAsFixed(0));
+    final suffixFinder = find.text(testValues.end.toStringAsFixed(0));
+
+    expect(prefixFinder, findsOneWidget);
+    expect(suffixFinder, findsOneWidget);
+  });
+
+  testWidgets('validates FastRangeSlider', (WidgetTester tester) async {
+    final errorText = 'Range is too narrow';
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastRangeSlider(
+        id: 'range_slider',
+        max: 10,
+        min: 0,
+        validator: (values) =>
+            values.end - values.start <= 1 ? errorText : null,
+      ),
+    ));
+
+    final fastRangeSliderFinder = find.byType(FastRangeSlider);
+    final state = tester.state(fastRangeSliderFinder) as FastRangeSliderState;
+
+    final errorTextFinder = find.text(errorText);
+    expect(errorTextFinder, findsNothing);
+
+    state.didChange(RangeValues(8, 9));
+    await tester.pumpAndSettle();
+
+    expect(errorTextFinder, findsOneWidget);
   });
 }
