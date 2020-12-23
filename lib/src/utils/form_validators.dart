@@ -20,7 +20,8 @@ abstract class Validators {
     return (value) => value != true ? errorTextFn(value) : null;
   }
 
-  static FormFieldValidator pattern(Pattern pattern, ErrorTextWithArgumentFn errorTextFn) {
+  static FormFieldValidator pattern(
+      Pattern pattern, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       if (value != null && value.isNotEmpty) {
         if (!RegExp(pattern).hasMatch(value))
@@ -30,7 +31,8 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator maxLength(num maxLength, ErrorTextWithArgumentFn errorTextFn) {
+  static FormFieldValidator maxLength(
+      num maxLength, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       if (value != null && value.length > maxLength) {
         return errorTextFn(value, maxLength);
@@ -39,7 +41,8 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator minLength(int minLength, ErrorTextWithArgumentFn errorTextFn) {
+  static FormFieldValidator minLength(
+      int minLength, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       if ((value?.length ?? 0) < minLength) {
         return errorTextFn(value, minLength);
