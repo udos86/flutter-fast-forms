@@ -89,8 +89,11 @@ class FormPage extends StatelessWidget {
             buildCounter: inputCounterWidgetBuilder,
             inputFormatters: [InputFormatters.maskText('##/####')],
             validator: Validators.compose([
-              Validators.required(),
-              Validators.minLength(7),
+              Validators.required((_value) => 'Field is required'),
+              Validators.minLength(
+                  7,
+                  (_value, minLength) =>
+                      'Field must contain at least $minLength characters'),
             ]),
           ),
           FastDropdown(

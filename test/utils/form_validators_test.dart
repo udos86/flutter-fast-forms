@@ -3,44 +3,46 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('required', () {
-    final errorText = 'error text';
-    final validator = Validators.required(errorText);
+    final errorTextFn = (_value) => 'error text';
+    final validator = Validators.required(errorTextFn);
 
     expect(validator(42), null);
     expect(validator('test'), null);
 
-    expect(validator(null), errorText);
-    expect(validator(''), errorText);
-    expect(validator({}), errorText);
-    expect(validator([]), errorText);
+    expect(validator(null), errorTextFn(null));
+    expect(validator(''), errorTextFn(''));
+    expect(validator({}), errorTextFn({}));
+    expect(validator([]), errorTextFn([]));
   });
 
   test('requiredTrue', () {
-    final errorText = 'error text';
-    final validator = Validators.requiredTrue(errorText);
+    final errorTextFn = (_value) => 'error text';
+    final validator = Validators.requiredTrue(errorTextFn);
 
     expect(validator(true), null);
 
-    expect(validator(false), errorText);
-    expect(validator(null), errorText);
-    expect(validator(42), errorText);
-    expect(validator(''), errorText);
+    expect(validator(false), errorTextFn(false));
+    expect(validator(null), errorTextFn(null));
+    expect(validator(42), errorTextFn(42));
+    expect(validator(''), errorTextFn(''));
   });
 
   test('pattern', () {
-    final errorText = 'error text';
-    final validator = Validators.pattern("^test\$", errorText);
+    final pattern = "^test\$";
+    final errorTextFn = (_value, _pattern) => 'error text';
+    final validator = Validators.pattern(pattern, errorTextFn);
 
     expect(validator('test'), null);
     expect(validator(''), null);
     expect(validator(null), null);
 
-    expect(validator('abc'), errorText);
+    expect(validator('abc'), errorTextFn('abc', pattern));
   });
 
   test('maxLength', () {
-    final errorText = 'error text';
-    final validator = Validators.maxLength(4, errorText);
+    final maxLength = 4;
+    final errorTextFn = (_value, _maxLength) => 'error text';
+    final validator = Validators.maxLength(maxLength, errorTextFn);
 
     expect(validator('test'), null);
     expect(validator('abc'), null);
@@ -49,73 +51,77 @@ void main() {
     expect(validator([1, 2, 3, 4]), null);
     expect(validator(null), null);
 
-    expect(validator('testtest'), errorText);
-    expect(validator([1, 2, 3, 4, 5]), errorText);
+    expect(validator('testtest'), errorTextFn('testtest', maxLength));
+    expect(validator([1, 2, 3, 4, 5]), errorTextFn([1, 2, 3, 4, 5], maxLength));
   });
 
   test('minLength', () {
-    final errorText = 'error text';
-    final validator = Validators.minLength(4, errorText);
+    final minLength = 4;
+    final errorTextFn = (_value, _minLength) => 'error text';
+    final validator = Validators.minLength(minLength, errorTextFn);
 
     expect(validator('test'), null);
 
-    expect(validator('abc'), errorText);
-    expect(validator(''), errorText);
-    expect(validator([]), errorText);
-    expect(validator([1, 2, 3]), errorText);
-    expect(validator(null), errorText);
+    expect(validator('abc'), errorTextFn('abc', minLength));
+    expect(validator(''), errorTextFn('', minLength));
+    expect(validator([]), errorTextFn([], minLength));
+    expect(validator([1, 2, 3]), errorTextFn([1, 2, 3], minLength));
+    expect(validator(null), errorTextFn(null, minLength));
   });
 
   test('max', () {
     final max = 4;
-    final errorText = 'error text';
-    final validator = Validators.max(max, errorText);
+    final errorTextFn = (_value, _max) => 'error text';
+    final validator = Validators.max(max, errorTextFn);
 
     expect(validator(max - 1), null);
     expect(validator((max - 1).toString()), null);
 
-    expect(validator(max + 1), errorText);
-    expect(validator((max + 1).toString()), errorText);
+    expect(validator(max + 1), errorTextFn(max + 1, max));
+    expect(validator((max + 1).toString()),
+        errorTextFn((max + 1).toString(), max));
     expect(() => validator(null), throwsNoSuchMethodError);
   });
 
   test('min', () {
     final min = 4;
-    final errorText = 'error text';
-    final validator = Validators.min(min, errorText);
+    final errorTextFn = (_value, _min) => 'error text';
+    final validator = Validators.min(min, errorTextFn);
 
     expect(validator(min + 1), null);
     expect(validator((min + 1).toString()), null);
 
-    expect(validator(min - 1), errorText);
-    expect(validator((min - 1).toString()), errorText);
+    expect(validator(min - 1), errorTextFn(min - 1, min));
+    expect(validator((min - 1).toString()),
+        errorTextFn((min - 1).toString(), min));
     expect(() => validator(null), throwsNoSuchMethodError);
   });
 
   test('email', () {
-    final errorText = 'error text';
-    final validator = Validators.email(errorText);
+    final errorTextFn = (_value) => 'error text';
+    final validator = Validators.email(errorTextFn);
 
     expect(validator('test@test.com'), null);
 
-    expect(validator('test'), errorText);
-    expect(validator('test@'), errorText);
-    expect(validator('test@test'), errorText);
+    expect(validator('test'), errorTextFn('test'));
+    expect(validator('test@'), errorTextFn('test@'));
+    expect(validator('test@test'), errorTextFn('test@test'));
   });
 
-  test('email', () {
-    final errorTextRequired = 'error text required';
-    final errorTextMinLength = 'error text minLength';
+  test('compose', () {
+    final errorTextRequiredFn = (_value) => 'error text required';
+    final minLength = 4;
+    final errorTextMinLengthFn = (_value, _minLength) => 'error text minLength';
     final validator = Validators.compose([
-      Validators.required(errorTextRequired),
-      Validators.minLength(4, errorTextMinLength),
+      Validators.required(errorTextRequiredFn),
+      Validators.minLength(minLength, errorTextMinLengthFn),
     ]);
 
     expect(validator('test'), null);
     expect(validator([1, 2, 3, 4]), null);
 
-    expect(validator('abc'), errorTextMinLength);
-    expect(validator([1, 2, 3]), errorTextMinLength);
-    expect(validator(null), errorTextRequired);
+    expect(validator('abc'), errorTextMinLengthFn('abc', minLength));
+    expect(validator([1, 2, 3]), errorTextMinLengthFn([1, 2, 3], minLength));
+    expect(validator(null), errorTextRequiredFn(null));
   });
 }

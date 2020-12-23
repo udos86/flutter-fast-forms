@@ -1,76 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
+typedef ErrorTextFn = String Function(dynamic value);
+typedef ErrorTextWithArgumentFn = String Function(
+    dynamic value, dynamic argument);
+
 abstract class Validators {
-  static FormFieldValidator required([errorText = 'Field is required']) {
+  static FormFieldValidator required(ErrorTextFn errorTextFn) {
     return (value) {
       final hasLength = value is Iterable || value is String || value is Map;
       if (value == null || (hasLength && value.length == 0)) {
-        return errorText;
+        return errorTextFn(value);
       }
       return null;
     };
   }
 
-  static FormFieldValidator requiredTrue(
-      [String errorText = 'Field is required']) {
-    return (value) => value != true ? errorText : null;
+  static FormFieldValidator requiredTrue(ErrorTextFn errorTextFn) {
+    return (value) => value != true ? errorTextFn(value) : null;
   }
 
-  static FormFieldValidator pattern(Pattern pattern,
-      [String errorText = 'Field does not match pattern']) {
+  static FormFieldValidator pattern(Pattern pattern, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       if (value != null && value.isNotEmpty) {
-        if (!RegExp(pattern).hasMatch(value)) return errorText;
+        if (!RegExp(pattern).hasMatch(value))
+          return errorTextFn(value, pattern);
       }
       return null;
     };
   }
 
-  static FormFieldValidator maxLength(num maxLength, [String errorText]) {
+  static FormFieldValidator maxLength(num maxLength, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       if (value != null && value.length > maxLength) {
-        return errorText ??
-            'Value must have a length less than or equal to $maxLength';
+        return errorTextFn(value, maxLength);
       }
       return null;
     };
   }
 
-  static FormFieldValidator minLength(int minLength, [String errorText]) {
+  static FormFieldValidator minLength(int minLength, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       if ((value?.length ?? 0) < minLength) {
-        return errorText ?? 'Field must be at least $minLength';
+        return errorTextFn(value, minLength);
       }
       return null;
     };
   }
 
-  static FormFieldValidator max(num max, [String errorText]) {
+  static FormFieldValidator max(num max, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       final _value = value is num ? value : num.tryParse(value);
       if (_value != null && _value > max) {
-        return errorText ?? 'Value must be less than or equal to $max';
+        return errorTextFn(value, max);
       }
       return null;
     };
   }
 
-  static FormFieldValidator min(num min, [String errorText]) {
+  static FormFieldValidator min(num min, ErrorTextWithArgumentFn errorTextFn) {
     return (value) {
       final _value = value is num ? value : num.tryParse(value);
-      if (value != null && _value < min) {
-        return errorText ?? 'Field must be at least $min';
+      if (_value != null && _value < min) {
+        return errorTextFn(value, min);
       }
       return null;
     };
   }
 
-  static FormFieldValidator email(
-      [String errorText = 'Field must contain a valid email address']) {
+  static FormFieldValidator email(ErrorTextFn errorTextFn) {
     return (value) {
       if (value != null && value.isNotEmpty) {
-        if (!isEmail(value.trim())) return errorText;
+        if (!isEmail(value.trim())) return errorTextFn(value);
       }
       return null;
     };
