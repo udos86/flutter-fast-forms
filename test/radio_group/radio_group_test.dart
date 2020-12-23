@@ -45,10 +45,10 @@ void main() {
       ),
     ));
 
-    final expandedsFinder = find.byType(Expanded);
+    final expandedFinder = find.byType(Expanded);
     final optionsFinder = find.byType(RadioListTile);
 
-    expect(expandedsFinder, findsNWidgets(options.length));
+    expect(expandedFinder, findsNWidgets(options.length));
     expect(optionsFinder, findsNWidgets(options.length));
   });
 
@@ -80,19 +80,19 @@ void main() {
   });
 
   testWidgets('validates FastRadioGroup', (WidgetTester tester) async {
-    final errorOption =
-        RadioOption(title: 'Error Option', value: 'error-option');
+    final invalidOption =
+        RadioOption(title: 'Invalid Option', value: 'invalid-option');
     final errorText = 'Do not touch this';
     final options = [
       RadioOption(title: 'Option 1', value: 'option-1'),
-      errorOption,
+      invalidOption,
     ];
 
     await tester.pumpWidget(getFastTestWidget(
       FastRadioGroup<String>(
         id: 'radio_group',
         options: options,
-        validator: (value) => value == errorOption.value ? errorText : null,
+        validator: (value) => value == invalidOption.value ? errorText : null,
       ),
     ));
 
@@ -103,7 +103,7 @@ void main() {
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    state.didChange(errorOption.value);
+    state.didChange(invalidOption.value);
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);

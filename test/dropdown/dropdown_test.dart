@@ -55,14 +55,14 @@ void main() {
   });
 
   testWidgets('validates FastDropdown', (WidgetTester tester) async {
-    final errorItem = 'Error item';
+    final invalidItem = 'invalid item';
     final errorText = 'Do not touch this';
 
     await tester.pumpWidget(getFastTestWidget(
       FastDropdown(
         id: 'dropdown',
-        items: ['item', errorItem],
-        validator: (value) => value == errorItem ? errorText : null,
+        items: ['item', invalidItem],
+        validator: (value) => value == invalidItem ? errorText : null,
       ),
     ));
 
@@ -74,7 +74,7 @@ void main() {
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    state.didChange(errorItem);
+    state.didChange(invalidItem);
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);

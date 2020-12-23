@@ -72,18 +72,17 @@ void main() {
     ));
 
     final fastDatePickerFinder = find.byType(FastDatePicker);
-    final widget = tester.widget(fastDatePickerFinder) as FastDatePicker;
     final state = tester.state(fastDatePickerFinder) as FastDatePickerState;
 
-    expect(state.value, widget.initialValue);
+    expect(state.value, state.widget.initialValue);
 
     final testValue = DateTime.now();
 
     state.didChange(testValue);
     await tester.pumpAndSettle();
 
-    final datePickerText =
-        datePickerTextBuilder(state.context, testValue, widget.dateFormat);
+    final datePickerText = datePickerTextBuilder(
+        state.context, testValue, state.widget.dateFormat);
     final datePickerTextFinder = find.text(datePickerText.data);
 
     expect(datePickerTextFinder, findsOneWidget);

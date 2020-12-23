@@ -36,12 +36,10 @@ void main() {
     ));
 
     final fastDateRangePickerFinder = find.byType(FastDateRangePicker);
-    final widget =
-        tester.widget(fastDateRangePickerFinder) as FastDateRangePicker;
     final state =
         tester.state(fastDateRangePickerFinder) as FastDateRangePickerState;
 
-    expect(state.value, widget.initialValue);
+    expect(state.value, state.widget.initialValue);
 
     final testValue = DateTimeRange(
       start: DateTime.now(),
@@ -51,8 +49,8 @@ void main() {
     state.didChange(testValue);
     await tester.pumpAndSettle();
 
-    final dateRangePickerText =
-        dateRangPickerTextBuilder(state.context, testValue, widget.dateFormat);
+    final dateRangePickerText = dateRangPickerTextBuilder(
+        state.context, testValue, state.widget.dateFormat);
     final dateRangePickerTextFinder = find.text(dateRangePickerText.data);
 
     expect(dateRangePickerTextFinder, findsOneWidget);

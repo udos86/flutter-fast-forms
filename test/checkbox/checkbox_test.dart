@@ -43,17 +43,16 @@ void main() {
     ));
 
     final fastCheckboxFinder = find.byType(FastCheckbox);
-    final widget = tester.widget(fastCheckboxFinder) as FastCheckbox;
     final state = tester.state(fastCheckboxFinder) as FastCheckboxState;
 
-    expect(state.value, widget.initialValue);
+    expect(state.value, state.widget.initialValue);
 
     final checkboxListTileFinder = find.byType(CheckboxListTile);
 
     await tester.tap(checkboxListTileFinder);
     await tester.pumpAndSettle();
 
-    expect(state.value, !widget.initialValue);
+    expect(state.value, !state.widget.initialValue);
   });
 
   testWidgets('validates FastCheckbox', (WidgetTester tester) async {

@@ -43,13 +43,12 @@ void main() {
     ));
 
     final fastSliderFinder = find.byType(FastSlider);
-    final widget = tester.widget(fastSliderFinder) as FastSlider;
     final state = tester.state(fastSliderFinder) as FastSliderState;
 
-    state.didChange(widget.max);
+    state.didChange(state.widget.max);
     await tester.pumpAndSettle();
 
-    final suffixFinder = find.text(widget.max.toStringAsFixed(0));
+    final suffixFinder = find.text(state.widget.max.toStringAsFixed(0));
 
     expect(suffixFinder, findsOneWidget);
   });
@@ -67,13 +66,12 @@ void main() {
     ));
 
     final fastSliderFinder = find.byType(FastSlider);
-    final widget = tester.widget(fastSliderFinder) as FastSlider;
     final state = tester.state(fastSliderFinder) as FastSliderState;
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    state.didChange(widget.max);
+    state.didChange(state.widget.max);
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);

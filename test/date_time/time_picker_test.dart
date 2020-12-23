@@ -32,10 +32,9 @@ void main() {
     ));
 
     final fastTimePickerFinder = find.byType(FastTimePicker);
-    final widget = tester.widget(fastTimePickerFinder) as FastTimePicker;
     final state = tester.state(fastTimePickerFinder) as FastTimePickerState;
 
-    expect(state.value, widget.initialValue);
+    expect(state.value, state.widget.initialValue);
 
     final testValue = TimeOfDay.now();
 
