@@ -11,11 +11,25 @@ void main() {
         id: 'range_slider',
         max: 10,
         min: 0,
+        labelsBuilder: rangeSliderLabelsBuilder,
+        prefixBuilder: rangeSliderPrefixBuilder,
+        suffixBuilder: rangeSliderSuffixBuilder,
       ),
     ));
 
-    final formFieldFinder = find.byType(RangeSlider);
+    final fastRangeSliderFinder = find.byType(FastRangeSlider);
+    final rangeSliderFinder = find.byType(RangeSlider);
 
-    expect(formFieldFinder, findsOneWidget);
+    expect(fastRangeSliderFinder, findsOneWidget);
+    expect(rangeSliderFinder, findsOneWidget);
+
+    final widget = tester.widget(fastRangeSliderFinder) as FastRangeSlider;
+
+    final prefixFinder =
+        find.text(widget.initialValue.start.toStringAsFixed(0));
+    final suffixFinder = find.text(widget.initialValue.end.toStringAsFixed(0));
+
+    expect(prefixFinder, findsOneWidget);
+    expect(suffixFinder, findsOneWidget);
   });
 }
