@@ -9,10 +9,9 @@ export 'src/slider/slider.dart';
 export 'src/text_field/text_field.dart';
 
 export 'src/utils/form_formatters.dart';
-export 'src/utils/form_model.dart';
 export 'src/utils/form_validators.dart';
 
-export 'src/form_container.dart';
+export 'src/form.dart';
 export 'src/form_field.dart';
 export 'src/form_field_group.dart';
 export 'src/form_store.dart';

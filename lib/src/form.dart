@@ -6,6 +6,7 @@ import 'form_theme.dart';
 
 typedef FormChanged = void Function(Map<String, dynamic> value);
 
+@immutable
 class FastForm extends StatefulWidget {
   FastForm({
     @required this.children,
