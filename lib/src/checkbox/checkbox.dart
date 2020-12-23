@@ -21,7 +21,7 @@ class FastCheckbox extends FastFormField<bool> {
     ValueChanged<bool> onChanged,
     VoidCallback onReset,
     FormFieldSetter<bool> onSaved,
-    this.title,
+    @required this.title,
     CheckboxTitleBuilder titleBuilder,
     bool tristate = false,
     FormFieldValidator<bool> validator,

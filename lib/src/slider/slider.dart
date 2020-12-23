@@ -101,11 +101,6 @@ final SliderLabelBuilder sliderLabelBuilder =
   return state.value.toStringAsFixed(0);
 };
 
-final SliderFixBuilder sliderPrefixBuilder =
-    (BuildContext context, FastSliderState state) {
-  return null;
-};
-
 final SliderFixBuilder sliderSuffixBuilder =
     (BuildContext context, FastSliderState state) {
   return Container(
