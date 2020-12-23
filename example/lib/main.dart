@@ -104,7 +104,6 @@ class FormPage extends StatelessWidget {
               'Iceland',
             ],
             initialValue: 'Finland',
-            validator: Validators.required(),
           ),
           FastRadioGroup(
             id: 'radio_group_1',
