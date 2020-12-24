@@ -9,8 +9,6 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastTextField(
         id: 'text_field',
-        maxLength: 7,
-        buildCounter: inputCounterWidgetBuilder,
       ),
     ));
 
@@ -32,8 +30,8 @@ void main() {
       ),
     ));
 
-    final fastTextFieldFinder = find.byType(FastTextField);
-    final state = tester.state(fastTextFieldFinder) as FastTextFieldState;
+    final state =
+        tester.state(find.byType(FastTextField)) as FastTextFieldState;
 
     final inputCounterText = inputCounterWidgetBuilder(
       state.context,
@@ -54,15 +52,14 @@ void main() {
       ),
     ));
 
-    final fastTextFieldFinder = find.byType(FastTextField);
-    final state = tester.state(fastTextFieldFinder) as FastTextFieldState;
+    final state =
+        tester.state(find.byType(FastTextField)) as FastTextFieldState;
 
     expect(state.value, state.widget.initialValue);
 
-    final textFormFieldFinder = find.byType(TextFormField);
     final text = 'This is a test';
 
-    await tester.enterText(textFormFieldFinder, text);
+    await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
 
     expect(state.value, text);
@@ -81,13 +78,12 @@ void main() {
 
     final state =
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
-    final textFormFieldFinder = find.byType(TextFormField);
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
     state.touched = true;
-    await tester.enterText(textFormFieldFinder, invalidText);
+    await tester.enterText(find.byType(TextFormField), invalidText);
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);

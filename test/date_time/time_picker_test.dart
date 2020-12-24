@@ -19,9 +19,6 @@ void main() {
     expect(fastTimePickerFinder, findsOneWidget);
     expect(gestureDetectorFinder.first, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
-
-    await tester.tap(iconButtonFinder);
-    await tester.pumpAndSettle();
   });
 
   testWidgets('updates FastTimePicker', (WidgetTester tester) async {
@@ -31,17 +28,18 @@ void main() {
       ),
     ));
 
-    final fastTimePickerFinder = find.byType(FastTimePicker);
-    final state = tester.state(fastTimePickerFinder) as FastTimePickerState;
+    final state =
+        tester.state(find.byType(FastTimePicker)) as FastTimePickerState;
 
     expect(state.value, state.widget.initialValue);
 
-    final testValue = TimeOfDay.now();
-
-    state.didChange(testValue);
+    await tester.tap(find.byType(IconButton));
     await tester.pumpAndSettle();
 
-    final timePickerText = timePickerTextBuilder(state.context, testValue);
+    await tester.tap(find.byType(TextButton).last);
+    await tester.pumpAndSettle();
+
+    final timePickerText = timePickerTextBuilder(state.context, state.value);
     final timePickerTextFinder = find.text(timePickerText.data);
 
     expect(timePickerTextFinder, findsOneWidget);

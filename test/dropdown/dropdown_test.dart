@@ -35,8 +35,7 @@ void main() {
       ),
     ));
 
-    final fastDropdownFinder = find.byType(FastDropdown);
-    final state = tester.state(fastDropdownFinder) as FastDropdownState;
+    final state = tester.state(find.byType(FastDropdown)) as FastDropdownState;
 
     final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
     final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());

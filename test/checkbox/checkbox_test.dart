@@ -42,14 +42,11 @@ void main() {
       ),
     ));
 
-    final fastCheckboxFinder = find.byType(FastCheckbox);
-    final state = tester.state(fastCheckboxFinder) as FastCheckboxState;
+    final state = tester.state(find.byType(FastCheckbox)) as FastCheckboxState;
 
     expect(state.value, state.widget.initialValue);
 
-    final checkboxListTileFinder = find.byType(CheckboxListTile);
-
-    await tester.tap(checkboxListTileFinder);
+    await tester.tap(find.byType(CheckboxListTile));
     await tester.pumpAndSettle();
 
     expect(state.value, !state.widget.initialValue);
@@ -67,8 +64,7 @@ void main() {
       ),
     ));
 
-    final fastCheckboxFinder = find.byType(FastCheckbox);
-    final state = tester.state(fastCheckboxFinder) as FastCheckboxState;
+    final state = tester.state(find.byType(FastCheckbox)) as FastCheckboxState;
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);

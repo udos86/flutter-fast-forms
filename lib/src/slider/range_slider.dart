@@ -121,7 +121,7 @@ final RangeSliderFixBuilder rangeSliderSuffixBuilder =
       child: Text(
         state.value.end.toStringAsFixed(0),
         style: TextStyle(
-          fontSize: 16.0,
+          fontSize: 16.0
         ),
       ),
     ),

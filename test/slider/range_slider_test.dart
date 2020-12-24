@@ -44,8 +44,8 @@ void main() {
       ),
     ));
 
-    final fastRangeSliderFinder = find.byType(FastRangeSlider);
-    final state = tester.state(fastRangeSliderFinder) as FastRangeSliderState;
+    final state =
+        tester.state(find.byType(FastRangeSlider)) as FastRangeSliderState;
 
     final testValues = RangeValues(5, 7);
     state.didChange(testValues);
@@ -71,8 +71,8 @@ void main() {
       ),
     ));
 
-    final fastRangeSliderFinder = find.byType(FastRangeSlider);
-    final state = tester.state(fastRangeSliderFinder) as FastRangeSliderState;
+    final state =
+        tester.state(find.byType(FastRangeSlider)) as FastRangeSliderState;
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);

@@ -33,9 +33,7 @@ void main() {
       ),
     ));
 
-    final iconButtonFinder = find.byType(IconButton);
-
-    await tester.tap(iconButtonFinder);
+    await tester.tap(find.byType(IconButton));
     await tester.pumpAndSettle();
 
     final calendarDatePickerFinder = find.byType(CalendarDatePicker);
@@ -52,9 +50,7 @@ void main() {
       ),
     ));
 
-    final gestureDetectorFinder = find.byType(GestureDetector);
-
-    await tester.tap(gestureDetectorFinder.first);
+    await tester.tap(find.byType(GestureDetector).first);
     await tester.pumpAndSettle();
 
     final inputDatePickerFormFieldFinder =
@@ -71,20 +67,46 @@ void main() {
       ),
     ));
 
-    final fastDatePickerFinder = find.byType(FastDatePicker);
-    final state = tester.state(fastDatePickerFinder) as FastDatePickerState;
+    final state =
+        tester.state(find.byType(FastDatePicker)) as FastDatePickerState;
 
     expect(state.value, state.widget.initialValue);
 
-    final testValue = DateTime.now();
+    await tester.tap(find.byType(IconButton));
+    await tester.pumpAndSettle();
 
-    state.didChange(testValue);
+    await tester.tap(find.byType(TextButton).last);
     await tester.pumpAndSettle();
 
     final datePickerText = datePickerTextBuilder(
-        state.context, testValue, state.widget.dateFormat);
+        state.context, state.value, state.widget.dateFormat);
     final datePickerTextFinder = find.text(datePickerText.data);
 
     expect(datePickerTextFinder, findsOneWidget);
+  });
+
+  testWidgets('validates FastDatePicker', (WidgetTester tester) async {
+    final invalidDate = DateTime(1974);
+    final errorText = 'invalid date';
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastDatePicker(
+        id: 'date_picker',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now()..add(Duration(days: 365)),
+        validator: (value) => value.year == invalidDate.year ? errorText : null,
+      ),
+    ));
+
+    final state =
+        tester.state(find.byType(FastDatePicker)) as FastDatePickerState;
+
+    final errorTextFinder = find.text(errorText);
+    expect(errorTextFinder, findsNothing);
+
+    state.didChange(invalidDate);
+    await tester.pumpAndSettle();
+
+    expect(errorTextFinder, findsOneWidget);
   });
 }
