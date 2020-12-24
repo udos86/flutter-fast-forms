@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
 
-typedef FastTestWidgetBuilder = MaterialApp Function(Widget testWidget);
+typedef FastTestWidgetBuilder = Widget Function(Widget testWidget);
 typedef GenericTypeOf = Type Function<T>();
 
 final GenericTypeOf typeOf = <T>() => T;

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'form_store.dart';
 import 'form_theme.dart';
 
-typedef FormChanged = void Function(Map<String, dynamic> value);
+typedef FormChanged = void Function(Map<String, dynamic> values);
 
 @immutable
 class FastForm extends StatefulWidget {
