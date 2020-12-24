@@ -3,14 +3,14 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:provider/provider.dart';
 
 typedef FastTestWidgetBuilder = MaterialApp Function(Widget testWidget);
-typedef GenericTypeExtracter = Type Function<T>();
+typedef GenericTypeOf = Type Function<T>();
 
-final GenericTypeExtracter typeOf = <T>() => T;
+final GenericTypeOf typeOf = <T>() => T;
 
 final FastTestWidgetBuilder getFastTestWidget = (Widget testWidget) {
   return MaterialApp(
     home: Scaffold(
-      body: ChangeNotifierProvider.value(
+      body: ChangeNotifierProvider<FastFormStore>.value(
         value: FastFormStore(),
         child: FastFormTheme(
           child: testWidget,

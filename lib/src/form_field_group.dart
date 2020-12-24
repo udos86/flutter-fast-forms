@@ -35,30 +35,29 @@ class FastFormFieldGroup extends StatelessWidget {
   }
 
   Widget _buildVerticalFormFieldGroup(BuildContext context) {
-    final theme = FastFormTheme.of(context);
     return Column(
       children: <Widget>[
-        for (final field in children)
-          Container(
-            padding: padding ?? theme.padding,
-            child: field,
-          ),
+        for (final field in children) _buildFormField(context, field),
       ],
     );
   }
 
   Widget _buildHorizontalFormFieldGroup(BuildContext context) {
-    final theme = FastFormTheme.of(context);
     return Row(
       children: <Widget>[
         for (final field in children)
           Expanded(
-            child: Container(
-              padding: padding ?? theme.padding,
-              child: field,
-            ),
+            child: _buildFormField(context, field),
           ),
       ],
+    );
+  }
+
+  Widget _buildFormField(BuildContext context, FastFormField field) {
+    final theme = FastFormTheme.of(context);
+    return Container(
+      padding: padding ?? theme.padding,
+      child: field,
     );
   }
 }
