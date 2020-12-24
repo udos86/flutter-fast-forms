@@ -120,9 +120,7 @@ final RangeSliderFixBuilder rangeSliderSuffixBuilder =
     child: Center(
       child: Text(
         state.value.end.toStringAsFixed(0),
-        style: TextStyle(
-          fontSize: 16.0
-        ),
+        style: TextStyle(fontSize: 16.0),
       ),
     ),
   );
