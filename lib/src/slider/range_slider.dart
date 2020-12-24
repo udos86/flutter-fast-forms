@@ -82,7 +82,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
         );
 
   @override
-  FormFieldState<RangeValues> createState() => FastRangeSliderState();
+  FastRangeSliderState createState() => FastRangeSliderState();
 }
 
 class FastRangeSliderState extends FastFormFieldState<RangeValues> {
@@ -120,7 +120,9 @@ final RangeSliderFixBuilder rangeSliderSuffixBuilder =
     child: Center(
       child: Text(
         state.value.end.toStringAsFixed(0),
-        style: TextStyle(fontSize: 16.0),
+        style: TextStyle(
+          fontSize: 16.0,
+        ),
       ),
     ),
   );

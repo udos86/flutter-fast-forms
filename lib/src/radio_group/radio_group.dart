@@ -79,7 +79,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
   final RadioGroupOrientation orientation;
 
   @override
-  FormFieldState<T> createState() => FastRadioGroupState<T>();
+  FastRadioGroupState<T> createState() => FastRadioGroupState<T>();
 }
 
 class FastRadioGroupState<T> extends FastFormFieldState<T> {

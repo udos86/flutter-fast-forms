@@ -80,7 +80,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
         );
 
   @override
-  FormFieldState<TimeOfDay> createState() => FastTimePickerState();
+  FastTimePickerState createState() => FastTimePickerState();
 }
 
 class FastTimePickerState extends FastFormFieldState<TimeOfDay> {

@@ -88,7 +88,7 @@ class FastSlider extends FastFormField<double> {
   final double min;
 
   @override
-  FormFieldState<double> createState() => FastSliderState();
+  FastSliderState createState() => FastSliderState();
 }
 
 class FastSliderState extends FastFormFieldState<double> {

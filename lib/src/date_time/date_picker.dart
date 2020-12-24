@@ -113,7 +113,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final DateFormat dateFormat;
 
   @override
-  FormFieldState<DateTime> createState() => FastDatePickerState();
+  FastDatePickerState createState() => FastDatePickerState();
 }
 
 class FastDatePickerState extends FastFormFieldState<DateTime> {

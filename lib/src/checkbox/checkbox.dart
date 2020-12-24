@@ -70,7 +70,7 @@ class FastCheckbox extends FastFormField<bool> {
   final String title;
 
   @override
-  FormFieldState<bool> createState() => FastCheckboxState();
+  FastCheckboxState createState() => FastCheckboxState();
 }
 
 class FastCheckboxState extends FastFormFieldState<bool> {

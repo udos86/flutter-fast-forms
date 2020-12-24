@@ -68,7 +68,7 @@ class FastDropdown extends FastFormField<String> {
         );
 
   @override
-  FormFieldState<String> createState() => FastDropdownState();
+  FastDropdownState createState() => FastDropdownState();
 }
 
 class FastDropdownState extends FastFormFieldState<String> {

@@ -92,7 +92,7 @@ class FastTextField extends FastFormField<String> {
   final String hint;
 
   @override
-  FormFieldState<String> createState() => FastTextFieldState();
+  FastTextFieldState createState() => FastTextFieldState();
 }
 
 class FastTextFieldState extends FastFormFieldState<String> {
