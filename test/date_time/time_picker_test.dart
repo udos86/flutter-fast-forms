@@ -19,6 +19,9 @@ void main() {
     expect(fastTimePickerFinder, findsOneWidget);
     expect(gestureDetectorFinder.first, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
+
+    await tester.tap(gestureDetectorFinder.first);
+    await tester.pumpAndSettle();
   });
 
   testWidgets('updates FastTimePicker', (WidgetTester tester) async {

@@ -21,6 +21,9 @@ void main() {
     expect(fastDateRangePickerFinder, findsOneWidget);
     expect(gestureDetectorFinder.first, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
+
+    await tester.tap(gestureDetectorFinder.first);
+    await tester.pumpAndSettle();
   });
 
   testWidgets('updates FastDateRangerPicker', (WidgetTester tester) async {
@@ -37,10 +40,10 @@ void main() {
 
     expect(state.value, state.widget.initialValue);
 
-    await tester.tap(find.byType(IconButton));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byType(TextButton).last);
+    state.didChange(DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now().add(Duration(days: 1)),
+    ));
     await tester.pumpAndSettle();
 
     final dateRangePickerText = dateRangPickerTextBuilder(
