@@ -62,6 +62,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
                   child: _optionsBuilder(state.context, options, state),
                 );
               },
+          decoration: decoration,
           enabled: enabled,
           helper: helper,
           id: id,

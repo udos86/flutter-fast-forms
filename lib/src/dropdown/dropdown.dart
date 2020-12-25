@@ -55,6 +55,7 @@ class FastDropdown extends FastFormField<String> {
                   value: state.value,
                 );
               },
+          decoration: decoration,
           enabled: enabled,
           helper: helper,
           id: id,

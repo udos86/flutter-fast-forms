@@ -55,8 +55,9 @@ class FastCheckbox extends FastFormField<bool> {
                   ),
                 );
               },
-          helper: helper,
+          decoration: decoration,
           enabled: enabled,
+          helper: helper,
           id: id,
           initialValue: initialValue ?? false,
           key: key,

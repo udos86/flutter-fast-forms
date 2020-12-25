@@ -98,6 +98,7 @@ class FastDatePicker extends FastFormField<DateTime> {
                   ),
                 );
               },
+          decoration: decoration,
           enabled: enabled,
           helper: helper,
           id: id,

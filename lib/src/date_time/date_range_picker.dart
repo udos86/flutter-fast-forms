@@ -105,6 +105,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                   ),
                 );
               },
+          decoration: decoration,
           enabled: enabled,
           helper: helper,
           id: id,

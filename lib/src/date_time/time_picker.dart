@@ -67,6 +67,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
                   ),
                 );
               },
+          decoration: decoration,
           enabled: enabled,
           helper: helper,
           id: id,

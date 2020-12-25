@@ -37,7 +37,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
           builder: builder ??
               (field) {
                 final state = field as FastRangeSliderState;
-                final theme = Theme.of(field.context);
+                final theme = Theme.of(state.context);
                 final formTheme = FastFormTheme.of(state.context);
                 final _decoration = decoration ??
                     formTheme.getInputDecoration(state.context, state.widget) ??
@@ -46,29 +46,30 @@ class FastRangeSlider extends FastFormField<RangeValues> {
                     _decoration.applyDefaults(theme.inputDecorationTheme);
                 return InputDecorator(
                   decoration: effectiveDecoration.copyWith(
-                    errorText: field.errorText,
+                    errorText: state.errorText,
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       if (prefixBuilder != null)
-                        prefixBuilder(field.context, field),
+                        prefixBuilder(state.context, state),
                       Expanded(
                         child: RangeSlider(
                           divisions: divisions,
-                          labels: labelsBuilder?.call(field.context, field),
+                          labels: labelsBuilder?.call(state.context, state),
                           min: min,
                           max: max,
-                          values: field.value,
-                          onChanged: enabled ? field.didChange : null,
+                          values: state.value,
+                          onChanged: enabled ? state.didChange : null,
                         ),
                       ),
                       if (suffixBuilder != null)
-                        suffixBuilder(field.context, field),
+                        suffixBuilder(state.context, state),
                     ],
                   ),
                 );
               },
+          decoration: decoration,
           enabled: enabled,
           helper: helper,
           key: key,

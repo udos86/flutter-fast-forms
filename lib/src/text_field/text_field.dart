@@ -77,6 +77,7 @@ class FastTextField extends FastFormField<String> {
                   validator: validator,
                 );
               },
+          decoration: decoration,
           enabled: enabled,
           helper: helper,
           id: id,

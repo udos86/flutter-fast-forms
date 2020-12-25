@@ -9,6 +9,7 @@ abstract class FastFormField<T> extends FormField<T> {
     this.autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     @required FormFieldBuilder<T> builder,
+    this.decoration,
     bool enabled = true,
     this.helper,
     @required this.id,
@@ -30,6 +31,7 @@ abstract class FastFormField<T> extends FormField<T> {
         );
 
   final bool autofocus;
+  final InputDecoration decoration;
   final String helper;
   final String id;
   final String label;
