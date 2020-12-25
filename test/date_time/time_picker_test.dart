@@ -42,7 +42,7 @@ void main() {
     await tester.tap(find.byType(TextButton).last);
     await tester.pumpAndSettle();
 
-    final timePickerText = timePickerTextBuilder(state.context, state.value);
+    final timePickerText = timePickerTextBuilder(state);
     final timePickerTextFinder = find.text(timePickerText.data);
 
     expect(timePickerTextFinder, findsOneWidget);

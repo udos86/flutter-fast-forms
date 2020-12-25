@@ -4,10 +4,9 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 typedef RangeSliderLabelsBuilder = RangeLabels Function(
-    BuildContext context, FastRangeSliderState state);
+    FastRangeSliderState state);
 
-typedef RangeSliderFixBuilder = Widget Function(
-    BuildContext context, FastRangeSliderState state);
+typedef RangeSliderFixBuilder = Widget Function(FastRangeSliderState state);
 
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
@@ -51,20 +50,18 @@ class FastRangeSlider extends FastFormField<RangeValues> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      if (prefixBuilder != null)
-                        prefixBuilder(state.context, state),
+                      if (prefixBuilder != null) prefixBuilder(state),
                       Expanded(
                         child: RangeSlider(
                           divisions: divisions,
-                          labels: labelsBuilder?.call(state.context, state),
+                          labels: labelsBuilder?.call(state),
                           min: min,
                           max: max,
                           values: state.value,
                           onChanged: enabled ? state.didChange : null,
                         ),
                       ),
-                      if (suffixBuilder != null)
-                        suffixBuilder(state.context, state),
+                      if (suffixBuilder != null) suffixBuilder(state),
                     ],
                   ),
                 );
@@ -92,7 +89,7 @@ class FastRangeSliderState extends FastFormFieldState<RangeValues> {
 }
 
 final RangeSliderLabelsBuilder rangeSliderLabelsBuilder =
-    (BuildContext context, FormFieldState<RangeValues> state) {
+    (FastRangeSliderState state) {
   return RangeLabels(
     state.value.start.toStringAsFixed(0),
     state.value.end.toStringAsFixed(0),
@@ -100,7 +97,7 @@ final RangeSliderLabelsBuilder rangeSliderLabelsBuilder =
 };
 
 final RangeSliderFixBuilder rangeSliderPrefixBuilder =
-    (BuildContext context, FastRangeSliderState state) {
+    (FastRangeSliderState state) {
   return Container(
     width: 48.0,
     child: Center(
@@ -115,7 +112,7 @@ final RangeSliderFixBuilder rangeSliderPrefixBuilder =
 };
 
 final RangeSliderFixBuilder rangeSliderSuffixBuilder =
-    (BuildContext context, FastRangeSliderState state) {
+    (FastRangeSliderState state) {
   return Container(
     width: 48.0,
     child: Center(

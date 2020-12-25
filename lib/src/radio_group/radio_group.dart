@@ -15,7 +15,7 @@ class RadioOption<T> {
 }
 
 typedef RadioOptionsBuilder = Widget Function(
-    BuildContext context, List<RadioOption> options, FastRadioGroupState state);
+    List<RadioOption> options, FastRadioGroupState state);
 
 enum RadioGroupOrientation {
   horizontal,
@@ -59,7 +59,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
                   decoration: effectiveDecoration.copyWith(
                     errorText: state.errorText,
                   ),
-                  child: _optionsBuilder(state.context, options, state),
+                  child: _optionsBuilder(options, state),
                 );
               },
           decoration: decoration,
@@ -89,7 +89,7 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 }
 
 final RadioOptionsBuilder radioOptionsBuilder =
-    (BuildContext context, options, FastRadioGroupState state) {
+    (options, FastRadioGroupState state) {
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
   final enabled = state.widget.enabled;
   final _tiles = options.map((option) {

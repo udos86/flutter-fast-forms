@@ -4,8 +4,7 @@ import 'package:intl/intl.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-typedef DatePickerTextBuilder = Text Function(
-    BuildContext context, DateTime value, DateFormat format);
+typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
 
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
@@ -83,8 +82,7 @@ class FastDatePicker extends FastFormField<DateTime> {
                           onTap: enabled
                               ? () => _showDatePicker(DatePickerEntryMode.input)
                               : null,
-                          child: _textBuilder(state.context, state.value,
-                              state.widget.dateFormat),
+                          child: _textBuilder(state),
                         ),
                       ),
                       IconButton(
@@ -123,10 +121,13 @@ class FastDatePickerState extends FastFormFieldState<DateTime> {
 }
 
 final DatePickerTextBuilder datePickerTextBuilder =
-    (BuildContext context, DateTime value, DateFormat dateFormat) {
-  final theme = Theme.of(context);
+    (FastDatePickerState state) {
+  final theme = Theme.of(state.context);
+  final format = state.widget.dateFormat.format;
+  final value = state.value;
+
   return Text(
-    value != null ? dateFormat.format(value) : '',
+    value != null ? format(state.value) : '',
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
   );

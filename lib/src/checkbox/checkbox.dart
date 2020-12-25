@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-typedef CheckboxTitleBuilder = Widget Function(
-    BuildContext context, FastCheckboxState state);
+typedef CheckboxTitleBuilder = Widget Function(FastCheckboxState state);
 
 class FastCheckbox extends FastFormField<bool> {
   FastCheckbox({
@@ -48,9 +47,7 @@ class FastCheckbox extends FastFormField<bool> {
                     onChanged: enabled ? state.didChange : null,
                     selected: state.value,
                     tristate: tristate,
-                    title: title is String
-                        ? _titleBuilder(state.context, state)
-                        : null,
+                    title: title is String ? _titleBuilder(state) : null,
                     value: state.value,
                   ),
                 );
@@ -79,8 +76,7 @@ class FastCheckboxState extends FastFormFieldState<bool> {
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
-final CheckboxTitleBuilder checkboxTitleBuilder =
-    (BuildContext context, FastCheckboxState state) {
+final CheckboxTitleBuilder checkboxTitleBuilder = (FastCheckboxState state) {
   return Text(
     state.widget.title,
     style: TextStyle(

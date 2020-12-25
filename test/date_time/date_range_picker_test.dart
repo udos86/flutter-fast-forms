@@ -46,8 +46,7 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    final dateRangePickerText = dateRangPickerTextBuilder(
-        state.context, state.value, state.widget.dateFormat);
+    final dateRangePickerText = dateRangPickerTextBuilder(state);
     final dateRangePickerTextFinder = find.text(dateRangePickerText.data);
 
     expect(dateRangePickerTextFinder, findsOneWidget);

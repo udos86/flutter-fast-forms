@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-typedef TimePickerTextBuilder = Text Function(
-    BuildContext context, TimeOfDay value);
+typedef TimePickerTextBuilder = Text Function(FastTimePickerState state);
 
 class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePicker({
@@ -55,7 +54,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
                       Expanded(
                         child: GestureDetector(
                           onTap: enabled ? () => _showTimePicker() : null,
-                          child: _textBuilder(state.context, state.value),
+                          child: _textBuilder(state),
                         ),
                       ),
                       IconButton(
@@ -90,10 +89,11 @@ class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
 }
 
 final TimePickerTextBuilder timePickerTextBuilder =
-    (BuildContext context, TimeOfDay value) {
-  final theme = Theme.of(context);
+    (FastTimePickerState state) {
+  final theme = Theme.of(state.context);
+
   return Text(
-    value?.format(context) ?? '',
+    state.value?.format(state.context) ?? '',
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
   );

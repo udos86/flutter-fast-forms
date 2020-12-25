@@ -13,7 +13,7 @@ void main() {
         min: 0,
         max: 10,
         labelBuilder: sliderLabelBuilder,
-        prefixBuilder: (context, state) => Icon(Icons.volume_up),
+        prefixBuilder: (state) => Icon(Icons.volume_up),
         suffixBuilder: sliderSuffixBuilder,
       ),
     ));
@@ -41,7 +41,7 @@ void main() {
         max: 10,
         builder: cupertinoSliderBuilder,
         labelBuilder: sliderLabelBuilder,
-        prefixBuilder: (context, state) => Icon(Icons.volume_up),
+        prefixBuilder: (state) => Icon(Icons.volume_up),
         suffixBuilder: sliderSuffixBuilder,
       ),
     ));

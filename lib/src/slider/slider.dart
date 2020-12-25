@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-typedef SliderLabelBuilder = String Function(
-    BuildContext context, FastSliderState state);
+typedef SliderLabelBuilder = String Function(FastSliderState state);
 
-typedef SliderFixBuilder = Widget Function(
-    BuildContext context, FastSliderState state);
+typedef SliderFixBuilder = Widget Function(FastSliderState state);
 
 class FastSlider extends FastFormField<double> {
   FastSlider({
@@ -76,13 +74,11 @@ class FastSliderState extends FastFormFieldState<double> {
   FastSlider get widget => super.widget as FastSlider;
 }
 
-final SliderLabelBuilder sliderLabelBuilder =
-    (BuildContext context, FastSliderState state) {
+final SliderLabelBuilder sliderLabelBuilder = (FastSliderState state) {
   return state.value.toStringAsFixed(0);
 };
 
-final SliderFixBuilder sliderSuffixBuilder =
-    (BuildContext context, FastSliderState state) {
+final SliderFixBuilder sliderSuffixBuilder = (FastSliderState state) {
   return Container(
     width: 32.0,
     child: Text(
@@ -113,20 +109,20 @@ final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        if (widget.prefixBuilder != null) widget.prefixBuilder(context, state),
+        if (widget.prefixBuilder != null) widget.prefixBuilder(state),
         Expanded(
           child: Slider.adaptive(
             autofocus: widget.autofocus,
             divisions: widget.divisions,
             focusNode: state.focusNode,
-            label: widget.labelBuilder?.call(context, state),
+            label: widget.labelBuilder?.call(state),
             max: widget.max,
             min: widget.min,
             value: state.value,
             onChanged: widget.enabled ? state.didChange : null,
           ),
         ),
-        if (widget.suffixBuilder != null) widget.suffixBuilder(context, state),
+        if (widget.suffixBuilder != null) widget.suffixBuilder(state),
       ],
     ),
   );
@@ -134,13 +130,12 @@ final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
 
 final FormFieldBuilder<double> cupertinoSliderBuilder =
     (FormFieldState<double> state) {
-  final context = state.context;
   final widget = state.widget as FastSlider;
 
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
-      if (widget.prefixBuilder != null) widget.prefixBuilder(context, state),
+      if (widget.prefixBuilder != null) widget.prefixBuilder(state),
       Expanded(
         child: CupertinoSlider(
           divisions: widget.divisions,
@@ -150,7 +145,7 @@ final FormFieldBuilder<double> cupertinoSliderBuilder =
           onChanged: widget.enabled ? state.didChange : null,
         ),
       ),
-      if (widget.suffixBuilder != null) widget.suffixBuilder(context, state),
+      if (widget.suffixBuilder != null) widget.suffixBuilder(state),
     ],
   );
 };

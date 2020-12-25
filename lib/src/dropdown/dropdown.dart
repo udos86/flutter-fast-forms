@@ -4,7 +4,7 @@ import '../form_field.dart';
 import '../form_theme.dart';
 
 typedef DropdownMenuItemsBuilder = List<DropdownMenuItem> Function(
-    BuildContext context, List<dynamic> items);
+    List<dynamic> items, FastDropdownState state);
 
 class FastDropdown extends FastFormField<String> {
   FastDropdown({
@@ -47,7 +47,7 @@ class FastDropdown extends FastFormField<String> {
                   decoration: _decoration,
                   dropdownColor: dropdownColor,
                   focusNode: focusNode,
-                  items: _itemsBuilder(state.context, items),
+                  items: _itemsBuilder(items, state),
                   onChanged: enabled ? _onChanged : null,
                   onSaved: onSaved,
                   selectedItemBuilder: selectedItemBuilder,
@@ -78,7 +78,7 @@ class FastDropdownState extends FastFormFieldState<String> {
 }
 
 final DropdownMenuItemsBuilder dropdownMenuItemsBuilder =
-    (BuildContext context, List<dynamic> items) {
+    (List<dynamic> items, FastDropdownState state) {
   return items.map((item) {
     return DropdownMenuItem<String>(
       value: item.toString(),

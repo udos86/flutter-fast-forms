@@ -78,8 +78,7 @@ void main() {
     await tester.tap(find.byType(TextButton).last);
     await tester.pumpAndSettle();
 
-    final datePickerText = datePickerTextBuilder(
-        state.context, state.value, state.widget.dateFormat);
+    final datePickerText = datePickerTextBuilder(state);
     final datePickerTextFinder = find.text(datePickerText.data);
 
     expect(datePickerTextFinder, findsOneWidget);

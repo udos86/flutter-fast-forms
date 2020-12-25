@@ -132,7 +132,7 @@ class FormPage extends StatelessWidget {
             helper: 'A Slider with prefix and suffix widgets',
             min: 0,
             max: 10,
-            prefixBuilder: (context, state) {
+            prefixBuilder: (state) {
               final enabled = state.widget.enabled;
               return IconButton(
                 icon: Icon(Icons.volume_off),
@@ -140,7 +140,7 @@ class FormPage extends StatelessWidget {
                     enabled ? () => state.didChange(state.widget.min) : null,
               );
             },
-            suffixBuilder: (context, state) {
+            suffixBuilder: (state) {
               final enabled = state.widget.enabled;
               return IconButton(
                 icon: Icon(Icons.volume_up),
