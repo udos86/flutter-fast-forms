@@ -8,8 +8,10 @@ typedef SliderLabelBuilder = String Function(FastSliderState state);
 
 typedef SliderFixBuilder = Widget Function(FastSliderState state);
 
+@immutable
 class FastSlider extends FastFormField<double> {
   FastSlider({
+    bool adaptive = false,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<double> builder,
@@ -32,19 +34,10 @@ class FastSlider extends FastFormField<double> {
     this.suffixBuilder,
     FormFieldValidator<double> validator,
   }) : super(
+          adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final platform = Theme.of(field.context).platform;
-                switch (platform) {
-                  case TargetPlatform.iOS:
-                    return cupertinoSliderBuilder(field);
-                  case TargetPlatform.android:
-                  default:
-                    return sliderBuilder(field);
-                }
-              },
+          builder: builder ?? sliderBuilder,
           decoration: decoration,
           enabled: enabled,
           helper: helper,
@@ -90,7 +83,8 @@ final SliderFixBuilder sliderSuffixBuilder = (FastSliderState state) {
   );
 };
 
-final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
+final FormFieldBuilder<double> materialSliderBuilder =
+    (FormFieldState<double> field) {
   final state = field as FastSliderState;
   final context = state.context;
   final widget = state.widget;
@@ -129,8 +123,9 @@ final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
 };
 
 final FormFieldBuilder<double> cupertinoSliderBuilder =
-    (FormFieldState<double> state) {
-  final widget = state.widget as FastSlider;
+    (FormFieldState<double> field) {
+  final state = field as FastSliderState;
+  final widget = state.widget;
 
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,4 +143,18 @@ final FormFieldBuilder<double> cupertinoSliderBuilder =
       if (widget.suffixBuilder != null) widget.suffixBuilder(state),
     ],
   );
+};
+
+final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
+  final state = field as FastSliderState;
+  if (state.widget.adaptive) {
+    switch (Theme.of(state.context).platform) {
+      case TargetPlatform.iOS:
+        return cupertinoSliderBuilder(field);
+      case TargetPlatform.android:
+      default:
+        return materialSliderBuilder(field);
+    }
+  }
+  return materialSliderBuilder(field);
 };

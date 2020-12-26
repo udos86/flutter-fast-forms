@@ -6,6 +6,7 @@ import 'form_store.dart';
 @immutable
 abstract class FastFormField<T> extends FormField<T> {
   const FastFormField({
+    this.adaptive = false,
     this.autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     @required FormFieldBuilder<T> builder,
@@ -30,6 +31,7 @@ abstract class FastFormField<T> extends FormField<T> {
           validator: validator,
         );
 
+  final bool adaptive;
   final bool autofocus;
   final InputDecoration decoration;
   final String helper;

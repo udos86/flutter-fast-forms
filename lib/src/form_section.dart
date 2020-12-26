@@ -3,22 +3,19 @@ import 'package:flutter/material.dart';
 import 'form_field.dart';
 import 'form_theme.dart';
 
-enum FormFieldGroupOrientation {
-  horizontal,
-  vertical,
-}
+enum FormSectionOrientation { horizontal, vertical }
 
 @immutable
-class FastFormFieldGroup extends StatelessWidget {
-  FastFormFieldGroup({
+class FastFormSection extends StatelessWidget {
+  FastFormSection({
     @required this.children,
-    this.orientation = FormFieldGroupOrientation.vertical,
+    this.orientation = FormSectionOrientation.vertical,
     this.padding,
     this.title,
   });
 
-  final List<FastFormField> children;
-  final FormFieldGroupOrientation orientation;
+  final List<Widget> children;
+  final FormSectionOrientation orientation;
   final EdgeInsets padding;
   final Widget title;
 
@@ -27,14 +24,14 @@ class FastFormFieldGroup extends StatelessWidget {
     return Column(
       children: <Widget>[
         if (title != null) title,
-        orientation == FormFieldGroupOrientation.vertical
-            ? _buildVerticalFormFieldGroup(context)
-            : _buildHorizontalFormFieldGroup(context),
+        orientation == FormSectionOrientation.vertical
+            ? _buildVerticalFormSection(context)
+            : _buildHorizontalFormSection(context),
       ],
     );
   }
 
-  Widget _buildVerticalFormFieldGroup(BuildContext context) {
+  Widget _buildVerticalFormSection(BuildContext context) {
     return Column(
       children: <Widget>[
         for (final field in children) _buildFormField(context, field),
@@ -42,7 +39,7 @@ class FastFormFieldGroup extends StatelessWidget {
     );
   }
 
-  Widget _buildHorizontalFormFieldGroup(BuildContext context) {
+  Widget _buildHorizontalFormSection(BuildContext context) {
     return Row(
       children: <Widget>[
         for (final field in children)

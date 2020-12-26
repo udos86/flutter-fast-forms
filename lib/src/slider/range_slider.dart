@@ -8,6 +8,7 @@ typedef RangeSliderLabelsBuilder = RangeLabels Function(
 
 typedef RangeSliderFixBuilder = Widget Function(FastRangeSliderState state);
 
+@immutable
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
     bool autofocus = false,

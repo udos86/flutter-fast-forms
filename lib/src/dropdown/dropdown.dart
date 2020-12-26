@@ -6,6 +6,7 @@ import '../form_theme.dart';
 typedef DropdownMenuItemsBuilder = List<DropdownMenuItem> Function(
     List<dynamic> items, FastDropdownState state);
 
+@immutable
 class FastDropdown extends FastFormField<String> {
   FastDropdown({
     bool autofocus = false,

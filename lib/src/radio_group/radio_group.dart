@@ -17,11 +17,9 @@ class RadioOption<T> {
 typedef RadioOptionsBuilder = Widget Function(
     List<RadioOption> options, FastRadioGroupState state);
 
-enum RadioGroupOrientation {
-  horizontal,
-  vertical,
-}
+enum RadioGroupOrientation { horizontal, vertical }
 
+@immutable
 class FastRadioGroup<T> extends FastFormField<T> {
   FastRadioGroup({
     bool autofocus = false,

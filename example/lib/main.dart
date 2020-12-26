@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
@@ -35,19 +36,22 @@ class FormPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FastForm(
-              formKey: formKey,
-              children: _buildFormModel(context),
-              onChanged: (value) => print('Form changed: ${value.toString()}'),
-            ),
-            RaisedButton(
-              child: Text('Reset'),
-              onPressed: () => formKey.currentState.reset(),
-            )
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              FastForm(
+                formKey: formKey,
+                children: _buildFormModel(context),
+                onChanged: (value) =>
+                    print('Form changed: ${value.toString()}'),
+              ),
+              RaisedButton(
+                child: Text('Reset'),
+                onPressed: () => formKey.currentState.reset(),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -55,37 +59,47 @@ class FormPage extends StatelessWidget {
 
   List<Widget> _buildFormModel(BuildContext context) {
     return [
-      FastFormFieldGroup(
-        title: Text(
-          'Form Group 1',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
+      FastFormSection(
+        title: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            'Form Example Section',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         children: [
           FastDatePicker(
-            id: 'date_picker_1',
+            id: 'date_picker',
             label: 'Date Picker',
-            firstDate: DateTime(1997),
-            lastDate: DateTime(2021),
+            firstDate: DateTime(1970),
+            lastDate: DateTime(2040),
           ),
           FastDateRangePicker(
-            id: 'date_range_picker_1',
+            id: 'date_range_picker',
             label: 'Date Range Picker',
-            firstDate: DateTime(1997),
-            lastDate: DateTime(2021),
+            firstDate: DateTime(1970),
+            lastDate: DateTime(2040),
           ),
           FastTimePicker(
-            id: 'time_picker_1',
+            id: 'time_picker',
             label: 'Time Picker',
           ),
+          FastSwitch(
+            id: 'switch',
+            label: 'Switch',
+            title: 'This is a switch',
+            contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+          ),
           FastTextField(
-            id: 'text_field_1',
+            id: 'text_field',
             label: 'Text Field',
             hint: 'MM/JJJJ',
             keyboardType: TextInputType.datetime,
             maxLength: 7,
+            prefix: Icon(Icons.calendar_today),
             buildCounter: inputCounterWidgetBuilder,
             inputFormatters: [InputFormatters.maskText('##/####')],
             validator: Validators.compose([
@@ -97,7 +111,7 @@ class FormPage extends StatelessWidget {
             ]),
           ),
           FastDropdown(
-            id: 'dropdown_1',
+            id: 'dropdown',
             label: 'Dropdown Field',
             items: [
               'Norway',
@@ -109,7 +123,7 @@ class FormPage extends StatelessWidget {
             initialValue: 'Finland',
           ),
           FastRadioGroup(
-            id: 'radio_group_1',
+            id: 'radio_group',
             label: 'Radio Group Model',
             options: [
               RadioOption(
@@ -127,7 +141,7 @@ class FormPage extends StatelessWidget {
             ],
           ),
           FastSlider(
-            id: 'slider_1',
+            id: 'slider',
             label: 'Slider',
             helper: 'A Slider with prefix and suffix widgets',
             min: 0,
@@ -151,7 +165,7 @@ class FormPage extends StatelessWidget {
             validator: (value) => value > 8 ? 'Volume is too high' : null,
           ),
           FastRangeSlider(
-            id: 'range_slider_1',
+            id: 'range_slider',
             label: 'Range Slider',
             min: 0,
             max: 10,
@@ -176,9 +190,17 @@ class FormPage extends StatelessWidget {
               ),
             ],
           ),
+          FastCalendar(
+            id: 'calendar',
+            label: 'Calendar',
+            firstDate: DateTime(1970),
+            lastDate: DateTime(2040),
+          ),
           FastCheckbox(
-            id: 'checkbox_1',
+            id: 'checkbox',
+            label: 'Checkbox',
             title: 'I accept',
+            contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
           ),
         ],
       ),

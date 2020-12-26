@@ -7,6 +7,12 @@ import '../form_theme.dart';
 typedef DateRangePickerTextBuilder = Text Function(
     FastDateRangePickerState state);
 
+typedef ShowDateRangePicker = void Function(DatePickerEntryMode entryMode);
+
+typedef DateRangePickerIconButtonBuilder = IconButton Function(
+    FastDateRangePickerState state, ShowDateRangePicker show);
+
+@immutable
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
     bool autofocus = false,
@@ -28,9 +34,10 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     DateFormat format,
     String helper,
     String helpText,
+    this.icon,
+    DateRangePickerIconButtonBuilder iconButtonBuilder,
     @required String id,
-    Icon icon,
-    DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+    this.initialEntryMode = DatePickerEntryMode.calendar,
     DateTimeRange initialValue,
     Key key,
     String label,
@@ -55,6 +62,8 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);
                 final _textBuilder = textBuilder ?? dateRangPickerTextBuilder;
+                final _iconButtonBuilder =
+                    iconButtonBuilder ?? dateRangePickerIconButtonBuilder;
                 final _showDateRangePicker = (DatePickerEntryMode entryMode) {
                   showDateRangePicker(
                     cancelText: cancelText,
@@ -77,30 +86,23 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                     if (value != null) state.didChange(value);
                   });
                 };
-                return InputDecorator(
-                  decoration: effectiveDecoration.copyWith(
-                    errorText: state.errorText,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: enabled
-                              ? () => _showDateRangePicker(
-                                  DatePickerEntryMode.input)
-                              : null,
+                return InkWell(
+                  onTap: enabled
+                      ? () => _showDateRangePicker(DatePickerEntryMode.input)
+                      : null,
+                  child: InputDecorator(
+                    decoration: effectiveDecoration.copyWith(
+                      errorText: state.errorText,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Expanded(
                           child: _textBuilder(state),
                         ),
-                      ),
-                      IconButton(
-                        alignment: Alignment.centerRight,
-                        icon: icon ?? Icon(Icons.today),
-                        onPressed: enabled
-                            ? () => _showDateRangePicker(initialEntryMode)
-                            : null,
-                      ),
-                    ],
+                        _iconButtonBuilder(state, _showDateRangePicker),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -117,6 +119,8 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
           validator: validator,
         );
 
+  final Icon icon;
+  final DatePickerEntryMode initialEntryMode;
   final DateFormat dateFormat;
 
   @override
@@ -138,5 +142,16 @@ final DateRangePickerTextBuilder dateRangPickerTextBuilder =
     value != null ? '${format(value.start)} - ${format(value.end)}' : '',
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
+  );
+};
+
+final DateRangePickerIconButtonBuilder dateRangePickerIconButtonBuilder =
+    (FastDateRangePickerState state, ShowDateRangePicker show) {
+  final widget = state.widget;
+
+  return IconButton(
+    alignment: Alignment.center,
+    icon: Icon(Icons.today),
+    onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
   );
 };

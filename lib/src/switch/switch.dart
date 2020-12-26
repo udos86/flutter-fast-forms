@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_theme.dart';
 
-typedef CheckboxTitleBuilder = Widget Function(FastCheckboxState state);
+typedef SwitchTitleBuilder = Widget Function(FastSwitchState state);
 
 @immutable
-class FastCheckbox extends FastFormField<bool> {
-  FastCheckbox({
+class FastSwitch extends FastFormField<bool> {
+  FastSwitch({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<bool> builder,
@@ -24,15 +24,14 @@ class FastCheckbox extends FastFormField<bool> {
     VoidCallback onReset,
     FormFieldSetter<bool> onSaved,
     @required this.title,
-    CheckboxTitleBuilder titleBuilder,
-    bool tristate = false,
+    SwitchTitleBuilder titleBuilder,
     FormFieldValidator<bool> validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ??
               (field) {
-                final state = field as FastCheckboxState;
+                final state = field as FastSwitchState;
                 final theme = Theme.of(state.context);
                 final formTheme = FastFormTheme.of(state.context);
                 final _decoration = decoration ??
@@ -40,17 +39,16 @@ class FastCheckbox extends FastFormField<bool> {
                     const InputDecoration();
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);
-                final _titleBuilder = titleBuilder ?? checkboxTitleBuilder;
+                final _titleBuilder = titleBuilder ?? switchTitleBuilder;
                 return InputDecorator(
                   decoration: effectiveDecoration.copyWith(
                     errorText: state.errorText,
                   ),
-                  child: CheckboxListTile(
+                  child: SwitchListTile.adaptive(
                     autofocus: autofocus,
                     contentPadding: contentPadding,
                     onChanged: enabled ? state.didChange : null,
                     selected: state.value,
-                    tristate: tristate,
                     title: title is String ? _titleBuilder(state) : null,
                     value: state.value,
                   ),
@@ -72,15 +70,15 @@ class FastCheckbox extends FastFormField<bool> {
   final String title;
 
   @override
-  FastCheckboxState createState() => FastCheckboxState();
+  FastSwitchState createState() => FastSwitchState();
 }
 
-class FastCheckboxState extends FastFormFieldState<bool> {
+class FastSwitchState extends FastFormFieldState<bool> {
   @override
-  FastCheckbox get widget => super.widget as FastCheckbox;
+  FastSwitch get widget => super.widget as FastSwitch;
 }
 
-final CheckboxTitleBuilder checkboxTitleBuilder = (FastCheckboxState state) {
+final SwitchTitleBuilder switchTitleBuilder = (FastSwitchState state) {
   return Text(
     state.widget.title,
     style: TextStyle(

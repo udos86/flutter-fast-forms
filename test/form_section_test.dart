@@ -5,11 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_utils.dart';
 
 void main() {
-  testWidgets('renders FastFormFieldGroup', (WidgetTester tester) async {
-    final titleWidget = Text('Test Form Group');
+  testWidgets('renders FastFormSection', (WidgetTester tester) async {
+    final titleWidget = Text('Test Form Section');
 
     await tester.pumpWidget(getFastTestWidget(
-      FastFormFieldGroup(
+      FastFormSection(
         title: titleWidget,
         children: [
           FastTextField(
@@ -19,7 +19,7 @@ void main() {
       ),
     ));
 
-    final fastFormFieldGroupFinder = find.byType(FastFormFieldGroup);
+    final fastFormFieldGroupFinder = find.byType(FastFormSection);
     final titleFinder = find.byWidget(titleWidget);
     final fastTextFieldFinder = find.byType(FastTextField);
 
@@ -28,11 +28,11 @@ void main() {
     expect(fastTextFieldFinder, findsOneWidget);
   });
 
-  testWidgets('renders FastFormFieldGroup horizontally',
+  testWidgets('renders FastFormSection horizontally',
       (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
-      FastFormFieldGroup(
-        orientation: FormFieldGroupOrientation.horizontal,
+      FastFormSection(
+        orientation: FormSectionOrientation.horizontal,
         children: [
           FastTextField(
             id: 'text_field',
@@ -41,7 +41,7 @@ void main() {
       ),
     ));
 
-    final fastFormFieldGroupFinder = find.byType(FastFormFieldGroup);
+    final fastFormFieldGroupFinder = find.byType(FastFormSection);
     final rowFinder = find.byType(Row);
     final expandedFinder = find.byType(Expanded);
     final fastTextFieldFinder = find.byType(FastTextField);
