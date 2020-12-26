@@ -15,14 +15,14 @@ void main() {
     ));
 
     final fastDateRangePickerFinder = find.byType(FastDateRangePicker);
-    final gestureDetectorFinder = find.byType(GestureDetector);
+    final inkWellFinder = find.byType(InkWell);
     final iconButtonFinder = find.byType(IconButton);
 
     expect(fastDateRangePickerFinder, findsOneWidget);
-    expect(gestureDetectorFinder.first, findsOneWidget);
+    expect(inkWellFinder.first, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
 
-    await tester.tap(gestureDetectorFinder.first);
+    await tester.tap(inkWellFinder.first);
     await tester.pumpAndSettle();
   });
 

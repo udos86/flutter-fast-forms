@@ -13,14 +13,14 @@ void main() {
     ));
 
     final fastTimePickerFinder = find.byType(FastTimePicker);
-    final gestureDetectorFinder = find.byType(GestureDetector);
+    final inkWellFinder = find.byType(InkWell);
     final iconButtonFinder = find.byType(IconButton);
 
     expect(fastTimePickerFinder, findsOneWidget);
-    expect(gestureDetectorFinder.first, findsOneWidget);
+    expect(inkWellFinder.first, findsOneWidget);
     expect(iconButtonFinder, findsOneWidget);
 
-    await tester.tap(gestureDetectorFinder.first);
+    await tester.tap(inkWellFinder.first);
     await tester.pumpAndSettle();
   });
 
