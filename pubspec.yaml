@@ -1,6 +1,6 @@
 name: flutter_fast_forms
 description: A package for building Flutter forms fast
-version: 0.1.0
+version: 0.5.0
 repository: https://github.com/udos86/flutter-fast-forms
 
 environment:
