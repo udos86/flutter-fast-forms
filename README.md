@@ -4,12 +4,11 @@
 [![Pub Version](https://img.shields.io/pub/v/flutter_fast_forms)](https://pub.dev/packages/flutter_fast_forms)
 [![codecov](https://codecov.io/gh/udos86/flutter-fast-forms/branch/master/graph/badge.svg)](https://codecov.io/gh/udos86/flutter-fast-forms)
 
-Flutter Fast Forms is a library for building Flutter forms fast and the only package you'll ever need again to do so.
-It adds major enhancements to the Flutter core framework while being fully in line with it:
+Flutter Fast Forms is a package for building Flutter forms fast - and probably the only dependency 
+you'll ever need again to do so. 
 
-* `FormField<T>` extensions for all Material input widgets
-* `InputDecoration` for all Material form fields
-* Adaptable / Platform-aware form field widgets
-* Validation states beyond `AutovalidateMode`
+The library is fully in line with the Flutter core framework and adds major enhancements to it:
 
-
+* `FormField<T>` extensions for all Material input & selection components
+* Platform-specific `FormFieldBuilder<T>` and adaptive form field widgets
+* Validation states for displaying error texts beyond `AutovalidateMode`

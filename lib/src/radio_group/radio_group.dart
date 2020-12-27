@@ -89,16 +89,15 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 final RadioOptionsBuilder radioOptionsBuilder =
     (options, FastRadioGroupState state) {
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
-  final enabled = state.widget.enabled;
-  final _tiles = options.map((option) {
+  final tiles = options.map((option) {
     final tile = RadioListTile(
+      groupValue: state.value,
+      onChanged: state.widget.enabled ? state.didChange : null,
       title: Text(option.title),
       value: option.value,
-      groupValue: state.value,
-      onChanged: enabled ? state.didChange : null,
     );
     return vertical ? tile : Expanded(child: tile);
   }).toList();
 
-  return vertical ? Column(children: _tiles) : Row(children: _tiles);
+  return vertical ? Column(children: tiles) : Row(children: tiles);
 };

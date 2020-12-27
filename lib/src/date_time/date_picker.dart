@@ -7,7 +7,8 @@ import '../form_theme.dart';
 
 typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
 
-typedef ShowDatePicker = void Function(DatePickerEntryMode entryMode);
+typedef ShowDatePicker = Future<DateTime> Function(
+    DatePickerEntryMode entryMode);
 
 typedef DatePickerIconButtonBuilder = IconButton Function(
     FastDatePickerState state, ShowDatePicker show);
@@ -20,6 +21,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     FormFieldBuilder<DateTime> builder,
     this.cancelText,
     this.confirmText,
+    this.currentDate,
     InputDecoration decoration,
     bool enabled = true,
     this.errorFormatText,
@@ -39,10 +41,14 @@ class FastDatePicker extends FastFormField<DateTime> {
     Key key,
     String label,
     @required this.lastDate,
+    this.locale,
     ValueChanged<DateTime> onChanged,
     VoidCallback onReset,
     FormFieldSetter<DateTime> onSaved,
+    this.routeSettings,
+    this.selectableDayPredicate,
     this.textBuilder,
+    this.useRootNavigator = true,
     FormFieldValidator<DateTime> validator,
   })  : this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
         super(
@@ -64,6 +70,7 @@ class FastDatePicker extends FastFormField<DateTime> {
 
   final String cancelText;
   final String confirmText;
+  final DateTime currentDate;
   final String errorFormatText;
   final String errorInvalidText;
   final DateFormat dateFormat;
@@ -76,7 +83,11 @@ class FastDatePicker extends FastFormField<DateTime> {
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
+  final Locale locale;
+  final RouteSettings routeSettings;
+  final SelectableDayPredicate selectableDayPredicate;
   final DatePickerTextBuilder textBuilder;
+  final bool useRootNavigator;
 
   @override
   FastDatePickerState createState() => FastDatePickerState();
@@ -114,22 +125,23 @@ final DatePickerIconButtonBuilder datePickerIconButtonBuilder =
 final FormFieldBuilder<DateTime> materialDatePickerBuilder =
     (FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
+  final context = state.context;
   final widget = state.widget;
-  final theme = Theme.of(state.context);
-  final formTheme = FastFormTheme.of(state.context);
-  final _decoration = widget.decoration ??
-      formTheme.getInputDecoration(state.context, state.widget) ??
-      const InputDecoration();
+
+  final decoration = widget.decoration ??
+      FastFormTheme.of(context).getInputDecoration(context, widget);
   final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
-  final _textBuilder = widget.textBuilder ?? datePickerTextBuilder;
-  final _iconButtonBuilder =
+      decoration.applyDefaults(Theme.of(context).inputDecorationTheme);
+  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
+  final iconButtonBuilder =
       widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
-  final _showDatePicker = (DatePickerEntryMode entryMode) {
-    showDatePicker(
+
+  final ShowDatePicker show = (DatePickerEntryMode entryMode) {
+    return showDatePicker(
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
-      context: state.context,
+      context: context,
+      currentDate: widget.currentDate,
       errorFormatText: widget.errorFormatText,
       errorInvalidText: widget.errorInvalidText,
       fieldHintText: widget.fieldHintText,
@@ -140,15 +152,18 @@ final FormFieldBuilder<DateTime> materialDatePickerBuilder =
       initialDate: widget.initialValue ?? DateTime.now(),
       firstDate: widget.firstDate,
       lastDate: widget.lastDate,
+      locale: widget.locale,
+      routeSettings: widget.routeSettings,
+      selectableDayPredicate: widget.selectableDayPredicate,
+      useRootNavigator: widget.useRootNavigator,
     ).then((value) {
       if (value != null) state.didChange(value);
+      return value;
     });
   };
 
   return InkWell(
-    onTap: widget.enabled
-        ? () => _showDatePicker(DatePickerEntryMode.input)
-        : null,
+    onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
       decoration: effectiveDecoration.copyWith(
         errorText: state.errorText,
@@ -157,9 +172,9 @@ final FormFieldBuilder<DateTime> materialDatePickerBuilder =
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
-            child: _textBuilder(state),
+            child: textBuilder(state),
           ),
-          _iconButtonBuilder(state, _showDatePicker),
+          iconButtonBuilder(state, show),
         ],
       ),
     ),

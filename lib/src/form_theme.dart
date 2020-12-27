@@ -8,7 +8,7 @@ import 'form_field.dart';
 typedef InputDecorationCreator = InputDecoration Function(
     BuildContext context, FastFormField field);
 
-final InputDecorationCreator defaultInputDecorationCreator =
+final InputDecorationCreator _fffInputDecorationCreator =
     (BuildContext context, FastFormField field) {
   final theme = Theme.of(context);
   final enabled = field.enabled;
@@ -43,7 +43,7 @@ final InputDecorationCreator defaultInputDecorationCreator =
   );
 };
 
-const defaultPadding =
+const _fffPadding =
     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
 
 class FastFormTheme extends InheritedWidget {
@@ -54,9 +54,12 @@ class FastFormTheme extends InheritedWidget {
     EdgeInsets padding,
   })  : assert(child != null),
         this.getInputDecoration =
-            decorationCreator ?? defaultInputDecorationCreator,
-        this.padding = padding ?? defaultPadding,
-        super(key: key, child: child);
+            decorationCreator ?? _fffInputDecorationCreator,
+        this.padding = padding ?? _fffPadding,
+        super(
+          key: key,
+          child: child,
+        );
 
   final InputDecorationCreator getInputDecoration;
   final EdgeInsets padding;

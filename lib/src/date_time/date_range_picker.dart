@@ -7,7 +7,8 @@ import '../form_theme.dart';
 typedef DateRangePickerTextBuilder = Text Function(
     FastDateRangePickerState state);
 
-typedef ShowDateRangePicker = void Function(DatePickerEntryMode entryMode);
+typedef ShowDateRangePicker = Future<DateTimeRange> Function(
+    DatePickerEntryMode entryMode);
 
 typedef DateRangePickerIconButtonBuilder = IconButton Function(
     FastDateRangePickerState state, ShowDateRangePicker show);
@@ -41,11 +42,15 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     DateTimeRange initialValue,
     Key key,
     String label,
+    Locale locale,
     @required DateTime lastDate,
     ValueChanged<DateTimeRange> onChanged,
     VoidCallback onReset,
     FormFieldSetter<DateTimeRange> onSaved,
+    RouteSettings routeSettings,
+    String saveText,
     DateRangePickerTextBuilder textBuilder,
+    bool useRootNavigator = true,
     FormFieldValidator<DateTimeRange> validator,
   })  : this.dateFormat = format ?? DateFormat.yMd(),
         super(
@@ -56,6 +61,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                 final state = field as FastDateRangePickerState;
                 final theme = Theme.of(state.context);
                 final formTheme = FastFormTheme.of(state.context);
+
                 final _decoration = decoration ??
                     formTheme.getInputDecoration(state.context, state.widget) ??
                     const InputDecoration();
@@ -64,8 +70,10 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                 final _textBuilder = textBuilder ?? dateRangPickerTextBuilder;
                 final _iconButtonBuilder =
                     iconButtonBuilder ?? dateRangePickerIconButtonBuilder;
-                final _showDateRangePicker = (DatePickerEntryMode entryMode) {
-                  showDateRangePicker(
+
+                final ShowDateRangePicker show =
+                    (DatePickerEntryMode entryMode) {
+                  return showDateRangePicker(
                     cancelText: cancelText,
                     confirmText: confirmText,
                     context: state.context,
@@ -82,14 +90,18 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                     initialDateRange: state.value,
                     firstDate: firstDate,
                     lastDate: lastDate,
+                    locale: locale,
+                    routeSettings: routeSettings,
+                    saveText: saveText,
+                    useRootNavigator: useRootNavigator,
                   ).then((value) {
                     if (value != null) state.didChange(value);
+                    return value;
                   });
                 };
+
                 return InkWell(
-                  onTap: enabled
-                      ? () => _showDateRangePicker(DatePickerEntryMode.input)
-                      : null,
+                  onTap: enabled ? () => show(DatePickerEntryMode.input) : null,
                   child: InputDecorator(
                     decoration: effectiveDecoration.copyWith(
                       errorText: state.errorText,
@@ -100,7 +112,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                         Expanded(
                           child: _textBuilder(state),
                         ),
-                        _iconButtonBuilder(state, _showDateRangePicker),
+                        _iconButtonBuilder(state, show),
                       ],
                     ),
                   ),
