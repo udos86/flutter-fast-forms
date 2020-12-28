@@ -8,7 +8,8 @@ Flutter Fast Forms is a package for building Flutter forms fast.
 
 It enhances the Flutter SDK with 
 
-* a set of framework-compliant `FormField<T>` wrappers for all [Material input / selection components](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) 
-that provide platform-specific `FormFieldBuilder<T>`
-* a lightweight meta layer of adaptive form widgets that allows for custom validation states beyond `AutovalidateMode` 
+* a set of `FormField<T>` wrappers modeled on built-in `TexFormField` / `DropdownButtonFormField` for all remaining [Material input / selection components](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) 
+that provide platform-specific `FormFieldBuilder<T>` when appropriate
+* a lightweight meta layer of adaptive form widgets that allow for custom validation states beyond `AutovalidateMode` 
 and populating field values on `Form` changes
+* a collection of common `FormFieldValidator<T>` functions and a `TextInputFormatter` to mask text fields 

@@ -1,3 +1,7 @@
+## [0.6.0] - 12/28/2020
+
+* rewrite of `FastFormState`
+
 ## [0.5.0] - 12/27/2020
 
 * pre-release
