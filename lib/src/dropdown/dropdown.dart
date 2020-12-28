@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_theme.dart';
+import '../form_scope.dart';
 
 typedef DropdownMenuItemsBuilder = List<DropdownMenuItem> Function(
     List<dynamic> items, FastDropdownState state);
@@ -34,9 +34,10 @@ class FastDropdown extends FastFormField<String> {
           builder: builder ??
               (field) {
                 final state = field as FastDropdownState;
-                final formTheme = FastFormTheme.of(state.context);
+                final decorator =
+                    FastFormScope.of(state.context).inputDecorator;
                 final _decoration = decoration ??
-                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    decorator(state.context, state.widget) ??
                     const InputDecoration();
                 final _itemsBuilder = itemsBuilder ?? dropdownMenuItemsBuilder;
                 final _onChanged = (value) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'form_field.dart';
-import 'form_theme.dart';
+import 'form_scope.dart';
 
 enum FormSectionOrientation { horizontal, vertical }
 
@@ -51,9 +51,9 @@ class FastFormSection extends StatelessWidget {
   }
 
   Widget _buildFormField(BuildContext context, FastFormField field) {
-    final theme = FastFormTheme.of(context);
+    final scope = FastFormScope.of(context);
     return Container(
-      padding: padding ?? theme.padding,
+      padding: padding ?? scope.padding,
       child: field,
     );
   }

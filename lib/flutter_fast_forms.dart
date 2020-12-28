@@ -15,6 +15,5 @@ export 'src/utils/form_validators.dart';
 
 export 'src/form.dart';
 export 'src/form_field.dart';
+export 'src/form_scope.dart';
 export 'src/form_section.dart';
-export 'src/form_store.dart';
-export 'src/form_theme.dart';

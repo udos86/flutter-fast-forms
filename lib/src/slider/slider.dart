@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_theme.dart';
+import '../form_scope.dart';
 
 typedef SliderLabelBuilder = String Function(FastSliderState state);
 
@@ -89,9 +89,9 @@ final FormFieldBuilder<double> materialSliderBuilder =
   final context = state.context;
   final widget = state.widget;
   final theme = Theme.of(context);
-  final formTheme = FastFormTheme.of(context);
+  final decorator = FastFormScope.of(context).inputDecorator;
   final _decoration = widget.decoration ??
-      formTheme.getInputDecoration(context, widget) ??
+      decorator(context, widget) ??
       const InputDecoration();
   final effectiveDecoration =
       _decoration.applyDefaults(theme.inputDecorationTheme);

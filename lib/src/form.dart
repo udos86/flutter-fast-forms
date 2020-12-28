@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:collection';
 
-import 'form_store.dart';
-import 'form_theme.dart';
+import 'package:flutter/material.dart';
+
+import 'dropdown/dropdown.dart';
+import 'form_field.dart';
+import 'form_scope.dart';
+import 'text_field/text_field.dart';
 
 typedef FormChanged = void Function(Map<String, dynamic> values);
 
@@ -10,58 +13,96 @@ typedef FormChanged = void Function(Map<String, dynamic> values);
 class FastForm extends StatefulWidget {
   FastForm({
     @required this.children,
-    this.decorationCreator,
     @required this.formKey,
+    this.inputDecorator,
     Key key,
     this.onChanged,
     this.padding,
   }) : super(key: key);
 
   final List<dynamic> children;
-  final InputDecorationCreator decorationCreator;
   final GlobalKey<FormState> formKey;
+  final FastInputDecorator inputDecorator;
   final FormChanged onChanged;
   final EdgeInsets padding;
 
   @override
-  _FastFormState createState() => _FastFormState();
+  FastFormState createState() => FastFormState();
 }
 
-class _FastFormState extends State<FastForm> {
-  FastFormStore store = FastFormStore();
+class FastFormState extends State<FastForm> {
+  final Set<FastFormFieldState<dynamic>> _fields = {};
 
-  @override
-  void initState() {
-    super.initState();
-    store.addListener(_onStoreChanged);
+  UnmodifiableMapView<String, dynamic> get values {
+    return UnmodifiableMapView(Map.fromIterable(
+      _fields,
+      key: (state) => state.widget.id,
+      value: (state) => state.value,
+    ));
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    store.removeListener(_onStoreChanged);
-    store.dispose();
+  void register(FastFormFieldState state) {
+    _fields.add(state);
+  }
+
+  void unregister(FastFormFieldState state) {
+    _fields.remove(state);
+  }
+
+  void update(FastFormFieldState _state) {
+    if (widget.onChanged != null) widget.onChanged(values);
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: store,
-      child: Form(
-        // onChanged: () =>, // Current store cannot be retrieved here due to the framework calling this before widget.onChanged
-        key: widget.formKey,
-        child: FastFormTheme(
-          decorationCreator: widget.decorationCreator,
-          padding: widget.padding,
-          child: Column(
-            children: widget.children,
-          ),
+    return Form(
+      // onChanged: () =>, // Current store cannot be retrieved here due to the framework calling this before widget.onChanged
+      key: widget.formKey,
+      child: FastFormScope(
+        formState: this,
+        inputDecorator: widget.inputDecorator ?? _inputDecorationCreator,
+        padding: widget.padding ?? _padding,
+        child: Column(
+          children: widget.children,
         ),
       ),
     );
   }
-
-  _onStoreChanged() {
-    if (widget.onChanged != null) widget.onChanged(store.values);
-  }
 }
+
+final FastInputDecorator _inputDecorationCreator =
+    (BuildContext context, FastFormField field) {
+  final theme = Theme.of(context);
+  final enabled = field.enabled;
+  return InputDecoration(
+    contentPadding: (field is FastDropdown || field is FastTextField)
+        ? EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
+        : EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+    labelText: field.label,
+    helperText: field.helper,
+    hintText: field is FastTextField ? field.hint : null,
+    labelStyle: TextStyle(
+      color: enabled ? theme.textTheme.bodyText1.color : theme.disabledColor,
+    ),
+    enabled: enabled,
+    disabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: theme.disabledColor, width: 1),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey[700], width: 1),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: theme.primaryColor, width: 2),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red, width: 2),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red[500], width: 2),
+    ),
+    filled: false,
+    fillColor: Colors.white,
+  );
+};
+
+final _padding = const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);

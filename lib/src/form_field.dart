@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'form_store.dart';
+import 'form.dart';
+import 'form_scope.dart';
 
 @immutable
 abstract class FastFormField<T> extends FormField<T> {
@@ -46,21 +46,24 @@ class FastFormFieldState<T> extends FormFieldState<T> {
   bool touched = false;
 
   FocusNode focusNode;
-  FastFormStore store;
+
+  @override
+  FastFormField<T> get widget => super.widget as FastFormField<T>;
+
+  FastFormState get formState => FastFormScope.of(context).formState;
 
   @override
   void initState() {
     super.initState();
 
     focusNode = FocusNode()..addListener(_onFocusChanged);
-    store = Provider.of<FastFormStore>(context, listen: false);
     setValue(widget.initialValue);
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    store.unregister(widget.id);
+    formState.unregister(this);
   }
 
   @override
@@ -70,11 +73,8 @@ class FastFormFieldState<T> extends FormFieldState<T> {
   }
 
   @override
-  FastFormField<T> get widget => super.widget as FastFormField<T>;
-
-  @override
   Widget build(BuildContext context) {
-    store.register(this);
+    formState.register(this);
     return super.build(context);
   }
 
@@ -93,7 +93,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
   void onChanged(T value) {
     if (!touched) setState(() => touched = true);
     setValue(value);
-    store.update(this);
+    formState.update(this);
   }
 
   void onReset() {
@@ -101,13 +101,13 @@ class FastFormFieldState<T> extends FormFieldState<T> {
       focused = false;
       touched = false;
       setValue(widget.initialValue);
-      store.update(this);
+      formState.update(this);
     });
   }
 
   void onSaved(T value) {
     setValue(value);
-    store.update(this);
+    formState.update(this);
   }
 
   void _onFocusChanged() {

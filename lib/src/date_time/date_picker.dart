@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../form_field.dart';
-import '../form_theme.dart';
+import '../form_scope.dart';
 
 typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
 
@@ -129,7 +129,7 @@ final FormFieldBuilder<DateTime> materialDatePickerBuilder =
   final widget = state.widget;
 
   final decoration = widget.decoration ??
-      FastFormTheme.of(context).getInputDecoration(context, widget);
+      FastFormScope.of(context).inputDecorator(context, widget);
   final InputDecoration effectiveDecoration =
       decoration.applyDefaults(Theme.of(context).inputDecorationTheme);
   final textBuilder = widget.textBuilder ?? datePickerTextBuilder;

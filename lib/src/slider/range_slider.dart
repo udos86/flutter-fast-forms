@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_theme.dart';
+import '../form_scope.dart';
 
 typedef RangeSliderLabelsBuilder = RangeLabels Function(
     FastRangeSliderState state);
@@ -38,9 +38,10 @@ class FastRangeSlider extends FastFormField<RangeValues> {
               (field) {
                 final state = field as FastRangeSliderState;
                 final theme = Theme.of(state.context);
-                final formTheme = FastFormTheme.of(state.context);
+                final decorator =
+                    FastFormScope.of(state.context).inputDecorator;
                 final _decoration = decoration ??
-                    formTheme.getInputDecoration(state.context, state.widget) ??
+                    decorator(state.context, state.widget) ??
                     const InputDecoration();
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);
