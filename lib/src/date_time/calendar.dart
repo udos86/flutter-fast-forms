@@ -9,21 +9,21 @@ class FastCalendar extends FastFormField<DateTime> {
   FastCalendar({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<DateTime> builder,
-    InputDecoration decoration,
+    FormFieldBuilder<DateTime>? builder,
+    InputDecoration? decoration,
     bool enabled = true,
-    @required this.firstDate,
-    String helper,
-    @required String id,
+    required this.firstDate,
+    String? helper,
+    required String id,
     this.initialCalendarMode = DatePickerMode.day,
-    DateTime initialValue,
-    Key key,
-    String label,
-    @required this.lastDate,
-    ValueChanged<DateTime> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<DateTime> onSaved,
-    FormFieldValidator<DateTime> validator,
+    DateTime? initialValue,
+    Key? key,
+    String? label,
+    required this.lastDate,
+    ValueChanged<DateTime>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<DateTime>? onSaved,
+    FormFieldValidator<DateTime>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -33,9 +33,9 @@ class FastCalendar extends FastFormField<DateTime> {
                 final widget = state.widget;
                 final theme = Theme.of(state.context);
                 final decorator =
-                    FastFormScope.of(state.context).inputDecorator;
+                    FastFormScope.of(state.context)?.inputDecorator;
                 final _decoration = widget.decoration ??
-                    decorator(state.context, state.widget) ??
+                    decorator?.call(state.context, state.widget) ??
                     const InputDecoration();
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);

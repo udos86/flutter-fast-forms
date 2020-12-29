@@ -41,7 +41,7 @@ void main() {
     await tester.tap(find.byType(SwitchListTile));
     await tester.pumpAndSettle();
 
-    expect(state.value, !state.widget.initialValue);
+    expect(state.value, !state.widget.initialValue!);
   });
 
   testWidgets('validates FastSwitch', (WidgetTester tester) async {
@@ -52,7 +52,7 @@ void main() {
         id: 'switch',
         title: 'title',
         initialValue: true,
-        validator: (value) => value ? null : errorText,
+        validator: (value) => value! ? null : errorText,
       ),
     ));
 

@@ -10,22 +10,22 @@ class FastSwitch extends FastFormField<bool> {
   FastSwitch({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<bool> builder,
+    FormFieldBuilder<bool>? builder,
     EdgeInsetsGeometry contentPadding =
         const EdgeInsets.symmetric(horizontal: 16.0),
-    InputDecoration decoration,
+    InputDecoration? decoration,
     bool enabled = true,
-    String helper,
-    @required String id,
-    bool initialValue,
-    Key key,
-    String label,
-    ValueChanged<bool> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<bool> onSaved,
-    @required this.title,
-    SwitchTitleBuilder titleBuilder,
-    FormFieldValidator<bool> validator,
+    String? helper,
+    required String id,
+    bool initialValue = false,
+    Key? key,
+    String? label,
+    ValueChanged<bool>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<bool>? onSaved,
+    required this.title,
+    SwitchTitleBuilder? titleBuilder,
+    FormFieldValidator<bool>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -34,9 +34,9 @@ class FastSwitch extends FastFormField<bool> {
                 final state = field as FastSwitchState;
                 final theme = Theme.of(state.context);
                 final decorator =
-                    FastFormScope.of(state.context).inputDecorator;
+                    FastFormScope.of(state.context)?.inputDecorator;
                 final _decoration = decoration ??
-                    decorator(state.context, state.widget) ??
+                    decorator?.call(state.context, state.widget) ??
                     const InputDecoration();
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);
@@ -49,9 +49,9 @@ class FastSwitch extends FastFormField<bool> {
                     autofocus: autofocus,
                     contentPadding: contentPadding,
                     onChanged: enabled ? state.didChange : null,
-                    selected: state.value,
+                    selected: state.value!,
                     title: title is String ? _titleBuilder(state) : null,
-                    value: state.value,
+                    value: state.value!,
                   ),
                 );
               },
@@ -59,7 +59,7 @@ class FastSwitch extends FastFormField<bool> {
           enabled: enabled,
           helper: helper,
           id: id,
-          initialValue: initialValue ?? false,
+          initialValue: initialValue,
           key: key,
           label: label,
           onChanged: onChanged,
@@ -84,7 +84,7 @@ final SwitchTitleBuilder switchTitleBuilder = (FastSwitchState state) {
     state.widget.title,
     style: TextStyle(
       fontSize: 14.0,
-      color: state.value ? Colors.black : Colors.grey,
+      color: state.value! ? Colors.black : Colors.grey,
     ),
   );
 };

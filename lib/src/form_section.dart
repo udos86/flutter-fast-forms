@@ -8,7 +8,7 @@ enum FormSectionOrientation { horizontal, vertical }
 @immutable
 class FastFormSection extends StatelessWidget {
   FastFormSection({
-    @required this.children,
+    required this.children,
     this.orientation = FormSectionOrientation.vertical,
     this.padding,
     this.title,
@@ -16,14 +16,14 @@ class FastFormSection extends StatelessWidget {
 
   final List<Widget> children;
   final FormSectionOrientation orientation;
-  final EdgeInsets padding;
-  final Widget title;
+  final EdgeInsets? padding;
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        if (title != null) title,
+        if (title != null) title!,
         orientation == FormSectionOrientation.vertical
             ? _buildVerticalFormSection(context)
             : _buildHorizontalFormSection(context),
@@ -34,7 +34,8 @@ class FastFormSection extends StatelessWidget {
   Widget _buildVerticalFormSection(BuildContext context) {
     return Column(
       children: <Widget>[
-        for (final field in children) _buildFormField(context, field),
+        for (final child in children)
+          child is FastFormField ? _buildFormField(context, child) : child,
       ],
     );
   }
@@ -42,9 +43,11 @@ class FastFormSection extends StatelessWidget {
   Widget _buildHorizontalFormSection(BuildContext context) {
     return Row(
       children: <Widget>[
-        for (final field in children)
+        for (final child in children)
           Expanded(
-            child: _buildFormField(context, field),
+            child: child is FastFormField
+                ? _buildFormField(context, child)
+                : child,
           ),
       ],
     );
@@ -53,7 +56,7 @@ class FastFormSection extends StatelessWidget {
   Widget _buildFormField(BuildContext context, FastFormField field) {
     final scope = FastFormScope.of(context);
     return Container(
-      padding: padding ?? scope.padding,
+      padding: padding ?? scope?.padding,
       child: field,
     );
   }

@@ -79,7 +79,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final datePickerText = datePickerTextBuilder(state);
-    final datePickerTextFinder = find.text(datePickerText.data);
+    final datePickerTextFinder = find.text(datePickerText.data!);
 
     expect(datePickerTextFinder, findsOneWidget);
   });
@@ -93,7 +93,8 @@ void main() {
         id: 'date_picker',
         firstDate: DateTime(1900),
         lastDate: DateTime.now()..add(Duration(days: 365)),
-        validator: (value) => value.year == invalidDate.year ? errorText : null,
+        validator: (value) =>
+            value?.year == invalidDate.year ? errorText : null,
       ),
     ));
 

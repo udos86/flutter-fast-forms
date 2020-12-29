@@ -49,7 +49,7 @@ void main() {
     await tester.tap(find.byType(CheckboxListTile));
     await tester.pumpAndSettle();
 
-    expect(state.value, !state.widget.initialValue);
+    expect(state.value, !state.widget.initialValue!);
   });
 
   testWidgets('validates FastCheckbox', (WidgetTester tester) async {
@@ -60,7 +60,7 @@ void main() {
         id: 'checkbox',
         title: 'title',
         initialValue: true,
-        validator: (value) => value ? null : errorText,
+        validator: (value) => value! ? null : errorText,
       ),
     ));
 

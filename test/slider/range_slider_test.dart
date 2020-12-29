@@ -26,8 +26,8 @@ void main() {
     final widget = tester.widget(fastRangeSliderFinder) as FastRangeSlider;
 
     final prefixFinder =
-        find.text(widget.initialValue.start.toStringAsFixed(0));
-    final suffixFinder = find.text(widget.initialValue.end.toStringAsFixed(0));
+        find.text(widget.initialValue!.start.toStringAsFixed(0));
+    final suffixFinder = find.text(widget.initialValue!.end.toStringAsFixed(0));
 
     expect(prefixFinder, findsOneWidget);
     expect(suffixFinder, findsOneWidget);
@@ -67,7 +67,7 @@ void main() {
         max: 10,
         min: 0,
         validator: (values) =>
-            values.end - values.start <= 1 ? errorText : null,
+            values!.end - values.start <= 1 ? errorText : null,
       ),
     ));
 

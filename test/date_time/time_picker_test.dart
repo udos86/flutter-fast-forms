@@ -43,7 +43,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final timePickerText = timePickerTextBuilder(state);
-    final timePickerTextFinder = find.text(timePickerText.data);
+    final timePickerTextFinder = find.text(timePickerText.data!);
 
     expect(timePickerTextFinder, findsOneWidget);
   });

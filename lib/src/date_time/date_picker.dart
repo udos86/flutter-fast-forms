@@ -7,7 +7,7 @@ import '../form_scope.dart';
 
 typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
 
-typedef ShowDatePicker = Future<DateTime> Function(
+typedef ShowDatePicker = Future<DateTime?> Function(
     DatePickerEntryMode entryMode);
 
 typedef DatePickerIconButtonBuilder = IconButton Function(
@@ -18,38 +18,38 @@ class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<DateTime> builder,
+    FormFieldBuilder<DateTime>? builder,
     this.cancelText,
     this.confirmText,
     this.currentDate,
-    InputDecoration decoration,
+    InputDecoration? decoration,
     bool enabled = true,
     this.errorFormatText,
     this.errorInvalidText,
     this.fieldHintText,
     this.fieldLabelText,
-    @required this.firstDate,
-    DateFormat format,
-    String helper,
+    required this.firstDate,
+    DateFormat? format,
+    String? helper,
     this.helpText,
     this.icon,
     this.iconButtonBuilder,
-    @required String id,
+    required String id,
     this.initialDatePickerMode = DatePickerMode.day,
     this.initialEntryMode = DatePickerEntryMode.calendar,
-    DateTime initialValue,
-    Key key,
-    String label,
-    @required this.lastDate,
+    DateTime? initialValue,
+    Key? key,
+    String? label,
+    required this.lastDate,
     this.locale,
-    ValueChanged<DateTime> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<DateTime> onSaved,
+    ValueChanged<DateTime>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<DateTime>? onSaved,
     this.routeSettings,
     this.selectableDayPredicate,
     this.textBuilder,
     this.useRootNavigator = true,
-    FormFieldValidator<DateTime> validator,
+    FormFieldValidator<DateTime>? validator,
   })  : this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
         super(
           autofocus: autofocus,
@@ -68,25 +68,25 @@ class FastDatePicker extends FastFormField<DateTime> {
           validator: validator,
         );
 
-  final String cancelText;
-  final String confirmText;
-  final DateTime currentDate;
-  final String errorFormatText;
-  final String errorInvalidText;
+  final String? cancelText;
+  final String? confirmText;
+  final DateTime? currentDate;
+  final String? errorFormatText;
+  final String? errorInvalidText;
   final DateFormat dateFormat;
-  final String fieldHintText;
-  final String fieldLabelText;
+  final String? fieldHintText;
+  final String? fieldLabelText;
   final DateTime firstDate;
-  final String helpText;
-  final Icon icon;
-  final DatePickerIconButtonBuilder iconButtonBuilder;
+  final String? helpText;
+  final Icon? icon;
+  final DatePickerIconButtonBuilder? iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
-  final Locale locale;
-  final RouteSettings routeSettings;
-  final SelectableDayPredicate selectableDayPredicate;
-  final DatePickerTextBuilder textBuilder;
+  final Locale? locale;
+  final RouteSettings? routeSettings;
+  final SelectableDayPredicate? selectableDayPredicate;
+  final DatePickerTextBuilder? textBuilder;
   final bool useRootNavigator;
 
   @override
@@ -105,7 +105,7 @@ final DatePickerTextBuilder datePickerTextBuilder =
   final value = state.value;
 
   return Text(
-    value != null ? format(state.value) : '',
+    value != null ? format(state.value!) : '',
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
   );
@@ -129,7 +129,8 @@ final FormFieldBuilder<DateTime> materialDatePickerBuilder =
   final widget = state.widget;
 
   final decoration = widget.decoration ??
-      FastFormScope.of(context).inputDecorator(context, widget);
+      FastFormScope.of(context)?.inputDecorator(context, widget) ??
+      const InputDecoration();
   final InputDecoration effectiveDecoration =
       decoration.applyDefaults(Theme.of(context).inputDecorationTheme);
   final textBuilder = widget.textBuilder ?? datePickerTextBuilder;

@@ -7,7 +7,7 @@ import '../form_scope.dart';
 typedef DateRangePickerTextBuilder = Text Function(
     FastDateRangePickerState state);
 
-typedef ShowDateRangePicker = Future<DateTimeRange> Function(
+typedef ShowDateRangePicker = Future<DateTimeRange?> Function(
     DatePickerEntryMode entryMode);
 
 typedef DateRangePickerIconButtonBuilder = IconButton Function(
@@ -18,40 +18,40 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<DateTimeRange> builder,
-    String cancelText,
-    String confirmText,
-    DateTime currentDate,
-    InputDecoration decoration,
+    FormFieldBuilder<DateTimeRange>? builder,
+    String? cancelText,
+    String? confirmText,
+    DateTime? currentDate,
+    InputDecoration? decoration,
     bool enabled = true,
-    String errorFormatText,
-    String errorInvalidRangeText,
-    String errorInvalidText,
-    String fieldEndHintText,
-    String fieldEndLabelText,
-    String fieldStartHintText,
-    String fieldStartLabelText,
-    @required DateTime firstDate,
-    DateFormat format,
-    String helper,
-    String helpText,
+    String? errorFormatText,
+    String? errorInvalidRangeText,
+    String? errorInvalidText,
+    String? fieldEndHintText,
+    String? fieldEndLabelText,
+    String? fieldStartHintText,
+    String? fieldStartLabelText,
+    required DateTime firstDate,
+    DateFormat? format,
+    String? helper,
+    String? helpText,
     this.icon,
-    DateRangePickerIconButtonBuilder iconButtonBuilder,
-    @required String id,
+    DateRangePickerIconButtonBuilder? iconButtonBuilder,
+    required String id,
     this.initialEntryMode = DatePickerEntryMode.calendar,
-    DateTimeRange initialValue,
-    Key key,
-    String label,
-    Locale locale,
-    @required DateTime lastDate,
-    ValueChanged<DateTimeRange> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<DateTimeRange> onSaved,
-    RouteSettings routeSettings,
-    String saveText,
-    DateRangePickerTextBuilder textBuilder,
+    DateTimeRange? initialValue,
+    Key? key,
+    String? label,
+    Locale? locale,
+    required DateTime lastDate,
+    ValueChanged<DateTimeRange>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<DateTimeRange>? onSaved,
+    RouteSettings? routeSettings,
+    String? saveText,
+    DateRangePickerTextBuilder? textBuilder,
     bool useRootNavigator = true,
-    FormFieldValidator<DateTimeRange> validator,
+    FormFieldValidator<DateTimeRange>? validator,
   })  : this.dateFormat = format ?? DateFormat.yMd(),
         super(
           autofocus: autofocus,
@@ -61,10 +61,10 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
                 final state = field as FastDateRangePickerState;
                 final theme = Theme.of(state.context);
                 final decorator =
-                    FastFormScope.of(state.context).inputDecorator;
+                    FastFormScope.of(state.context)?.inputDecorator;
 
                 final _decoration = decoration ??
-                    decorator(state.context, state.widget) ??
+                    decorator?.call(state.context, state.widget) ??
                     const InputDecoration();
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);
@@ -132,7 +132,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
           validator: validator,
         );
 
-  final Icon icon;
+  final Icon? icon;
   final DatePickerEntryMode initialEntryMode;
   final DateFormat dateFormat;
 
@@ -142,7 +142,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
 
 class FastDateRangePickerState extends FastFormFieldState<DateTimeRange> {
   @override
-  FastDateRangePicker get widget => super.widget;
+  FastDateRangePicker get widget => super.widget as FastDateRangePicker;
 }
 
 final DateRangePickerTextBuilder dateRangPickerTextBuilder =

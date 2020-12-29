@@ -13,24 +13,24 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<RangeValues> builder,
-    InputDecoration decoration,
-    int divisions,
+    FormFieldBuilder<RangeValues>? builder,
+    InputDecoration? decoration,
+    int? divisions,
     bool enabled = true,
-    String helper,
-    @required String id,
-    RangeValues initialValue,
-    Key key,
-    String label,
-    RangeSliderLabelsBuilder labelsBuilder,
-    @required double min,
-    @required double max,
-    RangeSliderFixBuilder prefixBuilder,
-    RangeSliderFixBuilder suffixBuilder,
-    ValueChanged<RangeValues> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<RangeValues> onSaved,
-    FormFieldValidator<RangeValues> validator,
+    String? helper,
+    required String id,
+    RangeValues? initialValue,
+    Key? key,
+    String? label,
+    RangeSliderLabelsBuilder? labelsBuilder,
+    required double min,
+    required double max,
+    RangeSliderFixBuilder? prefixBuilder,
+    RangeSliderFixBuilder? suffixBuilder,
+    ValueChanged<RangeValues>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<RangeValues>? onSaved,
+    FormFieldValidator<RangeValues>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -39,9 +39,9 @@ class FastRangeSlider extends FastFormField<RangeValues> {
                 final state = field as FastRangeSliderState;
                 final theme = Theme.of(state.context);
                 final decorator =
-                    FastFormScope.of(state.context).inputDecorator;
+                    FastFormScope.of(state.context)?.inputDecorator;
                 final _decoration = decoration ??
-                    decorator(state.context, state.widget) ??
+                    decorator?.call(state.context, state.widget) ??
                     const InputDecoration();
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);
@@ -59,7 +59,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
                           labels: labelsBuilder?.call(state),
                           min: min,
                           max: max,
-                          values: state.value,
+                          values: state.value!,
                           onChanged: enabled ? state.didChange : null,
                         ),
                       ),
@@ -93,8 +93,8 @@ class FastRangeSliderState extends FastFormFieldState<RangeValues> {
 final RangeSliderLabelsBuilder rangeSliderLabelsBuilder =
     (FastRangeSliderState state) {
   return RangeLabels(
-    state.value.start.toStringAsFixed(0),
-    state.value.end.toStringAsFixed(0),
+    state.value!.start.toStringAsFixed(0),
+    state.value!.end.toStringAsFixed(0),
   );
 };
 
@@ -104,7 +104,7 @@ final RangeSliderFixBuilder rangeSliderPrefixBuilder =
     width: 48.0,
     child: Center(
       child: Text(
-        state.value.start.toStringAsFixed(0),
+        state.value!.start.toStringAsFixed(0),
         style: TextStyle(
           fontSize: 16.0,
         ),
@@ -119,7 +119,7 @@ final RangeSliderFixBuilder rangeSliderSuffixBuilder =
     width: 48.0,
     child: Center(
       child: Text(
-        state.value.end.toStringAsFixed(0),
+        state.value!.end.toStringAsFixed(0),
         style: TextStyle(
           fontSize: 16.0,
         ),

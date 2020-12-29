@@ -52,10 +52,10 @@ void main() {
 
     final fieldState =
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
-    final formState = FastFormScope.of(fieldState.context).formState;
+    final formState = FastFormScope.of(fieldState.context)?.formState;
 
-    expect(formState.values.containsKey(fieldState.widget.id), true);
-    expect(formState.values.containsValue(fieldState.value), true);
+    expect(formState?.values.containsKey(fieldState.widget.id), true);
+    expect(formState?.values.containsValue(fieldState.value), true);
   });
 
   testWidgets('updates form fields', (WidgetTester tester) async {
@@ -78,22 +78,22 @@ void main() {
 
     final fieldState =
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
-    final formState = FastFormScope.of(fieldState.context).formState;
+    final formState = FastFormScope.of(fieldState.context)?.formState;
 
     final text = 'Hello Test';
 
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
 
-    expect(formState.values.containsKey(fieldState.widget.id), true);
-    expect(formState.values.containsValue(fieldState.value), true);
+    expect(formState?.values.containsKey(fieldState.widget.id), true);
+    expect(formState?.values.containsValue(fieldState.value), true);
   });
 
   testWidgets('calls callback on change', (WidgetTester tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     var onChangedCalled = false;
-    Map<String, dynamic> onChangedValues;
+    late Map<String, dynamic> onChangedValues;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -153,7 +153,7 @@ void main() {
 
     expect(state.value, text);
 
-    formKey.currentState.reset();
+    formKey.currentState?.reset();
     await tester.pumpAndSettle();
 
     expect(state.value, state.widget.initialValue);

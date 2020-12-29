@@ -27,7 +27,7 @@ void main() {
     final widget = tester.widget(fastSliderFinder) as FastSlider;
 
     final prefixFinder = find.byIcon(Icons.volume_up);
-    final suffixFinder = find.text(widget.initialValue.toStringAsFixed(0));
+    final suffixFinder = find.text(widget.initialValue!.toStringAsFixed(0));
 
     expect(prefixFinder, findsOneWidget);
     expect(suffixFinder, findsOneWidget);
@@ -55,7 +55,7 @@ void main() {
     final widget = tester.widget(fastSliderFinder) as FastSlider;
 
     final prefixFinder = find.byIcon(Icons.volume_up);
-    final suffixFinder = find.text(widget.initialValue.toStringAsFixed(0));
+    final suffixFinder = find.text(widget.initialValue!.toStringAsFixed(0));
 
     expect(prefixFinder, findsOneWidget);
     expect(suffixFinder, findsOneWidget);
@@ -88,7 +88,7 @@ void main() {
         id: 'slider',
         min: 0,
         max: 10,
-        validator: (value) => value > 0 ? errorText : null,
+        validator: (value) => value! > 0 ? errorText : null,
       ),
     ));
 
