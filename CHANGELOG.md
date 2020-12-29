@@ -1,3 +1,7 @@
+## [v0.7.0-nullsafety.1] - 12/29/2020
+
+* migration to null safety
+
 ## [v0.6.0] - 12/28/2020
 
 * rewrite of `FastFormState`
