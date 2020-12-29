@@ -14,21 +14,21 @@ class FastTextField extends FastFormField<String> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     this.buildCounter,
-    FormFieldBuilder<String> builder,
-    InputDecoration decoration,
+    FormFieldBuilder<String>? builder,
+    InputDecoration? decoration,
     bool enabled = true,
     this.enableInteractiveSelection = true,
     this.enableSuggestions = true,
     this.expands = false,
     this.focusNode,
-    String helper,
+    String? helper,
     this.hint,
-    @required String id,
-    String initialValue,
+    required String id,
+    String initialValue = '',
     this.inputFormatters,
-    Key key,
+    Key? key,
     this.keyboardType,
-    String label,
+    String? label,
     this.leading,
     this.maxLength,
     this.maxLengthEnforced = true,
@@ -36,9 +36,9 @@ class FastTextField extends FastFormField<String> {
     this.minLines,
     this.obscureText = false,
     this.obscuringCharacter = '•',
-    ValueChanged<String> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<String> onSaved,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<String>? onSaved,
     this.padding,
     this.prefix,
     this.readOnly = false,
@@ -47,7 +47,7 @@ class FastTextField extends FastFormField<String> {
     this.textAlignVertical,
     this.textCapitalization = TextCapitalization.none,
     this.trailing,
-    FormFieldValidator<String> validator,
+    FormFieldValidator<String>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -56,7 +56,7 @@ class FastTextField extends FastFormField<String> {
           enabled: enabled,
           helper: helper,
           id: id,
-          initialValue: initialValue ?? '',
+          initialValue: initialValue,
           key: key,
           label: label,
           onChanged: onChanged,
@@ -66,30 +66,30 @@ class FastTextField extends FastFormField<String> {
         );
 
   final bool autocorrect;
-  final Iterable<String> autofillHints;
-  final InputCounterWidgetBuilder buildCounter;
+  final Iterable<String>? autofillHints;
+  final InputCounterWidgetBuilder? buildCounter;
   final bool enableInteractiveSelection;
   final bool enableSuggestions;
   final bool expands;
-  final FocusNode focusNode;
-  final String hint;
-  final List<TextInputFormatter> inputFormatters;
-  final TextInputType keyboardType;
-  final Widget leading;
-  final int maxLength;
+  final FocusNode? focusNode;
+  final String? hint;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
+  final Widget? leading;
+  final int? maxLength;
   final bool maxLengthEnforced;
-  final int maxLines;
-  final int minLines;
+  final int? maxLines;
+  final int? minLines;
   final bool obscureText;
   final String obscuringCharacter;
-  final EdgeInsetsGeometry padding;
-  final Widget prefix;
+  final EdgeInsetsGeometry? padding;
+  final Widget? prefix;
   final bool readOnly;
-  final Widget suffix;
+  final Widget? suffix;
   final TextAlign textAlign;
-  final TextAlignVertical textAlignVertical;
+  final TextAlignVertical? textAlignVertical;
   final TextCapitalization textCapitalization;
-  final Widget trailing;
+  final Widget? trailing;
 
   @override
   FastTextFieldState createState() => FastTextFieldState();
@@ -100,9 +100,9 @@ class FastTextFieldState extends FastFormFieldState<String> {
   FastTextField get widget => super.widget as FastTextField;
 
   @override
-  void onChanged(String value) {
+  void onChanged(String? value) {
     setValue(value);
-    formState.update(this);
+    formState?.update(this);
   }
 
   AutovalidateMode get autovalidateMode =>
@@ -111,9 +111,9 @@ class FastTextFieldState extends FastFormFieldState<String> {
 
 final InputCounterWidgetBuilder inputCounterWidgetBuilder = (
   BuildContext context, {
-  int currentLength,
-  int maxLength,
-  bool isFocused,
+  required int currentLength,
+  required int? maxLength,
+  required bool isFocused,
 }) {
   return Text(
     '$currentLength / $maxLength',
@@ -126,9 +126,9 @@ final FormFieldBuilder<String> materialTextFieldBuilder =
   final state = field as FastTextFieldState;
   final widget = state.widget;
   final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context).inputDecorator;
+  final decorator = FastFormScope.of(state.context)?.inputDecorator;
   final _decoration = widget.decoration ??
-      decorator(state.context, state.widget) ??
+      decorator?.call(state.context, state.widget) ??
       const InputDecoration();
   final InputDecoration effectiveDecoration =
       _decoration.applyDefaults(theme.inputDecorationTheme).copyWith(

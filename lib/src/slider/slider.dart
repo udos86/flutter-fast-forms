@@ -14,25 +14,25 @@ class FastSlider extends FastFormField<double> {
     bool adaptive = false,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<double> builder,
-    InputDecoration decoration,
+    FormFieldBuilder<double>? builder,
+    InputDecoration? decoration,
     bool enabled = true,
     this.divisions,
-    FocusNode focusNode,
-    String helper,
-    @required String id,
-    double initialValue,
-    Key key,
-    String label,
-    @required this.max,
-    @required this.min,
+    FocusNode? focusNode,
+    String? helper,
+    required String id,
+    double? initialValue,
+    Key? key,
+    String? label,
+    required this.max,
+    required this.min,
     this.labelBuilder,
     this.prefixBuilder,
-    ValueChanged<double> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<double> onSaved,
+    ValueChanged<double>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<double>? onSaved,
     this.suffixBuilder,
-    FormFieldValidator<double> validator,
+    FormFieldValidator<double>? validator,
   }) : super(
           adaptive: adaptive,
           autofocus: autofocus,
@@ -51,12 +51,12 @@ class FastSlider extends FastFormField<double> {
           validator: validator,
         );
 
-  final int divisions;
-  final SliderLabelBuilder labelBuilder;
+  final int? divisions;
+  final SliderLabelBuilder? labelBuilder;
   final double max;
   final double min;
-  final SliderFixBuilder prefixBuilder;
-  final SliderFixBuilder suffixBuilder;
+  final SliderFixBuilder? prefixBuilder;
+  final SliderFixBuilder? suffixBuilder;
 
   @override
   FastSliderState createState() => FastSliderState();
@@ -68,14 +68,14 @@ class FastSliderState extends FastFormFieldState<double> {
 }
 
 final SliderLabelBuilder sliderLabelBuilder = (FastSliderState state) {
-  return state.value.toStringAsFixed(0);
+  return state.value!.toStringAsFixed(0);
 };
 
 final SliderFixBuilder sliderSuffixBuilder = (FastSliderState state) {
   return Container(
     width: 32.0,
     child: Text(
-      state.value.toStringAsFixed(0),
+      state.value!.toStringAsFixed(0),
       style: TextStyle(
         fontSize: 16.0,
       ),
@@ -89,9 +89,9 @@ final FormFieldBuilder<double> materialSliderBuilder =
   final context = state.context;
   final widget = state.widget;
   final theme = Theme.of(context);
-  final decorator = FastFormScope.of(context).inputDecorator;
+  final decorator = FastFormScope.of(context)?.inputDecorator;
   final _decoration = widget.decoration ??
-      decorator(context, widget) ??
+      decorator?.call(context, widget) ??
       const InputDecoration();
   final effectiveDecoration =
       _decoration.applyDefaults(theme.inputDecorationTheme);
@@ -103,7 +103,7 @@ final FormFieldBuilder<double> materialSliderBuilder =
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        if (widget.prefixBuilder != null) widget.prefixBuilder(state),
+        if (widget.prefixBuilder != null) widget.prefixBuilder!(state),
         Expanded(
           child: Slider.adaptive(
             autofocus: widget.autofocus,
@@ -112,11 +112,11 @@ final FormFieldBuilder<double> materialSliderBuilder =
             label: widget.labelBuilder?.call(state),
             max: widget.max,
             min: widget.min,
-            value: state.value,
+            value: state.value!,
             onChanged: widget.enabled ? state.didChange : null,
           ),
         ),
-        if (widget.suffixBuilder != null) widget.suffixBuilder(state),
+        if (widget.suffixBuilder != null) widget.suffixBuilder!(state),
       ],
     ),
   );
@@ -130,17 +130,17 @@ final FormFieldBuilder<double> cupertinoSliderBuilder =
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
-      if (widget.prefixBuilder != null) widget.prefixBuilder(state),
+      if (widget.prefixBuilder != null) widget.prefixBuilder!(state),
       Expanded(
         child: CupertinoSlider(
           divisions: widget.divisions,
           max: widget.max,
           min: widget.min,
-          value: state.value,
+          value: state.value!,
           onChanged: widget.enabled ? state.didChange : null,
         ),
       ),
-      if (widget.suffixBuilder != null) widget.suffixBuilder(state),
+      if (widget.suffixBuilder != null) widget.suffixBuilder!(state),
     ],
   );
 };

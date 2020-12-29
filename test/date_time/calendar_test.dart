@@ -39,7 +39,7 @@ void main() {
     await tester.tap(find.text(testValue.toString()));
     await tester.pumpAndSettle();
 
-    expect(state.value.day, testValue);
+    expect(state.value?.day, testValue);
   });
 
   testWidgets('validates FastCalendar', (WidgetTester tester) async {
@@ -51,7 +51,7 @@ void main() {
         id: 'calendar',
         firstDate: DateTime(1900),
         lastDate: DateTime.now()..add(Duration(days: 365)),
-        validator: (value) => value.day == invalidValue ? errorText : null,
+        validator: (value) => value?.day == invalidValue ? errorText : null,
       ),
     ));
 

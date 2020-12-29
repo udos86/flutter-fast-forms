@@ -35,12 +35,13 @@ void main() {
 
     final inputCounterText = inputCounterWidgetBuilder(
       state.context,
-      currentLength: state.value.length,
+      currentLength: state.value!.length,
       maxLength: maxLength,
       isFocused: false,
     ) as Text;
+
     final inputCounterTextFinder =
-        find.bySemanticsLabel(inputCounterText.semanticsLabel);
+        find.bySemanticsLabel(inputCounterText.semanticsLabel as Pattern);
 
     expect(inputCounterTextFinder, findsOneWidget);
   });

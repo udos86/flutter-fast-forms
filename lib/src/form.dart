@@ -12,19 +12,19 @@ typedef FormChanged = void Function(Map<String, dynamic> values);
 @immutable
 class FastForm extends StatefulWidget {
   FastForm({
-    @required this.children,
-    @required this.formKey,
+    required this.children,
+    required this.formKey,
     this.inputDecorator,
-    Key key,
+    Key? key,
     this.onChanged,
     this.padding,
   }) : super(key: key);
 
-  final List<dynamic> children;
+  final List<Widget> children;
   final GlobalKey<FormState> formKey;
-  final FastInputDecorator inputDecorator;
-  final FormChanged onChanged;
-  final EdgeInsets padding;
+  final FastInputDecorator? inputDecorator;
+  final FormChanged? onChanged;
+  final EdgeInsets? padding;
 
   @override
   FastFormState createState() => FastFormState();
@@ -50,7 +50,7 @@ class FastFormState extends State<FastForm> {
   }
 
   void update(FastFormFieldState _state) {
-    if (widget.onChanged != null) widget.onChanged(values);
+    if (widget.onChanged != null) widget.onChanged!(values);
   }
 
   @override
@@ -82,14 +82,14 @@ final FastInputDecorator _inputDecorationCreator =
     helperText: field.helper,
     hintText: field is FastTextField ? field.hint : null,
     labelStyle: TextStyle(
-      color: enabled ? theme.textTheme.bodyText1.color : theme.disabledColor,
+      color: enabled ? theme.textTheme.bodyText1!.color : theme.disabledColor,
     ),
     enabled: enabled,
     disabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: theme.disabledColor, width: 1),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey[700], width: 1),
+      borderSide: BorderSide(color: Colors.grey[700]!, width: 1),
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: theme.primaryColor, width: 2),
@@ -98,7 +98,7 @@ final FastInputDecorator _inputDecorationCreator =
       borderSide: BorderSide(color: Colors.red, width: 2),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.red[500], width: 2),
+      borderSide: BorderSide(color: Colors.red[500]!, width: 2),
     ),
     filled: false,
     fillColor: Colors.white,

@@ -9,18 +9,18 @@ abstract class FastFormField<T> extends FormField<T> {
     this.adaptive = false,
     this.autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    @required FormFieldBuilder<T> builder,
+    required FormFieldBuilder<T> builder,
     this.decoration,
     bool enabled = true,
     this.helper,
-    @required this.id,
-    T initialValue,
-    Key key,
+    required this.id,
+    T? initialValue,
+    Key? key,
     this.label,
     this.onChanged,
     this.onReset,
-    FormFieldSetter<T> onSaved,
-    FormFieldValidator<T> validator,
+    FormFieldSetter<T>? onSaved,
+    FormFieldValidator<T>? validator,
   }) : super(
           autovalidateMode: autovalidateMode,
           builder: builder,
@@ -33,24 +33,24 @@ abstract class FastFormField<T> extends FormField<T> {
 
   final bool adaptive;
   final bool autofocus;
-  final InputDecoration decoration;
-  final String helper;
+  final InputDecoration? decoration;
+  final String? helper;
   final String id;
-  final String label;
-  final ValueChanged<T> onChanged;
-  final VoidCallback onReset;
+  final String? label;
+  final ValueChanged<T>? onChanged;
+  final VoidCallback? onReset;
 }
 
 class FastFormFieldState<T> extends FormFieldState<T> {
   bool focused = false;
   bool touched = false;
 
-  FocusNode focusNode;
+  late FocusNode focusNode;
 
   @override
   FastFormField<T> get widget => super.widget as FastFormField<T>;
 
-  FastFormState get formState => FastFormScope.of(context).formState;
+  FastFormState? get formState => FastFormScope.of(context)?.formState;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
   @override
   void deactivate() {
     super.deactivate();
-    formState.unregister(this);
+    formState?.unregister(this);
   }
 
   @override
@@ -74,12 +74,12 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
   @override
   Widget build(BuildContext context) {
-    formState.register(this);
+    formState?.register(this);
     return super.build(context);
   }
 
   @override
-  void didChange(T value) {
+  void didChange(T? value) {
     super.didChange(value);
     onChanged(value);
   }
@@ -90,10 +90,10 @@ class FastFormFieldState<T> extends FormFieldState<T> {
     onReset();
   }
 
-  void onChanged(T value) {
+  void onChanged(T? value) {
     if (!touched) setState(() => touched = true);
     setValue(value);
-    formState.update(this);
+    formState?.update(this);
   }
 
   void onReset() {
@@ -101,13 +101,13 @@ class FastFormFieldState<T> extends FormFieldState<T> {
       focused = false;
       touched = false;
       setValue(widget.initialValue);
-      formState.update(this);
+      formState?.update(this);
     });
   }
 
   void onSaved(T value) {
     setValue(value);
-    formState.update(this);
+    formState?.update(this);
   }
 
   void _onFocusChanged() {

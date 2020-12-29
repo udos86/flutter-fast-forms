@@ -6,7 +6,7 @@ import '../form_scope.dart';
 
 typedef TimePickerTextBuilder = Text Function(FastTimePickerState state);
 
-typedef ShowTimePicker = Future<TimeOfDay> Function(
+typedef ShowTimePicker = Future<TimeOfDay?> Function(
     TimePickerEntryMode entryMode);
 
 typedef TimePickerIconButtonBuilder = IconButton Function(
@@ -17,27 +17,27 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePicker({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<TimeOfDay> builder,
-    String cancelText,
-    String confirmText,
-    InputDecoration decoration,
+    FormFieldBuilder<TimeOfDay>? builder,
+    String? cancelText,
+    String? confirmText,
+    InputDecoration? decoration,
     bool enabled = true,
-    String helper,
-    String helpText,
+    String? helper,
+    String? helpText,
     this.icon,
-    TimePickerIconButtonBuilder iconButtonBuilder,
-    @required String id,
+    TimePickerIconButtonBuilder? iconButtonBuilder,
+    required String id,
     this.initialEntryMode = TimePickerEntryMode.dial,
-    TimeOfDay initialValue,
-    Key key,
-    String label,
-    ValueChanged<TimeOfDay> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<TimeOfDay> onSaved,
-    RouteSettings routeSettings,
-    TimePickerTextBuilder textBuilder,
+    TimeOfDay? initialValue,
+    Key? key,
+    String? label,
+    ValueChanged<TimeOfDay>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<TimeOfDay>? onSaved,
+    RouteSettings? routeSettings,
+    TimePickerTextBuilder? textBuilder,
     bool useRootNavigator = true,
-    FormFieldValidator<TimeOfDay> validator,
+    FormFieldValidator<TimeOfDay>? validator,
   }) : super(
           autovalidateMode: autovalidateMode,
           builder: builder ??
@@ -45,10 +45,10 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
                 final state = field as FastTimePickerState;
                 final theme = Theme.of(state.context);
                 final decorator =
-                    FastFormScope.of(state.context).inputDecorator;
+                    FastFormScope.of(state.context)?.inputDecorator;
 
                 final _decoration = decoration ??
-                    decorator(state.context, state.widget) ??
+                    decorator?.call(state.context, state.widget) ??
                     const InputDecoration();
                 final InputDecoration effectiveDecoration =
                     _decoration.applyDefaults(theme.inputDecorationTheme);
@@ -103,7 +103,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
           validator: validator,
         );
 
-  final Icon icon;
+  final Icon? icon;
   final TimePickerEntryMode initialEntryMode;
 
   @override

@@ -23,8 +23,6 @@ void main() {
 
     expect(validator(false), errorTextFn(false));
     expect(validator(null), errorTextFn(null));
-    expect(validator(42), errorTextFn(42));
-    expect(validator(''), errorTextFn(''));
   });
 
   test('pattern', () {
@@ -61,12 +59,12 @@ void main() {
     final validator = Validators.minLength(minLength, errorTextFn);
 
     expect(validator('test'), null);
+    expect(validator(null), null);
 
     expect(validator('abc'), errorTextFn('abc', minLength));
     expect(validator(''), errorTextFn('', minLength));
     expect(validator([]), errorTextFn([], minLength));
     expect(validator([1, 2, 3]), errorTextFn([1, 2, 3], minLength));
-    expect(validator(null), errorTextFn(null, minLength));
   });
 
   test('max', () {
@@ -75,12 +73,8 @@ void main() {
     final validator = Validators.max(max, errorTextFn);
 
     expect(validator(max - 1), null);
-    expect(validator((max - 1).toString()), null);
-
     expect(validator(max + 1), errorTextFn(max + 1, max));
-    expect(validator((max + 1).toString()),
-        errorTextFn((max + 1).toString(), max));
-    expect(() => validator(null), throwsNoSuchMethodError);
+    expect(validator(null), null);
   });
 
   test('min', () {
@@ -89,23 +83,9 @@ void main() {
     final validator = Validators.min(min, errorTextFn);
 
     expect(validator(min + 1), null);
-    expect(validator((min + 1).toString()), null);
 
     expect(validator(min - 1), errorTextFn(min - 1, min));
-    expect(validator((min - 1).toString()),
-        errorTextFn((min - 1).toString(), min));
-    expect(() => validator(null), throwsNoSuchMethodError);
-  });
-
-  test('email', () {
-    final errorTextFn = (_value) => 'error text';
-    final validator = Validators.email(errorTextFn);
-
-    expect(validator('test@test.com'), null);
-
-    expect(validator('test'), errorTextFn('test'));
-    expect(validator('test@'), errorTextFn('test@'));
-    expect(validator('test@test'), errorTextFn('test@test'));
+    expect(validator(null), null);
   });
 
   test('compose', () {

@@ -3,31 +3,31 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_scope.dart';
 
-typedef DropdownMenuItemsBuilder = List<DropdownMenuItem> Function(
-    List<dynamic> items, FastDropdownState state);
+typedef DropdownMenuItemsBuilder = List<DropdownMenuItem<String>> Function(
+    List<String> items, FastDropdownState state);
 
 @immutable
 class FastDropdown extends FastFormField<String> {
   FastDropdown({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<String> builder,
-    InputDecoration decoration,
-    Color dropdownColor,
+    FormFieldBuilder<String>? builder,
+    InputDecoration? decoration,
+    Color? dropdownColor,
     bool enabled = true,
-    FocusNode focusNode,
-    String helper,
-    @required String id,
-    String initialValue,
-    List<dynamic> items,
-    DropdownMenuItemsBuilder itemsBuilder,
-    Key key,
-    String label,
-    ValueChanged<String> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter onSaved,
-    DropdownButtonBuilder selectedItemBuilder,
-    FormFieldValidator validator,
+    FocusNode? focusNode,
+    String? helper,
+    required String id,
+    String? initialValue,
+    List<String> items = const [],
+    DropdownMenuItemsBuilder? itemsBuilder,
+    Key? key,
+    String? label,
+    ValueChanged<String>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter? onSaved,
+    DropdownButtonBuilder? selectedItemBuilder,
+    FormFieldValidator? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -35,9 +35,9 @@ class FastDropdown extends FastFormField<String> {
               (field) {
                 final state = field as FastDropdownState;
                 final decorator =
-                    FastFormScope.of(state.context).inputDecorator;
+                    FastFormScope.of(state.context)?.inputDecorator;
                 final _decoration = decoration ??
-                    decorator(state.context, state.widget) ??
+                    decorator?.call(state.context, state.widget) ??
                     const InputDecoration();
                 final _itemsBuilder = itemsBuilder ?? dropdownMenuItemsBuilder;
                 final _onChanged = (value) {
@@ -80,7 +80,7 @@ class FastDropdownState extends FastFormFieldState<String> {
 }
 
 final DropdownMenuItemsBuilder dropdownMenuItemsBuilder =
-    (List<dynamic> items, FastDropdownState state) {
+    (List<String> items, FastDropdownState state) {
   return items.map((item) {
     return DropdownMenuItem<String>(
       value: item.toString(),
