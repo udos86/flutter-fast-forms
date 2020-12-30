@@ -39,7 +39,7 @@ class ExampleApp extends StatelessWidget {
 }
 
 class FormPage extends StatelessWidget {
-  FormPage({Key key, this.title}) : super(key: key);
+  FormPage({Key? key, required this.title}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final String title;
@@ -65,7 +65,7 @@ class FormPage extends StatelessWidget {
                   ),
                   CupertinoButton(
                     child: Text('Reset'),
-                    onPressed: () => formKey.currentState.reset(),
+                    onPressed: () => formKey.currentState?.reset(),
                   )
                 ],
               ),
@@ -91,7 +91,7 @@ class FormPage extends StatelessWidget {
                   ),
                   RaisedButton(
                     child: Text('Reset'),
-                    onPressed: () => formKey.currentState.reset(),
+                    onPressed: () => formKey.currentState?.reset(),
                   )
                 ],
               ),
@@ -207,7 +207,7 @@ class FormPage extends StatelessWidget {
                     enabled ? () => state.didChange(state.widget.max) : null,
               );
             },
-            validator: (value) => value > 8 ? 'Volume is too high' : null,
+            validator: (value) => value! > 8 ? 'Volume is too high' : null,
           ),
           FastRangeSlider(
             id: 'range_slider',
@@ -300,7 +300,7 @@ class FormPage extends StatelessWidget {
                     : null,
               );
             },
-            validator: (value) => value > 8 ? 'Volume is too high' : null,
+            validator: (value) => value! > 8 ? 'Volume is too high' : null,
           ),
         ],
       ),

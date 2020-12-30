@@ -4,8 +4,8 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 @immutable
 class CustomOption {
   CustomOption({
-    @required this.id,
-    @required this.label,
+    required this.id,
+    required this.label,
   });
 
   final String id;
@@ -14,26 +14,26 @@ class CustomOption {
 
 class FastCustomField extends FastFormField<Map<String, bool>> {
   FastCustomField({
-    InputDecoration decoration,
-    String helperText,
-    @required String id,
-    Key key,
-    String label,
-    String placeholder,
-    ValueChanged<Map<String, bool>> onChanged,
-    VoidCallback onReset,
-    FormFieldSetter<Map<String, bool>> onSaved,
-    @required this.options,
-    Widget title,
-    FormFieldValidator<Map<String, bool>> validator,
-    Map<String, bool> initialValue,
+    InputDecoration? decoration,
+    String? helperText,
+    required String id,
+    Map<String, bool>? initialValue,
+    Key? key,
+    String? label,
+    String? placeholder,
+    ValueChanged<Map<String, bool>>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<Map<String, bool>>? onSaved,
+    required this.options,
+    Widget? title,
+    FormFieldValidator<Map<String, bool>>? validator,
   }) : super(
           builder: (field) {
             final state = field as CustomFormFieldState;
             final theme = Theme.of(state.context);
-            final decorator = FastFormScope.of(state.context).inputDecorator;
+            final decorator = FastFormScope.of(state.context)?.inputDecorator;
             final _decoration = decoration ??
-                decorator(state.context, state.widget) ??
+                decorator?.call(state.context, state.widget) ??
                 const InputDecoration();
             final InputDecoration effectiveDecoration =
                 _decoration.applyDefaults(theme.inputDecorationTheme);
@@ -47,9 +47,9 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
                     contentPadding: EdgeInsets.all(0),
                     title: title,
                     value: state.active,
-                    onChanged: (active) {
-                      state.active = active;
-                      state.didChange(active ? state.activeValue : null);
+                    onChanged: (bool? active) {
+                      state.active = active ?? false;
+                      state.didChange(state.active ? state.activeValue : null);
                     },
                   ),
                   if (state.active) state.buildActive(),
@@ -76,11 +76,11 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
 
 class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
   bool _active = false;
-  Map<String, bool> _activeValue;
+  late Map<String, bool> _activeValue;
 
   bool get active => _active;
 
-  Map<String, bool> get activeValue => _activeValue;
+  Map<String, bool>? get activeValue => _activeValue;
 
   set active(bool value) {
     setState(() {
@@ -106,7 +106,7 @@ class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
   }
 
   @override
-  void didChange(Map<String, bool> value) {
+  void didChange(Map<String, bool>? value) {
     super.didChange(value);
     if (value != null) _activeValue = value;
   }
@@ -129,8 +129,8 @@ class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
           CheckboxListTile(
             title: Text(option.label),
             value: _activeValue[option.id],
-            onChanged: (bool checked) {
-              didChange({..._activeValue, option.id: checked});
+            onChanged: (bool? checked) {
+              didChange({..._activeValue, option.id: checked ?? false});
             },
           ),
       ],
