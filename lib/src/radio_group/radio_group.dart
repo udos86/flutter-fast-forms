@@ -25,9 +25,10 @@ class FastRadioGroup<T> extends FastFormField<T> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<T>? builder,
+    EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
-    String? helper,
+    String? helperText,
     required String id,
     T? initialValue,
     Key? key,
@@ -44,26 +45,14 @@ class FastRadioGroup<T> extends FastFormField<T> {
           autovalidateMode: autovalidateMode,
           builder: builder ??
               (field) {
-                final state = field as FastRadioGroupState;
-                final theme = Theme.of(state.context);
-                final decorator =
-                    FastFormScope.of(state.context)?.inputDecorator;
-                final _decoration = decoration ??
-                    decorator?.call(state.context, state.widget) ??
-                    const InputDecoration();
-                final InputDecoration effectiveDecoration =
-                    _decoration.applyDefaults(theme.inputDecorationTheme);
-                final _optionsBuilder = optionsBuilder ?? radioOptionsBuilder;
-                return InputDecorator(
-                  decoration: effectiveDecoration.copyWith(
-                    errorText: state.errorText,
-                  ),
-                  child: _optionsBuilder(options, state),
-                );
+                final scope = FastFormScope.of(field.context);
+                final builder = scope?.builders[FastRadioGroup] ??
+                    adaptiveRadioGroupBuilder;
+                return builder(field);
               },
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue ?? options.first.value,
           key: key,
@@ -101,4 +90,40 @@ final RadioOptionsBuilder radioOptionsBuilder =
   }).toList();
 
   return vertical ? Column(children: tiles) : Row(children: tiles);
+};
+
+final FormFieldBuilder radioGroupBuilder = (FormFieldState field) {
+  final state = field as FastRadioGroupState;
+  final widget = state.widget;
+
+  final theme = Theme.of(state.context);
+  final decorator = FastFormScope.of(state.context)?.inputDecorator;
+  final _decoration = widget.decoration ??
+      decorator?.call(state.context, state.widget) ??
+      const InputDecoration();
+  final InputDecoration effectiveDecoration =
+      _decoration.applyDefaults(theme.inputDecorationTheme);
+  final _optionsBuilder = widget.optionsBuilder ?? radioOptionsBuilder;
+
+  return InputDecorator(
+    decoration: effectiveDecoration.copyWith(
+      contentPadding: widget.contentPadding,
+      errorText: state.errorText,
+    ),
+    child: _optionsBuilder(widget.options, state),
+  );
+};
+
+final FormFieldBuilder adaptiveRadioGroupBuilder = (FormFieldState field) {
+  final state = field as FastRadioGroupState;
+
+  if (state.adaptive) {
+    switch (Theme.of(state.context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.android:
+      default:
+        return radioGroupBuilder(field);
+    }
+  }
+  return radioGroupBuilder(field);
 };

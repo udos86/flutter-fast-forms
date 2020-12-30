@@ -14,19 +14,20 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<RangeValues>? builder,
+    EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
-    int? divisions,
+    this.divisions,
     bool enabled = true,
-    String? helper,
+    String? helperText,
     required String id,
     RangeValues? initialValue,
     Key? key,
     String? label,
-    RangeSliderLabelsBuilder? labelsBuilder,
-    required double min,
-    required double max,
-    RangeSliderFixBuilder? prefixBuilder,
-    RangeSliderFixBuilder? suffixBuilder,
+    this.labelsBuilder,
+    required this.min,
+    required this.max,
+    this.prefixBuilder,
+    this.suffixBuilder,
     ValueChanged<RangeValues>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<RangeValues>? onSaved,
@@ -36,41 +37,15 @@ class FastRangeSlider extends FastFormField<RangeValues> {
           autovalidateMode: autovalidateMode,
           builder: builder ??
               (field) {
-                final state = field as FastRangeSliderState;
-                final theme = Theme.of(state.context);
-                final decorator =
-                    FastFormScope.of(state.context)?.inputDecorator;
-                final _decoration = decoration ??
-                    decorator?.call(state.context, state.widget) ??
-                    const InputDecoration();
-                final InputDecoration effectiveDecoration =
-                    _decoration.applyDefaults(theme.inputDecorationTheme);
-                return InputDecorator(
-                  decoration: effectiveDecoration.copyWith(
-                    errorText: state.errorText,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      if (prefixBuilder != null) prefixBuilder(state),
-                      Expanded(
-                        child: RangeSlider(
-                          divisions: divisions,
-                          labels: labelsBuilder?.call(state),
-                          min: min,
-                          max: max,
-                          values: state.value!,
-                          onChanged: enabled ? state.didChange : null,
-                        ),
-                      ),
-                      if (suffixBuilder != null) suffixBuilder(state),
-                    ],
-                  ),
-                );
+                final scope = FastFormScope.of(field.context);
+                final builder = scope?.builders[FastRangeSlider] ??
+                    adaptiveRangeSliderBuilder;
+                return builder(field);
               },
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           key: key,
           id: id,
           initialValue: initialValue ?? RangeValues(min, max),
@@ -80,6 +55,13 @@ class FastRangeSlider extends FastFormField<RangeValues> {
           onSaved: onSaved,
           validator: validator,
         );
+
+  final int? divisions;
+  final RangeSliderLabelsBuilder? labelsBuilder;
+  final double max;
+  final double min;
+  final RangeSliderFixBuilder? prefixBuilder;
+  final RangeSliderFixBuilder? suffixBuilder;
 
   @override
   FastRangeSliderState createState() => FastRangeSliderState();
@@ -126,4 +108,55 @@ final RangeSliderFixBuilder rangeSliderSuffixBuilder =
       ),
     ),
   );
+};
+
+final FormFieldBuilder<RangeValues> rangeSliderBuilder =
+    (FormFieldState<RangeValues> field) {
+  final state = field as FastRangeSliderState;
+  final widget = state.widget;
+  final theme = Theme.of(state.context);
+  final decorator = FastFormScope.of(state.context)?.inputDecorator;
+  final _decoration = widget.decoration ??
+      decorator?.call(state.context, state.widget) ??
+      const InputDecoration();
+  final InputDecoration effectiveDecoration =
+      _decoration.applyDefaults(theme.inputDecorationTheme);
+  return InputDecorator(
+    decoration: effectiveDecoration.copyWith(
+      contentPadding: widget.contentPadding,
+      errorText: state.errorText,
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        if (widget.prefixBuilder != null) widget.prefixBuilder!(state),
+        Expanded(
+          child: RangeSlider(
+            divisions: widget.divisions,
+            labels: widget.labelsBuilder?.call(state),
+            max: widget.max,
+            min: widget.min,
+            values: state.value!,
+            onChanged: widget.enabled ? state.didChange : null,
+          ),
+        ),
+        if (widget.suffixBuilder != null) widget.suffixBuilder!(state),
+      ],
+    ),
+  );
+};
+
+final FormFieldBuilder<RangeValues> adaptiveRangeSliderBuilder =
+    (FormFieldState<RangeValues> field) {
+  final state = field as FastRangeSliderState;
+
+  if (state.adaptive) {
+    switch (Theme.of(state.context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.android:
+      default:
+        return rangeSliderBuilder(field);
+    }
+  }
+  return rangeSliderBuilder(field);
 };

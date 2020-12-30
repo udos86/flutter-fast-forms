@@ -10,7 +10,7 @@ void main() {
 
     await tester.pumpWidget(getFastTestWidget(
       FastFormSection(
-        title: titleWidget,
+        header: titleWidget,
         children: [
           FastTextField(
             id: 'text_field',

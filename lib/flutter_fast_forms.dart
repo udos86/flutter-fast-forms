@@ -5,6 +5,7 @@ export 'src/date_time/date_range_picker.dart';
 export 'src/date_time/time_picker.dart';
 export 'src/dropdown/dropdown.dart';
 export 'src/radio_group/radio_group.dart';
+export 'src/segmented_control/segmented_control.dart';
 export 'src/slider/range_slider.dart';
 export 'src/slider/slider.dart';
 export 'src/switch/switch.dart';

@@ -15,7 +15,7 @@ class CustomOption {
 class FastCustomField extends FastFormField<Map<String, bool>> {
   FastCustomField({
     InputDecoration decoration,
-    String helper,
+    String helperText,
     @required String id,
     Key key,
     String label,
@@ -57,7 +57,7 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
               ),
             );
           },
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue,
           key: key,

@@ -21,6 +21,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     FormFieldBuilder<DateTime>? builder,
     this.cancelText,
     this.confirmText,
+    this.contentPadding,
     this.currentDate,
     InputDecoration? decoration,
     bool enabled = true,
@@ -30,7 +31,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.fieldLabelText,
     required this.firstDate,
     DateFormat? format,
-    String? helper,
+    String? helperText,
     this.helpText,
     this.icon,
     this.iconButtonBuilder,
@@ -54,10 +55,17 @@ class FastDatePicker extends FastFormField<DateTime> {
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? datePickerBuilder,
+          builder: builder ??
+              (field) {
+                final scope = FastFormScope.of(field.context);
+                final builder = scope?.builders[FastDatePicker] ??
+                    adaptiveDatePickerBuilder;
+                return builder(field);
+              },
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue,
           key: key,
@@ -70,6 +78,7 @@ class FastDatePicker extends FastFormField<DateTime> {
 
   final String? cancelText;
   final String? confirmText;
+  final EdgeInsetsGeometry? contentPadding;
   final DateTime? currentDate;
   final String? errorFormatText;
   final String? errorInvalidText;
@@ -122,7 +131,7 @@ final DatePickerIconButtonBuilder datePickerIconButtonBuilder =
   );
 };
 
-final FormFieldBuilder<DateTime> materialDatePickerBuilder =
+final FormFieldBuilder<DateTime> datePickerBuilder =
     (FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
   final context = state.context;
@@ -167,6 +176,7 @@ final FormFieldBuilder<DateTime> materialDatePickerBuilder =
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
       decoration: effectiveDecoration.copyWith(
+        contentPadding: widget.contentPadding,
         errorText: state.errorText,
       ),
       child: Row(
@@ -182,12 +192,17 @@ final FormFieldBuilder<DateTime> materialDatePickerBuilder =
   );
 };
 
-final FormFieldBuilder<DateTime> datePickerBuilder =
+final FormFieldBuilder<DateTime> adaptiveDatePickerBuilder =
     (FormFieldState<DateTime> field) {
-  switch (Theme.of(field.context).platform) {
-    case TargetPlatform.iOS:
-    case TargetPlatform.android:
-    default:
-      return materialDatePickerBuilder(field);
+  final state = field as FastDatePickerState;
+
+  if (state.adaptive) {
+    switch (Theme.of(field.context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.android:
+      default:
+        return datePickerBuilder(field);
+    }
   }
+  return datePickerBuilder(field);
 };

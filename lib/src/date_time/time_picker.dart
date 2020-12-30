@@ -18,14 +18,15 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<TimeOfDay>? builder,
-    String? cancelText,
-    String? confirmText,
+    this.cancelText,
+    this.confirmText,
+    EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
-    String? helper,
-    String? helpText,
+    String? helperText,
+    this.helpText,
     this.icon,
-    TimePickerIconButtonBuilder? iconButtonBuilder,
+    this.iconButtonBuilder,
     required String id,
     this.initialEntryMode = TimePickerEntryMode.dial,
     TimeOfDay? initialValue,
@@ -34,65 +35,23 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     ValueChanged<TimeOfDay>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<TimeOfDay>? onSaved,
-    RouteSettings? routeSettings,
-    TimePickerTextBuilder? textBuilder,
-    bool useRootNavigator = true,
+    this.routeSettings,
+    this.textBuilder,
+    this.useRootNavigator = true,
     FormFieldValidator<TimeOfDay>? validator,
   }) : super(
           autovalidateMode: autovalidateMode,
           builder: builder ??
               (field) {
-                final state = field as FastTimePickerState;
-                final theme = Theme.of(state.context);
-                final decorator =
-                    FastFormScope.of(state.context)?.inputDecorator;
-
-                final _decoration = decoration ??
-                    decorator?.call(state.context, state.widget) ??
-                    const InputDecoration();
-                final InputDecoration effectiveDecoration =
-                    _decoration.applyDefaults(theme.inputDecorationTheme);
-                final _textBuilder = textBuilder ?? timePickerTextBuilder;
-                final _iconButtonBuilder =
-                    iconButtonBuilder ?? timePickerIconButtonBuilder;
-
-                final ShowTimePicker show = (TimePickerEntryMode entryMode) {
-                  return showTimePicker(
-                    cancelText: cancelText,
-                    confirmText: confirmText,
-                    context: state.context,
-                    helpText: helpText,
-                    initialEntryMode: initialEntryMode,
-                    initialTime: state.value ?? TimeOfDay.now(),
-                    routeSettings: routeSettings,
-                    useRootNavigator: useRootNavigator,
-                  ).then((value) {
-                    if (value != null) state.didChange(value);
-                    return value;
-                  });
-                };
-
-                return InkWell(
-                  onTap: enabled ? () => show(initialEntryMode) : null,
-                  child: InputDecorator(
-                    decoration: effectiveDecoration.copyWith(
-                      errorText: state.errorText,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Expanded(
-                          child: _textBuilder(state),
-                        ),
-                        _iconButtonBuilder(state, show),
-                      ],
-                    ),
-                  ),
-                );
+                final scope = FastFormScope.of(field.context);
+                final builder = scope?.builders[FastTimePicker] ??
+                    adaptiveTimePickerBuilder;
+                return builder(field);
               },
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue,
           key: key,
@@ -103,8 +62,15 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
           validator: validator,
         );
 
+  final String? cancelText;
+  final String? confirmText;
+  final String? helpText;
   final Icon? icon;
+  final TimePickerIconButtonBuilder? iconButtonBuilder;
   final TimePickerEntryMode initialEntryMode;
+  final RouteSettings? routeSettings;
+  final TimePickerTextBuilder? textBuilder;
+  final bool useRootNavigator;
 
   @override
   FastTimePickerState createState() => FastTimePickerState();
@@ -135,4 +101,71 @@ final TimePickerIconButtonBuilder timePickerIconButtonBuilder =
     icon: widget.icon ?? Icon(Icons.schedule),
     onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
   );
+};
+
+final FormFieldBuilder<TimeOfDay> timePickerBuilder =
+    (FormFieldState<TimeOfDay> field) {
+  final state = field as FastTimePickerState;
+  final widget = state.widget;
+  final theme = Theme.of(state.context);
+  final decorator = FastFormScope.of(state.context)?.inputDecorator;
+
+  final _decoration = widget.decoration ??
+      decorator?.call(state.context, state.widget) ??
+      const InputDecoration();
+  final InputDecoration effectiveDecoration =
+      _decoration.applyDefaults(theme.inputDecorationTheme);
+  final _textBuilder = widget.textBuilder ?? timePickerTextBuilder;
+  final _iconButtonBuilder =
+      widget.iconButtonBuilder ?? timePickerIconButtonBuilder;
+
+  final ShowTimePicker show = (TimePickerEntryMode entryMode) {
+    return showTimePicker(
+      cancelText: widget.cancelText,
+      confirmText: widget.confirmText,
+      context: state.context,
+      helpText: widget.helpText,
+      initialEntryMode: widget.initialEntryMode,
+      initialTime: state.value ?? TimeOfDay.now(),
+      routeSettings: widget.routeSettings,
+      useRootNavigator: widget.useRootNavigator,
+    ).then((value) {
+      if (value != null) state.didChange(value);
+      return value;
+    });
+  };
+
+  return InkWell(
+    onTap: widget.enabled ? () => show(widget.initialEntryMode) : null,
+    child: InputDecorator(
+      decoration: effectiveDecoration.copyWith(
+        contentPadding: state.widget.contentPadding,
+        errorText: state.errorText,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Expanded(
+            child: _textBuilder(state),
+          ),
+          _iconButtonBuilder(state, show),
+        ],
+      ),
+    ),
+  );
+};
+
+final FormFieldBuilder<TimeOfDay> adaptiveTimePickerBuilder =
+    (FormFieldState<TimeOfDay> field) {
+  final state = field as FastTimePickerState;
+
+  if (state.adaptive) {
+    switch (Theme.of(field.context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.android:
+      default:
+        return timePickerBuilder(field);
+    }
+  }
+  return timePickerBuilder(field);
 };

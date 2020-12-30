@@ -4,22 +4,25 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_scope.dart';
 
-typedef SliderLabelBuilder = String Function(FastSliderState state);
-
 typedef SliderFixBuilder = Widget Function(FastSliderState state);
+
+typedef SliderLabelBuilder = String Function(FastSliderState state);
 
 @immutable
 class FastSlider extends FastFormField<double> {
   FastSlider({
-    bool adaptive = false,
+    bool? adaptive,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<double>? builder,
+    EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
     this.divisions,
+    this.errorBuilder,
     FocusNode? focusNode,
-    String? helper,
+    String? helperText,
+    this.helperBuilder,
     required String id,
     double? initialValue,
     Key? key,
@@ -37,10 +40,17 @@ class FastSlider extends FastFormField<double> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? sliderBuilder,
+          builder: builder ??
+              (field) {
+                final scope = FastFormScope.of(field.context);
+                final builder =
+                    scope?.builders[FastSlider] ?? adaptiveSliderBuilder;
+                return builder(field);
+              },
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue ?? min,
           key: key,
@@ -52,6 +62,8 @@ class FastSlider extends FastFormField<double> {
         );
 
   final int? divisions;
+  final ErrorBuilder? errorBuilder;
+  final HelperBuilder? helperBuilder;
   final SliderLabelBuilder? labelBuilder;
   final double max;
   final double min;
@@ -83,8 +95,7 @@ final SliderFixBuilder sliderSuffixBuilder = (FastSliderState state) {
   );
 };
 
-final FormFieldBuilder<double> materialSliderBuilder =
-    (FormFieldState<double> field) {
+final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
   final state = field as FastSliderState;
   final context = state.context;
   final widget = state.widget;
@@ -98,6 +109,7 @@ final FormFieldBuilder<double> materialSliderBuilder =
 
   return InputDecorator(
     decoration: effectiveDecoration.copyWith(
+      contentPadding: widget.contentPadding,
       errorText: state.errorText,
     ),
     child: Row(
@@ -127,34 +139,42 @@ final FormFieldBuilder<double> cupertinoSliderBuilder =
   final state = field as FastSliderState;
   final widget = state.widget;
 
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: <Widget>[
-      if (widget.prefixBuilder != null) widget.prefixBuilder!(state),
-      Expanded(
-        child: CupertinoSlider(
-          divisions: widget.divisions,
-          max: widget.max,
-          min: widget.min,
-          value: state.value!,
-          onChanged: widget.enabled ? state.didChange : null,
+  return CupertinoFormRow(
+    padding: widget.contentPadding,
+    prefix: widget.label is String ? Text(widget.label!) : null,
+    helper: widget.helperBuilder?.call(state) ?? helperBuilder(state),
+    error: widget.errorBuilder?.call(state) ?? errorBuilder(state),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        if (widget.prefixBuilder != null) widget.prefixBuilder!(state),
+        Expanded(
+          child: CupertinoSlider(
+            divisions: widget.divisions,
+            max: widget.max,
+            min: widget.min,
+            value: state.value!,
+            onChanged: widget.enabled ? state.didChange : null,
+          ),
         ),
-      ),
-      if (widget.suffixBuilder != null) widget.suffixBuilder!(state),
-    ],
+        if (widget.suffixBuilder != null) widget.suffixBuilder!(state),
+      ],
+    ),
   );
 };
 
-final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
+final FormFieldBuilder<double> adaptiveSliderBuilder =
+    (FormFieldState<double> field) {
   final state = field as FastSliderState;
-  if (state.widget.adaptive) {
+
+  if (state.adaptive) {
     switch (Theme.of(state.context).platform) {
       case TargetPlatform.iOS:
         return cupertinoSliderBuilder(field);
       case TargetPlatform.android:
       default:
-        return materialSliderBuilder(field);
+        return sliderBuilder(field);
     }
   }
-  return materialSliderBuilder(field);
+  return sliderBuilder(field);
 };

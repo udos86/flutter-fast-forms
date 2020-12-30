@@ -12,54 +12,37 @@ class FastDropdown extends FastFormField<String> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<String>? builder,
+    EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
-    Color? dropdownColor,
+    this.dropdownColor,
     bool enabled = true,
-    FocusNode? focusNode,
-    String? helper,
+    this.focusNode,
+    String? helperText,
+    this.hint,
     required String id,
     String? initialValue,
-    List<String> items = const [],
-    DropdownMenuItemsBuilder? itemsBuilder,
+    this.items = const [],
+    this.itemsBuilder,
     Key? key,
     String? label,
     ValueChanged<String>? onChanged,
     VoidCallback? onReset,
-    FormFieldSetter? onSaved,
-    DropdownButtonBuilder? selectedItemBuilder,
+    this.onSaved,
+    this.selectedItemBuilder,
     FormFieldValidator? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ??
               (field) {
-                final state = field as FastDropdownState;
-                final decorator =
-                    FastFormScope.of(state.context)?.inputDecorator;
-                final _decoration = decoration ??
-                    decorator?.call(state.context, state.widget) ??
-                    const InputDecoration();
-                final _itemsBuilder = itemsBuilder ?? dropdownMenuItemsBuilder;
-                final _onChanged = (value) {
-                  if (value != field.value) field.didChange(value);
-                };
-                return DropdownButtonFormField<String>(
-                  autofocus: autofocus,
-                  autovalidateMode: autovalidateMode,
-                  decoration: _decoration,
-                  dropdownColor: dropdownColor,
-                  focusNode: focusNode,
-                  items: _itemsBuilder(items, state),
-                  onChanged: enabled ? _onChanged : null,
-                  onSaved: onSaved,
-                  selectedItemBuilder: selectedItemBuilder,
-                  validator: validator,
-                  value: state.value,
-                );
+                final scope = FastFormScope.of(field.context);
+                final builder =
+                    scope?.builders[FastDropdown] ?? adaptiveDropdownBuilder;
+                return builder(field);
               },
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue,
           key: key,
@@ -69,6 +52,14 @@ class FastDropdown extends FastFormField<String> {
           onSaved: onSaved,
           validator: validator,
         );
+
+  final Color? dropdownColor;
+  final FocusNode? focusNode;
+  final Widget? hint;
+  final List<String> items;
+  final DropdownMenuItemsBuilder? itemsBuilder;
+  final FormFieldSetter? onSaved;
+  final DropdownButtonBuilder? selectedItemBuilder;
 
   @override
   FastDropdownState createState() => FastDropdownState();
@@ -87,4 +78,49 @@ final DropdownMenuItemsBuilder dropdownMenuItemsBuilder =
       child: Text(item.toString()),
     );
   }).toList();
+};
+
+final FormFieldBuilder<String> dropdownBuilder =
+    (FormFieldState<String> field) {
+  final state = field as FastDropdownState;
+  final widget = state.widget;
+
+  final decorator = FastFormScope.of(state.context)?.inputDecorator;
+  final _decoration = widget.decoration ??
+      decorator?.call(state.context, state.widget) ??
+      const InputDecoration();
+  final _itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
+  final _onChanged = (value) {
+    if (value != field.value) field.didChange(value);
+  };
+
+  return DropdownButtonFormField<String>(
+    autofocus: widget.autofocus,
+    autovalidateMode: widget.autovalidateMode,
+    decoration: _decoration,
+    dropdownColor: widget.dropdownColor,
+    focusNode: widget.focusNode,
+    hint: widget.hint,
+    items: _itemsBuilder(widget.items, state),
+    onChanged: widget.enabled ? _onChanged : null,
+    onSaved: widget.onSaved,
+    selectedItemBuilder: widget.selectedItemBuilder,
+    validator: widget.validator,
+    value: state.value,
+  );
+};
+
+final FormFieldBuilder<String> adaptiveDropdownBuilder =
+    (FormFieldState<String> field) {
+  final state = field as FastDropdownState;
+
+  if (state.adaptive) {
+    switch (Theme.of(field.context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.android:
+      default:
+        return dropdownBuilder(field);
+    }
+  }
+  return dropdownBuilder(field);
 };

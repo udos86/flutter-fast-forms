@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 import 'form.dart';
 import 'form_scope.dart';
 
+typedef ErrorBuilder<T> = Widget? Function(FastFormFieldState<T> state);
+typedef HelperBuilder<T> = Widget? Function(FastFormFieldState<T> state);
+
 @immutable
 abstract class FastFormField<T> extends FormField<T> {
   const FastFormField({
-    this.adaptive = false,
+    this.adaptive,
     this.autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     required FormFieldBuilder<T> builder,
+    this.contentPadding,
     this.decoration,
     bool enabled = true,
-    this.helper,
+    this.helperText,
     required this.id,
     T? initialValue,
     Key? key,
@@ -31,10 +35,11 @@ abstract class FastFormField<T> extends FormField<T> {
           validator: validator,
         );
 
-  final bool adaptive;
+  final bool? adaptive;
   final bool autofocus;
+  final EdgeInsetsGeometry? contentPadding;
   final InputDecoration? decoration;
-  final String? helper;
+  final String? helperText;
   final String id;
   final String? label;
   final ValueChanged<T>? onChanged;
@@ -49,6 +54,9 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
   @override
   FastFormField<T> get widget => super.widget as FastFormField<T>;
+
+  bool get adaptive =>
+      widget.adaptive ?? FastFormScope.of(context)?.adaptive ?? false;
 
   FastFormState? get formState => FastFormScope.of(context)?.formState;
 
@@ -121,3 +129,14 @@ class FastFormFieldState<T> extends FormFieldState<T> {
     });
   }
 }
+
+final ErrorBuilder<dynamic> errorBuilder = (FastFormFieldState<dynamic> state) {
+  return state.errorText is String ? Text(state.errorText!) : null;
+};
+
+final HelperBuilder<dynamic> helperBuilder =
+    (FastFormFieldState<dynamic> state) {
+  return state.widget.helperText is String
+      ? Text(state.widget.helperText!)
+      : null;
+};

@@ -13,7 +13,7 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastCheckbox(
         id: 'checkbox',
-        helper: helper,
+        helperText: helper,
         label: label,
         title: title,
       ),

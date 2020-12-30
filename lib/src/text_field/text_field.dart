@@ -9,20 +9,21 @@ import '../form_scope.dart';
 @immutable
 class FastTextField extends FastFormField<String> {
   FastTextField({
+    bool? adaptive,
     this.autocorrect = true,
     this.autofillHints,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     this.buildCounter,
     FormFieldBuilder<String>? builder,
+    EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
     this.enableInteractiveSelection = true,
     this.enableSuggestions = true,
     this.expands = false,
     this.focusNode,
-    String? helper,
-    this.hint,
+    String? helperText,
     required String id,
     String initialValue = '',
     this.inputFormatters,
@@ -40,6 +41,7 @@ class FastTextField extends FastFormField<String> {
     VoidCallback? onReset,
     FormFieldSetter<String>? onSaved,
     this.padding,
+    this.placeholder,
     this.prefix,
     this.readOnly = false,
     this.suffix,
@@ -49,12 +51,20 @@ class FastTextField extends FastFormField<String> {
     this.trailing,
     FormFieldValidator<String>? validator,
   }) : super(
+          adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? textFieldBuilder,
+          builder: builder ??
+              (field) {
+                final scope = FastFormScope.of(field.context);
+                final builder =
+                    scope?.builders[FastTextField] ?? adaptiveTextFieldBuilder;
+                return builder(field);
+              },
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue,
           key: key,
@@ -72,7 +82,6 @@ class FastTextField extends FastFormField<String> {
   final bool enableSuggestions;
   final bool expands;
   final FocusNode? focusNode;
-  final String? hint;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
   final Widget? leading;
@@ -83,6 +92,7 @@ class FastTextField extends FastFormField<String> {
   final bool obscureText;
   final String obscuringCharacter;
   final EdgeInsetsGeometry? padding;
+  final String? placeholder;
   final Widget? prefix;
   final bool readOnly;
   final Widget? suffix;
@@ -121,7 +131,7 @@ final InputCounterWidgetBuilder inputCounterWidgetBuilder = (
   );
 };
 
-final FormFieldBuilder<String> materialTextFieldBuilder =
+final FormFieldBuilder<String> textFieldBuilder =
     (FormFieldState<String> field) {
   final state = field as FastTextFieldState;
   final widget = state.widget;
@@ -132,6 +142,7 @@ final FormFieldBuilder<String> materialTextFieldBuilder =
       const InputDecoration();
   final InputDecoration effectiveDecoration =
       _decoration.applyDefaults(theme.inputDecorationTheme).copyWith(
+            contentPadding: widget.contentPadding,
             prefix: widget.prefix != null && !(widget.prefix is Icon)
                 ? widget.prefix
                 : null,
@@ -177,46 +188,51 @@ final FormFieldBuilder<String> cupertinoTextFieldBuilder =
     (FormFieldState<String> field) {
   final state = field as FastTextFieldState;
   final widget = state.widget;
+  final prefix =
+      widget.prefix ?? (widget.label is String ? Text(widget.label!) : null);
 
-  return CupertinoTextField(
+  return CupertinoTextFormFieldRow(
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
+    autovalidateMode: state.autovalidateMode,
     enabled: widget.enabled,
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
     focusNode: widget.focusNode ?? state.focusNode,
     keyboardType: widget.keyboardType,
+    initialValue: widget.initialValue,
     inputFormatters: widget.inputFormatters,
     maxLength: widget.maxLength,
-    maxLengthEnforced: widget.maxLengthEnforced,
     maxLines: widget.maxLines,
     minLines: widget.minLines,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
     onChanged: widget.enabled ? state.didChange : null,
-    padding: widget.padding ?? const EdgeInsets.all(6.0),
-    placeholder: widget.hint,
-    prefix: widget.prefix,
+    padding: widget.padding,
+    placeholder: widget.placeholder,
+    prefix: prefix,
     readOnly: widget.readOnly,
-    suffix: widget.suffix,
     textAlign: widget.textAlign,
     textAlignVertical: widget.textAlignVertical,
     textCapitalization: widget.textCapitalization,
+    validator: widget.validator,
   );
 };
 
-final FormFieldBuilder<String> textFieldBuilder =
+final FormFieldBuilder<String> adaptiveTextFieldBuilder =
     (FormFieldState<String> field) {
-  if ((field as FastTextFieldState).widget.adaptive) {
-    switch (Theme.of(field.context).platform) {
+  final state = field as FastTextFieldState;
+
+  if (state.adaptive) {
+    switch (Theme.of(state.context).platform) {
       case TargetPlatform.iOS:
         return cupertinoTextFieldBuilder(field);
       case TargetPlatform.android:
       default:
-        return materialTextFieldBuilder(field);
+        return textFieldBuilder(field);
     }
   }
-  return materialTextFieldBuilder(field);
+  return textFieldBuilder(field);
 };

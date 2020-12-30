@@ -12,19 +12,21 @@ typedef FormChanged = void Function(Map<String, dynamic> values);
 @immutable
 class FastForm extends StatefulWidget {
   FastForm({
+    this.adaptive = false,
+    this.builders = const {},
     required this.children,
     required this.formKey,
     this.inputDecorator,
     Key? key,
     this.onChanged,
-    this.padding,
   }) : super(key: key);
 
+  final bool adaptive;
+  final Map<Type, dynamic> builders;
   final List<Widget> children;
   final GlobalKey<FormState> formKey;
   final FastInputDecorator? inputDecorator;
   final FormChanged? onChanged;
-  final EdgeInsets? padding;
 
   @override
   FastFormState createState() => FastFormState();
@@ -59,9 +61,10 @@ class FastFormState extends State<FastForm> {
       // onChanged: () =>, // Current store cannot be retrieved here due to the framework calling this before widget.onChanged
       key: widget.formKey,
       child: FastFormScope(
+        adaptive: widget.adaptive,
+        builders: widget.builders,
         formState: this,
         inputDecorator: widget.inputDecorator ?? _inputDecorationCreator,
-        padding: widget.padding ?? _padding,
         child: Column(
           children: widget.children,
         ),
@@ -79,8 +82,8 @@ final FastInputDecorator _inputDecorationCreator =
         ? EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
         : EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
     labelText: field.label,
-    helperText: field.helper,
-    hintText: field is FastTextField ? field.hint : null,
+    helperText: field.helperText,
+    hintText: field is FastTextField ? field.placeholder : null,
     labelStyle: TextStyle(
       color: enabled ? theme.textTheme.bodyText1!.color : theme.disabledColor,
     ),
@@ -104,5 +107,3 @@ final FastInputDecorator _inputDecorationCreator =
     fillColor: Colors.white,
   );
 };
-
-final _padding = const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);

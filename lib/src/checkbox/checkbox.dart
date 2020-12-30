@@ -11,11 +11,10 @@ class FastCheckbox extends FastFormField<bool> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<bool>? builder,
-    EdgeInsetsGeometry contentPadding =
-        const EdgeInsets.symmetric(horizontal: 16.0),
+    EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
-    String? helper,
+    String? helperText,
     required String id,
     bool initialValue = false,
     Key? key,
@@ -24,42 +23,22 @@ class FastCheckbox extends FastFormField<bool> {
     VoidCallback? onReset,
     FormFieldSetter<bool>? onSaved,
     required this.title,
-    CheckboxTitleBuilder? titleBuilder,
-    bool tristate = false,
+    this.titleBuilder,
+    this.tristate = false,
     FormFieldValidator<bool>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ??
               (field) {
-                final state = field as FastCheckboxState;
-                final theme = Theme.of(state.context);
-                final decorator =
-                    FastFormScope.of(state.context)?.inputDecorator;
-                final _decoration = decoration ??
-                    decorator?.call(state.context, state.widget) ??
-                    const InputDecoration();
-                final InputDecoration effectiveDecoration =
-                    _decoration.applyDefaults(theme.inputDecorationTheme);
-                final _titleBuilder = titleBuilder ?? checkboxTitleBuilder;
-                return InputDecorator(
-                  decoration: effectiveDecoration.copyWith(
-                    errorText: state.errorText,
-                  ),
-                  child: CheckboxListTile(
-                    autofocus: autofocus,
-                    contentPadding: contentPadding,
-                    onChanged: enabled ? state.didChange : null,
-                    selected: state.value ?? false,
-                    tristate: tristate,
-                    title: title is String ? _titleBuilder(state) : null,
-                    value: state.value,
-                  ),
-                );
+                final scope = FastFormScope.of(field.context);
+                final builder =
+                    scope?.builders[FastCheckbox] ?? adaptiveCheckboxBuilder;
+                return builder(field);
               },
           decoration: decoration,
           enabled: enabled,
-          helper: helper,
+          helperText: helperText,
           id: id,
           initialValue: initialValue,
           key: key,
@@ -71,6 +50,8 @@ class FastCheckbox extends FastFormField<bool> {
         );
 
   final String title;
+  final CheckboxTitleBuilder? titleBuilder;
+  final bool tristate;
 
   @override
   FastCheckboxState createState() => FastCheckboxState();
@@ -89,4 +70,48 @@ final CheckboxTitleBuilder checkboxTitleBuilder = (FastCheckboxState state) {
       color: state.value! ? Colors.black : Colors.grey,
     ),
   );
+};
+
+final FormFieldBuilder<bool> checkboxBuilder = (FormFieldState<bool> field) {
+  final state = field as FastCheckboxState;
+  final widget = state.widget;
+
+  final theme = Theme.of(state.context);
+  final decorator = FastFormScope.of(state.context)?.inputDecorator;
+  final _decoration = widget.decoration ??
+      decorator?.call(state.context, state.widget) ??
+      const InputDecoration();
+  final InputDecoration effectiveDecoration =
+      _decoration.applyDefaults(theme.inputDecorationTheme);
+  final _titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
+
+  return InputDecorator(
+    decoration: effectiveDecoration.copyWith(
+      errorText: state.errorText,
+    ),
+    child: CheckboxListTile(
+      autofocus: widget.autofocus,
+      contentPadding: widget.contentPadding,
+      onChanged: widget.enabled ? state.didChange : null,
+      selected: state.value ?? false,
+      title: widget.title is String ? _titleBuilder(state) : null,
+      tristate: widget.tristate,
+      value: state.value,
+    ),
+  );
+};
+
+final FormFieldBuilder<bool> adaptiveCheckboxBuilder =
+    (FormFieldState<bool> field) {
+  final state = field as FastCheckboxState;
+
+  if (state.adaptive) {
+    switch (Theme.of(state.context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.android:
+      default:
+        return checkboxBuilder(field);
+    }
+  }
+  return checkboxBuilder(field);
 };
