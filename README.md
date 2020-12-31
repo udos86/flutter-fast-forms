@@ -16,17 +16,17 @@ and populating all field values on `Form` changes
 
 ## Widget Table
 
-| adaptive FastFormControl<T> 	|           adopts Material          	|             adopts  Cupertino            	| requires  Material Widget ancestor on `TargetPlatform.iOS` when `adaptive: true` 	|
-|:---------------------------:	|:----------------------------------:	|:----------------------------------------:	|:--------------------------------------------------------------------------------:	|
-|        `FastCheckbox`       	|         `CheckboxListTile`         	|                    no                    	|                                        yes                                       	|
-|        `FastCalendar`       	|        `CalendarDatePicker`        	|                    no                    	|                                        yes                                       	|
-|       `FastDatePicker`      	|          `showDatePicker`          	| `CupertinoDatePicker` (work in progress) 	|                                        no                                        	|
-|    `FastDateRangePicker`    	|        `showDateRangePicker`       	|                    no                    	|                                        yes                                       	|
-|        `FastDropdown`       	| `DropdownButtonFormField <String>` 	|                    no                    	|                                        yes                                       	|
-|     `FastRadioGroup<T>`     	|           `RadioListTile`          	|                    no                    	|                                        yes                                       	|
-|      `FastRangeSlider`      	|            `RangeSlider`           	|                    no                    	|                                        yes                                       	|
-|    `FastSegmentedControl`   	|                 no                 	|     `SlidingSegmenteControl <String>`    	|                                        no                                        	|
-|         `FastSlider`        	|          `Slider.adaptive`         	|             `CupertinoSlider`            	|                                        no                                        	|
-|         `FastSwitch`        	|          `SwitchListTile`          	|             `CupertinoSwitch`            	|                                        no                                        	|
-|       `FastTextField`       	|           `TextFormField`          	|        `CupertinoTextFormFieldRow`       	|                                        no                                        	|
-|       `FastTimePicker`      	|          `showTimePicker`          	| `CupertinoDatePicker` (work in progress) 	|                                        no                                        	|
+| adaptive<br>FastFormControl<T> 	|           adopts<br>Material          	|             adopts <br>Cupertino            	| requires <br>Material Widget ancestor<br>on `TargetPlatform.iOS`<br>when `adaptive: true` 	|
+|:------------------------------:	|:-------------------------------------:	|:-------------------------------------------:	|:-----------------------------------------------------------------------------------------:	|
+|         `FastCheckbox`         	|           `CheckboxListTile`          	|                      no                     	|                                            yes                                            	|
+|         `FastCalendar`         	|          `CalendarDatePicker`         	|                      no                     	|                                            yes                                            	|
+|        `FastDatePicker`        	|            `showDatePicker`           	| `CupertinoDatePicker`<br>(work in progress) 	|                                             no                                            	|
+|      `FastDateRangePicker`     	|         `showDateRangePicker`         	|                      no                     	|                                            yes                                            	|
+|         `FastDropdown`         	| `DropdownButtonFormField<br><String>` 	|                      no                     	|                                            yes                                            	|
+|       `FastRadioGroup<T>`      	|            `RadioListTile`            	|                      no                     	|                                            yes                                            	|
+|        `FastRangeSlider`       	|             `RangeSlider`             	|                      no                     	|                                            yes                                            	|
+|     `FastSegmentedControl`     	|                   no                  	|     `SlidingSegmenteControl<br><String>`    	|                                             no                                            	|
+|          `FastSlider`          	|           `Slider.adaptive`           	|              `CupertinoSlider`              	|                                             no                                            	|
+|          `FastSwitch`          	|            `SwitchListTile`           	|              `CupertinoSwitch`              	|                                             no                                            	|
+|         `FastTextField`        	|            `TextFormField`            	|         `CupertinoTextFormFieldRow`         	|                                             no                                            	|
+|        `FastTimePicker`        	|            `showTimePicker`           	| `CupertinoDatePicker`<br>(work in progress) 	|                                             no                                            	|
