@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form_field.dart';
 import '../form_scope.dart';
