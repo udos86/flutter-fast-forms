@@ -1,3 +1,7 @@
+## [v0.8.0-nullsafety.1] - 12/31/2020
+
+* adaptive form controls
+
 ## [v0.7.0-nullsafety.1] - 12/29/2020
 
 * migration to null safety
