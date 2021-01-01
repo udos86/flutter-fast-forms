@@ -62,8 +62,8 @@ class FastSlider extends FastFormField<double> {
         );
 
   final int? divisions;
-  final ErrorBuilder? errorBuilder;
-  final HelperBuilder? helperBuilder;
+  final ErrorBuilder<double>? errorBuilder;
+  final HelperBuilder<double>? helperBuilder;
   final SliderLabelBuilder? labelBuilder;
   final double max;
   final double min;

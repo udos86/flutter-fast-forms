@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import 'custom_form_field.dart';
@@ -264,10 +265,17 @@ class FormPage extends StatelessWidget {
             id: 'text_field',
             label: 'Text Field',
             placeholder: 'Placeholder',
+            helperText: 'Helper Text',
           ),
           FastSwitch(
             id: 'switch',
             label: 'Remind me on a day',
+          ),
+          FastDatePicker(
+            id: 'datepicker',
+            firstDate: DateTime(1970),
+            lastDate: DateTime(2040),
+            label: 'Datepicker',
           ),
           FastSegmentedControl(
             id: 'segmented_control',
@@ -284,7 +292,7 @@ class FormPage extends StatelessWidget {
             max: 10,
             prefixBuilder: (state) {
               return CupertinoButton(
-                padding: EdgeInsets.only(right: 16.0),
+                padding: EdgeInsets.only(left: 0),
                 child: Icon(CupertinoIcons.volume_mute),
                 onPressed: state.widget.enabled
                     ? () => state.didChange(state.widget.min)
@@ -293,14 +301,32 @@ class FormPage extends StatelessWidget {
             },
             suffixBuilder: (state) {
               return CupertinoButton(
-                padding: EdgeInsets.only(left: 16.0),
+                padding: EdgeInsets.zero,
                 child: Icon(CupertinoIcons.volume_up),
                 onPressed: state.widget.enabled
                     ? () => state.didChange(state.widget.max)
                     : null,
               );
             },
+            helperBuilder: (FormFieldState<double> _state) {
+              return DefaultTextStyle(
+                style: const TextStyle(
+                  color: CupertinoColors.black,
+                ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 6.0),
+                  child: Text('This is a help text'),
+                ),
+              );
+            },
             validator: (value) => value! > 8 ? 'Volume is too high' : null,
+          ),
+          FastDatePicker(
+            id: 'timepicker',
+            firstDate: DateTime(1970),
+            lastDate: DateTime(2040),
+            label: 'TimePicker',
+            mode: CupertinoDatePickerMode.time,
           ),
         ],
       ),

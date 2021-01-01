@@ -23,14 +23,17 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.confirmText,
     this.contentPadding,
     this.currentDate,
+    this.dateFormat,
     InputDecoration? decoration,
     bool enabled = true,
+    this.errorBuilder,
     this.errorFormatText,
     this.errorInvalidText,
     this.fieldHintText,
     this.fieldLabelText,
     required this.firstDate,
-    DateFormat? format,
+    this.helperBuilder,
+    this.height = 216.0,
     String? helperText,
     this.helpText,
     this.icon,
@@ -43,15 +46,20 @@ class FastDatePicker extends FastFormField<DateTime> {
     String? label,
     required this.lastDate,
     this.locale,
+    this.maximumYear,
+    this.minimumYear = 1,
+    this.minuteInterval = 1,
+    this.mode = CupertinoDatePickerMode.date,
     ValueChanged<DateTime>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<DateTime>? onSaved,
     this.routeSettings,
     this.selectableDayPredicate,
     this.textBuilder,
+    this.use24hFormat = false,
     this.useRootNavigator = true,
     FormFieldValidator<DateTime>? validator,
-  })  : this.dateFormat = format ?? DateFormat.yMMMMEEEEd(),
+  })  : initialValue = initialValue ?? DateTime.now(),
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -80,26 +88,47 @@ class FastDatePicker extends FastFormField<DateTime> {
   final String? confirmText;
   final EdgeInsetsGeometry? contentPadding;
   final DateTime? currentDate;
+  final DateFormat? dateFormat;
+  final ErrorBuilder<DateTime>? errorBuilder;
   final String? errorFormatText;
   final String? errorInvalidText;
-  final DateFormat dateFormat;
   final String? fieldHintText;
   final String? fieldLabelText;
   final DateTime firstDate;
+  final double height;
+  final HelperBuilder<DateTime>? helperBuilder;
   final String? helpText;
   final Icon? icon;
   final DatePickerIconButtonBuilder? iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
+  final DateTime initialValue;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
   final Locale? locale;
+  final int? maximumYear;
+  final int minimumYear;
+  final int minuteInterval;
+  final CupertinoDatePickerMode mode;
   final RouteSettings? routeSettings;
   final SelectableDayPredicate? selectableDayPredicate;
   final DatePickerTextBuilder? textBuilder;
+  final bool use24hFormat;
   final bool useRootNavigator;
 
   @override
   FastDatePickerState createState() => FastDatePickerState();
+}
+
+DateFormat _format(CupertinoDatePickerMode mode) {
+  switch (mode) {
+    case CupertinoDatePickerMode.dateAndTime:
+      return DateFormat('EEEE, MMMM d, y HH:mm');
+    case CupertinoDatePickerMode.time:
+      return DateFormat.Hm();
+    case CupertinoDatePickerMode.date:
+    default:
+      return DateFormat.yMMMMEEEEd();
+  }
 }
 
 class FastDatePickerState extends FastFormFieldState<DateTime> {
@@ -109,8 +138,9 @@ class FastDatePickerState extends FastFormFieldState<DateTime> {
 
 final DatePickerTextBuilder datePickerTextBuilder =
     (FastDatePickerState state) {
+  final widget = state.widget;
   final theme = Theme.of(state.context);
-  final format = state.widget.dateFormat.format;
+  final format = state.widget.dateFormat?.format ?? _format(widget.mode).format;
   final value = state.value;
 
   return Text(
@@ -128,6 +158,59 @@ final DatePickerIconButtonBuilder datePickerIconButtonBuilder =
     alignment: Alignment.center,
     icon: widget.icon ?? Icon(Icons.today),
     onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
+  );
+};
+
+final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
+    (FormFieldState<DateTime> field) {
+  final state = field as FastDatePickerState;
+  final widget = state.widget;
+
+  final CupertinoThemeData themeData = CupertinoTheme.of(state.context);
+  final TextStyle textStyle = themeData.textTheme.textStyle;
+  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
+
+  return CupertinoFormRow(
+    padding: widget.contentPadding,
+    helper: widget.helperBuilder?.call(state) ?? helperBuilder(state),
+    error: widget.errorBuilder?.call(state) ?? errorBuilder(state),
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (widget.label != null)
+              DefaultTextStyle(
+                style: textStyle,
+                child: Text(widget.label!),
+              ),
+            Flexible(
+              child: Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: textBuilder(state),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Container(
+          height: widget.height,
+          child: CupertinoDatePicker(
+            initialDateTime: widget.initialValue,
+            maximumDate: widget.lastDate,
+            minimumDate: widget.firstDate,
+            maximumYear: widget.maximumYear,
+            minimumYear: widget.minimumYear,
+            minuteInterval: widget.minuteInterval,
+            mode: widget.mode,
+            onDateTimeChanged: state.didChange,
+            use24hFormat: widget.use24hFormat,
+          ),
+        ),
+      ],
+    ),
   );
 };
 
@@ -159,7 +242,7 @@ final FormFieldBuilder<DateTime> datePickerBuilder =
       helpText: widget.helpText,
       initialDatePickerMode: widget.initialDatePickerMode,
       initialEntryMode: entryMode,
-      initialDate: widget.initialValue ?? DateTime.now(),
+      initialDate: widget.initialValue,
       firstDate: widget.firstDate,
       lastDate: widget.lastDate,
       locale: widget.locale,
@@ -199,6 +282,7 @@ final FormFieldBuilder<DateTime> adaptiveDatePickerBuilder =
   if (state.adaptive) {
     switch (Theme.of(field.context).platform) {
       case TargetPlatform.iOS:
+        return cupertinoDatePickerBuilder(field);
       case TargetPlatform.android:
       default:
         return datePickerBuilder(field);

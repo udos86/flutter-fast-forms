@@ -16,17 +16,17 @@ and populating all field values on `Form` changes
 
 ## Widget Table
 
-| adaptive<br>FastFormControl<T> 	|            adopts<br>Material           	|             adopts <br>Cupertino            	| requires <br>Material Widget ancestor<br>on `TargetPlatform.iOS`<br>when `adaptive: true` 	|
-|:------------------------------:	|:---------------------------------------:	|:-------------------------------------------:	|:-----------------------------------------------------------------------------------------:	|
-|         `FastCheckbox`         	|            `CheckboxListTile`           	|                      no                     	|                                            yes                                            	|
-|         `FastCalendar`         	|           `CalendarDatePicker`          	|                      no                     	|                                            yes                                            	|
-|        `FastDatePicker`        	|             `showDatePicker`            	| `CupertinoDatePicker`<br>(work in progress) 	|                                             no                                            	|
-|      `FastDateRangePicker`     	|          `showDateRangePicker`          	|                      no                     	|                                            yes                                            	|
-|         `FastDropdown`         	| `DropdownButtonFormField`<br>`<String>` 	|                      no                     	|                                            yes                                            	|
-|       `FastRadioGroup<T>`      	|             `RadioListTile`             	|                      no                     	|                                            yes                                            	|
-|        `FastRangeSlider`       	|              `RangeSlider`              	|                      no                     	|                                            yes                                            	|
-|     `FastSegmentedControl`     	|                    no                   	|    `SlidingSegmenteControl`<br>`<String>`   	|                                             no                                            	|
-|          `FastSlider`          	|            `Slider.adaptive`            	|              `CupertinoSlider`              	|                                             no                                            	|
-|          `FastSwitch`          	|             `SwitchListTile`            	|              `CupertinoSwitch`              	|                                             no                                            	|
-|         `FastTextField`        	|             `TextFormField`             	|         `CupertinoTextFormFieldRow`         	|                                             no                                            	|
-|        `FastTimePicker`        	|             `showTimePicker`            	| `CupertinoDatePicker`<br>(work in progress) 	|                                             no                                            	|
+| adaptive<br>`FastFormControl<T>` |            adopts<br>Material           |                         adopts <br>Cupertino                         | requires <br>Material Widget ancestor<br>when `adaptive: true` |
+|:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------:|
+|          `FastCheckbox`          |            `CheckboxListTile`           |                                  no                                  |                               yes                              |
+|          `FastCalendar`          |           `CalendarDatePicker`          |                                  no                                  |                               yes                              |
+|         `FastDatePicker`         |             `showDatePicker`            |                         `CupertinoDatePicker`                        |                               no                               |
+|       `FastDateRangePicker`      |          `showDateRangePicker`          |                                  no                                  |                               yes                              |
+|          `FastDropdown`          | `DropdownButtonFormField`<br>`<String>` |                                  no                                  |                               yes                              |
+|         `FastRadioGroup`         |             `RadioListTile`             |                                  no                                  |                               yes                              |
+|         `FastRangeSlider`        |              `RangeSlider`              |                                  no                                  |                               yes                              |
+|      `FastSegmentedControl`      |                    no                   |                `SlidingSegmenteControl`<br>`<String>`                |                               no                               |
+|           `FastSlider`           |            `Slider.adaptive`            |                           `CupertinoSlider`                          |                               no                               |
+|           `FastSwitch`           |             `SwitchListTile`            |                           `CupertinoSwitch`                          |                               no                               |
+|          `FastTextField`         |             `TextFormField`             |                      `CupertinoTextFormFieldRow`                     |                               no                               |
+|         `FastTimePicker`         |             `showTimePicker`            | no / use `FastDatePicker`<br>with <br>`CupertinoDatePickerMode.time` |                               yes                              |
