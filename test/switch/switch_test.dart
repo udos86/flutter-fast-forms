@@ -17,15 +17,10 @@ void main() {
       ),
     ));
 
-    final fastSwitchFinder = find.byType(FastSwitch);
-    final switchListTileFinder = find.byType(SwitchListTile);
-    final switchFinder = find.byType(Switch);
-    final titleFinder = find.text(title);
-
-    expect(fastSwitchFinder, findsOneWidget);
-    expect(switchListTileFinder, findsOneWidget);
-    expect(switchFinder, findsOneWidget);
-    expect(titleFinder, findsOneWidget);
+    expect(find.byType(FastSwitch), findsOneWidget);
+    expect(find.byType(SwitchListTile), findsOneWidget);
+    expect(find.byType(Switch), findsOneWidget);
+    expect(find.text(title), findsOneWidget);
   });
 
   testWidgets('updates FastSwitch', (WidgetTester tester) async {
@@ -76,7 +71,7 @@ void main() {
       FastSwitch(
         id: 'switch',
         title: 'title',
-        adaptive: false,
+        adaptive: true,
       ),
     ));
 

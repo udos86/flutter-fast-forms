@@ -8,17 +8,21 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastTextField', (WidgetTester tester) async {
+    final prefix = Text('prefix');
+    final suffix = Text('suffix');
+
     await tester.pumpWidget(getFastTestWidget(
       FastTextField(
         id: 'text_field',
+        prefix: prefix,
+        suffix: suffix,
       ),
     ));
 
-    final fastTextField = find.byType(FastTextField);
-    final textFormFieldFinder = find.byType(TextFormField);
-
-    expect(fastTextField, findsOneWidget);
-    expect(textFormFieldFinder, findsOneWidget);
+    expect(find.byType(FastTextField), findsOneWidget);
+    expect(find.byType(TextFormField), findsOneWidget);
+    expect(find.byWidget(prefix), findsOneWidget);
+    expect(find.byWidget(suffix), findsOneWidget);
   });
 
   testWidgets('builds input counter', (WidgetTester tester) async {
