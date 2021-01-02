@@ -102,7 +102,7 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastSlider(
         id: 'slider',
-        adaptive: false,
+        adaptive: true,
       ),
     ));
 
