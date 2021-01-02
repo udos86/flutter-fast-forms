@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,8 +11,6 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastSlider(
         id: 'slider',
-        min: 0,
-        max: 10,
         labelBuilder: sliderLabelBuilder,
         prefixBuilder: (state) => Icon(Icons.volume_up),
         suffixBuilder: sliderSuffixBuilder,
@@ -37,8 +36,6 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastSlider(
         id: 'slider',
-        min: 0,
-        max: 10,
         builder: cupertinoSliderBuilder,
         labelBuilder: sliderLabelBuilder,
         prefixBuilder: (state) => Icon(Icons.volume_up),
@@ -65,8 +62,6 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastSlider(
         id: 'slider',
-        min: 0,
-        max: 10,
         suffixBuilder: sliderSuffixBuilder,
       ),
     ));
@@ -86,8 +81,6 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastSlider(
         id: 'slider',
-        min: 0,
-        max: 10,
         validator: (value) => value! > 0 ? errorText : null,
       ),
     ));
@@ -101,5 +94,36 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);
+  });
+
+  testWidgets('adapts FastSlider to Android', (WidgetTester tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastSlider(
+        id: 'slider',
+        adaptive: false,
+      ),
+    ));
+
+    expect(find.byType(Slider), findsOneWidget);
+
+    debugDefaultTargetPlatformOverride = null;
+  });
+
+  testWidgets('adapts FastSlider to iOS', (WidgetTester tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastSlider(
+        id: 'slider',
+        adaptive: true,
+      ),
+    ));
+
+    expect(find.byType(CupertinoFormRow), findsOneWidget);
+    expect(find.byType(CupertinoSlider), findsOneWidget);
+
+    debugDefaultTargetPlatformOverride = null;
   });
 }

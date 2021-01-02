@@ -46,8 +46,8 @@ class FastRadioGroup<T> extends FastFormField<T> {
           builder: builder ??
               (field) {
                 final scope = FastFormScope.of(field.context);
-                final builder = scope?.builders[FastRadioGroup] ??
-                    adaptiveRadioGroupBuilder;
+                final builder =
+                    scope?.builders[FastRadioGroup] ?? radioGroupBuilder;
                 return builder(field);
               },
           decoration: decoration,
@@ -112,18 +112,4 @@ final FormFieldBuilder radioGroupBuilder = (FormFieldState field) {
     ),
     child: _optionsBuilder(widget.options, state),
   );
-};
-
-final FormFieldBuilder adaptiveRadioGroupBuilder = (FormFieldState field) {
-  final state = field as FastRadioGroupState;
-
-  if (state.adaptive) {
-    switch (Theme.of(state.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return radioGroupBuilder(field);
-    }
-  }
-  return radioGroupBuilder(field);
 };

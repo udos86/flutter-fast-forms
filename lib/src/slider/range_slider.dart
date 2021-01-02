@@ -24,8 +24,8 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     Key? key,
     String? label,
     this.labelsBuilder,
-    required this.min,
-    required this.max,
+    this.max = 1.0,
+    this.min = 0.0,
     this.prefixBuilder,
     this.suffixBuilder,
     ValueChanged<RangeValues>? onChanged,
@@ -38,8 +38,8 @@ class FastRangeSlider extends FastFormField<RangeValues> {
           builder: builder ??
               (field) {
                 final scope = FastFormScope.of(field.context);
-                final builder = scope?.builders[FastRangeSlider] ??
-                    adaptiveRangeSliderBuilder;
+                final builder =
+                    scope?.builders[FastRangeSlider] ?? rangeSliderBuilder;
                 return builder(field);
               },
           contentPadding: contentPadding,
@@ -144,19 +144,4 @@ final FormFieldBuilder<RangeValues> rangeSliderBuilder =
       ],
     ),
   );
-};
-
-final FormFieldBuilder<RangeValues> adaptiveRangeSliderBuilder =
-    (FormFieldState<RangeValues> field) {
-  final state = field as FastRangeSliderState;
-
-  if (state.adaptive) {
-    switch (Theme.of(state.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return rangeSliderBuilder(field);
-    }
-  }
-  return rangeSliderBuilder(field);
 };

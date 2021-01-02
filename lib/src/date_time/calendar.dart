@@ -33,7 +33,7 @@ class FastCalendar extends FastFormField<DateTime> {
               (field) {
                 final scope = FastFormScope.of(field.context);
                 final builder =
-                    scope?.builders[FastCalendar] ?? adaptiveCalendarBuilder;
+                    scope?.builders[FastCalendar] ?? calendarBuilder;
                 return builder(field);
               },
           contentPadding: contentPadding,
@@ -89,19 +89,4 @@ final FormFieldBuilder<DateTime> calendarBuilder =
       selectableDayPredicate: widget.selectableDayPredicate,
     ),
   );
-};
-
-final FormFieldBuilder<DateTime> adaptiveCalendarBuilder =
-    (FormFieldState<DateTime> field) {
-  final state = field as FastCalendarState;
-
-  if (state.adaptive) {
-    switch (Theme.of(field.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return calendarBuilder(field);
-    }
-  }
-  return calendarBuilder(field);
 };

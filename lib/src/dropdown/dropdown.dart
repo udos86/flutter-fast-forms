@@ -37,7 +37,7 @@ class FastDropdown extends FastFormField<String> {
               (field) {
                 final scope = FastFormScope.of(field.context);
                 final builder =
-                    scope?.builders[FastDropdown] ?? adaptiveDropdownBuilder;
+                    scope?.builders[FastDropdown] ?? dropdownBuilder;
                 return builder(field);
               },
           decoration: decoration,
@@ -108,19 +108,4 @@ final FormFieldBuilder<String> dropdownBuilder =
     validator: widget.validator,
     value: state.value,
   );
-};
-
-final FormFieldBuilder<String> adaptiveDropdownBuilder =
-    (FormFieldState<String> field) {
-  final state = field as FastDropdownState;
-
-  if (state.adaptive) {
-    switch (Theme.of(field.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return dropdownBuilder(field);
-    }
-  }
-  return dropdownBuilder(field);
 };

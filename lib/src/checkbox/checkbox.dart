@@ -33,7 +33,7 @@ class FastCheckbox extends FastFormField<bool> {
               (field) {
                 final scope = FastFormScope.of(field.context);
                 final builder =
-                    scope?.builders[FastCheckbox] ?? adaptiveCheckboxBuilder;
+                    scope?.builders[FastCheckbox] ?? checkboxBuilder;
                 return builder(field);
               },
           decoration: decoration,
@@ -99,19 +99,4 @@ final FormFieldBuilder<bool> checkboxBuilder = (FormFieldState<bool> field) {
       value: state.value,
     ),
   );
-};
-
-final FormFieldBuilder<bool> adaptiveCheckboxBuilder =
-    (FormFieldState<bool> field) {
-  final state = field as FastCheckboxState;
-
-  if (state.adaptive) {
-    switch (Theme.of(state.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return checkboxBuilder(field);
-    }
-  }
-  return checkboxBuilder(field);
 };

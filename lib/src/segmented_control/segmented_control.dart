@@ -36,7 +36,7 @@ class FastSegmentedControl extends FastFormField<String> {
               (field) {
                 final scope = FastFormScope.of(field.context);
                 final builder = scope?.builders[FastSegmentedControl] ??
-                    adaptiveSegmentedControlBuilder;
+                    cupertinoSegmentedControlBuilder;
                 return builder(field);
               },
           contentPadding: contentPadding,
@@ -92,19 +92,4 @@ final FormFieldBuilder<String> cupertinoSegmentedControlBuilder =
           ),
     ),
   );
-};
-
-final FormFieldBuilder<String> adaptiveSegmentedControlBuilder =
-    (FormFieldState<String> field) {
-  final state = field as FastSegmentedControlState;
-
-  if (state.adaptive) {
-    switch (Theme.of(state.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return cupertinoSegmentedControlBuilder(field);
-    }
-  }
-  return cupertinoSegmentedControlBuilder(field);
 };

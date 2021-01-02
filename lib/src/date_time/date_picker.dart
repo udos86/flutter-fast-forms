@@ -16,6 +16,7 @@ typedef DatePickerIconButtonBuilder = IconButton Function(
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
+    bool adaptive = false,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<DateTime>? builder,
@@ -61,6 +62,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     FormFieldValidator<DateTime>? validator,
   })  : initialValue = initialValue ?? DateTime.now(),
         super(
+          adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ??

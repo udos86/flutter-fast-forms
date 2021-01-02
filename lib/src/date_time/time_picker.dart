@@ -43,8 +43,8 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
           builder: builder ??
               (field) {
                 final scope = FastFormScope.of(field.context);
-                final builder = scope?.builders[FastTimePicker] ??
-                    adaptiveTimePickerBuilder;
+                final builder =
+                    scope?.builders[FastTimePicker] ?? timePickerBuilder;
                 return builder(field);
               },
           contentPadding: contentPadding,
@@ -152,19 +152,4 @@ final FormFieldBuilder<TimeOfDay> timePickerBuilder =
       ),
     ),
   );
-};
-
-final FormFieldBuilder<TimeOfDay> adaptiveTimePickerBuilder =
-    (FormFieldState<TimeOfDay> field) {
-  final state = field as FastTimePickerState;
-
-  if (state.adaptive) {
-    switch (Theme.of(field.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return timePickerBuilder(field);
-    }
-  }
-  return timePickerBuilder(field);
 };

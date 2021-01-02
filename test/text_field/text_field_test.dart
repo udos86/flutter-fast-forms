@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -88,5 +90,36 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);
+  });
+
+  testWidgets('adapts FastTextField to Android', (WidgetTester tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastTextField(
+        id: 'text_field',
+        adaptive: true,
+      ),
+    ));
+
+    expect(find.byType(TextFormField), findsOneWidget);
+
+    debugDefaultTargetPlatformOverride = null;
+  });
+
+  testWidgets('adapts FastTextField to iOS', (WidgetTester tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+
+    await tester.pumpWidget(getFastTestWidget(
+      FastTextField(
+        id: 'text_field',
+        adaptive: true,
+      ),
+    ));
+
+    expect(find.byType(CupertinoTextFormFieldRow), findsOneWidget);
+    expect(find.byType(CupertinoTextField), findsOneWidget);
+
+    debugDefaultTargetPlatformOverride = null;
   });
 }

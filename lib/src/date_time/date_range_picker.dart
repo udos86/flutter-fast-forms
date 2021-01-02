@@ -61,7 +61,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
               (field) {
                 final scope = FastFormScope.of(field.context);
                 final builder = scope?.builders[FastDateRangePicker] ??
-                    adaptiveDateRangePickerBuilder;
+                    dateRangePickerBuilder;
                 return builder(field);
               },
           contentPadding: contentPadding,
@@ -197,19 +197,4 @@ final FormFieldBuilder<DateTimeRange> dateRangePickerBuilder =
       ),
     ),
   );
-};
-
-final FormFieldBuilder<DateTimeRange> adaptiveDateRangePickerBuilder =
-    (FormFieldState<DateTimeRange> field) {
-  final state = field as FastDateRangePickerState;
-
-  if (state.adaptive) {
-    switch (Theme.of(field.context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-      default:
-        return dateRangePickerBuilder(field);
-    }
-  }
-  return dateRangePickerBuilder(field);
 };
