@@ -276,6 +276,7 @@ class FormPage extends StatelessWidget {
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
             label: 'Datepicker',
+            showModalPopup: true,
           ),
           FastSegmentedControl(
             id: 'segmented_control',

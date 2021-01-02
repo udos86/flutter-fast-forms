@@ -7,6 +7,9 @@ import '../form_scope.dart';
 
 typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
 
+typedef DatePickerCupertinoModalPopupBuilder = Widget Function(
+    BuildContext context, FastDatePickerState state);
+
 typedef ShowDatePicker = Future<DateTime?> Function(
     DatePickerEntryMode entryMode);
 
@@ -16,7 +19,7 @@ typedef DatePickerIconButtonBuilder = IconButton Function(
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
-    bool adaptive = false,
+    bool? adaptive,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<DateTime>? builder,
@@ -50,12 +53,15 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.maximumYear,
     this.minimumYear = 1,
     this.minuteInterval = 1,
+    this.modalCancelButtonText = 'Cancel',
+    this.modalDoneButtonText = 'Done',
     this.mode = CupertinoDatePickerMode.date,
     ValueChanged<DateTime>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<DateTime>? onSaved,
     this.routeSettings,
     this.selectableDayPredicate,
+    this.showModalPopup = false,
     this.textBuilder,
     this.use24hFormat = false,
     this.useRootNavigator = true,
@@ -110,9 +116,12 @@ class FastDatePicker extends FastFormField<DateTime> {
   final int? maximumYear;
   final int minimumYear;
   final int minuteInterval;
+  final String modalCancelButtonText;
+  final String modalDoneButtonText;
   final CupertinoDatePickerMode mode;
   final RouteSettings? routeSettings;
   final SelectableDayPredicate? selectableDayPredicate;
+  final bool showModalPopup;
   final DatePickerTextBuilder? textBuilder;
   final bool use24hFormat;
   final bool useRootNavigator;
@@ -163,6 +172,58 @@ final DatePickerIconButtonBuilder datePickerIconButtonBuilder =
   );
 };
 
+final DatePickerCupertinoModalPopupBuilder _cupertinoModalPopupBuilder =
+    (BuildContext context, FastDatePickerState state) {
+  final widget = state.widget;
+  DateTime? modalValue = state.value;
+
+  return Container(
+    color: CupertinoColors.systemBackground,
+    height: widget.height + 90.0,
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CupertinoButton(
+              child: Text(widget.modalCancelButtonText),
+              onPressed: () => Navigator.of(context).pop(null),
+            ),
+            CupertinoButton(
+              child: Text(
+                widget.modalDoneButtonText,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(modalValue),
+            ),
+          ],
+        ),
+        Divider(
+          height: 1.0,
+          thickness: 1.0,
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 12.0),
+          height: widget.height + 12.0,
+          child: CupertinoDatePicker(
+            initialDateTime: state.value,
+            maximumDate: widget.lastDate,
+            minimumDate: widget.firstDate,
+            maximumYear: widget.maximumYear,
+            minimumYear: widget.minimumYear,
+            minuteInterval: widget.minuteInterval,
+            mode: widget.mode,
+            onDateTimeChanged: (DateTime value) => modalValue = value,
+            use24hFormat: widget.use24hFormat,
+          ),
+        ),
+      ],
+    ),
+  );
+};
+
 final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
     (FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
@@ -171,6 +232,14 @@ final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
   final CupertinoThemeData themeData = CupertinoTheme.of(state.context);
   final TextStyle textStyle = themeData.textTheme.textStyle;
   final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
+
+  final text = Align(
+    alignment: AlignmentDirectional.centerEnd,
+    child: Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: textBuilder(state),
+    ),
+  );
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
@@ -186,31 +255,40 @@ final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
                 style: textStyle,
                 child: Text(widget.label!),
               ),
-            Flexible(
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: textBuilder(state),
-                ),
-              ),
-            ),
+            widget.showModalPopup
+                ? Flexible(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      child: text,
+                      onTap: () {
+                        showCupertinoModalPopup<DateTime>(
+                          context: state.context,
+                          builder: (BuildContext context) =>
+                              _cupertinoModalPopupBuilder(context, state),
+                        ).then((DateTime? value) {
+                          if (value != null) state.didChange(value);
+                        });
+                      },
+                    ),
+                  )
+                : Flexible(child: text),
           ],
         ),
-        Container(
-          height: widget.height,
-          child: CupertinoDatePicker(
-            initialDateTime: widget.initialValue,
-            maximumDate: widget.lastDate,
-            minimumDate: widget.firstDate,
-            maximumYear: widget.maximumYear,
-            minimumYear: widget.minimumYear,
-            minuteInterval: widget.minuteInterval,
-            mode: widget.mode,
-            onDateTimeChanged: state.didChange,
-            use24hFormat: widget.use24hFormat,
+        if (!widget.showModalPopup)
+          Container(
+            height: widget.height,
+            child: CupertinoDatePicker(
+              initialDateTime: widget.initialValue,
+              maximumDate: widget.lastDate,
+              minimumDate: widget.firstDate,
+              maximumYear: widget.maximumYear,
+              minimumYear: widget.minimumYear,
+              minuteInterval: widget.minuteInterval,
+              mode: widget.mode,
+              onDateTimeChanged: state.didChange,
+              use24hFormat: widget.use24hFormat,
+            ),
           ),
-        ),
       ],
     ),
   );
