@@ -21,15 +21,10 @@ void main() {
       ),
     );
 
-    final fastFormFinder = find.byType(FastForm);
-    final formFinder = find.byType(Form);
-    final fastFormScopeFinder = find.byType(FastFormScope);
-    final fastTextFieldFinder = find.byType(FastTextField);
-
-    expect(fastFormFinder, findsOneWidget);
-    expect(formFinder, findsOneWidget);
-    expect(fastFormScopeFinder, findsOneWidget);
-    expect(fastTextFieldFinder, findsOneWidget);
+    expect(find.byType(FastForm), findsOneWidget);
+    expect(find.byType(Form), findsOneWidget);
+    expect(find.byType(FastFormScope), findsOneWidget);
+    expect(find.byType(FastTextField), findsOneWidget);
   });
 
   testWidgets('registers form fields', (WidgetTester tester) async {
@@ -157,5 +152,43 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(state.value, state.widget.initialValue);
+  });
+
+  testWidgets('saves FastForm', (WidgetTester tester) async {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    var onSavedCalled = false;
+    String? onSavedValue;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: FastForm(
+            formKey: formKey,
+            children: <Widget>[
+              FastTextField(
+                id: 'text_field',
+                initialValue: 'Hello Test',
+                onSaved: (String? value) {
+                  onSavedCalled = true;
+                  onSavedValue = value;
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final text = 'Update Test';
+
+    await tester.enterText(find.byType(TextFormField), text);
+    await tester.pumpAndSettle();
+
+    formKey.currentState?.save();
+    await tester.pumpAndSettle();
+
+    expect(onSavedCalled, true);
+    expect(onSavedValue, text);
   });
 }
