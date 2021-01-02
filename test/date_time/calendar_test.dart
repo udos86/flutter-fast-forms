@@ -10,7 +10,7 @@ void main() {
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
       ),
     ));
 
@@ -26,7 +26,7 @@ void main() {
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
       ),
     ));
 
@@ -50,7 +50,7 @@ void main() {
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
         validator: (value) => value?.day == invalidValue ? errorText : null,
       ),
     ));

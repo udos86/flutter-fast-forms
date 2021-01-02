@@ -10,7 +10,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
       ),
     ));
 
@@ -29,7 +29,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
       ),
     ));
 
@@ -46,7 +46,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
       ),
     ));
 
@@ -63,7 +63,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
       ),
     ));
 
@@ -92,7 +92,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now()..add(Duration(days: 365)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
         validator: (value) =>
             value?.year == invalidDate.year ? errorText : null,
       ),
