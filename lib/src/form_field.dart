@@ -113,11 +113,6 @@ class FastFormFieldState<T> extends FormFieldState<T> {
     });
   }
 
-  void onSaved(T value) {
-    setValue(value);
-    formState?.update(this);
-  }
-
   void _onFocusChanged() {
     setState(() {
       if (focusNode.hasFocus) {
