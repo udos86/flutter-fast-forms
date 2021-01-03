@@ -7,7 +7,7 @@ import '../form_scope.dart';
 
 typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
 
-typedef DatePickerCupertinoModalPopupBuilder = Widget Function(
+typedef DatePickerModalPopupBuilder = Widget Function(
     BuildContext context, FastDatePickerState state);
 
 typedef ShowDatePicker = Future<DateTime?> Function(
@@ -130,15 +130,22 @@ class FastDatePicker extends FastFormField<DateTime> {
   FastDatePickerState createState() => FastDatePickerState();
 }
 
-DateFormat _format(CupertinoDatePickerMode mode) {
-  switch (mode) {
+DateFormat _datePickerFormat(FastDatePickerState state) {
+  final widget = state.widget;
+  final locale = widget.locale;
+
+  switch (widget.mode) {
     case CupertinoDatePickerMode.dateAndTime:
-      return DateFormat('EEEE, MMMM d, y HH:mm');
+      return widget.use24hFormat
+          ? DateFormat.yMMMMEEEEd(locale).add_Hm()
+          : DateFormat.yMMMMEEEEd(locale).add_jm();
     case CupertinoDatePickerMode.time:
-      return DateFormat.Hm();
+      return widget.use24hFormat
+          ? DateFormat.Hm(locale)
+          : DateFormat.jm(locale);
     case CupertinoDatePickerMode.date:
     default:
-      return DateFormat.yMMMMEEEEd();
+      return DateFormat.yMMMMEEEEd(locale);
   }
 }
 
@@ -149,9 +156,9 @@ class FastDatePickerState extends FastFormFieldState<DateTime> {
 
 final DatePickerTextBuilder datePickerTextBuilder =
     (FastDatePickerState state) {
-  final widget = state.widget;
   final theme = Theme.of(state.context);
-  final format = state.widget.dateFormat?.format ?? _format(widget.mode).format;
+  final format =
+      state.widget.dateFormat?.format ?? _datePickerFormat(state).format;
   final value = state.value;
 
   return Text(
@@ -172,7 +179,7 @@ final DatePickerIconButtonBuilder datePickerIconButtonBuilder =
   );
 };
 
-final DatePickerCupertinoModalPopupBuilder _cupertinoModalPopupBuilder =
+final DatePickerModalPopupBuilder cupertinoDatePickerModalPopupBuilder =
     (BuildContext context, FastDatePickerState state) {
   final widget = state.widget;
   DateTime? modalValue = state.value;
@@ -186,10 +193,12 @@ final DatePickerCupertinoModalPopupBuilder _cupertinoModalPopupBuilder =
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CupertinoButton(
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 16.0, 16.0),
               child: Text(widget.modalCancelButtonText),
               onPressed: () => Navigator.of(context).pop(null),
             ),
             CupertinoButton(
+              padding: EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 24.0, 16.0),
               child: Text(
                 widget.modalDoneButtonText,
                 style: TextStyle(
@@ -205,13 +214,13 @@ final DatePickerCupertinoModalPopupBuilder _cupertinoModalPopupBuilder =
           thickness: 1.0,
         ),
         Container(
-          padding: EdgeInsets.only(top: 12.0),
-          height: widget.height + 12.0,
+          padding: EdgeInsets.only(top: 6.0),
+          height: widget.height,
           child: CupertinoDatePicker(
             initialDateTime: state.value,
             maximumDate: widget.lastDate,
-            minimumDate: widget.firstDate,
             maximumYear: widget.maximumYear,
+            minimumDate: widget.firstDate,
             minimumYear: widget.minimumYear,
             minuteInterval: widget.minuteInterval,
             mode: widget.mode,
@@ -255,23 +264,24 @@ final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
                 style: textStyle,
                 child: Text(widget.label!),
               ),
-            widget.showModalPopup
-                ? Flexible(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
+            Flexible(
+              child: widget.showModalPopup
+                  ? CupertinoButton(
+                      padding: EdgeInsets.zero,
                       child: text,
-                      onTap: () {
+                      onPressed: () {
                         showCupertinoModalPopup<DateTime>(
                           context: state.context,
                           builder: (BuildContext context) =>
-                              _cupertinoModalPopupBuilder(context, state),
+                              cupertinoDatePickerModalPopupBuilder(
+                                  context, state),
                         ).then((DateTime? value) {
                           if (value != null) state.didChange(value);
                         });
                       },
-                    ),
-                  )
-                : Flexible(child: text),
+                    )
+                  : text,
+            ),
           ],
         ),
         if (!widget.showModalPopup)
@@ -280,8 +290,8 @@ final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
             child: CupertinoDatePicker(
               initialDateTime: widget.initialValue,
               maximumDate: widget.lastDate,
-              minimumDate: widget.firstDate,
               maximumYear: widget.maximumYear,
+              minimumDate: widget.firstDate,
               minimumYear: widget.minimumYear,
               minuteInterval: widget.minuteInterval,
               mode: widget.mode,
