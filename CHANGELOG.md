@@ -1,3 +1,7 @@
+## [v0.9.0-nullsafety.2] - 03/06/2021
+
+* resets Flutter SDK version to 2.0.0
+
 ## [v0.9.0-nullsafety.1] - 03/06/2021
 
 * migration to Flutter 2.0.1
