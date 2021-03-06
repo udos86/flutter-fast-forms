@@ -1,4 +1,4 @@
-## [v0.9.0] - 03/06/2021
+## [v0.9.0-nullsafety.1] - 03/06/2021
 
 * migration to Flutter 2.0.1
 
