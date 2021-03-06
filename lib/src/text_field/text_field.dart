@@ -31,7 +31,7 @@ class FastTextField extends FastFormField<String> {
     String? label,
     this.leading,
     this.maxLength,
-    this.maxLengthEnforced = true,
+    this.maxLengthEnforcement,
     this.maxLines = 1,
     this.minLines,
     this.obscureText = false,
@@ -85,7 +85,7 @@ class FastTextField extends FastFormField<String> {
   final TextInputType? keyboardType;
   final Widget? leading;
   final int? maxLength;
-  final bool maxLengthEnforced;
+  final MaxLengthEnforcement? maxLengthEnforcement;
   final int? maxLines;
   final int? minLines;
   final bool obscureText;
@@ -168,7 +168,7 @@ final FormFieldBuilder<String> textFieldBuilder =
     keyboardType: widget.keyboardType,
     inputFormatters: widget.inputFormatters,
     maxLength: widget.maxLength,
-    maxLengthEnforced: widget.maxLengthEnforced,
+    maxLengthEnforcement: widget.maxLengthEnforcement,
     maxLines: widget.maxLines,
     minLines: widget.minLines,
     obscureText: widget.obscureText,

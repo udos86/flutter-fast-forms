@@ -90,7 +90,7 @@ class FormPage extends StatelessWidget {
                     onChanged: (value) =>
                         print('Form changed: ${value.toString()}'),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     child: Text('Reset'),
                     onPressed: () => formKey.currentState?.reset(),
                   )

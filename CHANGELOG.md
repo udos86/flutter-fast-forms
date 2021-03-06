@@ -1,3 +1,7 @@
+## [v0.9.0-nullsafety.1] - 03/06/2021
+
+* migration to Flutter 2.0.1
+
 ## [v0.8.0-nullsafety.1] - 12/31/2020
 
 * adaptive form controls
