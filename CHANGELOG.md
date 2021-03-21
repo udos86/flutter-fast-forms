@@ -1,3 +1,7 @@
+## [v0.9.0] - 03/21/2021
+
+* removes `mask_text_input_formatter` dependency
+
 ## [v0.9.0-nullsafety.2] - 03/06/2021
 
 * resets Flutter SDK version to 2.0.0
