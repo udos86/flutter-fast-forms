@@ -11,10 +11,8 @@ export 'src/slider/slider.dart';
 export 'src/switch/switch.dart';
 export 'src/text_field/text_field.dart';
 
-export 'src/utils/form_formatters.dart';
-export 'src/utils/form_validators.dart';
-
 export 'src/form.dart';
 export 'src/form_field.dart';
 export 'src/form_scope.dart';
 export 'src/form_section.dart';
+export 'src/form_validators.dart';

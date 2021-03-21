@@ -147,7 +147,7 @@ class FormPage extends StatelessWidget {
             maxLength: 7,
             prefix: Icon(Icons.calendar_today),
             buildCounter: inputCounterWidgetBuilder,
-            inputFormatters: [InputFormatters.maskText('##/####')],
+            inputFormatters: [],
             validator: Validators.compose([
               Validators.required((_value) => 'Field is required'),
               Validators.minLength(
