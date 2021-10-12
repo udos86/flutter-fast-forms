@@ -12,11 +12,7 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastSegmentedControl(
         id: 'segmented_control',
-        children: Map.fromIterable(
-          testValues,
-          key: (item) => item,
-          value: (item) => Text(item),
-        ),
+        children: {for (var item in testValues) item: Text(item)},
       ),
     ));
 
@@ -39,11 +35,7 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastSegmentedControl(
         id: 'segmented_control',
-        children: Map.fromIterable(
-          testValues,
-          key: (item) => item,
-          value: (item) => Text(item),
-        ),
+        children: {for (var item in testValues) item: Text(item)},
       ),
     ));
 

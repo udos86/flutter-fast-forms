@@ -8,8 +8,8 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastTextField', (WidgetTester tester) async {
-    final prefix = Text('prefix');
-    final suffix = Text('suffix');
+    const prefix = Text('prefix');
+    const suffix = Text('suffix');
 
     await tester.pumpWidget(getFastTestWidget(
       FastTextField(
@@ -26,7 +26,7 @@ void main() {
   });
 
   testWidgets('builds input counter', (WidgetTester tester) async {
-    final maxLength = 7;
+    const maxLength = 7;
 
     await tester.pumpWidget(getFastTestWidget(
       FastTextField(
@@ -44,7 +44,7 @@ void main() {
       currentLength: state.value!.length,
       maxLength: maxLength,
       isFocused: false,
-    ) as Text;
+    );
 
     final inputCounterTextFinder =
         find.bySemanticsLabel(inputCounterText.semanticsLabel as Pattern);
@@ -64,7 +64,7 @@ void main() {
 
     expect(state.value, state.widget.initialValue);
 
-    final text = 'This is a test';
+    const text = 'This is a test';
 
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
@@ -73,8 +73,8 @@ void main() {
   });
 
   testWidgets('validates FastTextField', (WidgetTester tester) async {
-    final invalidText = 'This is an invalid text';
-    final errorText = 'Invalid input text';
+    const invalidText = 'This is an invalid text';
+    const errorText = 'Invalid input text';
 
     await tester.pumpWidget(getFastTestWidget(
       FastTextField(

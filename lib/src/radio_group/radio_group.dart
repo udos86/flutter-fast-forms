@@ -5,7 +5,7 @@ import '../form_scope.dart';
 
 @immutable
 class RadioOption<T> {
-  RadioOption({
+  const RadioOption({
     required this.title,
     required this.value,
   });
@@ -76,8 +76,7 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
   FastRadioGroup<T> get widget => super.widget as FastRadioGroup<T>;
 }
 
-final RadioOptionsBuilder radioOptionsBuilder =
-    (options, FastRadioGroupState state) {
+Flex radioOptionsBuilder(options, FastRadioGroupState state) {
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
   final tiles = options.map((option) {
     final tile = RadioListTile(
@@ -90,9 +89,9 @@ final RadioOptionsBuilder radioOptionsBuilder =
   }).toList();
 
   return vertical ? Column(children: tiles) : Row(children: tiles);
-};
+}
 
-final FormFieldBuilder radioGroupBuilder = (FormFieldState field) {
+InputDecorator radioGroupBuilder(FormFieldState field) {
   final state = field as FastRadioGroupState;
   final widget = state.widget;
 
@@ -112,4 +111,4 @@ final FormFieldBuilder radioGroupBuilder = (FormFieldState field) {
     ),
     child: _optionsBuilder(widget.options, state),
   );
-};
+}

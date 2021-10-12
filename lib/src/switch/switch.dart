@@ -68,7 +68,7 @@ class FastSwitchState extends FastFormFieldState<bool> {
   FastSwitch get widget => super.widget as FastSwitch;
 }
 
-final SwitchTitleBuilder switchTitleBuilder = (FastSwitchState state) {
+Text switchTitleBuilder(FastSwitchState state) {
   return Text(
     state.widget.title!,
     style: TextStyle(
@@ -76,9 +76,9 @@ final SwitchTitleBuilder switchTitleBuilder = (FastSwitchState state) {
       color: state.value! ? Colors.black : Colors.grey,
     ),
   );
-};
+}
 
-final FormFieldBuilder<bool> switchBuilder = (FormFieldState<bool> field) {
+InputDecorator switchBuilder(FormFieldState<bool> field) {
   final state = field as FastSwitchState;
   final widget = state.widget;
   final theme = Theme.of(state.context);
@@ -104,10 +104,9 @@ final FormFieldBuilder<bool> switchBuilder = (FormFieldState<bool> field) {
       value: state.value!,
     ),
   );
-};
+}
 
-final FormFieldBuilder<bool> cupertinoSwitchBuilder =
-    (FormFieldState<bool> field) {
+CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
   final state = field as FastSwitchState;
   final widget = state.widget;
 
@@ -121,10 +120,9 @@ final FormFieldBuilder<bool> cupertinoSwitchBuilder =
       value: state.value!,
     ),
   );
-};
+}
 
-final FormFieldBuilder<bool> adaptiveSwitchBuilder =
-    (FormFieldState<bool> field) {
+Widget adaptiveSwitchBuilder(FormFieldState<bool> field) {
   final state = field as FastSwitchState;
 
   if (state.adaptive) {
@@ -137,4 +135,4 @@ final FormFieldBuilder<bool> adaptiveSwitchBuilder =
     }
   }
   return switchBuilder(field);
-};
+}

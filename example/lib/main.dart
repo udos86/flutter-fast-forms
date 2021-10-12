@@ -6,13 +6,15 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'custom_form_field.dart';
 
 void main() {
-  runApp(ExampleApp());
+  runApp(const ExampleApp());
 }
 
 class ExampleApp extends StatelessWidget {
+  const ExampleApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final title = 'Flutter Fast Forms Example';
+    const title = 'Flutter Fast Forms Example';
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
@@ -62,10 +64,11 @@ class FormPage extends StatelessWidget {
                     formKey: formKey,
                     children: _buildCupertinoFormModel(context),
                     onChanged: (value) =>
+                        // ignore: avoid_print
                         print('Form changed: ${value.toString()}'),
                   ),
                   CupertinoButton(
-                    child: Text('Reset'),
+                    child: const Text('Reset'),
                     onPressed: () => formKey.currentState?.reset(),
                   )
                 ],
@@ -88,10 +91,11 @@ class FormPage extends StatelessWidget {
                     formKey: formKey,
                     children: _buildFormModel(context),
                     onChanged: (value) =>
+                        // ignore: avoid_print
                         print('Form changed: ${value.toString()}'),
                   ),
                   ElevatedButton(
-                    child: Text('Reset'),
+                    child: const Text('Reset'),
                     onPressed: () => formKey.currentState?.reset(),
                   )
                 ],
@@ -106,8 +110,8 @@ class FormPage extends StatelessWidget {
     return [
       FastFormSection(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-        header: Padding(
-          padding: const EdgeInsets.all(12.0),
+        header: const Padding(
+          padding: EdgeInsets.all(12.0),
           child: Text(
             'Form Example Section',
             style: TextStyle(
@@ -145,9 +149,9 @@ class FormPage extends StatelessWidget {
             placeholder: 'MM/JJJJ',
             keyboardType: TextInputType.datetime,
             maxLength: 7,
-            prefix: Icon(Icons.calendar_today),
+            prefix: const Icon(Icons.calendar_today),
             buildCounter: inputCounterWidgetBuilder,
-            inputFormatters: [],
+            inputFormatters: const [],
             validator: Validators.compose([
               Validators.required((_value) => 'Field is required'),
               Validators.minLength(
@@ -159,7 +163,7 @@ class FormPage extends StatelessWidget {
           FastDropdown(
             id: 'dropdown',
             label: 'Dropdown Field',
-            items: [
+            items: const [
               'Norway',
               'Sweden',
               'Finland',
@@ -171,7 +175,7 @@ class FormPage extends StatelessWidget {
           FastRadioGroup(
             id: 'radio_group',
             label: 'Radio Group Model',
-            options: [
+            options: const [
               RadioOption(
                 title: 'Option 1',
                 value: 'option-1',
@@ -195,7 +199,7 @@ class FormPage extends StatelessWidget {
             prefixBuilder: (state) {
               final enabled = state.widget.enabled;
               return IconButton(
-                icon: Icon(Icons.volume_off),
+                icon: const Icon(Icons.volume_off),
                 onPressed:
                     enabled ? () => state.didChange(state.widget.min) : null,
               );
@@ -203,7 +207,7 @@ class FormPage extends StatelessWidget {
             suffixBuilder: (state) {
               final enabled = state.widget.enabled;
               return IconButton(
-                icon: Icon(Icons.volume_up),
+                icon: const Icon(Icons.volume_up),
                 onPressed:
                     enabled ? () => state.didChange(state.widget.max) : null,
               );
@@ -224,8 +228,8 @@ class FormPage extends StatelessWidget {
             id: 'custom_form_field',
             label: 'Custom Form Field',
             helperText: "Optionally add some extras",
-            title: Text('Extras'),
-            options: [
+            title: const Text('Extras'),
+            options: const [
               CustomOption(
                 id: 'cheese',
                 label: 'Cheese',
@@ -258,8 +262,8 @@ class FormPage extends StatelessWidget {
       FastFormSection(
         adaptive: true,
         insetGrouped: true,
-        padding: EdgeInsets.symmetric(vertical: 12.0),
-        header: Text('Form Example Section'),
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        header: const Text('Form Example Section'),
         children: [
           FastTextField(
             id: 'text_field',
@@ -281,7 +285,7 @@ class FormPage extends StatelessWidget {
           FastSegmentedControl(
             id: 'segmented_control',
             label: 'Class',
-            children: {
+            children: const {
               'economy': Text('Economy'),
               'business': Text('Business'),
               'first': Text('First'),
@@ -293,8 +297,8 @@ class FormPage extends StatelessWidget {
             max: 10,
             prefixBuilder: (state) {
               return CupertinoButton(
-                padding: EdgeInsets.only(left: 0),
-                child: Icon(CupertinoIcons.volume_mute),
+                padding: const EdgeInsets.only(left: 0),
+                child: const Icon(CupertinoIcons.volume_mute),
                 onPressed: state.widget.enabled
                     ? () => state.didChange(state.widget.min)
                     : null,
@@ -303,19 +307,19 @@ class FormPage extends StatelessWidget {
             suffixBuilder: (state) {
               return CupertinoButton(
                 padding: EdgeInsets.zero,
-                child: Icon(CupertinoIcons.volume_up),
+                child: const Icon(CupertinoIcons.volume_up),
                 onPressed: state.widget.enabled
                     ? () => state.didChange(state.widget.max)
                     : null,
               );
             },
             helperBuilder: (FormFieldState<double> _state) {
-              return DefaultTextStyle(
-                style: const TextStyle(
+              return const DefaultTextStyle(
+                style: TextStyle(
                   color: CupertinoColors.black,
                 ),
                 child: Padding(
-                  padding: const EdgeInsetsDirectional.only(top: 6.0),
+                  padding: EdgeInsetsDirectional.only(top: 6.0),
                   child: Text('This is a help text'),
                 ),
               );

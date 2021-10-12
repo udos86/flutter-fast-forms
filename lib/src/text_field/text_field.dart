@@ -118,7 +118,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
       touched ? AutovalidateMode.always : AutovalidateMode.disabled;
 }
 
-final InputCounterWidgetBuilder inputCounterWidgetBuilder = (
+Text inputCounterWidgetBuilder(
   BuildContext context, {
   required int currentLength,
   required int? maxLength,
@@ -128,10 +128,9 @@ final InputCounterWidgetBuilder inputCounterWidgetBuilder = (
     '$currentLength / $maxLength',
     semanticsLabel: 'character input count',
   );
-};
+}
 
-final FormFieldBuilder<String> textFieldBuilder =
-    (FormFieldState<String> field) {
+TextFormField textFieldBuilder(FormFieldState<String> field) {
   final state = field as FastTextFieldState;
   final widget = state.widget;
   final theme = Theme.of(state.context);
@@ -142,11 +141,11 @@ final FormFieldBuilder<String> textFieldBuilder =
   final InputDecoration effectiveDecoration =
       _decoration.applyDefaults(theme.inputDecorationTheme).copyWith(
             contentPadding: widget.contentPadding,
-            prefix: widget.prefix != null && !(widget.prefix is Icon)
+            prefix: widget.prefix != null && widget.prefix is! Icon
                 ? widget.prefix
                 : null,
             prefixIcon: widget.prefix is Icon ? widget.prefix : null,
-            suffix: widget.suffix != null && !(widget.suffix is Icon)
+            suffix: widget.suffix != null && widget.suffix is! Icon
                 ? widget.suffix
                 : null,
             suffixIcon: widget.suffix is Icon ? widget.suffix : null,
@@ -181,10 +180,10 @@ final FormFieldBuilder<String> textFieldBuilder =
     textCapitalization: widget.textCapitalization,
     validator: widget.validator,
   );
-};
+}
 
-final FormFieldBuilder<String> cupertinoTextFieldBuilder =
-    (FormFieldState<String> field) {
+CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
+    FormFieldState<String> field) {
   final state = field as FastTextFieldState;
   final widget = state.widget;
   final prefix =
@@ -218,10 +217,9 @@ final FormFieldBuilder<String> cupertinoTextFieldBuilder =
     textCapitalization: widget.textCapitalization,
     validator: widget.validator,
   );
-};
+}
 
-final FormFieldBuilder<String> adaptiveTextFieldBuilder =
-    (FormFieldState<String> field) {
+Widget adaptiveTextFieldBuilder(FormFieldState<String> field) {
   final state = field as FastTextFieldState;
 
   if (state.adaptive) {
@@ -234,4 +232,4 @@ final FormFieldBuilder<String> adaptiveTextFieldBuilder =
     }
   }
   return textFieldBuilder(field);
-};
+}

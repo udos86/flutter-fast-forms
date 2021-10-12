@@ -3,7 +3,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 @immutable
 class CustomOption {
-  CustomOption({
+  const CustomOption({
     required this.id,
     required this.label,
   });
@@ -44,7 +44,7 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
               child: Column(
                 children: <Widget>[
                   SwitchListTile(
-                    contentPadding: EdgeInsets.all(0),
+                    contentPadding: const EdgeInsets.all(0),
                     title: title,
                     value: state.active,
                     onChanged: (bool? active) {
@@ -121,7 +121,7 @@ class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
   Widget buildActive() {
     return Column(
       children: <Widget>[
-        Divider(
+        const Divider(
           height: 4.0,
           color: Colors.black,
         ),

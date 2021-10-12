@@ -10,7 +10,7 @@ void main() {
       FastDateRangePicker(
         id: 'date_range_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -31,7 +31,7 @@ void main() {
       FastDateRangePicker(
         id: 'date_range_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -42,7 +42,7 @@ void main() {
 
     state.didChange(DateTimeRange(
       start: DateTime.now(),
-      end: DateTime.now().add(Duration(days: 1)),
+      end: DateTime.now().add(const Duration(days: 1)),
     ));
     await tester.pumpAndSettle();
 

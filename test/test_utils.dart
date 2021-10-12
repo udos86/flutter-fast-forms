@@ -5,10 +5,10 @@ typedef FastTestWidgetBuilder = Widget Function(Widget testWidget,
     {GlobalKey<FormState>? formKey});
 typedef GenericTypeOf = Type Function<T>();
 
-final GenericTypeOf typeOf = <T>() => T;
+Type typeOf<T>() => T;
 
-final FastTestWidgetBuilder getFastTestWidget =
-    (Widget testWidget, {GlobalKey<FormState>? formKey}) {
+MaterialApp getFastTestWidget(Widget testWidget,
+    {GlobalKey<FormState>? formKey}) {
   return MaterialApp(
     home: Scaffold(
       body: FastForm(
@@ -17,4 +17,4 @@ final FastTestWidgetBuilder getFastTestWidget =
       ),
     ),
   );
-};
+}

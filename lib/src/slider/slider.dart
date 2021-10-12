@@ -79,23 +79,23 @@ class FastSliderState extends FastFormFieldState<double> {
   FastSlider get widget => super.widget as FastSlider;
 }
 
-final SliderLabelBuilder sliderLabelBuilder = (FastSliderState state) {
+String sliderLabelBuilder(FastSliderState state) {
   return state.value!.toStringAsFixed(0);
-};
+}
 
-final SliderFixBuilder sliderSuffixBuilder = (FastSliderState state) {
-  return Container(
+SizedBox sliderSuffixBuilder(FastSliderState state) {
+  return SizedBox(
     width: 32.0,
     child: Text(
       state.value!.toStringAsFixed(0),
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 16.0,
       ),
     ),
   );
-};
+}
 
-final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
+InputDecorator sliderBuilder(FormFieldState<double> field) {
   final state = field as FastSliderState;
   final context = state.context;
   final widget = state.widget;
@@ -132,10 +132,9 @@ final FormFieldBuilder<double> sliderBuilder = (FormFieldState<double> field) {
       ],
     ),
   );
-};
+}
 
-final FormFieldBuilder<double> cupertinoSliderBuilder =
-    (FormFieldState<double> field) {
+CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
   final state = field as FastSliderState;
   final widget = state.widget;
 
@@ -161,10 +160,9 @@ final FormFieldBuilder<double> cupertinoSliderBuilder =
       ],
     ),
   );
-};
+}
 
-final FormFieldBuilder<double> adaptiveSliderBuilder =
-    (FormFieldState<double> field) {
+Widget adaptiveSliderBuilder(FormFieldState<double> field) {
   final state = field as FastSliderState;
 
   if (state.adaptive) {
@@ -177,4 +175,4 @@ final FormFieldBuilder<double> adaptiveSliderBuilder =
     }
   }
   return sliderBuilder(field);
-};
+}

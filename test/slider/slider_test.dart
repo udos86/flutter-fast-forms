@@ -12,7 +12,7 @@ void main() {
       FastSlider(
         id: 'slider',
         labelBuilder: sliderLabelBuilder,
-        prefixBuilder: (state) => Icon(Icons.volume_up),
+        prefixBuilder: (state) => const Icon(Icons.volume_up),
         suffixBuilder: sliderSuffixBuilder,
       ),
     ));
@@ -38,7 +38,7 @@ void main() {
         id: 'slider',
         builder: cupertinoSliderBuilder,
         labelBuilder: sliderLabelBuilder,
-        prefixBuilder: (state) => Icon(Icons.volume_up),
+        prefixBuilder: (state) => const Icon(Icons.volume_up),
         suffixBuilder: sliderSuffixBuilder,
       ),
     ));
@@ -76,7 +76,7 @@ void main() {
   });
 
   testWidgets('validates FastSlider', (WidgetTester tester) async {
-    final errorText = 'Value is too high';
+    const errorText = 'Value is too high';
 
     await tester.pumpWidget(getFastTestWidget(
       FastSlider(

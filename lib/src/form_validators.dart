@@ -6,7 +6,7 @@ typedef ErrorTexterWithConstraint = String Function(
 
 abstract class Validators {
   static FormFieldValidator<dynamic> required(ErrorTexter errorTexter) {
-    return (dynamic? value) {
+    return (dynamic value) {
       final hasLength = value is Iterable || value is String || value is Map;
       if (value == null || (hasLength && value.length == 0)) {
         return errorTexter(value);
@@ -30,9 +30,9 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<dynamic?> maxLength(
+  static FormFieldValidator<dynamic> maxLength(
       num maxLength, ErrorTexterWithConstraint errorTexter) {
-    return (dynamic? value) {
+    return (dynamic value) {
       final hasLength = value is String || value is Map || value is Iterable;
       if (value != null && hasLength && value.length > maxLength) {
         return errorTexter(value, maxLength);
@@ -41,9 +41,9 @@ abstract class Validators {
     };
   }
 
-  static FormFieldValidator<dynamic?> minLength(
+  static FormFieldValidator<dynamic> minLength(
       int minLength, ErrorTexterWithConstraint errorTexter) {
-    return (dynamic? value) {
+    return (dynamic value) {
       final hasLength = value is String || value is Map || value is Iterable;
       if (value != null && hasLength && value.length < minLength) {
         return errorTexter(value, minLength);
@@ -74,7 +74,7 @@ abstract class Validators {
 
   static FormFieldValidator<dynamic> compose(
       List<FormFieldValidator> validators) {
-    return (dynamic? value) {
+    return (dynamic value) {
       for (var index = 0; index < validators.length; index++) {
         final result = validators[index](value);
         if (result != null) return result;

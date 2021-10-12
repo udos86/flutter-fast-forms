@@ -125,13 +125,12 @@ class FastFormFieldState<T> extends FormFieldState<T> {
   }
 }
 
-final ErrorBuilder<dynamic> errorBuilder = (FastFormFieldState<dynamic> state) {
+Text? errorBuilder(FastFormFieldState<dynamic> state) {
   return state.errorText is String ? Text(state.errorText!) : null;
-};
+}
 
-final HelperBuilder<dynamic> helperBuilder =
-    (FastFormFieldState<dynamic> state) {
+Text? helperBuilder(FastFormFieldState<dynamic> state) {
   return state.widget.helperText is String
       ? Text(state.widget.helperText!)
       : null;
-};
+}

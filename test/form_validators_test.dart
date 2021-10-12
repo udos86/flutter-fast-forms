@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('required', () {
-    final errorTextFn = (_value) => 'error text';
+    String errorTextFn(_value) => 'error text';
     final validator = Validators.required(errorTextFn);
 
     expect(validator(42), null);
@@ -16,7 +16,7 @@ void main() {
   });
 
   test('requiredTrue', () {
-    final errorTextFn = (_value) => 'error text';
+    String errorTextFn(_value) => 'error text';
     final validator = Validators.requiredTrue(errorTextFn);
 
     expect(validator(true), null);
@@ -26,8 +26,8 @@ void main() {
   });
 
   test('pattern', () {
-    final pattern = "^test\$";
-    final errorTextFn = (_value, _pattern) => 'error text';
+    const pattern = "^test\$";
+    String errorTextFn(_value, _pattern) => 'error text';
     final validator = Validators.pattern(pattern, errorTextFn);
 
     expect(validator('test'), null);
@@ -38,8 +38,8 @@ void main() {
   });
 
   test('maxLength', () {
-    final maxLength = 4;
-    final errorTextFn = (_value, _maxLength) => 'error text';
+    const maxLength = 4;
+    String errorTextFn(_value, _maxLength) => 'error text';
     final validator = Validators.maxLength(maxLength, errorTextFn);
 
     expect(validator('test'), null);
@@ -54,8 +54,8 @@ void main() {
   });
 
   test('minLength', () {
-    final minLength = 4;
-    final errorTextFn = (_value, _minLength) => 'error text';
+    const minLength = 4;
+    String errorTextFn(_value, _minLength) => 'error text';
     final validator = Validators.minLength(minLength, errorTextFn);
 
     expect(validator('test'), null);
@@ -68,8 +68,8 @@ void main() {
   });
 
   test('max', () {
-    final max = 4;
-    final errorTextFn = (_value, _max) => 'error text';
+    const max = 4;
+    String errorTextFn(_value, _max) => 'error text';
     final validator = Validators.max(max, errorTextFn);
 
     expect(validator(max - 1), null);
@@ -78,8 +78,8 @@ void main() {
   });
 
   test('min', () {
-    final min = 4;
-    final errorTextFn = (_value, _min) => 'error text';
+    const min = 4;
+    String errorTextFn(_value, _min) => 'error text';
     final validator = Validators.min(min, errorTextFn);
 
     expect(validator(min + 1), null);
@@ -89,9 +89,9 @@ void main() {
   });
 
   test('compose', () {
-    final errorTextRequiredFn = (_value) => 'error text required';
-    final minLength = 4;
-    final errorTextMinLengthFn = (_value, _minLength) => 'error text minLength';
+    const minLength = 4;
+    String errorTextRequiredFn(_value) => 'error text required';
+    String errorTextMinLengthFn(_value, _minLength) => 'error text minLength';
     final validator = Validators.compose([
       Validators.required(errorTextRequiredFn),
       Validators.minLength(minLength, errorTextMinLengthFn),

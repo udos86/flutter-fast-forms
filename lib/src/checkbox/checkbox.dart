@@ -62,7 +62,7 @@ class FastCheckboxState extends FastFormFieldState<bool> {
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
-final CheckboxTitleBuilder checkboxTitleBuilder = (FastCheckboxState state) {
+Text checkboxTitleBuilder(FastCheckboxState state) {
   return Text(
     state.widget.title,
     style: TextStyle(
@@ -70,9 +70,9 @@ final CheckboxTitleBuilder checkboxTitleBuilder = (FastCheckboxState state) {
       color: state.value! ? Colors.black : Colors.grey,
     ),
   );
-};
+}
 
-final FormFieldBuilder<bool> checkboxBuilder = (FormFieldState<bool> field) {
+InputDecorator checkboxBuilder(FormFieldState<bool> field) {
   final state = field as FastCheckboxState;
   final widget = state.widget;
 
@@ -99,4 +99,4 @@ final FormFieldBuilder<bool> checkboxBuilder = (FormFieldState<bool> field) {
       value: state.value,
     ),
   );
-};
+}

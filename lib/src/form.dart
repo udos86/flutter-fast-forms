@@ -11,7 +11,7 @@ typedef FormChanged = void Function(Map<String, dynamic> values);
 
 @immutable
 class FastForm extends StatefulWidget {
-  FastForm({
+  const FastForm({
     this.adaptive = false,
     this.builders = const {},
     required this.children,
@@ -36,11 +36,8 @@ class FastFormState extends State<FastForm> {
   final Set<FastFormFieldState<dynamic>> _fields = {};
 
   UnmodifiableMapView<String, dynamic> get values {
-    return UnmodifiableMapView(Map.fromIterable(
-      _fields,
-      key: (state) => state.widget.id,
-      value: (state) => state.value,
-    ));
+    return UnmodifiableMapView(
+        {for (var state in _fields) state.widget.id: state.value});
   }
 
   void register(FastFormFieldState state) {
@@ -73,14 +70,14 @@ class FastFormState extends State<FastForm> {
   }
 }
 
-final FastInputDecorator _inputDecorationCreator =
-    (BuildContext context, FastFormField field) {
+InputDecoration _inputDecorationCreator(
+    BuildContext context, FastFormField field) {
   final theme = Theme.of(context);
   final enabled = field.enabled;
   return InputDecoration(
     contentPadding: (field is FastDropdown || field is FastTextField)
-        ? EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
-        : EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+        ? const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
+        : const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
     labelText: field.label,
     helperText: field.helperText,
     hintText: field is FastTextField ? field.placeholder : null,
@@ -97,7 +94,7 @@ final FastInputDecorator _inputDecorationCreator =
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: theme.primaryColor, width: 2),
     ),
-    errorBorder: OutlineInputBorder(
+    errorBorder: const OutlineInputBorder(
       borderSide: BorderSide(color: Colors.red, width: 2),
     ),
     focusedErrorBorder: OutlineInputBorder(
@@ -106,4 +103,4 @@ final FastInputDecorator _inputDecorationCreator =
     filled: false,
     fillColor: Colors.white,
   );
-};
+}

@@ -80,8 +80,7 @@ class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
   FastTimePicker get widget => super.widget as FastTimePicker;
 }
 
-final TimePickerTextBuilder timePickerTextBuilder =
-    (FastTimePickerState state) {
+Text timePickerTextBuilder(FastTimePickerState state) {
   final theme = Theme.of(state.context);
 
   return Text(
@@ -89,21 +88,20 @@ final TimePickerTextBuilder timePickerTextBuilder =
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
   );
-};
+}
 
-final TimePickerIconButtonBuilder timePickerIconButtonBuilder =
-    (FastTimePickerState state, ShowTimePicker show) {
+IconButton timePickerIconButtonBuilder(
+    FastTimePickerState state, ShowTimePicker show) {
   final widget = state.widget;
 
   return IconButton(
     alignment: Alignment.center,
-    icon: widget.icon ?? Icon(Icons.schedule),
+    icon: widget.icon ?? const Icon(Icons.schedule),
     onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
   );
-};
+}
 
-final FormFieldBuilder<TimeOfDay> timePickerBuilder =
-    (FormFieldState<TimeOfDay> field) {
+InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
   final state = field as FastTimePickerState;
   final widget = state.widget;
   final theme = Theme.of(state.context);
@@ -118,7 +116,7 @@ final FormFieldBuilder<TimeOfDay> timePickerBuilder =
   final _iconButtonBuilder =
       widget.iconButtonBuilder ?? timePickerIconButtonBuilder;
 
-  final ShowTimePicker show = (TimePickerEntryMode entryMode) {
+  Future<TimeOfDay?> show(TimePickerEntryMode entryMode) {
     return showTimePicker(
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
@@ -132,7 +130,7 @@ final FormFieldBuilder<TimeOfDay> timePickerBuilder =
       if (value != null) state.didChange(value);
       return value;
     });
-  };
+  }
 
   return InkWell(
     onTap: widget.enabled ? () => show(widget.initialEntryMode) : null,
@@ -152,4 +150,4 @@ final FormFieldBuilder<TimeOfDay> timePickerBuilder =
       ),
     ),
   );
-};
+}

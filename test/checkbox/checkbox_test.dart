@@ -6,9 +6,9 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastCheckbox', (WidgetTester tester) async {
-    final helper = 'helper';
-    final label = 'label';
-    final title = 'title';
+    const helper = 'helper';
+    const label = 'label';
+    const title = 'title';
 
     await tester.pumpWidget(getFastTestWidget(
       FastCheckbox(
@@ -53,7 +53,7 @@ void main() {
   });
 
   testWidgets('validates FastCheckbox', (WidgetTester tester) async {
-    final errorText = 'Must be checked';
+    const errorText = 'Must be checked';
 
     await tester.pumpWidget(getFastTestWidget(
       FastCheckbox(

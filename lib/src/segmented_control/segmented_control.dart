@@ -69,8 +69,8 @@ class FastSegmentedControlState extends FastFormFieldState<String> {
   FastSegmentedControl get widget => super.widget as FastSegmentedControl;
 }
 
-final FormFieldBuilder<String> cupertinoSegmentedControlBuilder =
-    (FormFieldState<String> field) {
+CupertinoFormRow cupertinoSegmentedControlBuilder(
+    FormFieldState<String> field) {
   final state = field as FastSegmentedControlState;
   final widget = state.widget;
 
@@ -86,10 +86,10 @@ final FormFieldBuilder<String> cupertinoSegmentedControlBuilder =
       onValueChanged: state.didChange,
       padding: widget.padding,
       thumbColor: widget.thumbColor ??
-          CupertinoDynamicColor.withBrightness(
+          const CupertinoDynamicColor.withBrightness(
             color: Color(0xFFFFFFFF),
             darkColor: Color(0xFF636366),
           ),
     ),
   );
-};
+}

@@ -25,7 +25,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     FormFieldBuilder<DateTime>? builder,
     this.cancelText,
     this.confirmText,
-    this.contentPadding,
+    EdgeInsetsGeometry? contentPadding,
     this.currentDate,
     this.dateFormat,
     InputDecoration? decoration,
@@ -66,8 +66,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.use24hFormat = false,
     this.useRootNavigator = true,
     FormFieldValidator<DateTime>? validator,
-  })  : initialValue = initialValue ?? DateTime.now(),
-        super(
+  }) : super(
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -83,7 +82,7 @@ class FastDatePicker extends FastFormField<DateTime> {
           enabled: enabled,
           helperText: helperText,
           id: id,
-          initialValue: initialValue,
+          initialValue: initialValue ?? DateTime.now(),
           key: key,
           label: label,
           onChanged: onChanged,
@@ -94,7 +93,6 @@ class FastDatePicker extends FastFormField<DateTime> {
 
   final String? cancelText;
   final String? confirmText;
-  final EdgeInsetsGeometry? contentPadding;
   final DateTime? currentDate;
   final DateFormat? dateFormat;
   final ErrorBuilder<DateTime>? errorBuilder;
@@ -109,7 +107,6 @@ class FastDatePicker extends FastFormField<DateTime> {
   final Icon? icon;
   final DatePickerIconButtonBuilder? iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
-  final DateTime initialValue;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
   final Locale? locale;
@@ -154,8 +151,7 @@ class FastDatePickerState extends FastFormFieldState<DateTime> {
   FastDatePicker get widget => super.widget as FastDatePicker;
 }
 
-final DatePickerTextBuilder datePickerTextBuilder =
-    (FastDatePickerState state) {
+Text datePickerTextBuilder(FastDatePickerState state) {
   final theme = Theme.of(state.context);
   final format =
       state.widget.dateFormat?.format ?? _datePickerFormat(state).format;
@@ -166,21 +162,21 @@ final DatePickerTextBuilder datePickerTextBuilder =
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
   );
-};
+}
 
-final DatePickerIconButtonBuilder datePickerIconButtonBuilder =
-    (FastDatePickerState state, ShowDatePicker show) {
+IconButton datePickerIconButtonBuilder(
+    FastDatePickerState state, ShowDatePicker show) {
   final widget = state.widget;
 
   return IconButton(
     alignment: Alignment.center,
-    icon: widget.icon ?? Icon(Icons.today),
+    icon: widget.icon ?? const Icon(Icons.today),
     onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
   );
-};
+}
 
-final DatePickerModalPopupBuilder cupertinoDatePickerModalPopupBuilder =
-    (BuildContext context, FastDatePickerState state) {
+Container cupertinoDatePickerModalPopupBuilder(
+    BuildContext context, FastDatePickerState state) {
   final widget = state.widget;
   DateTime? modalValue = state.value;
 
@@ -193,15 +189,17 @@ final DatePickerModalPopupBuilder cupertinoDatePickerModalPopupBuilder =
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CupertinoButton(
-              padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 16.0, 16.0),
+              padding:
+                  const EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 16.0, 16.0),
               child: Text(widget.modalCancelButtonText),
               onPressed: () => Navigator.of(context).pop(null),
             ),
             CupertinoButton(
-              padding: EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 24.0, 16.0),
+              padding:
+                  const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 24.0, 16.0),
               child: Text(
                 widget.modalDoneButtonText,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -209,12 +207,12 @@ final DatePickerModalPopupBuilder cupertinoDatePickerModalPopupBuilder =
             ),
           ],
         ),
-        Divider(
+        const Divider(
           height: 1.0,
           thickness: 1.0,
         ),
         Container(
-          padding: EdgeInsets.only(top: 6.0),
+          padding: const EdgeInsets.only(top: 6.0),
           height: widget.height,
           child: CupertinoDatePicker(
             initialDateTime: state.value,
@@ -231,10 +229,9 @@ final DatePickerModalPopupBuilder cupertinoDatePickerModalPopupBuilder =
       ],
     ),
   );
-};
+}
 
-final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
-    (FormFieldState<DateTime> field) {
+CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
   final widget = state.widget;
 
@@ -285,7 +282,7 @@ final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
           ],
         ),
         if (!widget.showModalPopup)
-          Container(
+          SizedBox(
             height: widget.height,
             child: CupertinoDatePicker(
               initialDateTime: widget.initialValue,
@@ -302,10 +299,9 @@ final FormFieldBuilder<DateTime> cupertinoDatePickerBuilder =
       ],
     ),
   );
-};
+}
 
-final FormFieldBuilder<DateTime> datePickerBuilder =
-    (FormFieldState<DateTime> field) {
+InkWell datePickerBuilder(FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
   final context = state.context;
   final widget = state.widget;
@@ -319,7 +315,7 @@ final FormFieldBuilder<DateTime> datePickerBuilder =
   final iconButtonBuilder =
       widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
 
-  final ShowDatePicker show = (DatePickerEntryMode entryMode) {
+  Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
@@ -332,7 +328,7 @@ final FormFieldBuilder<DateTime> datePickerBuilder =
       helpText: widget.helpText,
       initialDatePickerMode: widget.initialDatePickerMode,
       initialEntryMode: entryMode,
-      initialDate: widget.initialValue,
+      initialDate: widget.initialValue ?? DateTime.now(),
       firstDate: widget.firstDate,
       lastDate: widget.lastDate,
       locale: widget.locale,
@@ -343,7 +339,7 @@ final FormFieldBuilder<DateTime> datePickerBuilder =
       if (value != null) state.didChange(value);
       return value;
     });
-  };
+  }
 
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
@@ -363,10 +359,9 @@ final FormFieldBuilder<DateTime> datePickerBuilder =
       ),
     ),
   );
-};
+}
 
-final FormFieldBuilder<DateTime> adaptiveDatePickerBuilder =
-    (FormFieldState<DateTime> field) {
+Widget adaptiveDatePickerBuilder(FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
 
   if (state.adaptive) {
@@ -379,4 +374,4 @@ final FormFieldBuilder<DateTime> adaptiveDatePickerBuilder =
     }
   }
   return datePickerBuilder(field);
-};
+}

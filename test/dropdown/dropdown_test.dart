@@ -9,7 +9,7 @@ void main() {
     await tester.pumpWidget(getFastTestWidget(
       FastDropdown(
         id: 'dropdown',
-        items: [],
+        items: const [],
       ),
     ));
 
@@ -24,9 +24,9 @@ void main() {
   });
 
   testWidgets('updates FastDropdown', (WidgetTester tester) async {
-    final itemsLength = 3;
+    const itemsLength = 3;
     final items = List.generate(itemsLength, (int index) => 'item $index');
-    final testIndex = 2;
+    const testIndex = 2;
 
     await tester.pumpWidget(getFastTestWidget(
       FastDropdown(
@@ -54,13 +54,13 @@ void main() {
   });
 
   testWidgets('validates FastDropdown', (WidgetTester tester) async {
-    final invalidItem = 'invalid item';
-    final errorText = 'Do not touch this';
+    const invalidItem = 'invalid item';
+    const errorText = 'Do not touch this';
 
     await tester.pumpWidget(getFastTestWidget(
       FastDropdown(
         id: 'dropdown',
-        items: ['item', invalidItem],
+        items: const ['item', invalidItem],
         validator: (value) => value == invalidItem ? errorText : null,
       ),
     ));

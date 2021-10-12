@@ -10,7 +10,7 @@ typedef FastInputDecorator = InputDecoration Function(
     BuildContext context, FastFormField field);
 
 class FastFormScope extends InheritedWidget {
-  FastFormScope({
+  const FastFormScope({
     this.adaptive = false,
     required this.builders,
     required Widget child,

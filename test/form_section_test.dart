@@ -8,7 +8,7 @@ import 'test_utils.dart';
 
 void main() {
   testWidgets('renders FastFormSection', (WidgetTester tester) async {
-    final header = Text('Test Form Section');
+    const header = Text('Test Form Section');
 
     await tester.pumpWidget(getFastTestWidget(
       FastFormSection(
@@ -48,7 +48,7 @@ void main() {
   testWidgets('renders CupertinoFormSection', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    final header = Text('Test Form Section');
+    const header = Text('Test Form Section');
 
     await tester.pumpWidget(getFastTestWidget(
       FastFormSection(

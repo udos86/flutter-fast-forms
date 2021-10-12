@@ -53,7 +53,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.textBuilder,
     this.useRootNavigator = true,
     FormFieldValidator<DateTimeRange>? validator,
-  })  : this.dateFormat = format ?? DateFormat.yMd(),
+  })  : dateFormat = format ?? DateFormat.yMd(),
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -110,8 +110,7 @@ class FastDateRangePickerState extends FastFormFieldState<DateTimeRange> {
   FastDateRangePicker get widget => super.widget as FastDateRangePicker;
 }
 
-final DateRangePickerTextBuilder dateRangPickerTextBuilder =
-    (FastDateRangePickerState state) {
+Text dateRangPickerTextBuilder(FastDateRangePickerState state) {
   final theme = Theme.of(state.context);
   final format = state.widget.dateFormat.format;
   final value = state.value;
@@ -121,21 +120,20 @@ final DateRangePickerTextBuilder dateRangPickerTextBuilder =
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
   );
-};
+}
 
-final DateRangePickerIconButtonBuilder dateRangePickerIconButtonBuilder =
-    (FastDateRangePickerState state, ShowDateRangePicker show) {
+IconButton dateRangePickerIconButtonBuilder(
+    FastDateRangePickerState state, ShowDateRangePicker show) {
   final widget = state.widget;
 
   return IconButton(
     alignment: Alignment.center,
-    icon: Icon(Icons.today),
+    icon: const Icon(Icons.today),
     onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
   );
-};
+}
 
-final FormFieldBuilder<DateTimeRange> dateRangePickerBuilder =
-    (FormFieldState<DateTimeRange> field) {
+InkWell dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
   final state = field as FastDateRangePickerState;
   final widget = state.widget;
 
@@ -151,7 +149,7 @@ final FormFieldBuilder<DateTimeRange> dateRangePickerBuilder =
   final _iconButtonBuilder =
       widget.iconButtonBuilder ?? dateRangePickerIconButtonBuilder;
 
-  final ShowDateRangePicker show = (DatePickerEntryMode entryMode) {
+  Future<DateTimeRange?> show(DatePickerEntryMode entryMode) {
     return showDateRangePicker(
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
@@ -177,7 +175,7 @@ final FormFieldBuilder<DateTimeRange> dateRangePickerBuilder =
       if (value != null) state.didChange(value);
       return value;
     });
-  };
+  }
 
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
@@ -197,4 +195,4 @@ final FormFieldBuilder<DateTimeRange> dateRangePickerBuilder =
       ),
     ),
   );
-};
+}

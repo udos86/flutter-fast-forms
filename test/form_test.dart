@@ -75,7 +75,7 @@ void main() {
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
     final formState = FastFormScope.of(fieldState.context)?.formState;
 
-    final text = 'Hello Test';
+    const text = 'Hello Test';
 
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
@@ -111,7 +111,7 @@ void main() {
 
     expect(onChangedCalled, false);
 
-    final text = 'Hello Test';
+    const text = 'Hello Test';
 
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
@@ -141,7 +141,7 @@ void main() {
 
     final state =
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
-    final text = 'Update Test';
+    const text = 'Update Test';
 
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
@@ -180,7 +180,7 @@ void main() {
       ),
     );
 
-    final text = 'Update Test';
+    const text = 'Update Test';
 
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();

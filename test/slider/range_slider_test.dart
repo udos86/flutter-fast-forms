@@ -47,7 +47,7 @@ void main() {
     final state =
         tester.state(find.byType(FastRangeSlider)) as FastRangeSliderState;
 
-    final testValues = RangeValues(5, 7);
+    const testValues = RangeValues(5, 7);
     state.didChange(testValues);
     await tester.pumpAndSettle();
 
@@ -59,7 +59,7 @@ void main() {
   });
 
   testWidgets('validates FastRangeSlider', (WidgetTester tester) async {
-    final errorText = 'Range is too narrow';
+    const errorText = 'Range is too narrow';
 
     await tester.pumpWidget(getFastTestWidget(
       FastRangeSlider(
@@ -77,7 +77,7 @@ void main() {
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    state.didChange(RangeValues(8, 9));
+    state.didChange(const RangeValues(8, 9));
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);

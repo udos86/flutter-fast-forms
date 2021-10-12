@@ -7,14 +7,15 @@ enum FormSectionOrientation { horizontal, vertical }
 
 @immutable
 class FastFormSection extends StatelessWidget {
-  FastFormSection({
+  const FastFormSection({
     this.adaptive = false,
     required this.children,
     this.header,
     this.insetGrouped = false,
+    Key? key,
     this.orientation = FormSectionOrientation.vertical,
     this.padding = EdgeInsets.zero,
-  });
+  }) : super(key: key);
 
   final bool adaptive;
   final List<Widget> children;
@@ -25,7 +26,7 @@ class FastFormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (this.adaptive) {
+    if (adaptive) {
       switch (Theme.of(context).platform) {
         case TargetPlatform.iOS:
           return _buildCupertinoFormSection(context);

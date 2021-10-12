@@ -10,7 +10,7 @@ void main() {
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -26,7 +26,7 @@ void main() {
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -34,7 +34,7 @@ void main() {
 
     expect(state.value, state.widget.initialValue);
 
-    final testValue = 21;
+    const testValue = 21;
 
     await tester.tap(find.text(testValue.toString()));
     await tester.pumpAndSettle();
@@ -43,14 +43,14 @@ void main() {
   });
 
   testWidgets('validates FastCalendar', (WidgetTester tester) async {
-    final invalidValue = 21;
-    final errorText = 'Invalid day';
+    const invalidValue = 21;
+    const errorText = 'Invalid day';
 
     await tester.pumpWidget(getFastTestWidget(
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
         validator: (value) => value?.day == invalidValue ? errorText : null,
       ),
     ));

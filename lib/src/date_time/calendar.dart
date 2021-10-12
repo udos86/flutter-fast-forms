@@ -64,8 +64,7 @@ class FastCalendarState extends FastFormFieldState<DateTime> {
   FastCalendar get widget => super.widget as FastCalendar;
 }
 
-final FormFieldBuilder<DateTime> calendarBuilder =
-    (FormFieldState<DateTime> field) {
+InputDecorator calendarBuilder(FormFieldState<DateTime> field) {
   final state = field as FastCalendarState;
   final widget = state.widget;
   final theme = Theme.of(state.context);
@@ -89,4 +88,4 @@ final FormFieldBuilder<DateTime> calendarBuilder =
       selectableDayPredicate: widget.selectableDayPredicate,
     ),
   );
-};
+}

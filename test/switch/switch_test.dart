@@ -8,7 +8,7 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastSwitch', (WidgetTester tester) async {
-    final title = 'title';
+    const title = 'title';
 
     await tester.pumpWidget(getFastTestWidget(
       FastSwitch(
@@ -42,7 +42,7 @@ void main() {
   });
 
   testWidgets('validates FastSwitch', (WidgetTester tester) async {
-    final errorText = 'Must be switched on';
+    const errorText = 'Must be switched on';
 
     await tester.pumpWidget(getFastTestWidget(
       FastSwitch(

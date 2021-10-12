@@ -12,7 +12,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -31,7 +31,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -48,7 +48,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -65,7 +65,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ));
 
@@ -87,14 +87,14 @@ void main() {
   });
 
   testWidgets('validates FastDatePicker', (WidgetTester tester) async {
+    const errorText = 'invalid date';
     final invalidDate = DateTime(1974);
-    final errorText = 'invalid date';
 
     await tester.pumpWidget(getFastTestWidget(
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
         validator: (value) =>
             value?.year == invalidDate.year ? errorText : null,
       ),
@@ -119,7 +119,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
         adaptive: true,
       ),
     ));
@@ -136,7 +136,7 @@ void main() {
       FastDatePicker(
         id: 'date_picker',
         firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(Duration(days: 365)),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
         adaptive: true,
       ),
     ));

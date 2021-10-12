@@ -27,7 +27,7 @@ class FastDropdown extends FastFormField<String> {
     String? label,
     ValueChanged<String>? onChanged,
     VoidCallback? onReset,
-    this.onSaved,
+    FormFieldSetter? onSaved,
     this.selectedItemBuilder,
     FormFieldValidator? validator,
   }) : super(
@@ -58,7 +58,6 @@ class FastDropdown extends FastFormField<String> {
   final Widget? hint;
   final List<String> items;
   final DropdownMenuItemsBuilder? itemsBuilder;
-  final FormFieldSetter? onSaved;
   final DropdownButtonBuilder? selectedItemBuilder;
 
   @override
@@ -70,18 +69,17 @@ class FastDropdownState extends FastFormFieldState<String> {
   FastDropdown get widget => super.widget as FastDropdown;
 }
 
-final DropdownMenuItemsBuilder dropdownMenuItemsBuilder =
-    (List<String> items, FastDropdownState state) {
+List<DropdownMenuItem<String>> dropdownMenuItemsBuilder(
+    List<String> items, FastDropdownState state) {
   return items.map((item) {
     return DropdownMenuItem<String>(
       value: item.toString(),
       child: Text(item.toString()),
     );
   }).toList();
-};
+}
 
-final FormFieldBuilder<String> dropdownBuilder =
-    (FormFieldState<String> field) {
+DropdownButtonFormField<String> dropdownBuilder(FormFieldState<String> field) {
   final state = field as FastDropdownState;
   final widget = state.widget;
 
@@ -90,9 +88,9 @@ final FormFieldBuilder<String> dropdownBuilder =
       decorator?.call(state.context, state.widget) ??
       const InputDecoration();
   final _itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
-  final _onChanged = (value) {
+  void _onChanged(value) {
     if (value != field.value) field.didChange(value);
-  };
+  }
 
   return DropdownButtonFormField<String>(
     autofocus: widget.autofocus,
@@ -108,4 +106,4 @@ final FormFieldBuilder<String> dropdownBuilder =
     validator: widget.validator,
     value: state.value,
   );
-};
+}
