@@ -172,19 +172,19 @@ class FormPage extends StatelessWidget {
             ],
             initialValue: 'Finland',
           ),
-          FastRadioGroup(
+          FastRadioGroup<String>(
             id: 'radio_group',
             label: 'Radio Group Model',
             options: const [
-              RadioOption(
+              RadioOption<String>(
                 title: 'Option 1',
                 value: 'option-1',
               ),
-              RadioOption(
+              RadioOption<String>(
                 title: 'Option 2',
                 value: 'option-2',
               ),
-              RadioOption(
+              RadioOption<String>(
                 title: 'Option 3',
                 value: 'option-3',
               )

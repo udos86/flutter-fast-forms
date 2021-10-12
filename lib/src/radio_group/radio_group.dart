@@ -14,8 +14,11 @@ class RadioOption<T> {
   final String title;
 }
 
-typedef RadioOptionsBuilder = Widget Function(
-    List<RadioOption> options, FastRadioGroupState state);
+typedef RadioOptionBuilder<T> = Widget Function(
+    RadioOption<T> option, FastRadioGroupState state);
+
+typedef RadioOptionsBuilder<T> = Widget Function(
+    List<RadioOption<T>> options, FastRadioGroupState state);
 
 enum RadioGroupOrientation { horizontal, vertical }
 
@@ -37,6 +40,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
     this.orientation = RadioGroupOrientation.vertical,
     ValueChanged<T>? onChanged,
     VoidCallback? onReset,
+    this.optionBuilder,
     this.optionsBuilder,
     FormFieldSetter? onSaved,
     FormFieldValidator? validator,
@@ -64,6 +68,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
         );
 
   final List<RadioOption<T>> options;
+  final RadioOptionBuilder? optionBuilder;
   final RadioOptionsBuilder? optionsBuilder;
   final RadioGroupOrientation orientation;
 
@@ -76,17 +81,22 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
   FastRadioGroup<T> get widget => super.widget as FastRadioGroup<T>;
 }
 
-Flex radioOptionsBuilder(options, FastRadioGroupState state) {
+Widget radioOptionBuilder<T>(RadioOption<T> option, FastRadioGroupState state) {
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
-  final tiles = options.map((option) {
-    final tile = RadioListTile(
-      groupValue: state.value,
-      onChanged: state.widget.enabled ? state.didChange : null,
-      title: Text(option.title),
-      value: option.value,
-    );
-    return vertical ? tile : Expanded(child: tile);
-  }).toList();
+  final tile = RadioListTile<T>(
+    groupValue: state.value,
+    onChanged: state.widget.enabled ? state.didChange : null,
+    title: Text(option.title),
+    value: option.value,
+  );
+  return vertical ? tile : Expanded(child: tile);
+}
+
+Flex radioOptionsBuilder<T>(
+    List<RadioOption<T>> options, FastRadioGroupState state) {
+  final optionBuilder = state.widget.optionBuilder ?? radioOptionBuilder;
+  final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
+  final tiles = options.map((option) => optionBuilder(option, state)).toList();
 
   return vertical ? Column(children: tiles) : Row(children: tiles);
 }

@@ -6,9 +6,9 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastRadioGroup widget', (WidgetTester tester) async {
-    final options = [
-      const RadioOption(title: 'Option 1', value: 'option-1'),
-      const RadioOption(title: 'Option 2', value: 'option-2'),
+    const options = [
+      RadioOption(title: 'Option 1', value: 'option-1'),
+      RadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(getFastTestWidget(
@@ -32,9 +32,9 @@ void main() {
 
   testWidgets('renders FastRadioGroup widget horizontally',
       (WidgetTester tester) async {
-    final options = [
-      const RadioOption(title: 'Option 1', value: 'option-1'),
-      const RadioOption(title: 'Option 2', value: 'option-2'),
+    const options = [
+      RadioOption(title: 'Option 1', value: 'option-1'),
+      RadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(getFastTestWidget(
@@ -53,9 +53,9 @@ void main() {
   });
 
   testWidgets('updates FastRadioGroup value', (WidgetTester tester) async {
-    final options = [
-      const RadioOption(title: 'Option 1', value: 'option-1'),
-      const RadioOption(title: 'Option 2', value: 'option-2'),
+    const options = [
+      RadioOption(title: 'Option 1', value: 'option-1'),
+      RadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(getFastTestWidget(

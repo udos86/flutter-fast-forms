@@ -24,9 +24,9 @@ void main() {
   });
 
   testWidgets('updates FastDropdown', (WidgetTester tester) async {
+    const testIndex = 2;
     const itemsLength = 3;
     final items = List.generate(itemsLength, (int index) => 'item $index');
-    const testIndex = 2;
 
     await tester.pumpWidget(getFastTestWidget(
       FastDropdown(
@@ -47,7 +47,8 @@ void main() {
 
     expect(itemsFinder, findsNWidgets(itemsLength * 2));
 
-    await tester.tap(itemsFinder.at(itemsLength + testIndex));
+    await tester.tap(itemsFinder.at(itemsLength + testIndex),
+        warnIfMissed: false);
     await tester.pumpAndSettle();
 
     expect(state.value, items[testIndex]);
