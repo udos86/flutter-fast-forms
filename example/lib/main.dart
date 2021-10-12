@@ -90,9 +90,10 @@ class FormPage extends StatelessWidget {
                   FastForm(
                     formKey: formKey,
                     children: _buildFormModel(context),
-                    onChanged: (value) =>
-                        // ignore: avoid_print
-                        print('Form changed: ${value.toString()}'),
+                    onChanged: (value) {
+                      // ignore: avoid_print
+                      print('Form changed: ${value.toString()}');
+                    },
                   ),
                   ElevatedButton(
                     child: const Text('Reset'),
