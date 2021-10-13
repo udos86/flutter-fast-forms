@@ -1,3 +1,7 @@
+## [v1.0.0] - 10/13/2021
+
+* migration to Flutter `2.5`
+
 ## [v0.9.0] - 03/21/2021
 
 * removes `mask_text_input_formatter` dependency
