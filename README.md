@@ -10,9 +10,97 @@ At the core, it adds `FormField<T>` wrappers for all [Material](https://flutter.
 
 At the top, it provides a convenient set of **adaptive** `FastFormControl<T>` widgets with support of [**validation states**](https://github.com/flutter/flutter/issues/18885).
 
+## Getting Started
 
-## Adaptive Input Widgets
+1. Install the package:
+```sh
+flutter pub add flutter_fast_forms
+```
 
+2. Add a `FastForm` widget
+```dart
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: FastForm(
+            formKey: formKey,
+            children: [],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+3. Add some `FastFormControl<T>`:
+```dart
+child: FastForm(
+  formKey: formKey,
+  children: [
+    FastDatePicker(
+      id: 'date_picker',
+      label: 'Birthday',
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    ),
+    FastTextField(
+      id: 'text_field',
+      label: 'Name',
+      placeholder: 'Your name',
+      maxLength: 42,
+    ),
+    FastDropdown(
+      id: 'dropdown',
+      label: 'Country',
+      items: const [
+        'Norway',
+        'Sweden',
+        'Finland',
+        'Denmark',
+        'Iceland',
+      ],
+    ),
+  ],
+)
+```
+
+4. To add consistent padding wrap it all with `FastFormSection`:
+```dart
+child: FastForm(
+  formKey: formKey,
+  children: [
+    FastFormSection(
+      header: const Text('My Form'),
+      padding: EdgeInsets.all(16.0),
+      children: [
+        FastDatePicker(
+          id: 'date_picker',
+          label: 'Birthday',
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
+        ),
+        // ...
+      ],
+    ),
+  ]
+)
+```
+
+
+## Widget Overview
+---
 | adaptive<br>`FastFormControl<T>` |            adopts<br>Material           |                         adopts <br>Cupertino                         | requires <br>Material Widget ancestor<br>when `adaptive: true` |
 |:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------:|
 |          `FastCheckbox`          |            `CheckboxListTile`           |                                  no                                  |                               yes                              |
