@@ -62,10 +62,11 @@ class FormPage extends StatelessWidget {
                   FastForm(
                     adaptive: true,
                     formKey: formKey,
-                    children: _buildCupertinoFormModel(context),
-                    onChanged: (value) =>
-                        // ignore: avoid_print
-                        print('Form changed: ${value.toString()}'),
+                    children: _buildCupertinoForm(context),
+                    onChanged: (value) {
+                      // ignore: avoid_print
+                      print('Form changed: ${value.toString()}');
+                    },
                   ),
                   CupertinoButton(
                     child: const Text('Reset'),
@@ -89,7 +90,7 @@ class FormPage extends StatelessWidget {
                 children: [
                   FastForm(
                     formKey: formKey,
-                    children: _buildFormModel(context),
+                    children: _buildForm(context),
                     onChanged: (value) {
                       // ignore: avoid_print
                       print('Form changed: ${value.toString()}');
@@ -107,7 +108,7 @@ class FormPage extends StatelessWidget {
     }
   }
 
-  List<Widget> _buildFormModel(BuildContext context) {
+  List<Widget> _buildForm(BuildContext context) {
     return [
       FastFormSection(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
@@ -258,7 +259,7 @@ class FormPage extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildCupertinoFormModel(BuildContext context) {
+  List<Widget> _buildCupertinoForm(BuildContext context) {
     return [
       FastFormSection(
         adaptive: true,
