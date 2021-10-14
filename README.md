@@ -14,8 +14,8 @@ At the top, it provides a convenient set of **adaptive** `FastFormControl<T>` wi
 
 1. Add a `FastForm` to your widget tree:
 ```dart
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+class MyFormPage extends StatelessWidget {
+  MyFormPage({Key? key, required this.title}) : super(key: key);
 
   final formKey = GlobalKey<FormState>();
   final String title;
@@ -44,23 +44,21 @@ class MyHomePage extends StatelessWidget {
 child: FastForm(
   formKey: formKey,
   children: [
-    FastDatePicker(
-      id: 'field_birthday',
-      label: 'Birthday',
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    ),
     FastTextField(
-      id: 'field_name',
-      label: 'Name',
-      placeholder: 'Your name',
-      maxLength: 42,
+      id: 'field_destination',
+      label: 'Destination',
+      placeholder: 'Where are you going?',
+    ),
+    FastDateRangePicker(
+      id: 'field_check_in_out',
+      label: 'Check-in - Check-out',
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
     ),
     FastCheckbox(
-      id: 'field_no_robot',
-      label: 'reCAPTCHA',
-      title: 'I am not a robot',
-      contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
+      id: 'field_travel_purpose',
+      label: 'Travel purpose',
+      title: 'I am travelling for work',
     ),
   ],
 )
@@ -75,11 +73,10 @@ child: FastForm(
       header: const Text('My Form'),
       padding: EdgeInsets.all(16.0),
       children: [
-        FastDatePicker(
-          id: 'field_birthday',
-          label: 'Birthday',
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
+        FastTextField(
+          id: 'field_destination',
+          label: 'Destination',
+          placeholder: 'Where are you going?',
         ),
         // ...
       ],
