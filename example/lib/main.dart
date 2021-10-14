@@ -44,7 +44,7 @@ class ExampleApp extends StatelessWidget {
 class FormPage extends StatelessWidget {
   FormPage({Key? key, required this.title}) : super(key: key);
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final String title;
 
   @override

@@ -12,17 +12,12 @@ At the top, it provides a convenient set of **adaptive** `FastFormControl<T>` wi
 
 ## Getting Started
 
-1. Install the package:
-```sh
-flutter pub add flutter_fast_forms
-```
-
-2. Add a `FastForm` widget
+1. Add a `FastForm` to your widget tree:
 ```dart
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final String title;
 
   @override
@@ -44,39 +39,34 @@ class MyHomePage extends StatelessWidget {
 }
 ```
 
-3. Add some `FastFormControl<T>`:
+2. Add a set of `FastFormControl<T>` to build up your form:
 ```dart
 child: FastForm(
   formKey: formKey,
   children: [
     FastDatePicker(
-      id: 'date_picker',
+      id: 'field_birthday',
       label: 'Birthday',
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     ),
     FastTextField(
-      id: 'text_field',
+      id: 'field_name',
       label: 'Name',
       placeholder: 'Your name',
       maxLength: 42,
     ),
-    FastDropdown(
-      id: 'dropdown',
-      label: 'Country',
-      items: const [
-        'Norway',
-        'Sweden',
-        'Finland',
-        'Denmark',
-        'Iceland',
-      ],
+    FastCheckbox(
+      id: 'field_no_robot',
+      label: 'reCAPTCHA',
+      title: 'I am not a robot',
+      contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
     ),
   ],
 )
 ```
 
-4. To add consistent padding wrap it all with `FastFormSection`:
+3. Wrap it all with `FastFormSection` for grouping and consistent padding:
 ```dart
 child: FastForm(
   formKey: formKey,
@@ -86,7 +76,7 @@ child: FastForm(
       padding: EdgeInsets.all(16.0),
       children: [
         FastDatePicker(
-          id: 'date_picker',
+          id: 'field_birthday',
           label: 'Birthday',
           firstDate: DateTime(1900),
           lastDate: DateTime.now(),
