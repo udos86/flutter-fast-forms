@@ -7,7 +7,8 @@ import 'form_field.dart';
 import 'form_scope.dart';
 import 'text_field/text_field.dart';
 
-typedef FormChanged = void Function(Map<String, dynamic> values);
+typedef FormChanged = void Function(
+    UnmodifiableMapView<String, dynamic> values);
 
 @immutable
 class FastForm extends StatefulWidget {
@@ -36,8 +37,9 @@ class FastFormState extends State<FastForm> {
   final Set<FastFormFieldState<dynamic>> _fields = {};
 
   UnmodifiableMapView<String, dynamic> get values {
-    return UnmodifiableMapView(
-        {for (var state in _fields) state.widget.id: state.value});
+    return UnmodifiableMapView({
+      for (var fieldState in _fields) fieldState.widget.id: fieldState.value
+    });
   }
 
   void register(FastFormFieldState state) {
@@ -55,7 +57,8 @@ class FastFormState extends State<FastForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      // onChanged: () =>, // Current store cannot be retrieved here due to the framework calling this before widget.onChanged
+      // Current store cannot be retrieved here due to the framework calling this before widget.onChanged
+      // onChanged: () =>,
       key: widget.formKey,
       child: FastFormScope(
         adaptive: widget.adaptive,

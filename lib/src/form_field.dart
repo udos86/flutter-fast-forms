@@ -52,13 +52,14 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
   late FocusNode focusNode;
 
+  FastFormScope? formScope;
+
   @override
   FastFormField<T> get widget => super.widget as FastFormField<T>;
 
-  bool get adaptive =>
-      widget.adaptive ?? FastFormScope.of(context)?.adaptive ?? false;
+  bool get adaptive => widget.adaptive ?? formScope?.adaptive ?? false;
 
-  FastFormState? get formState => FastFormScope.of(context)?.formState;
+  FastFormState? get formState => formScope?.formState;
 
   @override
   void initState() {
@@ -82,6 +83,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
   @override
   Widget build(BuildContext context) {
+    formScope = FastFormScope.of(context);
     formState?.register(this);
     return super.build(context);
   }

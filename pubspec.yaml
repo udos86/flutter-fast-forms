@@ -1,6 +1,6 @@
 name: flutter_fast_forms
-description: Enhances Flutter SDK with framework-compliant form fields and a lightweight meta form widget layer to speed up form development
-version: 1.0.0
+description: Enhances the Flutter SDK form field wrappers, adaptive form field widgets and validation states to speed up form development.
+version: 1.0.1
 repository: https://github.com/udos86/flutter-fast-forms
 
 environment:
