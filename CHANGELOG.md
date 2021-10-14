@@ -1,3 +1,7 @@
+## [v1.0.1] - 10/14/2021
+
+* internal `FastFormFieldState<T>` refactoring
+
 ## [v1.0.0] - 10/13/2021
 
 * migration to Flutter `2.5`
