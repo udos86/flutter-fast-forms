@@ -22,7 +22,7 @@ void main() {
     final widget =
         tester.widget(fastRadioGroupFinder) as FastRadioGroup<String>;
 
-    final optionsFinder = find.byType(RadioListTile);
+    final optionsFinder = find.byType(typeOf<RadioListTile<String>>());
 
     expect(fastRadioGroupFinder, findsOneWidget);
 
@@ -46,7 +46,7 @@ void main() {
     ));
 
     final expandedFinder = find.byType(Expanded);
-    final optionsFinder = find.byType(RadioListTile);
+    final optionsFinder = find.byType(typeOf<RadioListTile<String>>());
 
     expect(expandedFinder, findsNWidgets(options.length));
     expect(optionsFinder, findsNWidgets(options.length));
@@ -69,7 +69,7 @@ void main() {
     final state =
         tester.state(fastRadioGroupFinder) as FastRadioGroupState<String>;
 
-    final optionsFinder = find.byType(RadioListTile);
+    final optionsFinder = find.byType(typeOf<RadioListTile<String>>());
 
     expect(state.value, options.first.value);
 
