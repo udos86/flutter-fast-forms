@@ -13,12 +13,16 @@ It adds these missing pieces to the Flutter SDK to make Flutter form development
 * `FastForm` widget that provides current form field values `onChanged`
 * common `FormFieldValidator<T>` functions
 
-![fff_1](https://user-images.githubusercontent.com/508325/137481158-89c424d9-2e7b-41ce-a86e-22646d7ecf86.png)
-![fff_2](https://user-images.githubusercontent.com/508325/137481545-852c2928-d074-4af6-987a-ca01c200d309.png)
-![fff_3](https://user-images.githubusercontent.com/508325/137481680-7a14bb53-da2d-49bf-9d52-f40cf77c7dda.png)
-![fff_4](https://user-images.githubusercontent.com/508325/137481729-3711d859-d153-4b1a-a5e0-f2c608b2e5d5.png)
-![fff_5](https://user-images.githubusercontent.com/508325/137481851-04cf0bab-7315-4f87-96e2-f2ee69b29217.png)
-![fff_6](https://user-images.githubusercontent.com/508325/137481875-8d025dae-ffbf-4527-b6d0-4d38fd7793e2.png)
+---
+![fff_1](https://user-images.githubusercontent.com/508325/137506640-4cfbd53f-ac18-465d-96e9-84426f8e88bf.png)
+![fff_2](https://user-images.githubusercontent.com/508325/137506706-ba54ae05-580c-45c6-8b29-265cc3d3c418.png)
+![fff_3](https://user-images.githubusercontent.com/508325/137506833-5399a721-b269-4069-9ce7-89f70c3001ed.png)
+![fff_4](https://user-images.githubusercontent.com/508325/137506915-e646600d-6bc5-44b7-ac39-6da1366641b8.png)
+![fff_7](https://user-images.githubusercontent.com/508325/137507175-9bb211b5-5fa2-483b-8a2c-5fa4f92113d9.png)
+![fff_8](https://user-images.githubusercontent.com/508325/137507232-b8014080-980b-400e-b316-2123f530f9be.png)
+![fff_5](https://user-images.githubusercontent.com/508325/137507001-63791436-9553-4dc4-b25b-f92d7f0b9e8d.png)
+![fff_6](https://user-images.githubusercontent.com/508325/137507072-6084bb0b-b311-4b09-aea3-95ddd4f63db5.png)
+
 
 ## Getting Started
 
