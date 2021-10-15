@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 import '../form_scope.dart';
 
+typedef OptionsMatcher<O extends Object> = bool Function(
+    TextEditingValue textEditingValue, O option);
+
+bool _optionsMatcher<O extends Object>(TextEditingValue value, O option) {
+  return option.toString().toLowerCase().contains(value.text.toLowerCase());
+}
+
 @immutable
 class FastAutocomplete<O extends Object> extends FastFormField<String> {
   FastAutocomplete({
@@ -26,6 +33,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     this.onSelected,
     this.options,
     this.optionsBuilder,
+    this.optionsMatcher,
     this.optionsMaxHeight = 200.00,
     this.optionsViewBuilder,
   })  : _initialValue = initialValue,
@@ -58,6 +66,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
   final AutocompleteOnSelected<O>? onSelected;
   final Iterable<O>? options;
   final AutocompleteOptionsBuilder<O>? optionsBuilder;
+  final OptionsMatcher<O>? optionsMatcher;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<O>? optionsViewBuilder;
 
@@ -71,33 +80,20 @@ class FastAutocompleteState<O extends Object>
   FastAutocomplete<O> get widget => super.widget as FastAutocomplete<O>;
 }
 
-AutocompleteOptionsBuilder<O> optionsBuilderFactory<O extends Object>(
-  Iterable<O> options,
-  FastAutocompleteState<O> state,
-) {
-  return (TextEditingValue textEditingValue) {
-    if (textEditingValue.text == '') {
+AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(
+    Iterable<O> options, FastAutocompleteState<O> state) {
+  return (TextEditingValue value) {
+    if (value.text == '') {
       return const Iterable.empty();
     }
-
-    return options.where((O option) {
-      return option
-          .toString()
-          .toLowerCase()
-          .contains(textEditingValue.text.toLowerCase());
-    });
+    final optionsMatcher = state.widget.optionsMatcher ?? _optionsMatcher;
+    return options.where((O option) => optionsMatcher(value, option));
   };
 }
 
-AutocompleteFieldViewBuilder fieldViewBuilderFactory(
-  FastAutocompleteState state,
-) {
-  return (
-    BuildContext context,
-    TextEditingController textEditingController,
-    FocusNode focusNode,
-    VoidCallback onFieldSubmitted,
-  ) {
+AutocompleteFieldViewBuilder _fieldViewBuilder(FastAutocompleteState state) {
+  return (BuildContext context, TextEditingController textEditingController,
+      FocusNode focusNode, VoidCallback onFieldSubmitted) {
     final widget = state.widget;
     final theme = Theme.of(state.context);
     final decorator = FastFormScope.of(state.context)?.inputDecorator;
@@ -111,13 +107,9 @@ AutocompleteFieldViewBuilder fieldViewBuilderFactory(
       controller: textEditingController,
       enabled: widget.enabled,
       focusNode: focusNode,
-      decoration: effectiveDecoration.copyWith(
-        errorText: state.errorText,
-      ),
+      decoration: effectiveDecoration.copyWith(errorText: state.errorText),
       onChanged: widget.enabled ? state.didChange : null,
-      onFieldSubmitted: (String value) {
-        onFieldSubmitted();
-      },
+      onFieldSubmitted: (String value) => onFieldSubmitted(),
       validator: widget.validator,
     );
   };
@@ -127,22 +119,22 @@ Autocomplete autocompleteBuilder<O extends Object>(
     FormFieldState<String> field) {
   final state = field as FastAutocompleteState<O>;
   final widget = state.widget;
-  final AutocompleteOptionsBuilder<O> _optionsBuilder;
+  final AutocompleteOptionsBuilder<O> optionsBuilder;
 
   if (widget.optionsBuilder != null) {
-    _optionsBuilder = widget.optionsBuilder!;
+    optionsBuilder = widget.optionsBuilder!;
   } else if (widget.options != null) {
-    _optionsBuilder = optionsBuilderFactory(widget.options!, state);
+    optionsBuilder = _optionsBuilder(widget.options!, state);
   } else {
     throw 'Either optionsBuilder or options must be defined on FastAutocomplete';
   }
 
   return Autocomplete<O>(
     displayStringForOption: widget.displayStringForOption,
-    fieldViewBuilder: fieldViewBuilderFactory(state),
+    fieldViewBuilder: _fieldViewBuilder(state),
     initialValue: widget._initialValue,
     onSelected: widget.onSelected,
-    optionsBuilder: _optionsBuilder,
+    optionsBuilder: optionsBuilder,
     optionsMaxHeight: widget.optionsMaxHeight,
     optionsViewBuilder: widget.optionsViewBuilder,
   );

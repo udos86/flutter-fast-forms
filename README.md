@@ -103,6 +103,7 @@ child: FastForm(
 
 | adaptive<br>`FastFormControl<T>` |            adopts<br>Material           |                         adopts <br>Cupertino                         | requires <br>Material Widget ancestor<br>when `adaptive: true` |
 |:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------:|
+|        `FastAutocomplete`        |              `Autocomplete`             |                                  no                                  |                               yes                              |
 |          `FastCheckbox`          |            `CheckboxListTile`           |                                  no                                  |                               yes                              |
 |         `FastChoiceChips`        |               `ChoiceChip`              |                                  no                                  |                               yes                              |
 |          `FastCalendar`          |           `CalendarDatePicker`          |                                  no                                  |                               yes                              |
