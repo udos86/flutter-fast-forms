@@ -92,18 +92,11 @@ typedef ChoiceChipBuilder = Widget Function(
 @immutable
 class FastChoiceChips extends FastFormField<Set<int>> {
   FastChoiceChips({
-    this.alignment = WrapAlignment.start,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<Set<int>>? builder,
-    required this.chips,
-    this.chipPadding,
-    this.choiceChipBuilder,
-    this.clipBehavior = Clip.none,
     EdgeInsetsGeometry? contentPadding,
-    this.crossAlignment = WrapCrossAlignment.start,
     InputDecoration? decoration,
-    this.direction = Axis.horizontal,
     bool enabled = true,
     String? helperText,
     required String id,
@@ -113,12 +106,19 @@ class FastChoiceChips extends FastFormField<Set<int>> {
     ValueChanged<Set<int>>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter? onSaved,
+    FormFieldValidator<Set<int>>? validator,
+    this.alignment = WrapAlignment.start,
+    this.chipBuilder,
+    this.chipPadding,
+    required this.chips,
+    this.clipBehavior = Clip.none,
+    this.crossAlignment = WrapCrossAlignment.start,
+    this.direction = Axis.horizontal,
     this.spacing = 12.0,
     this.runAlignment = WrapAlignment.start,
     this.runSpacing = 0.0,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
-    FormFieldValidator<Set<int>>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -147,9 +147,9 @@ class FastChoiceChips extends FastFormField<Set<int>> {
         );
 
   final WrapAlignment alignment;
-  final List<FastChoiceChip> chips;
-  final ChoiceChipBuilder? choiceChipBuilder;
+  final ChoiceChipBuilder? chipBuilder;
   final EdgeInsetsGeometry? chipPadding;
+  final List<FastChoiceChip> chips;
   final Clip clipBehavior;
   final WrapCrossAlignment crossAlignment;
   final Axis direction;
@@ -222,7 +222,7 @@ InputDecorator choiceChipsBuilder(FormFieldState field) {
       const InputDecoration();
   final InputDecoration effectiveDecoration =
       _decoration.applyDefaults(theme.inputDecorationTheme);
-  final _choiceChipBuilder = widget.choiceChipBuilder ?? choiceChipBuilder;
+  final _choiceChipBuilder = widget.chipBuilder ?? choiceChipBuilder;
 
   return InputDecorator(
     decoration: effectiveDecoration.copyWith(
