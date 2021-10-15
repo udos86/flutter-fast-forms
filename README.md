@@ -13,6 +13,13 @@ It adds these missing pieces to the Flutter SDK to make form development a breez
 * `FastForm` widget that provides current form field values `onChanged`
 * common `FormFieldValidator<T>` functions
 
+![fff_1](https://user-images.githubusercontent.com/508325/137481158-89c424d9-2e7b-41ce-a86e-22646d7ecf86.png)
+![fff_2](https://user-images.githubusercontent.com/508325/137481545-852c2928-d074-4af6-987a-ca01c200d309.png)
+![fff_3](https://user-images.githubusercontent.com/508325/137481680-7a14bb53-da2d-49bf-9d52-f40cf77c7dda.png)
+![fff_4](https://user-images.githubusercontent.com/508325/137481729-3711d859-d153-4b1a-a5e0-f2c608b2e5d5.png)
+![fff_5](https://user-images.githubusercontent.com/508325/137481851-04cf0bab-7315-4f87-96e2-f2ee69b29217.png)
+![fff_6](https://user-images.githubusercontent.com/508325/137481875-8d025dae-ffbf-4527-b6d0-4d38fd7793e2.png)
+
 ## Getting Started
 
 1. Add a `FastForm` to your widget tree:
