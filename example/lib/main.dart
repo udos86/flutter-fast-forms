@@ -123,6 +123,12 @@ class FormPage extends StatelessWidget {
           ),
         ),
         children: [
+          FastAutocomplete<String>(
+            id: 'autocomplete',
+            label: 'Autocomplete',
+            options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
+
+          ),
           FastDatePicker(
             id: 'date_picker',
             label: 'Date Picker',

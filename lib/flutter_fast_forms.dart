@@ -1,3 +1,4 @@
+export 'src/autocomplete/autocomplete.dart';
 export 'src/checkbox/checkbox.dart';
 export 'src/choice_chips/choice_chips.dart';
 export 'src/date_time/calendar.dart';

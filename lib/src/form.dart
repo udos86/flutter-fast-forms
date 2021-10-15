@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import 'dropdown/dropdown.dart';
 import 'form_field.dart';
@@ -78,7 +79,9 @@ InputDecoration _inputDecorationCreator(
   final theme = Theme.of(context);
   final enabled = field.enabled;
   return InputDecoration(
-    contentPadding: (field is FastDropdown || field is FastTextField)
+    contentPadding: (field is FastDropdown ||
+            field is FastTextField ||
+            field is FastAutocomplete)
         ? const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
         : const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
     labelText: field.label,
