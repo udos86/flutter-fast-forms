@@ -15,10 +15,10 @@ class RadioOption<T> {
 }
 
 typedef RadioOptionBuilder<T> = Widget Function(
-    RadioOption<T> option, FastRadioGroupState state);
+    RadioOption<T> option, FastRadioGroupState<T> state);
 
 typedef RadioOptionsBuilder<T> = Widget Function(
-    List<RadioOption<T>> options, FastRadioGroupState state);
+    List<RadioOption<T>> options, FastRadioGroupState<T> state);
 
 enum RadioGroupOrientation { horizontal, vertical }
 
@@ -42,8 +42,8 @@ class FastRadioGroup<T> extends FastFormField<T> {
     VoidCallback? onReset,
     this.optionBuilder,
     this.optionsBuilder,
-    FormFieldSetter? onSaved,
-    FormFieldValidator? validator,
+    FormFieldSetter<T>? onSaved,
+    FormFieldValidator<T>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,

@@ -139,6 +139,31 @@ class FormPage extends StatelessWidget {
             id: 'time_picker',
             label: 'Time Picker',
           ),
+          FastChoiceChips(
+            id: 'choice_chips',
+            label: 'Choice Chips',
+            alignment: WrapAlignment.center,
+            chipPadding: const EdgeInsets.all(8.0),
+            chips: const [
+              FastChoiceChip(
+                label: Text('Flutter'),
+                avatar: FlutterLogo(),
+              ),
+              FastChoiceChip(
+                  label: Text('Android'),
+                  avatar: Icon(
+                    Icons.android_sharp,
+                    size: 16.0,
+                  )),
+              FastChoiceChip(
+                label: Text('Chrome OS'),
+              ),
+            ],
+            validator: (value) => value == null || value.isEmpty
+                ? 'Please select at least one chip'
+                : null,
+            initialValue: const {0, 2},
+          ),
           FastSwitch(
             id: 'switch',
             label: 'Switch',

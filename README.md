@@ -9,7 +9,7 @@ Flutter Fast Forms is a Dart package for building Flutter forms fast.
 It adds these missing pieces to the Flutter SDK to make form development a breeze: 
 
 * `FormField<T>` wrappers for all [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) input widgets **according** to the already built-in [TextFormField](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [DropdownButtonFormField](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
-* **adaptive** `FastFormControl<T>` widgets with support of [**validation states**](https://github.com/flutter/flutter/issues/18885).
+* **adaptive** and highly customizable `FastFormControl<T>` widgets with support of [**validation states**](https://github.com/flutter/flutter/issues/18885).
 * `FastForm` widget that provides current form field values `onChanged`
 * common `FormFieldValidator<T>` functions
 
@@ -94,6 +94,7 @@ child: FastForm(
 | adaptive<br>`FastFormControl<T>` |            adopts<br>Material           |                         adopts <br>Cupertino                         | requires <br>Material Widget ancestor<br>when `adaptive: true` |
 |:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------:|
 |          `FastCheckbox`          |            `CheckboxListTile`           |                                  no                                  |                               yes                              |
+|         `FastChoiceChips`        |               `ChoiceChip`              |                                  no                                  |                               yes                              |
 |          `FastCalendar`          |           `CalendarDatePicker`          |                                  no                                  |                               yes                              |
 |         `FastDatePicker`         |             `showDatePicker`            |                         `CupertinoDatePicker`                        |                               no                               |
 |       `FastDateRangePicker`      |          `showDateRangePicker`          |                                  no                                  |                               yes                              |

@@ -1,4 +1,5 @@
 export 'src/checkbox/checkbox.dart';
+export 'src/choice_chips/choice_chips.dart';
 export 'src/date_time/calendar.dart';
 export 'src/date_time/date_picker.dart';
 export 'src/date_time/date_range_picker.dart';
