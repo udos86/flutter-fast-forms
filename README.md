@@ -6,10 +6,10 @@
 
 Flutter Fast Forms is a Dart package for building Flutter forms fast.
 
-It adds these missing pieces to the Flutter SDK to make form development a breeze: 
+It adds these missing pieces to the Flutter SDK to make Flutter form development a breeze: 
 
 * `FormField<T>` wrappers for all [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) input widgets **according** to the already built-in [TextFormField](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [DropdownButtonFormField](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
-* **adaptive** and highly customizable `FastFormControl<T>` widgets with support of [**validation states**](https://github.com/flutter/flutter/issues/18885).
+* **adaptive** and highly **customizable** `FastFormControl<T>` widgets with support of [**validation states**](https://github.com/flutter/flutter/issues/18885).
 * `FastForm` widget that provides current form field values `onChanged`
 * common `FormFieldValidator<T>` functions
 
@@ -22,7 +22,7 @@ It adds these missing pieces to the Flutter SDK to make form development a breez
 
 ## Getting Started
 
-1. Add a `FastForm` to your widget tree:
+**1.** Add a `FastForm` to your widget tree:
 ```dart
 class MyFormPage extends StatelessWidget {
   MyFormPage({Key? key, required this.title}) : super(key: key);
@@ -49,7 +49,7 @@ class MyFormPage extends StatelessWidget {
 }
 ```
 
-2. Add a set of `FastFormControl<T>` to build up your form:
+**2.** Add `FastFormControl<T>` children to build up your form:
 ```dart
 child: FastForm(
   formKey: formKey,
@@ -74,7 +74,7 @@ child: FastForm(
 )
 ```
 
-3. Wrap it all with `FastFormSection` for grouping and consistent padding:
+**3.** Wrap children with `FastFormSection` for grouping and consistent padding:
 ```dart
 child: FastForm(
   formKey: formKey,
