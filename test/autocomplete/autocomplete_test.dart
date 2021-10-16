@@ -11,6 +11,12 @@ void main() {
     options = const ['Alabama', 'Montana', 'Nebraska', 'Wyoming'];
   });
 
+  testWidgets(
+      'throws when no options or optionsBuilder is present on FastAutocomplete',
+      (WidgetTester _tester) async {
+    expect(() => FastAutocomplete<String>(id: 'id'), throwsAssertionError);
+  });
+
   testWidgets('renders FastAutocomplete', (WidgetTester tester) async {
     const helper = 'helper';
     const label = 'label';

@@ -14,12 +14,12 @@ typedef FormChanged = void Function(
 @immutable
 class FastForm extends StatefulWidget {
   const FastForm({
+    Key? key,
     this.adaptive = false,
     this.builders = const {},
     required this.children,
     required this.formKey,
     this.inputDecorator,
-    Key? key,
     this.onChanged,
   }) : super(key: key);
 

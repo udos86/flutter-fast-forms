@@ -8,11 +8,11 @@ enum FormSectionOrientation { horizontal, vertical }
 @immutable
 class FastFormSection extends StatelessWidget {
   const FastFormSection({
+    Key? key,
     this.adaptive = false,
     required this.children,
     this.header,
     this.insetGrouped = false,
-    Key? key,
     this.orientation = FormSectionOrientation.vertical,
     this.padding = EdgeInsets.zero,
   }) : super(key: key);

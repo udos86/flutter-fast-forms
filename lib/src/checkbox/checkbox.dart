@@ -22,10 +22,10 @@ class FastCheckbox extends FastFormField<bool> {
     ValueChanged<bool>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<bool>? onSaved,
+    FormFieldValidator<bool>? validator,
     required this.title,
     this.titleBuilder,
     this.tristate = false,
-    FormFieldValidator<bool>? validator,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,

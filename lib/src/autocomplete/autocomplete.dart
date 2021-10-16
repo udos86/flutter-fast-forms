@@ -36,7 +36,8 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     this.optionsMatcher,
     this.optionsMaxHeight = 200.00,
     this.optionsViewBuilder,
-  })  : _initialValue = initialValue,
+  })  : assert(options != null || optionsBuilder != null),
+        _initialValue = initialValue,
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -83,7 +84,7 @@ class FastAutocompleteState<O extends Object>
 AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(
     Iterable<O> options, FastAutocompleteState<O> state) {
   return (TextEditingValue value) {
-    if (value.text == '') {
+    if (value.text.isEmpty) {
       return const Iterable.empty();
     }
     final optionsMatcher = state.widget.optionsMatcher ?? _optionsMatcher;
@@ -126,7 +127,7 @@ Autocomplete autocompleteBuilder<O extends Object>(
   } else if (widget.options != null) {
     optionsBuilder = _optionsBuilder(widget.options!, state);
   } else {
-    throw 'Either optionsBuilder or options must be defined on FastAutocomplete';
+    throw 'Either optionsBuilder or options must not be null';
   }
 
   return Autocomplete<O>(
