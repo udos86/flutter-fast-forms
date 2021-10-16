@@ -1,3 +1,8 @@
+## [v1.1.0] - 10/16/2021
+
+* introduces `FastAutocomplete<T>` widget
+* introduces `FastChoiceChips` widget
+
 ## [v1.0.1] - 10/14/2021
 
 * internal `FastFormFieldState<T>` refactoring
