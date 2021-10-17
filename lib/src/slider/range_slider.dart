@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 typedef RangeSliderLabelsBuilder = RangeLabels Function(
     FastRangeSliderState state);
@@ -35,13 +34,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastRangeSlider] ?? rangeSliderBuilder;
-                return builder(field);
-              },
+          builder: builder ?? rangeSliderBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

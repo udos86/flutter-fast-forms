@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 typedef OptionsMatcher<O extends Object> = bool Function(
     TextEditingValue textEditingValue, O option);
@@ -41,13 +40,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastAutocomplete] ?? autocompleteBuilder;
-                return builder<O>(field);
-              },
+          builder: builder ?? (field) => autocompleteBuilder<O>(field),
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,

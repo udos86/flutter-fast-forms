@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 typedef SwitchTitleBuilder = Widget Function(FastSwitchState state);
 
 @immutable
 class FastSwitch extends FastFormField<bool> {
-  FastSwitch({
+  const FastSwitch({
     bool? adaptive,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
@@ -33,13 +32,7 @@ class FastSwitch extends FastFormField<bool> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastSwitch] ?? adaptiveSwitchBuilder;
-                return builder(field);
-              },
+          builder: builder ?? adaptiveSwitchBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 @immutable
 class FastRadioOption<T> {
@@ -18,7 +17,7 @@ typedef RadioOptionBuilder<T> = Widget Function(
 typedef RadioOptionsBuilder<T> = Widget Function(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> state);
 
-enum RadioGroupOrientation { horizontal, vertical }
+enum FastRadioGroupOrientation { horizontal, vertical }
 
 @immutable
 class FastRadioGroup<T> extends FastFormField<T> {
@@ -38,20 +37,14 @@ class FastRadioGroup<T> extends FastFormField<T> {
     VoidCallback? onReset,
     FormFieldSetter<T>? onSaved,
     FormFieldValidator<T>? validator,
-    this.orientation = RadioGroupOrientation.vertical,
+    this.orientation = FastRadioGroupOrientation.vertical,
     required this.options,
     this.optionBuilder,
     this.optionsBuilder,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastRadioGroup] ?? radioGroupBuilder;
-                return builder<T>(field);
-              },
+          builder: builder ?? (field) => radioGroupBuilder<T>(field),
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
@@ -68,7 +61,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
   final List<FastRadioOption<T>> options;
   final RadioOptionBuilder<T>? optionBuilder;
   final RadioOptionsBuilder<T>? optionsBuilder;
-  final RadioGroupOrientation orientation;
+  final FastRadioGroupOrientation orientation;
 
   @override
   FastRadioGroupState<T> createState() => FastRadioGroupState<T>();
@@ -81,7 +74,8 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 
 Widget radioOptionBuilder<T>(
     FastRadioOption<T> option, FastRadioGroupState<T> state) {
-  final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
+  final vertical =
+      state.widget.orientation == FastRadioGroupOrientation.vertical;
   final tile = RadioListTile<T>(
     groupValue: state.value,
     onChanged: state.widget.enabled ? state.didChange : null,
@@ -95,7 +89,8 @@ Widget radioOptionBuilder<T>(
 Flex radioOptionsBuilder<T>(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> state) {
   final optionBuilder = state.widget.optionBuilder ?? radioOptionBuilder;
-  final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
+  final vertical =
+      state.widget.orientation == FastRadioGroupOrientation.vertical;
   final tiles = options.map((option) => optionBuilder(option, state)).toList();
 
   return vertical ? Column(children: tiles) : Row(children: tiles);
@@ -110,7 +105,7 @@ InputDecorator radioGroupBuilder<T>(FormFieldState<T> field) {
       contentPadding: widget.contentPadding,
       errorText: state.errorText,
     ),
-    // Try to refactor when constructor tear-offs arrive -> https://github.com/dart-lang/language/blob/master/accepted/future-releases/constructor-tearoffs/feature-specification.md
+    // Try to refactor when Tear-Offs arrive in Dart
     child: widget.optionsBuilder != null
         ? widget.optionsBuilder!(widget.options, state)
         : radioOptionsBuilder<T>(widget.options, state),

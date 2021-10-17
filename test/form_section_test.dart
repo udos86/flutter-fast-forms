@@ -11,7 +11,7 @@ void main() {
     const header = Text('Test Form Section');
 
     await tester.pumpWidget(getFastTestWidget(
-      FastFormSection(
+      const FastFormSection(
         header: header,
         children: [
           FastTextField(
@@ -29,7 +29,7 @@ void main() {
   testWidgets('renders FastFormSection horizontally',
       (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
-      FastFormSection(
+      const FastFormSection(
         orientation: FormSectionOrientation.horizontal,
         children: [
           FastTextField(
@@ -51,7 +51,7 @@ void main() {
     const header = Text('Test Form Section');
 
     await tester.pumpWidget(getFastTestWidget(
-      FastFormSection(
+      const FastFormSection(
         adaptive: true,
         header: header,
         children: [
@@ -74,7 +74,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastFormSection(
+      const FastFormSection(
         adaptive: true,
         insetGrouped: true,
         children: [

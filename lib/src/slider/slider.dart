@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 typedef SliderFixBuilder = Widget Function(FastSliderState state);
 
@@ -10,7 +9,7 @@ typedef SliderLabelBuilder = String Function(FastSliderState state);
 
 @immutable
 class FastSlider extends FastFormField<double> {
-  FastSlider({
+  const FastSlider({
     bool? adaptive,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
@@ -40,13 +39,7 @@ class FastSlider extends FastFormField<double> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastSlider] ?? adaptiveSliderBuilder;
-                return builder(field);
-              },
+          builder: builder ?? adaptiveSliderBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

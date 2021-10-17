@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 @immutable
 class FastTextField extends FastFormField<String> {
-  FastTextField({
+  const FastTextField({
     bool? adaptive,
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
@@ -53,13 +52,7 @@ class FastTextField extends FastFormField<String> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastTextField] ?? adaptiveTextFieldBuilder;
-                return builder(field);
-              },
+          builder: builder ?? adaptiveTextFieldBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

@@ -7,13 +7,13 @@ import '../test_utils.dart';
 void main() {
   testWidgets('renders FastDropdown', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
-      FastDropdown(
+      FastDropdown<String>(
         id: 'dropdown',
         items: const [],
       ),
     ));
 
-    final fastDropdownFinder = find.byType(FastDropdown);
+    final fastDropdownFinder = find.byType(typeOf<FastDropdown<String>>());
     final dropdownFormFieldFinder =
         find.byType(typeOf<DropdownButtonFormField<String>>());
     final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
@@ -29,13 +29,14 @@ void main() {
     final items = List.generate(itemsLength, (int index) => 'item $index');
 
     await tester.pumpWidget(getFastTestWidget(
-      FastDropdown(
+      FastDropdown<String>(
         id: 'dropdown',
         items: items,
       ),
     ));
 
-    final state = tester.state(find.byType(FastDropdown)) as FastDropdownState;
+    final state = tester.state(find.byType(typeOf<FastDropdown<String>>()))
+        as FastDropdownState<String>;
 
     final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
     final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());
@@ -59,7 +60,7 @@ void main() {
     const errorText = 'Do not touch this';
 
     await tester.pumpWidget(getFastTestWidget(
-      FastDropdown(
+      FastDropdown<String>(
         id: 'dropdown',
         items: const ['item', invalidItem],
         validator: (value) => value == invalidItem ? errorText : null,

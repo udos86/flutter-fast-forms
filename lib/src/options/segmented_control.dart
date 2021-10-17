@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 @immutable
 class FastSegmentedControl<T> extends FastFormField<T> {
@@ -32,13 +31,8 @@ class FastSegmentedControl<T> extends FastFormField<T> {
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder = scope?.builders[FastSegmentedControl] ??
-                    cupertinoSegmentedControlBuilder;
-                return builder<T>(field);
-              },
+          builder:
+              builder ?? (field) => cupertinoSegmentedControlBuilder<T>(field),
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

@@ -12,7 +12,7 @@ void main() {
     const suffix = Text('suffix');
 
     await tester.pumpWidget(getFastTestWidget(
-      FastTextField(
+      const FastTextField(
         id: 'text_field',
         prefix: prefix,
         suffix: suffix,
@@ -29,7 +29,7 @@ void main() {
     const maxLength = 7;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastTextField(
+      const FastTextField(
         id: 'text_field',
         maxLength: maxLength,
         buildCounter: inputCounterWidgetBuilder,
@@ -54,7 +54,7 @@ void main() {
 
   testWidgets('updates FastTextField', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
-      FastTextField(
+      const FastTextField(
         id: 'text_field',
       ),
     ));
@@ -100,7 +100,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastTextField(
+      const FastTextField(
         id: 'text_field',
         adaptive: true,
       ),
@@ -115,7 +115,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastTextField(
+      const FastTextField(
         id: 'text_field',
         adaptive: true,
       ),

@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 @immutable
 class FastCalendar extends FastFormField<DateTime> {
-  FastCalendar({
+  const FastCalendar({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<DateTime>? builder,
@@ -29,13 +28,7 @@ class FastCalendar extends FastFormField<DateTime> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastCalendar] ?? calendarBuilder;
-                return builder(field);
-              },
+          builder: builder ?? calendarBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

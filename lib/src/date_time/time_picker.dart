@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 typedef TimePickerTextBuilder = Text Function(FastTimePickerState state);
 
@@ -13,7 +12,7 @@ typedef TimePickerIconButtonBuilder = IconButton Function(
 
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
-  FastTimePicker({
+  const FastTimePicker({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<TimeOfDay>? builder,
@@ -40,13 +39,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     this.useRootNavigator = true,
   }) : super(
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastTimePicker] ?? timePickerBuilder;
-                return builder(field);
-              },
+          builder: builder ?? timePickerBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

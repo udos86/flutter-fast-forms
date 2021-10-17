@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
 
@@ -70,13 +69,7 @@ class FastDatePicker extends FastFormField<DateTime> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder = scope?.builders[FastDatePicker] ??
-                    adaptiveDatePickerBuilder;
-                return builder(field);
-              },
+          builder: builder ?? adaptiveDatePickerBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

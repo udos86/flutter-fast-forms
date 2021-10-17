@@ -13,7 +13,6 @@ class FastFormScope extends InheritedWidget {
   const FastFormScope({
     Key? key,
     this.adaptive = false,
-    required this.builders,
     required Widget child,
     required this.formState,
     required this.inputDecorator,
@@ -21,7 +20,6 @@ class FastFormScope extends InheritedWidget {
   }) : super(key: key, child: child);
 
   final bool adaptive;
-  final Map<Type, dynamic> builders;
   final FastFormState formState;
   final FastInputDecorator inputDecorator;
   final EdgeInsetsGeometry? padding;

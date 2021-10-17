@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 @immutable
 class FastChoiceChip
@@ -122,13 +121,7 @@ class FastChoiceChips extends FastFormField<Set<int>> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastChoiceChips] ?? choiceChipsBuilder;
-                return builder(field);
-              },
+          builder: builder ?? choiceChipsBuilder,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,

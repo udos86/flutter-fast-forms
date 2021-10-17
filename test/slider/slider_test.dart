@@ -60,7 +60,7 @@ void main() {
 
   testWidgets('updates FastSlider', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
-      FastSlider(
+      const FastSlider(
         id: 'slider',
         suffixBuilder: sliderSuffixBuilder,
       ),
@@ -100,7 +100,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastSlider(
+      const FastSlider(
         id: 'slider',
         adaptive: true,
       ),
@@ -115,7 +115,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastSlider(
+      const FastSlider(
         id: 'slider',
         adaptive: true,
       ),

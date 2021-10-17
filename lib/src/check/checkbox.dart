@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
 typedef CheckboxTitleBuilder = Widget Function(FastCheckboxState state);
 
 @immutable
 class FastCheckbox extends FastFormField<bool> {
-  FastCheckbox({
+  const FastCheckbox({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<bool>? builder,
@@ -29,13 +28,7 @@ class FastCheckbox extends FastFormField<bool> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastCheckbox] ?? checkboxBuilder;
-                return builder(field);
-              },
+          builder: builder ?? checkboxBuilder,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,

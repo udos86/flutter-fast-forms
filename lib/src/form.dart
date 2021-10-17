@@ -16,7 +16,6 @@ class FastForm extends StatefulWidget {
   const FastForm({
     Key? key,
     this.adaptive = false,
-    this.builders = const {},
     required this.children,
     required this.formKey,
     this.inputDecorator,
@@ -24,7 +23,6 @@ class FastForm extends StatefulWidget {
   }) : super(key: key);
 
   final bool adaptive;
-  final Map<Type, dynamic> builders;
   final List<Widget> children;
   final GlobalKey<FormState> formKey;
   final FastInputDecorator? inputDecorator;
@@ -63,7 +61,6 @@ class FastFormState extends State<FastForm> {
       key: widget.formKey,
       child: FastFormScope(
         adaptive: widget.adaptive,
-        builders: widget.builders,
         formState: this,
         inputDecorator: widget.inputDecorator ?? _inputDecorationCreator,
         child: Column(

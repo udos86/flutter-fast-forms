@@ -11,7 +11,7 @@ void main() {
     const title = 'title';
 
     await tester.pumpWidget(getFastTestWidget(
-      FastSwitch(
+      const FastSwitch(
         id: 'switch',
         title: title,
       ),
@@ -25,7 +25,7 @@ void main() {
 
   testWidgets('updates FastSwitch', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
-      FastSwitch(
+      const FastSwitch(
         id: 'switch',
         title: 'title',
       ),
@@ -68,7 +68,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastSwitch(
+      const FastSwitch(
         id: 'switch',
         title: 'title',
         adaptive: true,
@@ -84,7 +84,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(getFastTestWidget(
-      FastSwitch(
+      const FastSwitch(
         id: 'switch',
         title: 'title',
         adaptive: true,

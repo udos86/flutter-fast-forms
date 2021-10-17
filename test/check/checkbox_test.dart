@@ -11,7 +11,7 @@ void main() {
     const title = 'title';
 
     await tester.pumpWidget(getFastTestWidget(
-      FastCheckbox(
+      const FastCheckbox(
         id: 'checkbox',
         helperText: helper,
         label: label,
@@ -36,7 +36,7 @@ void main() {
 
   testWidgets('updates FastCheckbox', (WidgetTester tester) async {
     await tester.pumpWidget(getFastTestWidget(
-      FastCheckbox(
+      const FastCheckbox(
         id: 'checkbox',
         title: 'title',
       ),

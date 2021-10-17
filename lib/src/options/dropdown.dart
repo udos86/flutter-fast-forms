@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
 import '../form_field.dart';
-import '../form_scope.dart';
 
-typedef DropdownMenuItemsBuilder = List<DropdownMenuItem<String>> Function(
-    List<String> items, FastDropdownState state);
+typedef DropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
+    List<T> items, FastDropdownState<T> state);
 
 @immutable
-class FastDropdown extends FastFormField<String> {
+class FastDropdown<T> extends FastFormField<T> {
   FastDropdown({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<String>? builder,
+    FormFieldBuilder<T>? builder,
     EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
     required String id,
-    String? initialValue,
+    T? initialValue,
     Key? key,
     String? label,
-    ValueChanged<String>? onChanged,
+    ValueChanged<T>? onChanged,
     VoidCallback? onReset,
-    FormFieldSetter? onSaved,
-    FormFieldValidator? validator,
+    FormFieldSetter<T>? onSaved,
+    FormFieldValidator<T>? validator,
     this.dropdownColor,
     this.focusNode,
     this.hint,
@@ -33,13 +32,7 @@ class FastDropdown extends FastFormField<String> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ??
-              (field) {
-                final scope = FastFormScope.of(field.context);
-                final builder =
-                    scope?.builders[FastDropdown] ?? dropdownBuilder;
-                return builder(field);
-              },
+          builder: builder ?? (field) => dropdownBuilder<T>(field),
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
@@ -56,47 +49,48 @@ class FastDropdown extends FastFormField<String> {
   final Color? dropdownColor;
   final FocusNode? focusNode;
   final Widget? hint;
-  final List<String> items;
-  final DropdownMenuItemsBuilder? itemsBuilder;
+  final List<T> items;
+  final DropdownMenuItemsBuilder<T>? itemsBuilder;
   final DropdownButtonBuilder? selectedItemBuilder;
 
   @override
-  FastDropdownState createState() => FastDropdownState();
+  FastDropdownState<T> createState() => FastDropdownState<T>();
 }
 
-class FastDropdownState extends FastFormFieldState<String> {
+class FastDropdownState<T> extends FastFormFieldState<T> {
   @override
-  FastDropdown get widget => super.widget as FastDropdown;
+  FastDropdown<T> get widget => super.widget as FastDropdown<T>;
 }
 
-List<DropdownMenuItem<String>> dropdownMenuItemsBuilder(
-    List<String> items, FastDropdownState state) {
+List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
+    List<T> items, FastDropdownState<T> state) {
   return items.map((item) {
-    return DropdownMenuItem<String>(
-      value: item.toString(),
+    return DropdownMenuItem<T>(
+      value: item,
       child: Text(item.toString()),
     );
   }).toList();
 }
 
-DropdownButtonFormField<String> dropdownBuilder(FormFieldState<String> field) {
-  final state = field as FastDropdownState;
+DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
+  final state = field as FastDropdownState<T>;
   final widget = state.widget;
-
-  final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
   void _onChanged(value) {
     if (value != field.value) field.didChange(value);
   }
 
-  return DropdownButtonFormField<String>(
+  return DropdownButtonFormField<T>(
     autofocus: widget.autofocus,
     autovalidateMode: widget.autovalidateMode,
     decoration: state.decoration,
     dropdownColor: widget.dropdownColor,
     focusNode: widget.focusNode,
     hint: widget.hint,
-    items: itemsBuilder(widget.items, state),
+    // Try to refactor when Tear-Offs arrive in Dart
+    items: widget.itemsBuilder != null
+        ? widget.itemsBuilder!(widget.items, state)
+        : dropdownMenuItemsBuilder<T>(widget.items, state),
     onChanged: widget.enabled ? _onChanged : null,
     onSaved: widget.onSaved,
     selectedItemBuilder: widget.selectedItemBuilder,

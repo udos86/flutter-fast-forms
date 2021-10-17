@@ -41,7 +41,7 @@ void main() {
       FastRadioGroup<String>(
         id: 'radio_group',
         options: options,
-        orientation: RadioGroupOrientation.horizontal,
+        orientation: FastRadioGroupOrientation.horizontal,
       ),
     ));
 

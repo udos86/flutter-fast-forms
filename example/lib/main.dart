@@ -140,7 +140,7 @@ class FormPage extends StatelessWidget {
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
-          FastTimePicker(
+          const FastTimePicker(
             id: 'time_picker',
             label: 'Time Picker',
           ),
@@ -166,11 +166,11 @@ class FormPage extends StatelessWidget {
                 : null,
             initialValue: const {0, 2},
           ),
-          FastSwitch(
+          const FastSwitch(
             id: 'switch',
             label: 'Switch',
             title: 'This is a switch',
-            contentPadding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+            contentPadding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
           ),
           FastTextField(
             id: 'text_field',
@@ -189,7 +189,7 @@ class FormPage extends StatelessWidget {
                       'Field must contain at least $minLength characters')
             ]),
           ),
-          FastDropdown(
+          FastDropdown<String>(
             id: 'dropdown',
             label: 'Dropdown Field',
             items: const ['Norway', 'Sweden', 'Finland', 'Denmark', 'Iceland'],
@@ -254,11 +254,11 @@ class FormPage extends StatelessWidget {
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
-          FastCheckbox(
+          const FastCheckbox(
             id: 'checkbox',
             label: 'Checkbox',
             title: 'I accept',
-            contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 0, 0),
+            contentPadding: EdgeInsets.fromLTRB(12.0, 0, 0, 0),
           ),
         ],
       ),
@@ -273,13 +273,13 @@ class FormPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         header: const Text('Form Example Section'),
         children: [
-          FastTextField(
+          const FastTextField(
             id: 'text_field',
             label: 'Text Field',
             placeholder: 'Placeholder',
             helperText: 'Helper Text',
           ),
-          FastSwitch(
+          const FastSwitch(
             id: 'switch',
             label: 'Remind me on a day',
           ),
