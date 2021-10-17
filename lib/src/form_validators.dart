@@ -1,80 +1,77 @@
 import 'package:flutter/material.dart';
 
-typedef ErrorTexter = String Function(dynamic value);
-typedef ErrorTexterWithConstraint = String Function(
-    dynamic value, dynamic constraint);
+typedef ErrorTextBuilder<T> = String? Function(T? value);
+typedef ErrorTextBuilderWithConstraint<T, C> = String? Function(
+    T? value, C constraint);
 
 abstract class Validators {
-  static FormFieldValidator<dynamic> required(ErrorTexter errorTexter) {
-    return (dynamic value) {
-      final hasLength = value is Iterable || value is String || value is Map;
-      if (value == null || (hasLength && value.length == 0)) {
-        return errorTexter(value);
-      }
-      return null;
+  static FormFieldValidator<T> required<T>(
+      ErrorTextBuilder<T> errorTextBuilder) {
+    return (T? value) {
+      final invalid = value == null ||
+          (value is Iterable && value.isEmpty) ||
+          (value is Map && value.isEmpty) ||
+          (value is String && value.isEmpty);
+
+      return invalid ? errorTextBuilder(value) : null;
     };
   }
 
-  static FormFieldValidator<bool> requiredTrue(ErrorTexter errorTexter) {
-    return (bool? value) => value != true ? errorTexter(value) : null;
+  static FormFieldValidator<bool> requiredTrue(
+      ErrorTextBuilder<bool> errorTextBuilder) {
+    return (bool? value) => value != true ? errorTextBuilder(value) : null;
   }
 
-  static FormFieldValidator<String?> pattern(
-      Pattern pattern, ErrorTexterWithConstraint errorTexter) {
+  static FormFieldValidator<String?> pattern(Pattern pattern,
+      ErrorTextBuilderWithConstraint<String, Pattern> errorTextBuilder) {
     return (String? value) {
       if (value != null && value.isNotEmpty) {
         final regex = pattern is String ? RegExp(pattern) : pattern as RegExp;
-        if (!regex.hasMatch(value)) return errorTexter(value, pattern);
+        if (!regex.hasMatch(value)) return errorTextBuilder(value, pattern);
       }
       return null;
     };
   }
 
-  static FormFieldValidator<dynamic> maxLength(
-      num maxLength, ErrorTexterWithConstraint errorTexter) {
-    return (dynamic value) {
-      final hasLength = value is String || value is Map || value is Iterable;
-      if (value != null && hasLength && value.length > maxLength) {
-        return errorTexter(value, maxLength);
-      }
-      return null;
+  static FormFieldValidator<T> maxLength<T>(
+      int maxLength, ErrorTextBuilderWithConstraint<T, int> errorTextBuilder) {
+    return (T? value) {
+      final invalid = (value is Iterable && value.length > maxLength) ||
+          (value is Map && value.length > maxLength) ||
+          (value is String && value.length > maxLength);
+
+      return invalid ? errorTextBuilder(value, maxLength) : null;
     };
   }
 
-  static FormFieldValidator<dynamic> minLength(
-      int minLength, ErrorTexterWithConstraint errorTexter) {
-    return (dynamic value) {
-      final hasLength = value is String || value is Map || value is Iterable;
-      if (value != null && hasLength && value.length < minLength) {
-        return errorTexter(value, minLength);
-      }
-      return null;
+  static FormFieldValidator<T> minLength<T>(
+      int minLength, ErrorTextBuilderWithConstraint<T, int> errorTextBuilder) {
+    return (T? value) {
+      final invalid = (value is Iterable && value.length < minLength) ||
+          (value is Map && value.length < minLength) ||
+          (value is String && value.length < minLength);
+
+      return invalid ? errorTextBuilder(value, minLength) : null;
     };
   }
 
   static FormFieldValidator<num> max(
-      num max, ErrorTexterWithConstraint errorTexter) {
+      num max, ErrorTextBuilderWithConstraint<num, num> errorTextBuilder) {
     return (num? value) {
-      if (value != null && value > max) {
-        return errorTexter(value, max);
-      }
-      return null;
+      return value != null && value > max ? errorTextBuilder(value, max) : null;
     };
   }
 
   static FormFieldValidator<num> min(
-      num min, ErrorTexterWithConstraint errorTexter) {
+      num min, ErrorTextBuilderWithConstraint<num, num> errorTextBuilder) {
     return (num? value) {
-      if (value != null && value < min) {
-        return errorTexter(value, min);
-      }
-      return null;
+      return value != null && value < min ? errorTextBuilder(value, min) : null;
     };
   }
 
-  static FormFieldValidator<dynamic> compose(
-      List<FormFieldValidator> validators) {
-    return (dynamic value) {
+  static FormFieldValidator<T> compose<T>(
+      List<FormFieldValidator<T>> validators) {
+    return (T? value) {
       for (var index = 0; index < validators.length; index++) {
         final result = validators[index](value);
         if (result != null) return result;
