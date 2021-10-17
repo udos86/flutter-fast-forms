@@ -6,10 +6,7 @@ import '../form_scope.dart';
 
 @immutable
 class FastRadioOption<T> {
-  const FastRadioOption({
-    required this.title,
-    required this.value,
-  });
+  const FastRadioOption({required this.title, required this.value});
 
   final T value;
   final String title;
@@ -91,6 +88,7 @@ Widget radioOptionBuilder<T>(
     title: Text(option.title),
     value: option.value,
   );
+
   return vertical ? tile : Expanded(child: tile);
 }
 
@@ -103,7 +101,7 @@ Flex radioOptionsBuilder<T>(
   return vertical ? Column(children: tiles) : Row(children: tiles);
 }
 
-InputDecorator radioGroupBuilder<T>(FormFieldState field) {
+InputDecorator radioGroupBuilder<T>(FormFieldState<T> field) {
   final state = field as FastRadioGroupState<T>;
   final widget = state.widget;
 
