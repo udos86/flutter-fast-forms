@@ -110,15 +110,9 @@ SizedBox rangeSliderSuffixBuilder(FastRangeSliderState state) {
 InputDecorator rangeSliderBuilder(FormFieldState<RangeValues> field) {
   final state = field as FastRangeSliderState;
   final widget = state.widget;
-  final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
+
   return InputDecorator(
-    decoration: effectiveDecoration.copyWith(
+    decoration: state.decoration.copyWith(
       contentPadding: widget.contentPadding,
       errorText: state.errorText,
     ),

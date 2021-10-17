@@ -76,25 +76,16 @@ InputDecorator checkboxBuilder(FormFieldState<bool> field) {
   final state = field as FastCheckboxState;
   final widget = state.widget;
 
-  final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
-  final _titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
+  final titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
 
   return InputDecorator(
-    decoration: effectiveDecoration.copyWith(
-      errorText: state.errorText,
-    ),
+    decoration: state.decoration.copyWith(errorText: state.errorText),
     child: CheckboxListTile(
       autofocus: widget.autofocus,
       contentPadding: widget.contentPadding,
       onChanged: widget.enabled ? state.didChange : null,
       selected: state.value ?? false,
-      title: widget.title is String ? _titleBuilder(state) : null,
+      title: widget.title is String ? titleBuilder(state) : null,
       tristate: widget.tristate,
       value: state.value,
     ),

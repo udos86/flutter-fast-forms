@@ -71,7 +71,7 @@ class FormPage extends StatelessWidget {
                   CupertinoButton(
                     child: const Text('Reset'),
                     onPressed: () => formKey.currentState?.reset(),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -99,7 +99,7 @@ class FormPage extends StatelessWidget {
                   ElevatedButton(
                     child: const Text('Reset'),
                     onPressed: () => formKey.currentState?.reset(),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -156,10 +156,7 @@ class FormPage extends StatelessWidget {
               ),
               FastChoiceChip(
                   label: Text('Android'),
-                  avatar: Icon(
-                    Icons.android_sharp,
-                    size: 16.0,
-                  )),
+                  avatar: Icon(Icons.android_sharp, size: 16.0)),
               FastChoiceChip(
                 label: Text('Chrome OS'),
               ),
@@ -189,37 +186,22 @@ class FormPage extends StatelessWidget {
               Validators.minLength(
                   7,
                   (_value, minLength) =>
-                      'Field must contain at least $minLength characters'),
+                      'Field must contain at least $minLength characters')
             ]),
           ),
           FastDropdown(
             id: 'dropdown',
             label: 'Dropdown Field',
-            items: const [
-              'Norway',
-              'Sweden',
-              'Finland',
-              'Denmark',
-              'Iceland',
-            ],
+            items: const ['Norway', 'Sweden', 'Finland', 'Denmark', 'Iceland'],
             initialValue: 'Finland',
           ),
           FastRadioGroup<String>(
             id: 'radio_group',
             label: 'Radio Group Model',
             options: const [
-              RadioOption<String>(
-                title: 'Option 1',
-                value: 'option-1',
-              ),
-              RadioOption<String>(
-                title: 'Option 2',
-                value: 'option-2',
-              ),
-              RadioOption<String>(
-                title: 'Option 3',
-                value: 'option-3',
-              )
+              FastRadioOption(title: 'Option 1', value: 'option-1'),
+              FastRadioOption(title: 'Option 2', value: 'option-2'),
+              FastRadioOption(title: 'Option 3', value: 'option-3')
             ],
           ),
           FastSlider(
@@ -256,20 +238,14 @@ class FormPage extends StatelessWidget {
             prefixBuilder: rangeSliderPrefixBuilder,
             suffixBuilder: rangeSliderSuffixBuilder,
           ),
-          FastCustomField(
+          const FastCustomField(
             id: 'custom_form_field',
             label: 'Custom Form Field',
             helperText: "Optionally add some extras",
-            title: const Text('Extras'),
-            options: const [
-              CustomOption(
-                id: 'cheese',
-                label: 'Cheese',
-              ),
-              CustomOption(
-                id: 'bacon',
-                label: 'Bacon',
-              ),
+            title: Text('Extras'),
+            options: [
+              FastCustomOption(id: 'cheese', label: 'Cheese'),
+              FastCustomOption(id: 'bacon', label: 'Bacon'),
             ],
           ),
           FastCalendar(
@@ -314,7 +290,7 @@ class FormPage extends StatelessWidget {
             label: 'Datepicker',
             showModalPopup: true,
           ),
-          FastSegmentedControl(
+          FastSegmentedControl<String>(
             id: 'segmented_control',
             label: 'Class',
             children: const {

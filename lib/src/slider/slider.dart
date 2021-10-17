@@ -97,18 +97,10 @@ SizedBox sliderSuffixBuilder(FastSliderState state) {
 
 InputDecorator sliderBuilder(FormFieldState<double> field) {
   final state = field as FastSliderState;
-  final context = state.context;
   final widget = state.widget;
-  final theme = Theme.of(context);
-  final decorator = FastFormScope.of(context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(context, widget) ??
-      const InputDecoration();
-  final effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
 
   return InputDecorator(
-    decoration: effectiveDecoration.copyWith(
+    decoration: state.decoration.copyWith(
       contentPadding: widget.contentPadding,
       errorText: state.errorText,
     ),

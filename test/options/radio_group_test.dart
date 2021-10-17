@@ -7,8 +7,8 @@ import '../test_utils.dart';
 void main() {
   testWidgets('renders FastRadioGroup widget', (WidgetTester tester) async {
     const options = [
-      RadioOption(title: 'Option 1', value: 'option-1'),
-      RadioOption(title: 'Option 2', value: 'option-2'),
+      FastRadioOption(title: 'Option 1', value: 'option-1'),
+      FastRadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(getFastTestWidget(
@@ -33,8 +33,8 @@ void main() {
   testWidgets('renders FastRadioGroup widget horizontally',
       (WidgetTester tester) async {
     const options = [
-      RadioOption(title: 'Option 1', value: 'option-1'),
-      RadioOption(title: 'Option 2', value: 'option-2'),
+      FastRadioOption(title: 'Option 1', value: 'option-1'),
+      FastRadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(getFastTestWidget(
@@ -54,8 +54,8 @@ void main() {
 
   testWidgets('updates FastRadioGroup value', (WidgetTester tester) async {
     const options = [
-      RadioOption(title: 'Option 1', value: 'option-1'),
-      RadioOption(title: 'Option 2', value: 'option-2'),
+      FastRadioOption(title: 'Option 1', value: 'option-1'),
+      FastRadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(getFastTestWidget(
@@ -82,9 +82,9 @@ void main() {
   testWidgets('validates FastRadioGroup', (WidgetTester tester) async {
     const errorText = 'Do not touch this';
     const invalidOption =
-        RadioOption(title: 'Invalid Option', value: 'invalid-option');
+        FastRadioOption(title: 'Invalid Option', value: 'invalid-option');
     final options = [
-      const RadioOption(title: 'Option 1', value: 'option-1'),
+      const FastRadioOption(title: 'Option 1', value: 'option-1'),
       invalidOption,
     ];
 

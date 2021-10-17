@@ -215,17 +215,10 @@ InputDecorator choiceChipsBuilder(FormFieldState field) {
   final state = field as FastChoiceChipsState;
   final widget = state.widget;
 
-  final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
-  final _choiceChipBuilder = widget.chipBuilder ?? choiceChipBuilder;
+  final chipBuilder = widget.chipBuilder ?? choiceChipBuilder;
 
   return InputDecorator(
-    decoration: effectiveDecoration.copyWith(
+    decoration: state.decoration.copyWith(
       contentPadding: widget.contentPadding,
       errorText: state.errorText,
     ),
@@ -240,7 +233,7 @@ InputDecorator choiceChipsBuilder(FormFieldState field) {
       textDirection: widget.textDirection,
       verticalDirection: widget.verticalDirection,
       children: [
-        for (var chip in widget.chips) _choiceChipBuilder(chip, state),
+        for (var chip in widget.chips) chipBuilder(chip, state),
       ],
     ),
   );

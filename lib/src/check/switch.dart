@@ -81,26 +81,17 @@ Text switchTitleBuilder(FastSwitchState state) {
 InputDecorator switchBuilder(FormFieldState<bool> field) {
   final state = field as FastSwitchState;
   final widget = state.widget;
-  final theme = Theme.of(state.context);
 
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
-  final _titleBuilder = widget.titleBuilder ?? switchTitleBuilder;
+  final titleBuilder = widget.titleBuilder ?? switchTitleBuilder;
 
   return InputDecorator(
-    decoration: effectiveDecoration.copyWith(
-      errorText: state.errorText,
-    ),
+    decoration: state.decoration.copyWith(errorText: state.errorText),
     child: SwitchListTile.adaptive(
       autofocus: widget.autofocus,
       contentPadding: widget.contentPadding,
       onChanged: widget.enabled ? state.didChange : null,
       selected: state.value!,
-      title: widget.title is String ? _titleBuilder(state) : null,
+      title: widget.title is String ? titleBuilder(state) : null,
       value: state.value!,
     ),
   );

@@ -5,23 +5,23 @@ import '../form_field.dart';
 import '../form_scope.dart';
 
 @immutable
-class FastSegmentedControl extends FastFormField<String> {
+class FastSegmentedControl<T> extends FastFormField<T> {
   FastSegmentedControl({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<String>? builder,
+    FormFieldBuilder<T>? builder,
     EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
     required String id,
-    String? initialValue,
+    T? initialValue,
     Key? key,
     String? label,
-    ValueChanged<String>? onChanged,
+    ValueChanged<T>? onChanged,
     VoidCallback? onReset,
-    FormFieldSetter<String>? onSaved,
-    FormFieldValidator<String>? validator,
+    FormFieldSetter<T>? onSaved,
+    FormFieldValidator<T>? validator,
     this.backgroundColor = CupertinoColors.tertiarySystemFill,
     required this.children,
     this.errorBuilder,
@@ -37,7 +37,7 @@ class FastSegmentedControl extends FastFormField<String> {
                 final scope = FastFormScope.of(field.context);
                 final builder = scope?.builders[FastSegmentedControl] ??
                     cupertinoSegmentedControlBuilder;
-                return builder(field);
+                return builder<T>(field);
               },
           contentPadding: contentPadding,
           decoration: decoration,
@@ -54,24 +54,23 @@ class FastSegmentedControl extends FastFormField<String> {
         );
 
   final Color backgroundColor;
-  final Map<String, Widget> children;
-  final ErrorBuilder<String>? errorBuilder;
-  final HelperBuilder<String>? helperBuilder;
+  final Map<T, Widget> children;
+  final ErrorBuilder<T>? errorBuilder;
+  final HelperBuilder<T>? helperBuilder;
   final EdgeInsetsGeometry padding;
   final Color? thumbColor;
 
   @override
-  FastSegmentedControlState createState() => FastSegmentedControlState();
+  FastSegmentedControlState<T> createState() => FastSegmentedControlState<T>();
 }
 
-class FastSegmentedControlState extends FastFormFieldState<String> {
+class FastSegmentedControlState<T> extends FastFormFieldState<T> {
   @override
-  FastSegmentedControl get widget => super.widget as FastSegmentedControl;
+  FastSegmentedControl<T> get widget => super.widget as FastSegmentedControl<T>;
 }
 
-CupertinoFormRow cupertinoSegmentedControlBuilder(
-    FormFieldState<String> field) {
-  final state = field as FastSegmentedControlState;
+CupertinoFormRow cupertinoSegmentedControlBuilder<T>(FormFieldState<T> field) {
+  final state = field as FastSegmentedControlState<T>;
   final widget = state.widget;
 
   return CupertinoFormRow(
@@ -79,7 +78,7 @@ CupertinoFormRow cupertinoSegmentedControlBuilder(
     prefix: widget.label is String ? Text(widget.label!) : null,
     helper: widget.helperBuilder?.call(state) ?? helperBuilder(state),
     error: widget.errorBuilder?.call(state) ?? errorBuilder(state),
-    child: CupertinoSlidingSegmentedControl<String>(
+    child: CupertinoSlidingSegmentedControl<T>(
       backgroundColor: widget.backgroundColor,
       children: widget.children,
       groupValue: state.value,

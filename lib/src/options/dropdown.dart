@@ -83,11 +83,8 @@ DropdownButtonFormField<String> dropdownBuilder(FormFieldState<String> field) {
   final state = field as FastDropdownState;
   final widget = state.widget;
 
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final _itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
+  final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
+
   void _onChanged(value) {
     if (value != field.value) field.didChange(value);
   }
@@ -95,11 +92,11 @@ DropdownButtonFormField<String> dropdownBuilder(FormFieldState<String> field) {
   return DropdownButtonFormField<String>(
     autofocus: widget.autofocus,
     autovalidateMode: widget.autovalidateMode,
-    decoration: _decoration,
+    decoration: state.decoration,
     dropdownColor: widget.dropdownColor,
     focusNode: widget.focusNode,
     hint: widget.hint,
-    items: _itemsBuilder(widget.items, state),
+    items: itemsBuilder(widget.items, state),
     onChanged: widget.enabled ? _onChanged : null,
     onSaved: widget.onSaved,
     selectedItemBuilder: widget.selectedItemBuilder,

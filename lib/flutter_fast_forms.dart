@@ -1,17 +1,17 @@
-export 'src/autocomplete/autocomplete.dart';
-export 'src/checkbox/checkbox.dart';
-export 'src/choice_chips/choice_chips.dart';
+export 'src/check/checkbox.dart';
+export 'src/check/switch.dart';
 export 'src/date_time/calendar.dart';
 export 'src/date_time/date_picker.dart';
 export 'src/date_time/date_range_picker.dart';
 export 'src/date_time/time_picker.dart';
-export 'src/dropdown/dropdown.dart';
-export 'src/radio_group/radio_group.dart';
-export 'src/segmented_control/segmented_control.dart';
+export 'src/options/choice_chips.dart';
+export 'src/options/dropdown.dart';
+export 'src/options/radio_group.dart';
+export 'src/options/segmented_control.dart';
 export 'src/slider/range_slider.dart';
 export 'src/slider/slider.dart';
-export 'src/switch/switch.dart';
-export 'src/text_field/text_field.dart';
+export 'src/options/autocomplete.dart';
+export 'src/text/text_field.dart';
 
 export 'src/form.dart';
 export 'src/form_field.dart';

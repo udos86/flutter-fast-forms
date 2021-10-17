@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 @immutable
-class CustomOption {
-  const CustomOption({
-    required this.id,
-    required this.label,
-  });
+class FastCustomOption {
+  const FastCustomOption({required this.id, required this.label});
 
   final String id;
   final String label;
 }
 
 class FastCustomField extends FastFormField<Map<String, bool>> {
-  FastCustomField({
+  const FastCustomField({
     InputDecoration? decoration,
     String? helperText,
     required String id,
@@ -24,39 +21,11 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
     ValueChanged<Map<String, bool>>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<Map<String, bool>>? onSaved,
-    required this.options,
-    Widget? title,
     FormFieldValidator<Map<String, bool>>? validator,
+    required this.options,
+    this.title,
   }) : super(
-          builder: (field) {
-            final state = field as CustomFormFieldState;
-            final theme = Theme.of(state.context);
-            final decorator = FastFormScope.of(state.context)?.inputDecorator;
-            final _decoration = decoration ??
-                decorator?.call(state.context, state.widget) ??
-                const InputDecoration();
-            final InputDecoration effectiveDecoration =
-                _decoration.applyDefaults(theme.inputDecorationTheme);
-            return InputDecorator(
-              decoration: effectiveDecoration.copyWith(
-                errorText: state.errorText,
-              ),
-              child: Column(
-                children: <Widget>[
-                  SwitchListTile(
-                    contentPadding: const EdgeInsets.all(0),
-                    title: title,
-                    value: state.active,
-                    onChanged: (bool? active) {
-                      state.active = active ?? false;
-                      state.didChange(state.active ? state.activeValue : null);
-                    },
-                  ),
-                  if (state.active) state.buildActive(),
-                ],
-              ),
-            );
-          },
+          builder: _customFormFieldBuilder,
           helperText: helperText,
           id: id,
           initialValue: initialValue,
@@ -68,7 +37,8 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
           validator: validator,
         );
 
-  final List<CustomOption> options;
+  final List<FastCustomOption> options;
+  final Widget? title;
 
   @override
   FormFieldState<Map<String, bool>> createState() => CustomFormFieldState();
@@ -136,4 +106,27 @@ class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
       ],
     );
   }
+}
+
+Widget _customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
+  final state = field as CustomFormFieldState;
+  final widget = state.widget;
+
+  return InputDecorator(
+    decoration: state.decoration.copyWith(errorText: state.errorText),
+    child: Column(
+      children: <Widget>[
+        SwitchListTile(
+          contentPadding: const EdgeInsets.all(0),
+          title: widget.title,
+          value: state.active,
+          onChanged: (bool? active) {
+            state.active = active ?? false;
+            state.didChange(state.active ? state.activeValue : null);
+          },
+        ),
+        if (state.active) state.buildActive(),
+      ],
+    ),
+  );
 }

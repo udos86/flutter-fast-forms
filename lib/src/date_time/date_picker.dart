@@ -306,11 +306,6 @@ InkWell datePickerBuilder(FormFieldState<DateTime> field) {
   final context = state.context;
   final widget = state.widget;
 
-  final decoration = widget.decoration ??
-      FastFormScope.of(context)?.inputDecorator(context, widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      decoration.applyDefaults(Theme.of(context).inputDecorationTheme);
   final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
   final iconButtonBuilder =
       widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
@@ -344,7 +339,7 @@ InkWell datePickerBuilder(FormFieldState<DateTime> field) {
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
-      decoration: effectiveDecoration.copyWith(
+      decoration: state.decoration.copyWith(
         contentPadding: widget.contentPadding,
         errorText: state.errorText,
       ),

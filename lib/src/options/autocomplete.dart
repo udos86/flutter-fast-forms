@@ -96,19 +96,12 @@ AutocompleteFieldViewBuilder _fieldViewBuilder(FastAutocompleteState state) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
     final widget = state.widget;
-    final theme = Theme.of(state.context);
-    final decorator = FastFormScope.of(state.context)?.inputDecorator;
-    final _decoration = state.widget.decoration ??
-        decorator?.call(state.context, state.widget) ??
-        const InputDecoration();
-    final InputDecoration effectiveDecoration =
-        _decoration.applyDefaults(theme.inputDecorationTheme);
 
     return TextFormField(
       controller: textEditingController,
       enabled: widget.enabled,
       focusNode: focusNode,
-      decoration: effectiveDecoration.copyWith(errorText: state.errorText),
+      decoration: state.decoration.copyWith(errorText: state.errorText),
       onChanged: widget.enabled ? state.didChange : null,
       onFieldSubmitted: (String value) => onFieldSubmitted(),
       validator: widget.validator,
@@ -120,6 +113,7 @@ Autocomplete autocompleteBuilder<O extends Object>(
     FormFieldState<String> field) {
   final state = field as FastAutocompleteState<O>;
   final widget = state.widget;
+
   final AutocompleteOptionsBuilder<O> optionsBuilder;
 
   if (widget.optionsBuilder != null) {

@@ -59,6 +59,15 @@ class FastFormFieldState<T> extends FormFieldState<T> {
 
   bool get adaptive => widget.adaptive ?? formScope?.adaptive ?? false;
 
+  InputDecoration get decoration {
+    final theme = Theme.of(context);
+    final decoration = widget.decoration ??
+        formScope?.inputDecorator.call(context, widget) ??
+        const InputDecoration();
+
+    return decoration.applyDefaults(theme.inputDecorationTheme);
+  }
+
   FastFormState? get formState => formScope?.formState;
 
   @override

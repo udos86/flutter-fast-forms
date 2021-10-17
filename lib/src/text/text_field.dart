@@ -133,23 +133,16 @@ Text inputCounterWidgetBuilder(
 TextFormField textFieldBuilder(FormFieldState<String> field) {
   final state = field as FastTextFieldState;
   final widget = state.widget;
-  final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme).copyWith(
-            contentPadding: widget.contentPadding,
-            prefix: widget.prefix != null && widget.prefix is! Icon
-                ? widget.prefix
-                : null,
-            prefixIcon: widget.prefix is Icon ? widget.prefix : null,
-            suffix: widget.suffix != null && widget.suffix is! Icon
-                ? widget.suffix
-                : null,
-            suffixIcon: widget.suffix is Icon ? widget.suffix : null,
-          );
+
+  final InputDecoration decoration = state.decoration.copyWith(
+    contentPadding: widget.contentPadding,
+    prefix:
+        widget.prefix != null && widget.prefix is! Icon ? widget.prefix : null,
+    prefixIcon: widget.prefix is Icon ? widget.prefix : null,
+    suffix:
+        widget.suffix != null && widget.suffix is! Icon ? widget.suffix : null,
+    suffixIcon: widget.suffix is Icon ? widget.suffix : null,
+  );
 
   return TextFormField(
     autocorrect: widget.autocorrect,
@@ -157,7 +150,7 @@ TextFormField textFieldBuilder(FormFieldState<String> field) {
     autofocus: widget.autofocus,
     autovalidateMode: state.autovalidateMode,
     buildCounter: widget.buildCounter,
-    decoration: effectiveDecoration,
+    decoration: decoration,
     initialValue: widget.initialValue,
     enabled: widget.enabled,
     enableInteractiveSelection: widget.enableInteractiveSelection,

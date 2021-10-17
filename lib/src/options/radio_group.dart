@@ -5,8 +5,8 @@ import '../form_field.dart';
 import '../form_scope.dart';
 
 @immutable
-class RadioOption<T> {
-  const RadioOption({
+class FastRadioOption<T> {
+  const FastRadioOption({
     required this.title,
     required this.value,
   });
@@ -16,10 +16,10 @@ class RadioOption<T> {
 }
 
 typedef RadioOptionBuilder<T> = Widget Function(
-    RadioOption<T> option, FastRadioGroupState<T> state);
+    FastRadioOption<T> option, FastRadioGroupState<T> state);
 
 typedef RadioOptionsBuilder<T> = Widget Function(
-    List<RadioOption<T>> options, FastRadioGroupState<T> state);
+    List<FastRadioOption<T>> options, FastRadioGroupState<T> state);
 
 enum RadioGroupOrientation { horizontal, vertical }
 
@@ -68,7 +68,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
           validator: validator,
         );
 
-  final List<RadioOption<T>> options;
+  final List<FastRadioOption<T>> options;
   final RadioOptionBuilder<T>? optionBuilder;
   final RadioOptionsBuilder<T>? optionsBuilder;
   final RadioGroupOrientation orientation;
@@ -83,7 +83,7 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 }
 
 Widget radioOptionBuilder<T>(
-    RadioOption<T> option, FastRadioGroupState<T> state) {
+    FastRadioOption<T> option, FastRadioGroupState<T> state) {
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
   final tile = RadioListTile<T>(
     groupValue: state.value,
@@ -95,7 +95,7 @@ Widget radioOptionBuilder<T>(
 }
 
 Flex radioOptionsBuilder<T>(
-    List<RadioOption<T>> options, FastRadioGroupState<T> state) {
+    List<FastRadioOption<T>> options, FastRadioGroupState<T> state) {
   final optionBuilder = state.widget.optionBuilder ?? radioOptionBuilder;
   final vertical = state.widget.orientation == RadioGroupOrientation.vertical;
   final tiles = options.map((option) => optionBuilder(option, state)).toList();
@@ -107,16 +107,8 @@ InputDecorator radioGroupBuilder<T>(FormFieldState field) {
   final state = field as FastRadioGroupState<T>;
   final widget = state.widget;
 
-  final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
-
   return InputDecorator(
-    decoration: effectiveDecoration.copyWith(
+    decoration: state.decoration.copyWith(
       contentPadding: widget.contentPadding,
       errorText: state.errorText,
     ),

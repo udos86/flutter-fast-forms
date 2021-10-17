@@ -67,18 +67,9 @@ class FastCalendarState extends FastFormFieldState<DateTime> {
 InputDecorator calendarBuilder(FormFieldState<DateTime> field) {
   final state = field as FastCalendarState;
   final widget = state.widget;
-  final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
 
   return InputDecorator(
-    decoration: effectiveDecoration.copyWith(
-      errorText: state.errorText,
-    ),
+    decoration: state.decoration.copyWith(errorText: state.errorText),
     child: CalendarDatePicker(
       firstDate: widget.firstDate,
       initialCalendarMode: widget.initialCalendarMode,

@@ -10,13 +10,14 @@ void main() {
     final testValues = ['value1', 'value2', 'value3'];
 
     await tester.pumpWidget(getFastTestWidget(
-      FastSegmentedControl(
+      FastSegmentedControl<String>(
         id: 'segmented_control',
         children: {for (var item in testValues) item: Text(item)},
       ),
     ));
 
-    final fastSegmentedControlFinder = find.byType(FastSegmentedControl);
+    final fastSegmentedControlFinder =
+        find.byType(typeOf<FastSegmentedControl<String>>());
     final segmentedControlFinder =
         find.byType(typeOf<CupertinoSlidingSegmentedControl<String>>());
     final segmentedButtonFinder = find.descendant(
@@ -39,8 +40,9 @@ void main() {
       ),
     ));
 
-    final state = tester.state(find.byType(FastSegmentedControl))
-        as FastSegmentedControlState;
+    final state =
+        tester.state(find.byType(typeOf<FastSegmentedControl<String>>()))
+            as FastSegmentedControlState;
 
     expect(state.value, state.widget.initialValue);
 

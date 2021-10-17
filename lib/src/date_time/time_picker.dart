@@ -104,16 +104,9 @@ IconButton timePickerIconButtonBuilder(
 InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
   final state = field as FastTimePickerState;
   final widget = state.widget;
-  final theme = Theme.of(state.context);
-  final decorator = FastFormScope.of(state.context)?.inputDecorator;
 
-  final _decoration = widget.decoration ??
-      decorator?.call(state.context, state.widget) ??
-      const InputDecoration();
-  final InputDecoration effectiveDecoration =
-      _decoration.applyDefaults(theme.inputDecorationTheme);
-  final _textBuilder = widget.textBuilder ?? timePickerTextBuilder;
-  final _iconButtonBuilder =
+  final textBuilder = widget.textBuilder ?? timePickerTextBuilder;
+  final iconButtonBuilder =
       widget.iconButtonBuilder ?? timePickerIconButtonBuilder;
 
   Future<TimeOfDay?> show(TimePickerEntryMode entryMode) {
@@ -135,7 +128,7 @@ InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
   return InkWell(
     onTap: widget.enabled ? () => show(widget.initialEntryMode) : null,
     child: InputDecorator(
-      decoration: effectiveDecoration.copyWith(
+      decoration: state.decoration.copyWith(
         contentPadding: state.widget.contentPadding,
         errorText: state.errorText,
       ),
@@ -143,9 +136,9 @@ InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
-            child: _textBuilder(state),
+            child: textBuilder(state),
           ),
-          _iconButtonBuilder(state, show),
+          iconButtonBuilder(state, show),
         ],
       ),
     ),
