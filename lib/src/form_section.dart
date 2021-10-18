@@ -46,10 +46,7 @@ class FastFormSection extends StatelessWidget {
   }
 
   Widget _buildFormField(BuildContext context, FastFormField field) {
-    return Padding(
-      padding: padding,
-      child: field,
-    );
+    return Padding(padding: padding, child: field);
   }
 
   Widget _buildVerticalFormSection(BuildContext context) {

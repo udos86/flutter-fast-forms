@@ -20,9 +20,7 @@ class ExampleApp extends StatelessWidget {
       case TargetPlatform.iOS:
         return CupertinoApp(
           title: title,
-          home: FormPage(
-            title: title,
-          ),
+          home: FormPage(title: title),
         );
 
       case TargetPlatform.android:
@@ -33,9 +31,7 @@ class ExampleApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: FormPage(
-            title: title,
-          ),
+          home: FormPage(title: title),
         );
     }
   }
@@ -52,9 +48,7 @@ class FormPage extends StatelessWidget {
     switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
         return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            middle: Text(title),
-          ),
+          navigationBar: CupertinoNavigationBar(middle: Text(title)),
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -116,10 +110,7 @@ class FormPage extends StatelessWidget {
           padding: EdgeInsets.all(12.0),
           child: Text(
             'Form Example Section',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
         children: [
@@ -181,7 +172,7 @@ class FormPage extends StatelessWidget {
             prefix: const Icon(Icons.calendar_today),
             buildCounter: inputCounterWidgetBuilder,
             inputFormatters: const [],
-            validator: Validators.compose<String>([
+            validator: Validators.compose([
               Validators.required((_value) => 'Field is required'),
               Validators.minLength(
                   7,
@@ -201,7 +192,7 @@ class FormPage extends StatelessWidget {
             options: const [
               FastRadioOption(title: 'Option 1', value: 'option-1'),
               FastRadioOption(title: 'Option 2', value: 'option-2'),
-              FastRadioOption(title: 'Option 3', value: 'option-3')
+              FastRadioOption(title: 'Option 3', value: 'option-3'),
             ],
           ),
           FastSlider(

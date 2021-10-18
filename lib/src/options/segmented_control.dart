@@ -32,7 +32,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder:
-              builder ?? (field) => cupertinoSegmentedControlBuilder<T>(field),
+              builder ?? (field) => cupertinoSegmentedControlBuilder(field),
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,

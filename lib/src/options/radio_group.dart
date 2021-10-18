@@ -44,7 +44,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? (field) => radioGroupBuilder<T>(field),
+          builder: builder ?? (field) => radioGroupBuilder(field),
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,

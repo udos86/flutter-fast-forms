@@ -76,6 +76,8 @@ DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
   final state = field as FastDropdownState<T>;
   final widget = state.widget;
 
+  final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
+
   void _onChanged(value) {
     if (value != field.value) field.didChange(value);
   }
@@ -87,10 +89,7 @@ DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
     dropdownColor: widget.dropdownColor,
     focusNode: widget.focusNode,
     hint: widget.hint,
-    // Try to refactor when Tear-Offs arrive in Dart
-    items: widget.itemsBuilder != null
-        ? widget.itemsBuilder!(widget.items, state)
-        : dropdownMenuItemsBuilder<T>(widget.items, state),
+    items: itemsBuilder(widget.items, state),
     onChanged: widget.enabled ? _onChanged : null,
     onSaved: widget.onSaved,
     selectedItemBuilder: widget.selectedItemBuilder,

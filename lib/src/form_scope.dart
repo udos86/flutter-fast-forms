@@ -12,8 +12,8 @@ typedef FastInputDecorator = InputDecoration Function(
 class FastFormScope extends InheritedWidget {
   const FastFormScope({
     Key? key,
-    this.adaptive = false,
     required Widget child,
+    this.adaptive = false,
     required this.formState,
     required this.inputDecorator,
     this.padding,

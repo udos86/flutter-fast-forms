@@ -162,11 +162,9 @@ class FastChoiceChipsState extends FastFormFieldState<Set<int>> {
 }
 
 Set<int>? newFieldValue(bool selected, int index, FastChoiceChipsState state) {
-  final currentValue = state.value!;
-
   return selected
-      ? {...currentValue, index}
-      : ({...currentValue}..remove(index));
+      ? {...state.value!, index}
+      : ({...state.value!}..remove(index));
 }
 
 ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState state) {

@@ -9,6 +9,9 @@ bool _optionsMatcher<O extends Object>(TextEditingValue value, O option) {
   return option.toString().toLowerCase().contains(value.text.toLowerCase());
 }
 
+typedef FastAutocompleteFieldViewBuilder<O extends Object>
+    = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> state);
+
 @immutable
 class FastAutocomplete<O extends Object> extends FastFormField<String> {
   FastAutocomplete({
@@ -56,7 +59,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
 
   final TextEditingValue? _initialValue;
   final AutocompleteOptionToString<O> displayStringForOption;
-  final AutocompleteFieldViewBuilder? fieldViewBuilder;
+  final FastAutocompleteFieldViewBuilder<O>? fieldViewBuilder;
   final AutocompleteOnSelected<O>? onSelected;
   final Iterable<O>? options;
   final AutocompleteOptionsBuilder<O>? optionsBuilder;
@@ -85,7 +88,8 @@ AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(
   };
 }
 
-AutocompleteFieldViewBuilder _fieldViewBuilder(FastAutocompleteState state) {
+AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
+    FastAutocompleteState<O> state) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
     final widget = state.widget;
@@ -107,6 +111,7 @@ Autocomplete autocompleteBuilder<O extends Object>(
   final state = field as FastAutocompleteState<O>;
   final widget = state.widget;
 
+  final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
   final AutocompleteOptionsBuilder<O> optionsBuilder;
 
   if (widget.optionsBuilder != null) {
@@ -119,7 +124,7 @@ Autocomplete autocompleteBuilder<O extends Object>(
 
   return Autocomplete<O>(
     displayStringForOption: widget.displayStringForOption,
-    fieldViewBuilder: _fieldViewBuilder(state),
+    fieldViewBuilder: fieldViewBuilder(state),
     initialValue: widget._initialValue,
     onSelected: widget.onSelected,
     optionsBuilder: optionsBuilder,
