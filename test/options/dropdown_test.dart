@@ -13,14 +13,10 @@ void main() {
       ),
     ));
 
-    final fastDropdownFinder = find.byType(typeOf<FastDropdown<String>>());
-    final dropdownFormFieldFinder =
-        find.byType(typeOf<DropdownButtonFormField<String>>());
-    final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
-
-    expect(fastDropdownFinder, findsOneWidget);
-    expect(dropdownFormFieldFinder, findsOneWidget);
-    expect(dropdownButtonFinder, findsOneWidget);
+    expect(find.byType(typeOf<FastDropdown<String>>()), findsOneWidget);
+    expect(
+        find.byType(typeOf<DropdownButtonFormField<String>>()), findsOneWidget);
+    expect(find.byType(typeOf<DropdownButton<String>>()), findsOneWidget);
   });
 
   testWidgets('updates FastDropdown', (WidgetTester tester) async {
@@ -38,12 +34,11 @@ void main() {
     final state = tester.state(find.byType(typeOf<FastDropdown<String>>()))
         as FastDropdownState<String>;
 
-    final dropdownButtonFinder = find.byType(typeOf<DropdownButton<String>>());
     final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());
 
     expect(itemsFinder, findsNWidgets(itemsLength));
 
-    await tester.tap(dropdownButtonFinder);
+    await tester.tap(find.byType(typeOf<DropdownButton<String>>()));
     await tester.pumpAndSettle();
 
     expect(itemsFinder, findsNWidgets(itemsLength * 2));
@@ -67,10 +62,9 @@ void main() {
       ),
     ));
 
-    final dropdownButtonFormFieldFinder =
-        find.byType(typeOf<DropdownButtonFormField<String>>());
     final state =
-        tester.state(dropdownButtonFormFieldFinder) as FormFieldState<String>;
+        tester.state(find.byType(typeOf<DropdownButtonFormField<String>>()))
+            as FormFieldState<String>;
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);

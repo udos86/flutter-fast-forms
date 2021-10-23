@@ -30,7 +30,7 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       const FastFormSection(
-        orientation: FormSectionOrientation.horizontal,
+        orientation: FastFormSectionOrientation.horizontal,
         children: [
           FastTextField(
             id: 'text_field',

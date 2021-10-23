@@ -19,19 +19,11 @@ void main() {
       ),
     ));
 
-    final fastCheckboxFinder = find.byType(FastCheckbox);
-    final checkboxListTileFinder = find.byType(CheckboxListTile);
-
-    expect(fastCheckboxFinder, findsOneWidget);
-    expect(checkboxListTileFinder, findsOneWidget);
-
-    final helperFinder = find.text(helper);
-    final labelFinder = find.text(label);
-    final titleFinder = find.text(title);
-
-    expect(helperFinder, findsOneWidget);
-    expect(labelFinder, findsOneWidget);
-    expect(titleFinder, findsOneWidget);
+    expect(find.byType(FastCheckbox), findsOneWidget);
+    expect(find.byType(CheckboxListTile), findsOneWidget);
+    expect(find.text(helper), findsOneWidget);
+    expect(find.text(label), findsOneWidget);
+    expect(find.text(title), findsOneWidget);
   });
 
   testWidgets('updates FastCheckbox', (WidgetTester tester) async {

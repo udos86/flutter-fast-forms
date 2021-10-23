@@ -83,11 +83,11 @@ void main() {
   testWidgets('adapts FastSwitch to iOS', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(buildMaterialTestApp(
+    await tester.pumpWidget(buildCupertinoTestApp(
       const FastSwitch(
         id: 'switch',
-        title: 'title',
         adaptive: true,
+        title: 'title',
       ),
     ));
 

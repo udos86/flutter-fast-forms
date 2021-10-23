@@ -88,14 +88,14 @@ class FastDatePicker extends FastFormField<DateTime> {
   final String? confirmText;
   final DateTime? currentDate;
   final DateFormat? dateFormat;
-  final ErrorBuilder<DateTime>? errorBuilder;
+  final FastErrorBuilder<DateTime>? errorBuilder;
   final String? errorFormatText;
   final String? errorInvalidText;
   final String? fieldHintText;
   final String? fieldLabelText;
   final DateTime firstDate;
   final double height;
-  final HelperBuilder<DateTime>? helperBuilder;
+  final FastHelperBuilder<DateTime>? helperBuilder;
   final String? helpText;
   final Icon? icon;
   final FastDatePickerIconButtonBuilder? iconButtonBuilder;

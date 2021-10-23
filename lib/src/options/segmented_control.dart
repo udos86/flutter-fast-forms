@@ -49,8 +49,8 @@ class FastSegmentedControl<T> extends FastFormField<T> {
 
   final Color backgroundColor;
   final Map<T, Widget> children;
-  final ErrorBuilder<T>? errorBuilder;
-  final HelperBuilder<T>? helperBuilder;
+  final FastErrorBuilder<T>? errorBuilder;
+  final FastHelperBuilder<T>? helperBuilder;
   final EdgeInsetsGeometry padding;
   final Color? thumbColor;
 

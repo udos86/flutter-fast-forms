@@ -12,13 +12,11 @@ void main() {
       ),
     ));
 
-    final fastTimePickerFinder = find.byType(FastTimePicker);
-    final inkWellFinder = find.byType(InkWell);
-    final iconButtonFinder = find.byType(IconButton);
+    expect(find.byType(FastTimePicker), findsOneWidget);
+    expect(find.byType(IconButton), findsOneWidget);
 
-    expect(fastTimePickerFinder, findsOneWidget);
+    final inkWellFinder = find.byType(InkWell);
     expect(inkWellFinder.first, findsOneWidget);
-    expect(iconButtonFinder, findsOneWidget);
 
     await tester.tap(inkWellFinder.first);
     await tester.pumpAndSettle();

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'form_field.dart';
 
-enum FormSectionOrientation { horizontal, vertical }
+enum FastFormSectionOrientation { horizontal, vertical }
 
 @immutable
 class FastFormSection extends StatelessWidget {
@@ -13,7 +13,7 @@ class FastFormSection extends StatelessWidget {
     required this.children,
     this.header,
     this.insetGrouped = false,
-    this.orientation = FormSectionOrientation.vertical,
+    this.orientation = FastFormSectionOrientation.vertical,
     this.padding = EdgeInsets.zero,
   }) : super(key: key);
 
@@ -21,7 +21,7 @@ class FastFormSection extends StatelessWidget {
   final List<Widget> children;
   final Widget? header;
   final bool insetGrouped;
-  final FormSectionOrientation orientation;
+  final FastFormSectionOrientation orientation;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -40,7 +40,7 @@ class FastFormSection extends StatelessWidget {
   }
 
   Widget _buildFormSection(BuildContext context) {
-    return orientation == FormSectionOrientation.vertical
+    return orientation == FastFormSectionOrientation.vertical
         ? _buildVerticalFormSection(context)
         : _buildHorizontalFormSection(context);
   }

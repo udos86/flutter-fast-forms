@@ -9,7 +9,7 @@ import 'form_scope.dart';
 import 'options/dropdown.dart';
 import 'text/text_field.dart';
 
-typedef FormChanged = void Function(
+typedef FastFormChanged = void Function(
     UnmodifiableMapView<String, dynamic> values);
 
 @immutable
@@ -27,7 +27,7 @@ class FastForm extends StatefulWidget {
   final List<Widget> children;
   final GlobalKey<FormState> formKey;
   final FastInputDecorator? inputDecorator;
-  final FormChanged? onChanged;
+  final FastFormChanged? onChanged;
 
   @override
   FastFormState createState() => FastFormState();

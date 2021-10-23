@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'form.dart';
 import 'form_scope.dart';
 
-typedef ErrorBuilder<T> = Widget? Function(FastFormFieldState<T> state);
-typedef HelperBuilder<T> = Widget? Function(FastFormFieldState<T> state);
+typedef FastErrorBuilder<T> = Widget? Function(FastFormFieldState<T> state);
+typedef FastHelperBuilder<T> = Widget? Function(FastFormFieldState<T> state);
 
 @immutable
 abstract class FastFormField<T> extends FormField<T> {

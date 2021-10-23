@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'form.dart';
 import 'form_field.dart';
 
-typedef BoxDecorator = BoxDecoration Function(
+typedef FastBoxDecorator = BoxDecoration Function(
     BuildContext context, FastFormField field);
 
 typedef FastInputDecorator = InputDecoration Function(

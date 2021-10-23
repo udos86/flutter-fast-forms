@@ -22,12 +22,11 @@ void main() {
     final widget =
         tester.widget(fastRadioGroupFinder) as FastRadioGroup<String>;
 
-    final optionsFinder = find.byType(typeOf<RadioListTile<String>>());
-
     expect(fastRadioGroupFinder, findsOneWidget);
 
     expect(options.length, widget.options.length);
-    expect(optionsFinder, findsNWidgets(options.length));
+    expect(find.byType(typeOf<RadioListTile<String>>()),
+        findsNWidgets(options.length));
   });
 
   testWidgets('renders FastRadioGroup widget horizontally',
@@ -45,11 +44,9 @@ void main() {
       ),
     ));
 
-    final expandedFinder = find.byType(Expanded);
-    final optionsFinder = find.byType(typeOf<RadioListTile<String>>());
-
-    expect(expandedFinder, findsNWidgets(options.length));
-    expect(optionsFinder, findsNWidgets(options.length));
+    expect(find.byType(Expanded), findsNWidgets(options.length));
+    expect(find.byType(typeOf<RadioListTile<String>>()),
+        findsNWidgets(options.length));
   });
 
   testWidgets('updates FastRadioGroup value', (WidgetTester tester) async {
@@ -65,15 +62,12 @@ void main() {
       ),
     ));
 
-    final fastRadioGroupFinder = find.byType(typeOf<FastRadioGroup<String>>());
-    final state =
-        tester.state(fastRadioGroupFinder) as FastRadioGroupState<String>;
-
-    final optionsFinder = find.byType(typeOf<RadioListTile<String>>());
+    final state = tester.state(find.byType(typeOf<FastRadioGroup<String>>()))
+        as FastRadioGroupState<String>;
 
     expect(state.value, options.first.value);
 
-    await tester.tap(optionsFinder.last);
+    await tester.tap(find.byType(typeOf<RadioListTile<String>>()).last);
     await tester.pumpAndSettle();
 
     expect(state.value, options.last.value);
@@ -96,9 +90,8 @@ void main() {
       ),
     ));
 
-    final fastRadioGroupFinder = find.byType(typeOf<FastRadioGroup<String>>());
-    final state =
-        tester.state(fastRadioGroupFinder) as FastRadioGroupState<String>;
+    final state = tester.state(find.byType(typeOf<FastRadioGroup<String>>()))
+        as FastRadioGroupState<String>;
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);

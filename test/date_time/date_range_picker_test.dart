@@ -14,13 +14,11 @@ void main() {
       ),
     ));
 
-    final fastDateRangePickerFinder = find.byType(FastDateRangePicker);
-    final inkWellFinder = find.byType(InkWell);
-    final iconButtonFinder = find.byType(IconButton);
+    expect(find.byType(FastDateRangePicker), findsOneWidget);
+    expect(find.byType(IconButton), findsOneWidget);
 
-    expect(fastDateRangePickerFinder, findsOneWidget);
+    final inkWellFinder = find.byType(InkWell);
     expect(inkWellFinder.first, findsOneWidget);
-    expect(iconButtonFinder, findsOneWidget);
 
     await tester.tap(inkWellFinder.first);
     await tester.pumpAndSettle();
@@ -47,8 +45,6 @@ void main() {
     await tester.pumpAndSettle();
 
     final dateRangePickerText = dateRangPickerTextBuilder(state);
-    final dateRangePickerTextFinder = find.text(dateRangePickerText.data!);
-
-    expect(dateRangePickerTextFinder, findsOneWidget);
+    expect(find.text(dateRangePickerText.data!), findsOneWidget);
   });
 }

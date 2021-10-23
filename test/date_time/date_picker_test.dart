@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders Material FastDatePicker', (WidgetTester tester) async {
+  testWidgets('renders FastDatePicker', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
         id: 'date_picker',
@@ -19,29 +19,6 @@ void main() {
     expect(find.byType(FastDatePicker), findsOneWidget);
     expect(find.byType(InkWell).first, findsOneWidget);
     expect(find.byType(IconButton), findsOneWidget);
-  });
-
-  testWidgets('renders Cupertino FastDatePicker', (WidgetTester tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-
-    await tester.pumpWidget(buildCupertinoTestApp(
-      FastDatePicker(
-        id: 'date_picker',
-        adaptive: true,
-        showModalPopup: true,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-      ),
-    ));
-
-    expect(find.byType(FastDatePicker), findsOneWidget);
-
-    await tester.tap(find.byType(CupertinoButton).first);
-    await tester.pumpAndSettle();
-
-    expect(find.byType(CupertinoDatePicker), findsOneWidget);
-
-    debugDefaultTargetPlatformOverride = null;
   });
 
   testWidgets('shows CalendarDatePicker on GestureDetector tap',
@@ -117,9 +94,9 @@ void main() {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
         id: 'date_picker',
+        adaptive: true,
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
-        adaptive: true,
       ),
     ));
 
@@ -128,7 +105,7 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets('renders Cupertino FastDatePicker', (WidgetTester tester) async {
+  testWidgets('adapts FastDatePicker to iOS', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildCupertinoTestApp(

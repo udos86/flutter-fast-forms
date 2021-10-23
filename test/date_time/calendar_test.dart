@@ -14,11 +14,8 @@ void main() {
       ),
     ));
 
-    final fastCalendarFinder = find.byType(FastCalendar);
-    final calendarDatePickerFinder = find.byType(CalendarDatePicker);
-
-    expect(fastCalendarFinder, findsOneWidget);
-    expect(calendarDatePickerFinder, findsOneWidget);
+    expect(find.byType(FastCalendar), findsOneWidget);
+    expect(find.byType(CalendarDatePicker), findsOneWidget);
   });
 
   testWidgets('updates FastCalendar', (WidgetTester tester) async {

@@ -47,8 +47,8 @@ class FastSwitch extends FastFormField<bool> {
           validator: validator,
         );
 
-  final ErrorBuilder<bool>? errorBuilder;
-  final HelperBuilder<bool>? helperBuilder;
+  final FastErrorBuilder<bool>? errorBuilder;
+  final FastHelperBuilder<bool>? helperBuilder;
   final String? title;
   final FastSwitchTitleBuilder? titleBuilder;
 
