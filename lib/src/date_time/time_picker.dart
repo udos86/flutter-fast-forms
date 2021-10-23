@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef TimePickerTextBuilder = Text Function(FastTimePickerState state);
+typedef FastTimePickerTextBuilder = Text Function(FastTimePickerState state);
 
-typedef ShowTimePicker = Future<TimeOfDay?> Function(
+typedef ShowFastTimePicker = Future<TimeOfDay?> Function(
     TimePickerEntryMode entryMode);
 
-typedef TimePickerIconButtonBuilder = IconButton Function(
-    FastTimePickerState state, ShowTimePicker show);
+typedef FastTimePickerIconButtonBuilder = IconButton Function(
+    FastTimePickerState state, ShowFastTimePicker show);
 
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
@@ -58,10 +58,10 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   final String? confirmText;
   final String? helpText;
   final Icon? icon;
-  final TimePickerIconButtonBuilder? iconButtonBuilder;
+  final FastTimePickerIconButtonBuilder? iconButtonBuilder;
   final TimePickerEntryMode initialEntryMode;
   final RouteSettings? routeSettings;
-  final TimePickerTextBuilder? textBuilder;
+  final FastTimePickerTextBuilder? textBuilder;
   final bool useRootNavigator;
 
   @override
@@ -84,7 +84,7 @@ Text timePickerTextBuilder(FastTimePickerState state) {
 }
 
 IconButton timePickerIconButtonBuilder(
-    FastTimePickerState state, ShowTimePicker show) {
+    FastTimePickerState state, ShowFastTimePicker show) {
   final widget = state.widget;
 
   return IconButton(

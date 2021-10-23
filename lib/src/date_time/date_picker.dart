@@ -4,16 +4,16 @@ import 'package:intl/intl.dart';
 
 import '../form_field.dart';
 
-typedef DatePickerTextBuilder = Text Function(FastDatePickerState state);
+typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState state);
 
-typedef DatePickerModalPopupBuilder = Widget Function(
+typedef FastDatePickerModalPopupBuilder = Widget Function(
     BuildContext context, FastDatePickerState state);
 
-typedef ShowDatePicker = Future<DateTime?> Function(
+typedef ShowFastDatePicker = Future<DateTime?> Function(
     DatePickerEntryMode entryMode);
 
-typedef DatePickerIconButtonBuilder = IconButton Function(
-    FastDatePickerState state, ShowDatePicker show);
+typedef FastDatePickerIconButtonBuilder = IconButton Function(
+    FastDatePickerState state, ShowFastDatePicker show);
 
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
@@ -98,7 +98,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final HelperBuilder<DateTime>? helperBuilder;
   final String? helpText;
   final Icon? icon;
-  final DatePickerIconButtonBuilder? iconButtonBuilder;
+  final FastDatePickerIconButtonBuilder? iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
@@ -112,7 +112,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final RouteSettings? routeSettings;
   final SelectableDayPredicate? selectableDayPredicate;
   final bool showModalPopup;
-  final DatePickerTextBuilder? textBuilder;
+  final FastDatePickerTextBuilder? textBuilder;
   final bool use24hFormat;
   final bool useRootNavigator;
 
@@ -158,7 +158,7 @@ Text datePickerTextBuilder(FastDatePickerState state) {
 }
 
 IconButton datePickerIconButtonBuilder(
-    FastDatePickerState state, ShowDatePicker show) {
+    FastDatePickerState state, ShowFastDatePicker show) {
   final widget = state.widget;
 
   return IconButton(

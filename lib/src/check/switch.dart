@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef SwitchTitleBuilder = Widget Function(FastSwitchState state);
+typedef FastSwitchTitleBuilder = Widget Function(FastSwitchState state);
 
 @immutable
 class FastSwitch extends FastFormField<bool> {
@@ -50,7 +50,7 @@ class FastSwitch extends FastFormField<bool> {
   final ErrorBuilder<bool>? errorBuilder;
   final HelperBuilder<bool>? helperBuilder;
   final String? title;
-  final SwitchTitleBuilder? titleBuilder;
+  final FastSwitchTitleBuilder? titleBuilder;
 
   @override
   FastSwitchState createState() => FastSwitchState();

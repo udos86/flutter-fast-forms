@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef CheckboxTitleBuilder = Widget Function(FastCheckboxState state);
+typedef FastCheckboxTitleBuilder = Widget Function(FastCheckboxState state);
 
 @immutable
 class FastCheckbox extends FastFormField<bool> {
@@ -43,7 +43,7 @@ class FastCheckbox extends FastFormField<bool> {
         );
 
   final String title;
-  final CheckboxTitleBuilder? titleBuilder;
+  final FastCheckboxTitleBuilder? titleBuilder;
   final bool tristate;
 
   @override

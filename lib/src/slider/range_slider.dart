@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef RangeSliderLabelsBuilder = RangeLabels Function(
+typedef FastRangeSliderLabelsBuilder = RangeLabels Function(
     FastRangeSliderState state);
 
-typedef RangeSliderFixBuilder = Widget Function(FastRangeSliderState state);
+typedef FastRangeSliderFixBuilder = Widget Function(FastRangeSliderState state);
 
 @immutable
 class FastRangeSlider extends FastFormField<RangeValues> {
@@ -50,11 +50,11 @@ class FastRangeSlider extends FastFormField<RangeValues> {
         );
 
   final int? divisions;
-  final RangeSliderLabelsBuilder? labelsBuilder;
+  final FastRangeSliderLabelsBuilder? labelsBuilder;
   final double max;
   final double min;
-  final RangeSliderFixBuilder? prefixBuilder;
-  final RangeSliderFixBuilder? suffixBuilder;
+  final FastRangeSliderFixBuilder? prefixBuilder;
+  final FastRangeSliderFixBuilder? suffixBuilder;
 
   @override
   FastRangeSliderState createState() => FastRangeSliderState();

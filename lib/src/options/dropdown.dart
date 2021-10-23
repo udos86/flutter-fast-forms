@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef DropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
+typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
     List<T> items, FastDropdownState<T> state);
 
 @immutable
@@ -50,7 +50,7 @@ class FastDropdown<T> extends FastFormField<T> {
   final FocusNode? focusNode;
   final Widget? hint;
   final List<T> items;
-  final DropdownMenuItemsBuilder<T>? itemsBuilder;
+  final FastDropdownMenuItemsBuilder<T>? itemsBuilder;
   final DropdownButtonBuilder? selectedItemBuilder;
 
   @override

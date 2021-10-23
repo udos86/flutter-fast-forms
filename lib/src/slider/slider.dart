@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef SliderFixBuilder = Widget Function(FastSliderState state);
+typedef FastSliderFixBuilder = Widget Function(FastSliderState state);
 
-typedef SliderLabelBuilder = String Function(FastSliderState state);
+typedef FastSliderLabelBuilder = String Function(FastSliderState state);
 
 @immutable
 class FastSlider extends FastFormField<double> {
@@ -57,11 +57,11 @@ class FastSlider extends FastFormField<double> {
   final int? divisions;
   final ErrorBuilder<double>? errorBuilder;
   final HelperBuilder<double>? helperBuilder;
-  final SliderLabelBuilder? labelBuilder;
+  final FastSliderLabelBuilder? labelBuilder;
   final double max;
   final double min;
-  final SliderFixBuilder? prefixBuilder;
-  final SliderFixBuilder? suffixBuilder;
+  final FastSliderFixBuilder? prefixBuilder;
+  final FastSliderFixBuilder? suffixBuilder;
 
   @override
   FastSliderState createState() => FastSliderState();

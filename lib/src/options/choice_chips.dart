@@ -85,7 +85,7 @@ class FastChoiceChip
   bool get isEnabled => onSelected != null;
 }
 
-typedef ChoiceChipBuilder = Widget Function(
+typedef FastChoiceChipBuilder = Widget Function(
     FastChoiceChip chip, FastChoiceChipsState state);
 
 @immutable
@@ -140,7 +140,7 @@ class FastChoiceChips extends FastFormField<Set<int>> {
         );
 
   final WrapAlignment alignment;
-  final ChoiceChipBuilder? chipBuilder;
+  final FastChoiceChipBuilder? chipBuilder;
   final EdgeInsetsGeometry? chipPadding;
   final List<FastChoiceChip> chips;
   final Clip clipBehavior;

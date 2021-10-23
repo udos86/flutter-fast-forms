@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef OptionsMatcher<O extends Object> = bool Function(
+typedef FastOptionsMatcher<O extends Object> = bool Function(
     TextEditingValue textEditingValue, O option);
-
-bool _optionsMatcher<O extends Object>(TextEditingValue value, O option) {
-  return option.toString().toLowerCase().contains(value.text.toLowerCase());
-}
 
 typedef FastAutocompleteFieldViewBuilder<O extends Object>
     = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> state);
@@ -63,7 +59,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
   final AutocompleteOnSelected<O>? onSelected;
   final Iterable<O>? options;
   final AutocompleteOptionsBuilder<O>? optionsBuilder;
-  final OptionsMatcher<O>? optionsMatcher;
+  final FastOptionsMatcher<O>? optionsMatcher;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<O>? optionsViewBuilder;
 
@@ -75,6 +71,10 @@ class FastAutocompleteState<O extends Object>
     extends FastFormFieldState<String> {
   @override
   FastAutocomplete<O> get widget => super.widget as FastAutocomplete<O>;
+}
+
+bool _optionsMatcher<O extends Object>(TextEditingValue value, O option) {
+  return option.toString().toLowerCase().contains(value.text.toLowerCase());
 }
 
 AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(

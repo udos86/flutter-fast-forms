@@ -3,14 +3,14 @@ import 'package:intl/intl.dart';
 
 import '../form_field.dart';
 
-typedef DateRangePickerTextBuilder = Text Function(
+typedef FastDateRangePickerTextBuilder = Text Function(
     FastDateRangePickerState state);
 
-typedef ShowDateRangePicker = Future<DateTimeRange?> Function(
+typedef ShowFastDateRangePicker = Future<DateTimeRange?> Function(
     DatePickerEntryMode entryMode);
 
-typedef DateRangePickerIconButtonBuilder = IconButton Function(
-    FastDateRangePickerState state, ShowDateRangePicker show);
+typedef FastDateRangePickerIconButtonBuilder = IconButton Function(
+    FastDateRangePickerState state, ShowFastDateRangePicker show);
 
 @immutable
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
@@ -85,13 +85,13 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final DateTime firstDate;
   final String? helpText;
   final Icon? icon;
-  final DateRangePickerIconButtonBuilder? iconButtonBuilder;
+  final FastDateRangePickerIconButtonBuilder? iconButtonBuilder;
   final DatePickerEntryMode initialEntryMode;
   final DateTime lastDate;
   final Locale? locale;
   final RouteSettings? routeSettings;
   final String? saveText;
-  final DateRangePickerTextBuilder? textBuilder;
+  final FastDateRangePickerTextBuilder? textBuilder;
   final bool useRootNavigator;
 
   @override
@@ -116,7 +116,7 @@ Text dateRangPickerTextBuilder(FastDateRangePickerState state) {
 }
 
 IconButton dateRangePickerIconButtonBuilder(
-    FastDateRangePickerState state, ShowDateRangePicker show) {
+    FastDateRangePickerState state, ShowFastDateRangePicker show) {
   final widget = state.widget;
 
   return IconButton(

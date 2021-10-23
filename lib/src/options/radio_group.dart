@@ -11,10 +11,10 @@ class FastRadioOption<T> {
   final String title;
 }
 
-typedef RadioOptionBuilder<T> = Widget Function(
+typedef FastRadioOptionBuilder<T> = Widget Function(
     FastRadioOption<T> option, FastRadioGroupState<T> state);
 
-typedef RadioOptionsBuilder<T> = Widget Function(
+typedef FastRadioOptionsBuilder<T> = Widget Function(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> state);
 
 enum FastRadioGroupOrientation { horizontal, vertical }
@@ -59,8 +59,8 @@ class FastRadioGroup<T> extends FastFormField<T> {
         );
 
   final List<FastRadioOption<T>> options;
-  final RadioOptionBuilder<T>? optionBuilder;
-  final RadioOptionsBuilder<T>? optionsBuilder;
+  final FastRadioOptionBuilder<T>? optionBuilder;
+  final FastRadioOptionsBuilder<T>? optionsBuilder;
   final FastRadioGroupOrientation orientation;
 
   @override
