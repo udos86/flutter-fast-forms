@@ -11,7 +11,7 @@ void main() {
     const prefix = Text('prefix');
     const suffix = Text('suffix');
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastTextField(
         id: 'text_field',
         prefix: prefix,
@@ -28,7 +28,7 @@ void main() {
   testWidgets('builds input counter', (WidgetTester tester) async {
     const maxLength = 7;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastTextField(
         id: 'text_field',
         maxLength: maxLength,
@@ -53,7 +53,7 @@ void main() {
   });
 
   testWidgets('updates FastTextField', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastTextField(
         id: 'text_field',
       ),
@@ -76,7 +76,7 @@ void main() {
     const invalidText = 'This is an invalid text';
     const errorText = 'Invalid input text';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastTextField(
         id: 'text_field',
         validator: (value) => value == invalidText ? errorText : null,
@@ -99,7 +99,7 @@ void main() {
   testWidgets('adapts FastTextField to Android', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastTextField(
         id: 'text_field',
         adaptive: true,
@@ -114,7 +114,7 @@ void main() {
   testWidgets('adapts FastTextField to iOS', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastTextField(
         id: 'text_field',
         adaptive: true,

@@ -11,7 +11,7 @@ void main() {
       FastRadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastRadioGroup<String>(
         id: 'radio_group',
         options: options,
@@ -37,7 +37,7 @@ void main() {
       FastRadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastRadioGroup<String>(
         id: 'radio_group',
         options: options,
@@ -58,7 +58,7 @@ void main() {
       FastRadioOption(title: 'Option 2', value: 'option-2'),
     ];
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastRadioGroup<String>(
         id: 'radio_group',
         options: options,
@@ -88,7 +88,7 @@ void main() {
       invalidOption,
     ];
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastRadioGroup<String>(
         id: 'radio_group',
         options: options,

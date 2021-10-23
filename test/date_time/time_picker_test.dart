@@ -6,7 +6,7 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastTimePicker', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastTimePicker(
         id: 'time_picker',
       ),
@@ -25,7 +25,7 @@ void main() {
   });
 
   testWidgets('updates FastTimePicker', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastTimePicker(
         id: 'time_picker',
       ),

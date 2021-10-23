@@ -6,7 +6,7 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastRangeSlider', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
         id: 'range_slider',
         max: 10,
@@ -34,7 +34,7 @@ void main() {
   });
 
   testWidgets('updates FastRangeSlider', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
         id: 'range_slider',
         max: 10,
@@ -61,7 +61,7 @@ void main() {
   testWidgets('validates FastRangeSlider', (WidgetTester tester) async {
     const errorText = 'Range is too narrow';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
         id: 'range_slider',
         max: 10,

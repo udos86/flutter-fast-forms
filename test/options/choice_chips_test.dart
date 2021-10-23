@@ -19,7 +19,7 @@ void main() {
     const helper = 'helper';
     const label = 'label';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastChoiceChips(
         id: 'choice_chips',
         helperText: helper,
@@ -36,7 +36,7 @@ void main() {
   });
 
   testWidgets('updates FastChoiceChips', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastChoiceChips(
         id: 'choice_chips',
         chips: chips,
@@ -58,7 +58,7 @@ void main() {
   testWidgets('validates FastChoiceChips', (WidgetTester tester) async {
     const errorText = 'At least one chip must be selected';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastChoiceChips(
         id: 'choice_chips',
         chips: chips,

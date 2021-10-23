@@ -9,7 +9,7 @@ void main() {
   testWidgets('renders FastSegmentedControl', (WidgetTester tester) async {
     final testValues = ['value1', 'value2', 'value3'];
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastSegmentedControl<String>(
         id: 'segmented_control',
         children: {for (var item in testValues) item: Text(item)},
@@ -33,7 +33,7 @@ void main() {
   testWidgets('updates FastSegmentedControl', (WidgetTester tester) async {
     final testValues = ['value1', 'value2', 'value3'];
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastSegmentedControl(
         id: 'segmented_control',
         children: {for (var item in testValues) item: Text(item)},

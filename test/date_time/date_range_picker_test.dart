@@ -6,7 +6,7 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastDateRangerPicker', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastDateRangePicker(
         id: 'date_range_picker',
         firstDate: DateTime(1900),
@@ -27,7 +27,7 @@ void main() {
   });
 
   testWidgets('updates FastDateRangerPicker', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastDateRangePicker(
         id: 'date_range_picker',
         firstDate: DateTime(1900),

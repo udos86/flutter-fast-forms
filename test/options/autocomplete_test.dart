@@ -21,7 +21,7 @@ void main() {
     const helper = 'helper';
     const label = 'label';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastAutocomplete<String>(
         id: 'autocomplete',
         helperText: helper,
@@ -38,7 +38,7 @@ void main() {
   });
 
   testWidgets('shows FastAutocomplete options', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastAutocomplete<String>(
         id: 'autocomplete',
         options: options,
@@ -54,7 +54,7 @@ void main() {
   });
 
   testWidgets('updates FastAutocomplete', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastAutocomplete<String>(
         id: 'autocomplete',
         options: options,

@@ -10,7 +10,7 @@ void main() {
     const label = 'label';
     const title = 'title';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastCheckbox(
         id: 'checkbox',
         helperText: helper,
@@ -35,7 +35,7 @@ void main() {
   });
 
   testWidgets('updates FastCheckbox', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastCheckbox(
         id: 'checkbox',
         title: 'title',
@@ -55,7 +55,7 @@ void main() {
   testWidgets('validates FastCheckbox', (WidgetTester tester) async {
     const errorText = 'Must be checked';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastCheckbox(
         id: 'checkbox',
         title: 'title',

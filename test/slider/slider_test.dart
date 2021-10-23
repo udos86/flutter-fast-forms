@@ -8,7 +8,7 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders Material FastSlider', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
         id: 'slider',
         labelBuilder: sliderLabelBuilder,
@@ -33,7 +33,7 @@ void main() {
   });
 
   testWidgets('renders Cupertino FastSlider', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
         id: 'slider',
         builder: cupertinoSliderBuilder,
@@ -59,7 +59,7 @@ void main() {
   });
 
   testWidgets('updates FastSlider', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastSlider(
         id: 'slider',
         suffixBuilder: sliderSuffixBuilder,
@@ -78,7 +78,7 @@ void main() {
   testWidgets('validates FastSlider', (WidgetTester tester) async {
     const errorText = 'Value is too high';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
         id: 'slider',
         validator: (value) => value! > 0 ? errorText : null,
@@ -99,7 +99,7 @@ void main() {
   testWidgets('adapts FastSlider to Android', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastSlider(
         id: 'slider',
         adaptive: true,
@@ -114,7 +114,7 @@ void main() {
   testWidgets('adapts FastSlider to iOS', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastSlider(
         id: 'slider',
         adaptive: true,

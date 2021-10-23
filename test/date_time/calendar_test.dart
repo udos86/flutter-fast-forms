@@ -6,7 +6,7 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastCalendar', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
@@ -22,7 +22,7 @@ void main() {
   });
 
   testWidgets('updates FastCalendar', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),
@@ -46,7 +46,7 @@ void main() {
     const invalidValue = 21;
     const errorText = 'Invalid day';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
         id: 'calendar',
         firstDate: DateTime(1900),

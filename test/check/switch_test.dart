@@ -10,7 +10,7 @@ void main() {
   testWidgets('renders FastSwitch', (WidgetTester tester) async {
     const title = 'title';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastSwitch(
         id: 'switch',
         title: title,
@@ -24,7 +24,7 @@ void main() {
   });
 
   testWidgets('updates FastSwitch', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastSwitch(
         id: 'switch',
         title: 'title',
@@ -44,7 +44,7 @@ void main() {
   testWidgets('validates FastSwitch', (WidgetTester tester) async {
     const errorText = 'Must be switched on';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastSwitch(
         id: 'switch',
         title: 'title',
@@ -67,7 +67,7 @@ void main() {
   testWidgets('adapts FastSwitch to Android', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastSwitch(
         id: 'switch',
         title: 'title',
@@ -83,7 +83,7 @@ void main() {
   testWidgets('adapts FastSwitch to iOS', (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastSwitch(
         id: 'switch',
         title: 'title',

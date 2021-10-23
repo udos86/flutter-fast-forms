@@ -10,7 +10,7 @@ void main() {
   testWidgets('renders FastFormSection', (WidgetTester tester) async {
     const header = Text('Test Form Section');
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastFormSection(
         header: header,
         children: [
@@ -28,7 +28,7 @@ void main() {
 
   testWidgets('renders FastFormSection horizontally',
       (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastFormSection(
         orientation: FormSectionOrientation.horizontal,
         children: [
@@ -50,7 +50,7 @@ void main() {
 
     const header = Text('Test Form Section');
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastFormSection(
         adaptive: true,
         header: header,
@@ -73,7 +73,7 @@ void main() {
       (WidgetTester tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       const FastFormSection(
         adaptive: true,
         insetGrouped: true,

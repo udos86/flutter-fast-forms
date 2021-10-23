@@ -6,7 +6,7 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastDropdown', (WidgetTester tester) async {
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastDropdown<String>(
         id: 'dropdown',
         items: const [],
@@ -28,7 +28,7 @@ void main() {
     const itemsLength = 3;
     final items = List.generate(itemsLength, (int index) => 'item $index');
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastDropdown<String>(
         id: 'dropdown',
         items: items,
@@ -59,7 +59,7 @@ void main() {
     const invalidItem = 'invalid item';
     const errorText = 'Do not touch this';
 
-    await tester.pumpWidget(getFastTestWidget(
+    await tester.pumpWidget(buildMaterialTestApp(
       FastDropdown<String>(
         id: 'dropdown',
         items: const ['item', invalidItem],
