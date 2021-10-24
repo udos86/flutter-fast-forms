@@ -7,10 +7,7 @@ import '../test_utils.dart';
 void main() {
   testWidgets('renders FastDropdown', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastDropdown<String>(
-        id: 'dropdown',
-        items: const [],
-      ),
+      FastDropdown<String>(id: 'dropdown', items: const []),
     ));
 
     expect(find.byType(typeOf<FastDropdown<String>>()), findsOneWidget);
@@ -25,10 +22,7 @@ void main() {
     final items = List.generate(itemsLength, (int index) => 'item $index');
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastDropdown<String>(
-        id: 'dropdown',
-        items: items,
-      ),
+      FastDropdown<String>(id: 'dropdown', items: items),
     ));
 
     final state = tester.state(find.byType(typeOf<FastDropdown<String>>()))

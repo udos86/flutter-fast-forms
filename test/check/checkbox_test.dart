@@ -28,10 +28,7 @@ void main() {
 
   testWidgets('updates FastCheckbox', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastCheckbox(
-        id: 'checkbox',
-        title: 'title',
-      ),
+      const FastCheckbox(id: 'checkbox', title: 'title'),
     ));
 
     final state = tester.state(find.byType(FastCheckbox)) as FastCheckboxState;

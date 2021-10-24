@@ -12,10 +12,7 @@ void main() {
     ];
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastRadioGroup<String>(
-        id: 'radio_group',
-        options: options,
-      ),
+      FastRadioGroup<String>(id: 'radio_group', options: options),
     ));
 
     final fastRadioGroupFinder = find.byType(typeOf<FastRadioGroup<String>>());
@@ -56,10 +53,7 @@ void main() {
     ];
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastRadioGroup<String>(
-        id: 'radio_group',
-        options: options,
-      ),
+      FastRadioGroup<String>(id: 'radio_group', options: options),
     ));
 
     final state = tester.state(find.byType(typeOf<FastRadioGroup<String>>()))
