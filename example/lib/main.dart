@@ -147,8 +147,9 @@ class FormPage extends StatelessWidget {
                 selected: true,
               ),
               FastChoiceChip(
-                  label: Text('Android'),
-                  avatar: Icon(Icons.android_sharp, size: 16.0)),
+                label: Text('Android'),
+                avatar: Icon(Icons.android_sharp, size: 16.0),
+              ),
               FastChoiceChip(
                 label: Text('Chrome OS'),
                 selected: true,
