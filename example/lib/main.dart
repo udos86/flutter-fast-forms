@@ -144,18 +144,19 @@ class FormPage extends StatelessWidget {
               FastChoiceChip(
                 label: Text('Flutter'),
                 avatar: FlutterLogo(),
+                selected: true,
               ),
               FastChoiceChip(
                   label: Text('Android'),
                   avatar: Icon(Icons.android_sharp, size: 16.0)),
               FastChoiceChip(
                 label: Text('Chrome OS'),
+                selected: true,
               ),
             ],
             validator: (value) => value == null || value.isEmpty
                 ? 'Please select at least one chip'
                 : null,
-            initialValue: const {0, 2},
           ),
           const FastSwitch(
             id: 'switch',
