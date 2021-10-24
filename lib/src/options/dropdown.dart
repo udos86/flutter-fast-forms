@@ -78,7 +78,7 @@ DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
 
   final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
-  void _onChanged(value) {
+  void _onChanged(T? value) {
     if (value != field.value) field.didChange(value);
   }
 
