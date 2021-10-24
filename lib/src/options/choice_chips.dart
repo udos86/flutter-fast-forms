@@ -158,11 +158,6 @@ class FastChoiceChipsState extends FastFormFieldState<Set<FastChoiceChip>> {
   FastChoiceChips get widget => super.widget as FastChoiceChips;
 }
 
-Set<FastChoiceChip>? newFieldValue(
-    bool selected, FastChoiceChip chip, FastChoiceChipsState state) {
-  return selected ? {...state.value!, chip} : ({...state.value!}..remove(chip));
-}
-
 ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState state) {
   return ChoiceChip(
     autofocus: chip.autofocus,
@@ -191,7 +186,11 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState state) {
       if (chip.onSelected != null) {
         chip.onSelected!(selected);
       }
-      state.didChange(newFieldValue(selected, chip, state));
+
+      final value = state.value ?? <FastChoiceChip>{};
+      final newValue = selected ? {...value, chip} : ({...value}..remove(chip));
+
+      state.didChange(newValue);
     },
   );
 }
