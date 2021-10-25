@@ -39,10 +39,7 @@ void main() {
 
   testWidgets('shows FastAutocomplete options', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(
-        id: 'autocomplete',
-        options: options,
-      ),
+      FastAutocomplete<String>(id: 'autocomplete', options: options),
     ));
 
     final text = options.last;
@@ -55,10 +52,7 @@ void main() {
 
   testWidgets('updates FastAutocomplete', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(
-        id: 'autocomplete',
-        options: options,
-      ),
+      FastAutocomplete<String>(id: 'autocomplete', options: options),
     ));
 
     final state = tester.state(find.byType(typeOf<FastAutocomplete<String>>()))

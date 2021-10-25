@@ -37,22 +37,19 @@ void main() {
 
   testWidgets('updates FastChoiceChips', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastChoiceChips(
-        id: 'choice_chips',
-        chips: chips,
-      ),
+      FastChoiceChips(id: 'choice_chips', chips: chips),
     ));
 
     final state =
         tester.state(find.byType(FastChoiceChips)) as FastChoiceChipsState;
 
     expect(state.value, state.widget.initialValue);
-    expect(state.value, <int>{});
+    expect(state.value, <FastChoiceChip>{});
 
     await tester.tap(find.byType(ChoiceChip).first);
     await tester.pumpAndSettle();
 
-    expect(state.value, <int>{chips.indexOf(chips.first)});
+    expect(state.value, {chips.first});
   });
 
   testWidgets('validates FastChoiceChips', (WidgetTester tester) async {

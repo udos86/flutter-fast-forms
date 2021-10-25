@@ -1,3 +1,10 @@
+## [2.0.0] - 10/24/2021
+
+* introduces typed validators
+* prefixes typedefs with `Fast`
+* improves typing of option form fields
+* removes `builders`config from `FormScope` 
+
 ## [v1.1.0] - 10/16/2021
 
 * introduces `FastAutocomplete<T>` widget

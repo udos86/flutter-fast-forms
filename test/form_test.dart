@@ -11,11 +11,7 @@ void main() {
         home: Scaffold(
           body: FastForm(
             formKey: formKey,
-            children: const [
-              FastTextField(
-                id: 'text_field',
-              )
-            ],
+            children: const [FastTextField(id: 'text_field')],
           ),
         ),
       ),
@@ -35,11 +31,7 @@ void main() {
         home: Scaffold(
           body: FastForm(
             formKey: formKey,
-            children: const [
-              FastTextField(
-                id: 'text_field',
-              )
-            ],
+            children: const [FastTextField(id: 'text_field')],
           ),
         ),
       ),
@@ -61,11 +53,7 @@ void main() {
         home: Scaffold(
           body: FastForm(
             formKey: formKey,
-            children: const [
-              FastTextField(
-                id: 'text_field',
-              )
-            ],
+            children: const [FastTextField(id: 'text_field')],
           ),
         ),
       ),
@@ -99,11 +87,7 @@ void main() {
               onChangedCalled = true;
               onChangedValues = values;
             },
-            children: const [
-              FastTextField(
-                id: 'text_field',
-              )
-            ],
+            children: const [FastTextField(id: 'text_field')],
           ),
         ),
       ),

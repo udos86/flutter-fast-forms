@@ -12,11 +12,7 @@ void main() {
     const suffix = Text('suffix');
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(
-        id: 'text_field',
-        prefix: prefix,
-        suffix: suffix,
-      ),
+      const FastTextField(id: 'text_field', prefix: prefix, suffix: suffix),
     ));
 
     expect(find.byType(FastTextField), findsOneWidget);
@@ -54,9 +50,7 @@ void main() {
 
   testWidgets('updates FastTextField', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(
-        id: 'text_field',
-      ),
+      const FastTextField(id: 'text_field'),
     ));
 
     final state =
@@ -100,10 +94,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(
-        id: 'text_field',
-        adaptive: true,
-      ),
+      const FastTextField(id: 'text_field', adaptive: true),
     ));
 
     expect(find.byType(TextFormField), findsOneWidget);
@@ -115,10 +106,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(
-        id: 'text_field',
-        adaptive: true,
-      ),
+      const FastTextField(id: 'text_field', adaptive: true),
     ));
 
     expect(find.byType(CupertinoTextFormFieldRow), findsOneWidget);
