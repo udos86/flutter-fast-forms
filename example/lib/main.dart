@@ -114,11 +114,6 @@ class FormPage extends StatelessWidget {
           ),
         ),
         children: [
-          FastInputChips(
-            id: 'input_chips',
-            label: 'Input Chips',
-            options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
-          ),
           FastAutocomplete<String>(
             id: 'autocomplete',
             label: 'Autocomplete',
@@ -251,6 +246,11 @@ class FormPage extends StatelessWidget {
             label: 'Calendar',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
+          ),
+          FastInputChips(
+            id: 'input_chips',
+            label: 'Input Chips',
+            options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
           ),
           const FastCheckbox(
             id: 'checkbox',

@@ -35,7 +35,7 @@ class FastInputChips extends FastFormField<Set<String>> {
     this.fieldViewValidator,
     this.fieldViewWidth = 120.0,
     this.onSelected,
-    this.options,
+    this.options = const [],
     this.optionsBuilder,
     this.optionsMatcher,
     this.optionsMaxHeight = 200.0,
@@ -45,8 +45,7 @@ class FastInputChips extends FastFormField<Set<String>> {
     this.spacing = 8.0,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
-  })  : assert(options != null || optionsBuilder != null),
-        super(
+  }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ?? (field) => inputChipsBuilder(field),
@@ -73,7 +72,7 @@ class FastInputChips extends FastFormField<Set<String>> {
   final FormFieldValidator<String>? fieldViewValidator;
   final double fieldViewWidth;
   final AutocompleteOnSelected<String>? onSelected;
-  final Iterable<String>? options;
+  final Iterable<String> options;
   final AutocompleteOptionsBuilder<String>? optionsBuilder;
   final FastOptionsMatcher<String>? optionsMatcher;
   final double optionsMaxHeight;
@@ -129,7 +128,7 @@ InputChip _chipBuilder(String value, FastInputChipsState state) {
   );
 }
 
-AutocompleteFieldViewBuilder fieldViewBuilder(FastInputChipsState state) {
+AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState state) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
     final widget = state.widget;
@@ -151,12 +150,11 @@ AutocompleteFieldViewBuilder fieldViewBuilder(FastInputChipsState state) {
           width: widget.fieldViewWidth,
           child: TextFormField(
             controller: textEditingController,
-            enabled: widget.enabled,
-            focusNode: focusNode,
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),
-            // decoration: state.decoration.copyWith(errorText: state.errorText),
+            enabled: widget.enabled,
+            focusNode: focusNode,
             onFieldSubmitted: (String value) {
               if (value.isEmpty) {
                 focusNode.unfocus();
@@ -232,12 +230,12 @@ Widget inputChipsBuilder(FormFieldState<Set<String>> field) {
       ),
       child: RawAutocomplete<String>(
         displayStringForOption: widget.displayStringForOption,
-        fieldViewBuilder: fieldViewBuilder(state),
+        fieldViewBuilder: _fieldViewBuilder(state),
         focusNode: state.textFocusNode,
         onSelected: (String? value) {
           _updateField(value, state);
         },
-        optionsBuilder: _optionsBuilder(widget.options!, state),
+        optionsBuilder: _optionsBuilder(widget.options, state),
         optionsViewBuilder:
             widget.optionsViewBuilder ?? _optionsViewBuilder(state),
         textEditingController: state.textEditingController,
