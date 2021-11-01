@@ -114,6 +114,11 @@ class FormPage extends StatelessWidget {
           ),
         ),
         children: [
+          FastInputChips(
+            id: 'input_chips',
+            label: 'Input Chips',
+            options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
+          ),
           FastAutocomplete<String>(
             id: 'autocomplete',
             label: 'Autocomplete',

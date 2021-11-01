@@ -7,6 +7,7 @@ export 'src/date_time/time_picker.dart';
 export 'src/options/autocomplete.dart';
 export 'src/options/choice_chips.dart';
 export 'src/options/dropdown.dart';
+export 'src/options/input_chips.dart';
 export 'src/options/radio_group.dart';
 export 'src/options/segmented_control.dart';
 export 'src/slider/range_slider.dart';
