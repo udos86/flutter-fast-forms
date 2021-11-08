@@ -16,12 +16,7 @@ void main() {
     const label = 'label';
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(
-        id: 'input_chips',
-        helperText: helper,
-        label: label,
-        options: options,
-      ),
+      FastInputChips(id: 'input_chips', helperText: helper, label: label),
     ));
 
     expect(find.byType(FastInputChips), findsOneWidget);
@@ -37,16 +32,16 @@ void main() {
     ));
 
     const text = 'Hello';
-    final textFieldFinder = find.byType(TextFormField);
 
-    await tester.enterText(textFieldFinder, text);
+    await tester.enterText(find.byType(TextFormField), text);
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
     expect(find.byType(InputChip), findsOneWidget);
   });
 
-  testWidgets('updates FastInputChips', (WidgetTester tester) async {
+  testWidgets('updates FastInputChips by text input',
+      (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastInputChips(id: 'input_chips', options: options),
     ));
@@ -57,10 +52,35 @@ void main() {
     expect(state.value, state.widget.initialValue);
 
     const text = 'Hello';
-    final textFieldFinder = find.byType(TextFormField);
 
-    await tester.enterText(textFieldFinder, text);
+    await tester.enterText(find.byType(TextFormField), text);
     await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+
+    expect(state.value, {text});
+  });
+
+  testWidgets('updates FastInputChips by selecting option',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(buildMaterialTestApp(
+      FastInputChips(id: 'input_chips', options: options),
+    ));
+
+    final state =
+        tester.state(find.byType(FastInputChips)) as FastInputChipsState;
+    final text = options.last;
+
+    await tester.enterText(find.byType(TextFormField), text);
+    await tester.pumpAndSettle();
+
+    final optionFinder = find.descendant(
+      of: find.byType(ListView),
+      matching: find.byType(InkWell),
+    );
+
+    expect(optionFinder, findsOneWidget);
+
+    await tester.tap(optionFinder);
     await tester.pumpAndSettle();
 
     expect(state.value, {text});
