@@ -1,3 +1,7 @@
+## [2.1.0] - 11/17/2021
+
+* introduces `FastInputChips`
+
 ## [2.0.0] - 10/24/2021
 
 * introduces typed validators
