@@ -10,7 +10,7 @@ void main() {
   testWidgets('renders Material FastSlider', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
-        id: 'slider',
+        name: 'slider',
         labelBuilder: sliderLabelBuilder,
         prefixBuilder: (state) => const Icon(Icons.volume_up),
         suffixBuilder: sliderSuffixBuilder,
@@ -35,7 +35,7 @@ void main() {
   testWidgets('renders Cupertino FastSlider', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
-        id: 'slider',
+        name: 'slider',
         builder: cupertinoSliderBuilder,
         labelBuilder: sliderLabelBuilder,
         prefixBuilder: (state) => const Icon(Icons.volume_up),
@@ -60,7 +60,7 @@ void main() {
 
   testWidgets('updates FastSlider', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSlider(id: 'slider', suffixBuilder: sliderSuffixBuilder),
+      const FastSlider(name: 'slider', suffixBuilder: sliderSuffixBuilder),
     ));
 
     final state = tester.state(find.byType(FastSlider)) as FastSliderState;
@@ -77,7 +77,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
-        id: 'slider',
+        name: 'slider',
         validator: (value) => value! > 0 ? errorText : null,
       ),
     ));
@@ -97,7 +97,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSlider(id: 'slider', adaptive: true),
+      const FastSlider(name: 'slider', adaptive: true),
     ));
 
     expect(find.byType(Slider), findsOneWidget);
@@ -109,7 +109,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSlider(id: 'slider', adaptive: true),
+      const FastSlider(name: 'slider', adaptive: true),
     ));
 
     expect(find.byType(CupertinoFormRow), findsOneWidget);

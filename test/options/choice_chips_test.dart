@@ -21,7 +21,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastChoiceChips(
-        id: 'choice_chips',
+        name: 'choice_chips',
         helperText: helper,
         label: label,
         chips: chips,
@@ -37,7 +37,7 @@ void main() {
 
   testWidgets('updates FastChoiceChips', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastChoiceChips(id: 'choice_chips', chips: chips),
+      FastChoiceChips(name: 'choice_chips', chips: chips),
     ));
 
     final state =
@@ -57,7 +57,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastChoiceChips(
-        id: 'choice_chips',
+        name: 'choice_chips',
         chips: chips,
         validator: (selected) =>
             selected == null || selected.isEmpty ? errorText : null,

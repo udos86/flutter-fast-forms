@@ -11,7 +11,7 @@ void main() {
         home: Scaffold(
           body: FastForm(
             formKey: formKey,
-            children: const [FastTextField(id: 'text_field')],
+            children: const [FastTextField(name: 'text_field')],
           ),
         ),
       ),
@@ -31,7 +31,7 @@ void main() {
         home: Scaffold(
           body: FastForm(
             formKey: formKey,
-            children: const [FastTextField(id: 'text_field')],
+            children: const [FastTextField(name: 'text_field')],
           ),
         ),
       ),
@@ -41,7 +41,7 @@ void main() {
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
     final formState = FastFormScope.of(fieldState.context)?.formState;
 
-    expect(formState?.values.containsKey(fieldState.widget.id), true);
+    expect(formState?.values.containsKey(fieldState.widget.name), true);
     expect(formState?.values.containsValue(fieldState.value), true);
   });
 
@@ -53,7 +53,7 @@ void main() {
         home: Scaffold(
           body: FastForm(
             formKey: formKey,
-            children: const [FastTextField(id: 'text_field')],
+            children: const [FastTextField(name: 'text_field')],
           ),
         ),
       ),
@@ -68,7 +68,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
 
-    expect(formState?.values.containsKey(fieldState.widget.id), true);
+    expect(formState?.values.containsKey(fieldState.widget.name), true);
     expect(formState?.values.containsValue(fieldState.value), true);
   });
 
@@ -87,7 +87,7 @@ void main() {
               onChangedCalled = true;
               onChangedValues = values;
             },
-            children: const [FastTextField(id: 'text_field')],
+            children: const [FastTextField(name: 'text_field')],
           ),
         ),
       ),
@@ -114,7 +114,7 @@ void main() {
             formKey: formKey,
             children: const [
               FastTextField(
-                id: 'text_field',
+                name: 'text_field',
                 initialValue: 'Hello Test',
               )
             ],
@@ -151,7 +151,7 @@ void main() {
             formKey: formKey,
             children: <Widget>[
               FastTextField(
-                id: 'text_field',
+                name: 'text_field',
                 initialValue: 'Hello Test',
                 onSaved: (String? value) {
                   onSavedCalled = true;

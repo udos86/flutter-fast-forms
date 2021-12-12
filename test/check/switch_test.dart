@@ -11,7 +11,7 @@ void main() {
     const title = 'title';
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSwitch(id: 'switch', title: title),
+      const FastSwitch(name: 'switch', title: title),
     ));
 
     expect(find.byType(FastSwitch), findsOneWidget);
@@ -22,7 +22,7 @@ void main() {
 
   testWidgets('updates FastSwitch', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSwitch(id: 'switch', title: 'title'),
+      const FastSwitch(name: 'switch', title: 'title'),
     ));
 
     final state = tester.state(find.byType(FastSwitch)) as FastSwitchState;
@@ -40,7 +40,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastSwitch(
-        id: 'switch',
+        name: 'switch',
         title: 'title',
         initialValue: true,
         validator: (value) => value! ? null : errorText,
@@ -62,7 +62,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSwitch(id: 'switch', title: 'title', adaptive: true),
+      const FastSwitch(name: 'switch', title: 'title', adaptive: true),
     ));
 
     expect(find.byType(SwitchListTile), findsOneWidget);
@@ -74,7 +74,7 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildCupertinoTestApp(
-      const FastSwitch(id: 'switch', adaptive: true, title: 'title'),
+      const FastSwitch(name: 'switch', adaptive: true, title: 'title'),
     ));
 
     expect(find.byType(CupertinoFormRow), findsOneWidget);

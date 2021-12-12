@@ -7,12 +7,12 @@ import '../test_utils.dart';
 void main() {
   testWidgets('renders FastRadioGroup widget', (WidgetTester tester) async {
     const options = [
-      FastRadioOption(title: 'Option 1', value: 'option-1'),
-      FastRadioOption(title: 'Option 2', value: 'option-2'),
+      FastRadioOption(label: 'Option 1', value: 'option-1'),
+      FastRadioOption(label: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastRadioGroup<String>(id: 'radio_group', options: options),
+      FastRadioGroup<String>(name: 'radio_group', options: options),
     ));
 
     final fastRadioGroupFinder = find.byType(typeOf<FastRadioGroup<String>>());
@@ -29,13 +29,13 @@ void main() {
   testWidgets('renders FastRadioGroup widget horizontally',
       (WidgetTester tester) async {
     const options = [
-      FastRadioOption(title: 'Option 1', value: 'option-1'),
-      FastRadioOption(title: 'Option 2', value: 'option-2'),
+      FastRadioOption(label: 'Option 1', value: 'option-1'),
+      FastRadioOption(label: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastRadioGroup<String>(
-        id: 'radio_group',
+        name: 'radio_group',
         options: options,
         orientation: FastRadioGroupOrientation.horizontal,
       ),
@@ -48,12 +48,12 @@ void main() {
 
   testWidgets('updates FastRadioGroup value', (WidgetTester tester) async {
     const options = [
-      FastRadioOption(title: 'Option 1', value: 'option-1'),
-      FastRadioOption(title: 'Option 2', value: 'option-2'),
+      FastRadioOption(label: 'Option 1', value: 'option-1'),
+      FastRadioOption(label: 'Option 2', value: 'option-2'),
     ];
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastRadioGroup<String>(id: 'radio_group', options: options),
+      FastRadioGroup<String>(name: 'radio_group', options: options),
     ));
 
     final state = tester.state(find.byType(typeOf<FastRadioGroup<String>>()))
@@ -70,15 +70,15 @@ void main() {
   testWidgets('validates FastRadioGroup', (WidgetTester tester) async {
     const errorText = 'Do not touch this';
     const invalidOption =
-        FastRadioOption(title: 'Invalid Option', value: 'invalid-option');
+        FastRadioOption(label: 'Invalid Option', value: 'invalid-option');
     final options = [
-      const FastRadioOption(title: 'Option 1', value: 'option-1'),
+      const FastRadioOption(label: 'Option 1', value: 'option-1'),
       invalidOption,
     ];
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastRadioGroup<String>(
-        id: 'radio_group',
+        name: 'radio_group',
         options: options,
         validator: (value) => value == invalidOption.value ? errorText : null,
       ),

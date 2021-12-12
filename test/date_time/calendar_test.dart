@@ -8,7 +8,7 @@ void main() {
   testWidgets('renders FastCalendar', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
-        id: 'calendar',
+        name: 'calendar',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
@@ -21,7 +21,7 @@ void main() {
   testWidgets('updates FastCalendar', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
-        id: 'calendar',
+        name: 'calendar',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
@@ -45,7 +45,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
-        id: 'calendar',
+        name: 'calendar',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
         validator: (value) => value?.day == invalidValue ? errorText : null,

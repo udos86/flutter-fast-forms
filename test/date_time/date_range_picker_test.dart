@@ -8,7 +8,7 @@ void main() {
   testWidgets('renders FastDateRangerPicker', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDateRangePicker(
-        id: 'date_range_picker',
+        name: 'date_range_picker',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
@@ -27,7 +27,7 @@ void main() {
   testWidgets('updates FastDateRangerPicker', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDateRangePicker(
-        id: 'date_range_picker',
+        name: 'date_range_picker',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),

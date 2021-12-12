@@ -14,7 +14,7 @@ void main() {
   testWidgets(
       'throws when no options or optionsBuilder is present on FastAutocomplete',
       (WidgetTester _tester) async {
-    expect(() => FastAutocomplete<String>(id: 'id'), throwsAssertionError);
+    expect(() => FastAutocomplete<String>(name: 'id'), throwsAssertionError);
   });
 
   testWidgets('renders FastAutocomplete', (WidgetTester tester) async {
@@ -23,7 +23,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastAutocomplete<String>(
-        id: 'autocomplete',
+        name: 'autocomplete',
         helperText: helper,
         label: label,
         options: options,
@@ -39,7 +39,7 @@ void main() {
 
   testWidgets('shows FastAutocomplete options', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(id: 'autocomplete', options: options),
+      FastAutocomplete<String>(name: 'autocomplete', options: options),
     ));
 
     final text = options.last;
@@ -52,7 +52,7 @@ void main() {
 
   testWidgets('updates FastAutocomplete', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(id: 'autocomplete', options: options),
+      FastAutocomplete<String>(name: 'autocomplete', options: options),
     ));
 
     final state = tester.state(find.byType(typeOf<FastAutocomplete<String>>()))

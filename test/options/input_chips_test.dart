@@ -16,7 +16,7 @@ void main() {
     const label = 'label';
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(id: 'input_chips', helperText: helper, label: label),
+      FastInputChips(name: 'input_chips', helperText: helper, label: label),
     ));
 
     expect(find.byType(FastInputChips), findsOneWidget);
@@ -28,7 +28,7 @@ void main() {
 
   testWidgets('shows InputChip', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(id: 'input_chips', options: options),
+      FastInputChips(name: 'input_chips', options: options),
     ));
 
     const text = 'Hello';
@@ -43,7 +43,7 @@ void main() {
   testWidgets('updates FastInputChips by text input',
       (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(id: 'input_chips', options: options),
+      FastInputChips(name: 'input_chips', options: options),
     ));
 
     final state =
@@ -63,7 +63,7 @@ void main() {
   testWidgets('updates FastInputChips by selecting option',
       (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(id: 'input_chips', options: options),
+      FastInputChips(name: 'input_chips', options: options),
     ));
 
     final state =

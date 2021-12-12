@@ -114,28 +114,28 @@ class FormPage extends StatelessWidget {
         ),
         children: [
           FastAutocomplete<String>(
-            id: 'autocomplete',
+            name: 'autocomplete',
             label: 'Autocomplete',
             options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
           ),
           FastDatePicker(
-            id: 'date_picker',
+            name: 'date_picker',
             label: 'Date Picker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
           FastDateRangePicker(
-            id: 'date_range_picker',
+            name: 'date_range_picker',
             label: 'Date Range Picker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
           const FastTimePicker(
-            id: 'time_picker',
+            name: 'time_picker',
             label: 'Time Picker',
           ),
           FastChoiceChips(
-            id: 'choice_chips',
+            name: 'choice_chips',
             label: 'Choice Chips',
             alignment: WrapAlignment.center,
             chipPadding: const EdgeInsets.all(8.0),
@@ -159,13 +159,13 @@ class FormPage extends StatelessWidget {
                 : null,
           ),
           const FastSwitch(
-            id: 'switch',
+            name: 'switch',
             label: 'Switch',
             title: 'This is a switch',
             contentPadding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
           ),
           FastTextField(
-            id: 'text_field',
+            name: 'text_field',
             label: 'Text Field',
             placeholder: 'MM/JJJJ',
             keyboardType: TextInputType.datetime,
@@ -182,22 +182,22 @@ class FormPage extends StatelessWidget {
             ]),
           ),
           const FastDropdown<String>(
-            id: 'dropdown',
+            name: 'dropdown',
             label: 'Dropdown Field',
             items: ['Norway', 'Sweden', 'Finland', 'Denmark', 'Iceland'],
             initialValue: 'Finland',
           ),
           FastRadioGroup<String>(
-            id: 'radio_group',
+            name: 'radio_group',
             label: 'Radio Group Model',
             options: const [
-              FastRadioOption(title: 'Option 1', value: 'option-1'),
-              FastRadioOption(title: 'Option 2', value: 'option-2'),
-              FastRadioOption(title: 'Option 3', value: 'option-3'),
+              FastRadioOption(label: 'Option 1', value: 'option-1'),
+              FastRadioOption(label: 'Option 2', value: 'option-2'),
+              FastRadioOption(label: 'Option 3', value: 'option-3'),
             ],
           ),
           FastSlider(
-            id: 'slider',
+            name: 'slider',
             label: 'Slider',
             helperText: 'A Slider with prefix and suffix widgets',
             min: 0,
@@ -221,7 +221,7 @@ class FormPage extends StatelessWidget {
             validator: (value) => value! > 8 ? 'Volume is too high' : null,
           ),
           FastRangeSlider(
-            id: 'range_slider',
+            name: 'range_slider',
             label: 'Range Slider',
             min: 0,
             max: 10,
@@ -231,28 +231,28 @@ class FormPage extends StatelessWidget {
             suffixBuilder: rangeSliderSuffixBuilder,
           ),
           const FastCustomField(
-            id: 'custom_form_field',
+            name: 'custom_form_field',
             label: 'Custom Form Field',
             helperText: "Optionally add some extras",
             title: Text('Extras'),
             options: [
-              FastCustomOption(id: 'cheese', label: 'Cheese'),
-              FastCustomOption(id: 'bacon', label: 'Bacon'),
+              FastCustomOption(label: 'Cheese', name: 'cheese'),
+              FastCustomOption(label: 'Bacon', name: 'bacon'),
             ],
           ),
           FastCalendar(
-            id: 'calendar',
+            name: 'calendar',
             label: 'Calendar',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
           FastInputChips(
-            id: 'input_chips',
+            name: 'input_chips',
             label: 'Input Chips',
             options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
           ),
           const FastCheckbox(
-            id: 'checkbox',
+            name: 'checkbox',
             label: 'Checkbox',
             title: 'I accept',
             contentPadding: EdgeInsets.fromLTRB(12.0, 0, 0, 0),
@@ -271,24 +271,24 @@ class FormPage extends StatelessWidget {
         header: const Text('Form Example Section'),
         children: [
           const FastTextField(
-            id: 'text_field',
+            name: 'text_field',
             label: 'Text Field',
             placeholder: 'Placeholder',
             helperText: 'Helper Text',
           ),
           const FastSwitch(
-            id: 'switch',
+            name: 'switch',
             label: 'Remind me on a day',
           ),
           FastDatePicker(
-            id: 'datepicker',
+            name: 'datepicker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
             label: 'Datepicker',
             showModalPopup: true,
           ),
           FastSegmentedControl<String>(
-            id: 'segmented_control',
+            name: 'segmented_control',
             label: 'Class',
             children: const {
               'economy': Text('Economy'),
@@ -297,7 +297,7 @@ class FormPage extends StatelessWidget {
             },
           ),
           FastSlider(
-            id: 'slider',
+            name: 'slider',
             min: 0,
             max: 10,
             prefixBuilder: (state) {
@@ -332,7 +332,7 @@ class FormPage extends StatelessWidget {
             validator: (value) => value! > 8 ? 'Volume is too high' : null,
           ),
           FastDatePicker(
-            id: 'timepicker',
+            name: 'timepicker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
             label: 'TimePicker',

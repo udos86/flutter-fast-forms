@@ -15,10 +15,10 @@ class FastTextField extends FastFormField<String> {
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
-    required String id,
     String initialValue = '',
     Key? key,
     String? label,
+    required String name,
     ValueChanged<String>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<String>? onSaved,
@@ -57,10 +57,10 @@ class FastTextField extends FastFormField<String> {
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
-          id: id,
           initialValue: initialValue,
           key: key,
           label: label,
+          name: name,
           onChanged: onChanged,
           onReset: onReset,
           onSaved: onSaved,
@@ -104,7 +104,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   void onChanged(String? value) {
     setValue(value);
-    formState?.update(this);
+    formState?.updateValues();
   }
 
   AutovalidateMode get autovalidateMode {

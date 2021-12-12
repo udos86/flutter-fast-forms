@@ -21,8 +21,8 @@ abstract class FastFormField<T> extends FormField<T> {
     this.contentPadding,
     this.decoration,
     this.helperText,
-    required this.id,
     this.label,
+    required this.name,
     this.onChanged,
     this.onReset,
   }) : super(
@@ -40,8 +40,8 @@ abstract class FastFormField<T> extends FormField<T> {
   final EdgeInsetsGeometry? contentPadding;
   final InputDecoration? decoration;
   final String? helperText;
-  final String id;
   final String? label;
+  final String name;
   final ValueChanged<T>? onChanged;
   final VoidCallback? onReset;
 }
@@ -112,7 +112,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
   void onChanged(T? value) {
     if (!touched) setState(() => touched = true);
     setValue(value);
-    formState?.update(this);
+    formState?.updateValues();
   }
 
   void onReset() {
@@ -120,7 +120,7 @@ class FastFormFieldState<T> extends FormFieldState<T> {
       focused = false;
       touched = false;
       setValue(widget.initialValue);
-      formState?.update(this);
+      formState?.updateValues();
     });
   }
 

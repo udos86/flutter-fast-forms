@@ -8,7 +8,7 @@ void main() {
   testWidgets('renders FastRangeSlider', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
-        id: 'range_slider',
+        name: 'range_slider',
         max: 10,
         min: 0,
         labelsBuilder: rangeSliderLabelsBuilder,
@@ -36,7 +36,7 @@ void main() {
   testWidgets('updates FastRangeSlider', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
-        id: 'range_slider',
+        name: 'range_slider',
         max: 10,
         min: 0,
         prefixBuilder: rangeSliderPrefixBuilder,
@@ -63,7 +63,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
-        id: 'range_slider',
+        name: 'range_slider',
         max: 10,
         min: 0,
         validator: (values) =>

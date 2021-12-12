@@ -5,10 +5,10 @@ import '../form_field.dart';
 
 @immutable
 class FastRadioOption<T> {
-  const FastRadioOption({required this.title, required this.value});
+  const FastRadioOption({required this.label, required this.value});
 
+  final String label;
   final T value;
-  final String title;
 }
 
 typedef FastRadioOptionBuilder<T> = Widget Function(
@@ -29,10 +29,10 @@ class FastRadioGroup<T> extends FastFormField<T> {
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
-    required String id,
     T? initialValue,
     Key? key,
     String? label,
+    required String name,
     ValueChanged<T>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<T>? onSaved,
@@ -48,10 +48,10 @@ class FastRadioGroup<T> extends FastFormField<T> {
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
-          id: id,
           initialValue: initialValue ?? options.first.value,
           key: key,
           label: label,
+          name: name,
           onChanged: onChanged,
           onReset: onReset,
           onSaved: onSaved,
@@ -79,7 +79,7 @@ Widget radioOptionBuilder<T>(
   final tile = RadioListTile<T>(
     groupValue: state.value,
     onChanged: state.widget.enabled ? state.didChange : null,
-    title: Text(option.title),
+    title: Text(option.label),
     value: option.value,
   );
 

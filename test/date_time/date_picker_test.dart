@@ -10,7 +10,7 @@ void main() {
   testWidgets('renders FastDatePicker', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
-        id: 'date_picker',
+        name: 'date_picker',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
@@ -25,7 +25,7 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
-        id: 'date_picker',
+        name: 'date_picker',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
@@ -40,7 +40,7 @@ void main() {
   testWidgets('updates FastDatePicker', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
-        id: 'date_picker',
+        name: 'date_picker',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
@@ -68,7 +68,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
-        id: 'date_picker',
+        name: 'date_picker',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
         validator: (value) =>
@@ -93,7 +93,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
-        id: 'date_picker',
+        name: 'date_picker',
         adaptive: true,
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
@@ -110,7 +110,7 @@ void main() {
 
     await tester.pumpWidget(buildCupertinoTestApp(
       FastDatePicker(
-        id: 'date_picker',
+        name: 'date_picker',
         adaptive: true,
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
@@ -129,7 +129,7 @@ void main() {
 
     await tester.pumpWidget(buildCupertinoTestApp(
       FastDatePicker(
-        id: 'date_picker',
+        name: 'date_picker',
         adaptive: true,
         showModalPopup: true,
         firstDate: DateTime(1900),

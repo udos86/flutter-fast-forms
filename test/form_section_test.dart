@@ -13,7 +13,7 @@ void main() {
       const FastFormSection(
         header: header,
         children: [
-          FastTextField(id: 'text_field'),
+          FastTextField(name: 'text_field'),
         ],
       ),
     ));
@@ -29,7 +29,7 @@ void main() {
       const FastFormSection(
         orientation: FastFormSectionOrientation.horizontal,
         children: [
-          FastTextField(id: 'text_field'),
+          FastTextField(name: 'text_field'),
         ],
       ),
     ));
@@ -50,7 +50,7 @@ void main() {
         adaptive: true,
         header: header,
         children: [
-          FastTextField(id: 'text_field'),
+          FastTextField(name: 'text_field'),
         ],
       ),
     ));
@@ -71,7 +71,7 @@ void main() {
         adaptive: true,
         insetGrouped: true,
         children: [
-          FastTextField(id: 'text_field'),
+          FastTextField(name: 'text_field'),
         ],
       ),
     ));

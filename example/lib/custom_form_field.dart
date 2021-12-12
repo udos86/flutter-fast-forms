@@ -3,21 +3,20 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 @immutable
 class FastCustomOption {
-  const FastCustomOption({required this.id, required this.label});
+  const FastCustomOption({required this.label, required this.name});
 
-  final String id;
   final String label;
+  final String name;
 }
 
 class FastCustomField extends FastFormField<Map<String, bool>> {
   const FastCustomField({
     InputDecoration? decoration,
     String? helperText,
-    required String id,
     Map<String, bool>? initialValue,
     Key? key,
     String? label,
-    String? placeholder,
+    required String name,
     ValueChanged<Map<String, bool>>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<Map<String, bool>>? onSaved,
@@ -27,10 +26,10 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
   }) : super(
           builder: _customFormFieldBuilder,
           helperText: helperText,
-          id: id,
           initialValue: initialValue,
           key: key,
           label: label,
+          name: name,
           onChanged: onChanged,
           onReset: onReset,
           onSaved: onSaved,
@@ -41,27 +40,25 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
   final Widget? title;
 
   @override
-  FormFieldState<Map<String, bool>> createState() => CustomFormFieldState();
+  FormFieldState<Map<String, bool>> createState() => FastCustomFieldState();
 }
 
-class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
+class FastCustomFieldState extends FastFormFieldState<Map<String, bool>> {
   bool _active = false;
   late Map<String, bool> _activeValue;
 
   bool get active => _active;
 
-  Map<String, bool>? get activeValue => _activeValue;
+  Map<String, bool> get activeValue => _activeValue;
 
   set active(bool value) {
-    setState(() {
-      _active = value;
-    });
+    setState(() => _active = value);
   }
 
   Map<String, bool> get initialActiveValue {
     return widget.initialValue ??
         widget.options.fold({}, (value, option) {
-          value[option.id] = false;
+          value[option.name] = false;
           return value;
         });
   }
@@ -87,29 +84,32 @@ class CustomFormFieldState extends FastFormFieldState<Map<String, bool>> {
     active = false;
     _activeValue = initialActiveValue;
   }
+}
 
-  Widget buildActive() {
-    return Column(
-      children: <Widget>[
-        const Divider(
-          height: 4.0,
-          color: Colors.black,
+Widget _customFormFieldActiveBuilder(FastCustomFieldState state) {
+  return Column(
+    children: <Widget>[
+      const Divider(
+        height: 4.0,
+        color: Colors.black,
+      ),
+      for (var option in state.widget.options)
+        CheckboxListTile(
+          title: Text(option.label),
+          value: state.activeValue[option.name],
+          onChanged: (bool? checked) {
+            state.didChange({
+              ...state.activeValue,
+              option.name: checked ?? false,
+            });
+          },
         ),
-        for (var option in widget.options)
-          CheckboxListTile(
-            title: Text(option.label),
-            value: _activeValue[option.id],
-            onChanged: (bool? checked) {
-              didChange({..._activeValue, option.id: checked ?? false});
-            },
-          ),
-      ],
-    );
-  }
+    ],
+  );
 }
 
 Widget _customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
-  final state = field as CustomFormFieldState;
+  final state = field as FastCustomFieldState;
   final widget = state.widget;
 
   return InputDecorator(
@@ -125,7 +125,7 @@ Widget _customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
             state.didChange(state.active ? state.activeValue : null);
           },
         ),
-        if (state.active) state.buildActive(),
+        if (state.active) _customFormFieldActiveBuilder(state),
       ],
     ),
   );

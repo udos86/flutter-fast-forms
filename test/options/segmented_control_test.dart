@@ -10,7 +10,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastSegmentedControl<String>(
-        id: 'segmented_control',
+        name: 'segmented_control',
         children: {for (var item in testValues) item: Text(item)},
       ),
     ));
@@ -34,7 +34,7 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastSegmentedControl(
-        id: 'segmented_control',
+        name: 'segmented_control',
         children: {for (var item in testValues) item: Text(item)},
       ),
     ));
