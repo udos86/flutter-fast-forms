@@ -107,8 +107,9 @@ class FastTextFieldState extends FastFormFieldState<String> {
     formState?.update(this);
   }
 
-  AutovalidateMode get autovalidateMode =>
-      touched ? AutovalidateMode.always : AutovalidateMode.disabled;
+  AutovalidateMode get autovalidateMode {
+    return touched ? AutovalidateMode.always : AutovalidateMode.disabled;
+  }
 }
 
 Text inputCounterWidgetBuilder(
@@ -207,15 +208,12 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
 
 Widget adaptiveTextFieldBuilder(FormFieldState<String> field) {
   final state = field as FastTextFieldState;
+  FormFieldBuilder<String> builder = textFieldBuilder;
 
   if (state.adaptive) {
-    switch (Theme.of(state.context).platform) {
-      case TargetPlatform.iOS:
-        return cupertinoTextFieldBuilder(field);
-      case TargetPlatform.android:
-      default:
-        return textFieldBuilder(field);
-    }
+    final platform = Theme.of(state.context).platform;
+    if (platform == TargetPlatform.iOS) builder = cupertinoTextFieldBuilder;
   }
-  return textFieldBuilder(field);
+
+  return builder(field);
 }

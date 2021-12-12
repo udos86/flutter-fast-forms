@@ -78,9 +78,7 @@ SizedBox rangeSliderPrefixBuilder(FastRangeSliderState state) {
     child: Center(
       child: Text(
         state.value!.start.toStringAsFixed(0),
-        style: const TextStyle(
-          fontSize: 16.0,
-        ),
+        style: const TextStyle(fontSize: 16.0),
       ),
     ),
   );

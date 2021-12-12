@@ -126,8 +126,8 @@ CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
   return CupertinoFormRow(
     padding: widget.contentPadding,
     prefix: widget.label is String ? Text(widget.label!) : null,
-    helper: widget.helperBuilder?.call(state) ?? helperBuilder(state),
-    error: widget.errorBuilder?.call(state) ?? errorBuilder(state),
+    helper: (widget.helperBuilder ?? helperBuilder)(state),
+    error: (widget.errorBuilder ?? errorBuilder)(state),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -149,15 +149,12 @@ CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
 
 Widget adaptiveSliderBuilder(FormFieldState<double> field) {
   final state = field as FastSliderState;
+  FormFieldBuilder<double> builder = sliderBuilder;
 
   if (state.adaptive) {
-    switch (Theme.of(state.context).platform) {
-      case TargetPlatform.iOS:
-        return cupertinoSliderBuilder(field);
-      case TargetPlatform.android:
-      default:
-        return sliderBuilder(field);
-    }
+    final platform = Theme.of(state.context).platform;
+    if (platform == TargetPlatform.iOS) builder = cupertinoSliderBuilder;
   }
-  return sliderBuilder(field);
+
+  return builder(field);
 }

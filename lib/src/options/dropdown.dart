@@ -7,7 +7,7 @@ typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
 
 @immutable
 class FastDropdown<T> extends FastFormField<T> {
-  FastDropdown({
+  const FastDropdown({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<T>? builder,
@@ -32,7 +32,7 @@ class FastDropdown<T> extends FastFormField<T> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? (field) => dropdownBuilder<T>(field),
+          builder: builder ?? dropdownBuilder<T>,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
@@ -65,10 +65,7 @@ class FastDropdownState<T> extends FastFormFieldState<T> {
 List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
     List<T> items, FastDropdownState<T> state) {
   return items.map((item) {
-    return DropdownMenuItem<T>(
-      value: item,
-      child: Text(item.toString()),
-    );
+    return DropdownMenuItem<T>(value: item, child: Text(item.toString()));
   }).toList();
 }
 

@@ -78,7 +78,7 @@ InputDecorator checkboxBuilder(FormFieldState<bool> field) {
       contentPadding: widget.contentPadding,
       onChanged: widget.enabled ? state.didChange : null,
       selected: state.value ?? false,
-      title: widget.title is String ? titleBuilder(state) : null,
+      title: titleBuilder(state),
       tristate: widget.tristate,
       value: state.value,
     ),

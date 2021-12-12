@@ -97,8 +97,8 @@ CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
   return CupertinoFormRow(
     padding: widget.contentPadding,
     prefix: widget.label is String ? Text(widget.label!) : null,
-    helper: widget.helperBuilder?.call(state) ?? helperBuilder(state),
-    error: widget.errorBuilder?.call(state) ?? errorBuilder(state),
+    helper: (widget.helperBuilder ?? helperBuilder)(state),
+    error: (widget.errorBuilder ?? errorBuilder)(state),
     child: CupertinoSwitch(
       onChanged: widget.enabled ? state.didChange : null,
       value: state.value!,
@@ -108,15 +108,12 @@ CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
 
 Widget adaptiveSwitchBuilder(FormFieldState<bool> field) {
   final state = field as FastSwitchState;
+  FormFieldBuilder<bool> builder = switchBuilder;
 
   if (state.adaptive) {
-    switch (Theme.of(state.context).platform) {
-      case TargetPlatform.iOS:
-        return cupertinoSwitchBuilder(field);
-      case TargetPlatform.android:
-      default:
-        return switchBuilder(field);
-    }
+    final platform = Theme.of(state.context).platform;
+    if (platform == TargetPlatform.iOS) builder = cupertinoSwitchBuilder;
   }
-  return switchBuilder(field);
+
+  return builder(field);
 }

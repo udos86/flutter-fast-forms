@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import 'custom_form_field.dart';
@@ -182,10 +181,10 @@ class FormPage extends StatelessWidget {
                       'Field must contain at least $minLength characters')
             ]),
           ),
-          FastDropdown<String>(
+          const FastDropdown<String>(
             id: 'dropdown',
             label: 'Dropdown Field',
-            items: const ['Norway', 'Sweden', 'Finland', 'Denmark', 'Iceland'],
+            items: ['Norway', 'Sweden', 'Finland', 'Denmark', 'Iceland'],
             initialValue: 'Finland',
           ),
           FastRadioGroup<String>(

@@ -88,26 +88,25 @@ Widget radioOptionBuilder<T>(
 
 Flex radioOptionsBuilder<T>(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> state) {
+  final builder = state.widget.orientation == FastRadioGroupOrientation.vertical
+      ? Column.new
+      : Row.new;
   final optionBuilder = state.widget.optionBuilder ?? radioOptionBuilder;
-  final vertical =
-      state.widget.orientation == FastRadioGroupOrientation.vertical;
   final tiles = options.map((option) => optionBuilder(option, state)).toList();
 
-  return vertical ? Column(children: tiles) : Row(children: tiles);
+  return builder(children: tiles);
 }
 
 InputDecorator radioGroupBuilder<T>(FormFieldState<T> field) {
   final state = field as FastRadioGroupState<T>;
   final widget = state.widget;
+  final optionsBuilder = widget.optionsBuilder ?? radioOptionsBuilder;
 
   return InputDecorator(
     decoration: state.decoration.copyWith(
       contentPadding: widget.contentPadding,
       errorText: state.errorText,
     ),
-    // Try to refactor when Tear-Offs arrive in Dart
-    child: widget.optionsBuilder != null
-        ? widget.optionsBuilder!(widget.options, state)
-        : radioOptionsBuilder<T>(widget.options, state),
+    child: optionsBuilder(widget.options, state),
   );
 }

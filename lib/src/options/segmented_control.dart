@@ -31,8 +31,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder:
-              builder ?? (field) => cupertinoSegmentedControlBuilder(field),
+          builder: builder ?? cupertinoSegmentedControlBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
@@ -70,8 +69,8 @@ CupertinoFormRow cupertinoSegmentedControlBuilder<T>(FormFieldState<T> field) {
   return CupertinoFormRow(
     padding: widget.contentPadding,
     prefix: widget.label is String ? Text(widget.label!) : null,
-    helper: widget.helperBuilder?.call(state) ?? helperBuilder(state),
-    error: widget.errorBuilder?.call(state) ?? errorBuilder(state),
+    helper: (widget.helperBuilder ?? helperBuilder)(state),
+    error: (widget.errorBuilder ?? errorBuilder)(state),
     child: CupertinoSlidingSegmentedControl<T>(
       backgroundColor: widget.backgroundColor,
       children: widget.children,

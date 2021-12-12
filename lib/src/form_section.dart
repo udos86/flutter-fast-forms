@@ -40,9 +40,11 @@ class FastFormSection extends StatelessWidget {
   }
 
   Widget _buildFormSection(BuildContext context) {
-    return orientation == FastFormSectionOrientation.vertical
-        ? _buildVerticalFormSection(context)
-        : _buildHorizontalFormSection(context);
+    final builder = orientation == FastFormSectionOrientation.vertical
+        ? _buildVerticalFormSection
+        : _buildHorizontalFormSection;
+
+    return builder(context);
   }
 
   Widget _buildFormField(BuildContext context, FastFormField field) {
@@ -73,13 +75,15 @@ class FastFormSection extends StatelessWidget {
   }
 
   Widget _buildCupertinoFormSection(BuildContext context) {
-    final _children = <Widget>[
+    final builder = insetGrouped
+        ? CupertinoFormSection.insetGrouped
+        : CupertinoFormSection.new;
+
+    final _children = [
       for (final child in children)
         child is FastFormField ? _buildFormField(context, child) : child,
     ];
 
-    return insetGrouped
-        ? CupertinoFormSection.insetGrouped(header: header, children: _children)
-        : CupertinoFormSection(header: header, children: _children);
+    return builder(header: header, children: _children);
   }
 }

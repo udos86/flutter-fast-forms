@@ -39,7 +39,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? (field) => autocompleteBuilder<O>(field),
+          builder: builder ?? autocompleteBuilder<O>,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,

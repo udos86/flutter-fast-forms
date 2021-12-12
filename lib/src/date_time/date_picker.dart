@@ -126,13 +126,11 @@ DateFormat _datePickerFormat(FastDatePickerState state) {
 
   switch (widget.mode) {
     case CupertinoDatePickerMode.dateAndTime:
-      return widget.use24hFormat
-          ? DateFormat.yMMMMEEEEd(locale).add_Hm()
-          : DateFormat.yMMMMEEEEd(locale).add_jm();
+      final format = DateFormat.yMMMMEEEEd(locale);
+      return widget.use24hFormat ? format.add_Hm() : format.add_jm();
     case CupertinoDatePickerMode.time:
-      return widget.use24hFormat
-          ? DateFormat.Hm(locale)
-          : DateFormat.jm(locale);
+      final format = widget.use24hFormat ? DateFormat.Hm : DateFormat.jm;
+      return format(locale);
     case CupertinoDatePickerMode.date:
     default:
       return DateFormat.yMMMMEEEEd(locale);
@@ -242,8 +240,8 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    helper: widget.helperBuilder?.call(state) ?? helperBuilder(state),
-    error: widget.errorBuilder?.call(state) ?? errorBuilder(state),
+    helper: (widget.helperBuilder ?? helperBuilder)(state),
+    error: (widget.errorBuilder ?? errorBuilder)(state),
     child: Column(
       children: [
         Row(
@@ -351,15 +349,12 @@ InkWell datePickerBuilder(FormFieldState<DateTime> field) {
 
 Widget adaptiveDatePickerBuilder(FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
+  FormFieldBuilder<DateTime> builder = datePickerBuilder;
 
   if (state.adaptive) {
-    switch (Theme.of(field.context).platform) {
-      case TargetPlatform.iOS:
-        return cupertinoDatePickerBuilder(field);
-      case TargetPlatform.android:
-      default:
-        return datePickerBuilder(field);
-    }
+    final platform = Theme.of(state.context).platform;
+    if (platform == TargetPlatform.iOS) builder = cupertinoDatePickerBuilder;
   }
-  return datePickerBuilder(field);
+
+  return builder(field);
 }

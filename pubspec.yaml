@@ -4,7 +4,7 @@ version: 2.1.0
 repository: https://github.com/udos86/flutter-fast-forms
 
 environment:
-  sdk: ">=2.14.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
 
 dependencies:
   flutter:

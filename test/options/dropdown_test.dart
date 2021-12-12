@@ -7,7 +7,7 @@ import '../test_utils.dart';
 void main() {
   testWidgets('renders FastDropdown', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastDropdown<String>(id: 'dropdown', items: const []),
+      const FastDropdown<String>(id: 'dropdown', items: []),
     ));
 
     expect(find.byType(typeOf<FastDropdown<String>>()), findsOneWidget);

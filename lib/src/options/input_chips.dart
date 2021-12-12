@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../form_field.dart';
+
 import 'autocomplete.dart';
 
 typedef FastInputChipBuilder = InputChip Function(
@@ -48,7 +49,7 @@ class FastInputChips extends FastFormField<Set<String>> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? (field) => inputChipsBuilder(field),
+          builder: builder ?? inputChipsBuilder,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
@@ -122,9 +123,7 @@ InputChip _chipBuilder(String value, FastInputChipsState state) {
   return InputChip(
     label: Text(value),
     isEnabled: state.widget.enabled,
-    onDeleted: () {
-      state.didChange({...state.value!}..remove(value));
-    },
+    onDeleted: () => state.didChange({...state.value!}..remove(value)),
   );
 }
 
@@ -150,9 +149,7 @@ AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState state) {
           width: widget.fieldViewWidth,
           child: TextFormField(
             controller: textEditingController,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-            ),
+            decoration: const InputDecoration(border: InputBorder.none),
             enabled: widget.enabled,
             focusNode: focusNode,
             onFieldSubmitted: (String value) {
@@ -190,9 +187,7 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
             itemBuilder: (BuildContext context, int index) {
               final String option = options.elementAt(index);
               return InkWell(
-                onTap: () {
-                  onSelected(option);
-                },
+                onTap: () => onSelected(option),
                 child: Builder(builder: (BuildContext context) {
                   final bool highlight =
                       AutocompleteHighlightedOption.of(context) == index;
@@ -232,9 +227,7 @@ Widget inputChipsBuilder(FormFieldState<Set<String>> field) {
         displayStringForOption: widget.displayStringForOption,
         fieldViewBuilder: _fieldViewBuilder(state),
         focusNode: state.textFocusNode,
-        onSelected: (String? value) {
-          _updateField(value, state);
-        },
+        onSelected: (String? value) => _updateField(value, state),
         optionsBuilder: _optionsBuilder(widget.options, state),
         optionsViewBuilder:
             widget.optionsViewBuilder ?? _optionsViewBuilder(state),
