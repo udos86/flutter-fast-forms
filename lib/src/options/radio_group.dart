@@ -44,7 +44,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? (field) => radioGroupBuilder(field),
+          builder: builder ?? radioGroupBuilder<T>,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
@@ -88,13 +88,16 @@ Widget radioOptionBuilder<T>(
 
 Flex radioOptionsBuilder<T>(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> state) {
-  final builder = state.widget.orientation == FastRadioGroupOrientation.vertical
+  final optionBuilder = state.widget.optionBuilder ?? radioOptionBuilder;
+  final wrapper = state.widget.orientation == FastRadioGroupOrientation.vertical
       ? Column.new
       : Row.new;
-  final optionBuilder = state.widget.optionBuilder ?? radioOptionBuilder;
-  final tiles = options.map((option) => optionBuilder(option, state)).toList();
 
-  return builder(children: tiles);
+  return wrapper(
+    children: [
+      for (var option in options) optionBuilder(option, state),
+    ],
+  );
 }
 
 InputDecorator radioGroupBuilder<T>(FormFieldState<T> field) {
