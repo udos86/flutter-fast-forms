@@ -217,7 +217,7 @@ InputDecorator choiceChipsBuilder(FormFieldState field) {
       textDirection: widget.textDirection,
       verticalDirection: widget.verticalDirection,
       children: [
-        for (var chip in widget.chips) chipBuilder(chip, state),
+        for (final chip in widget.chips) chipBuilder(chip, state),
       ],
     ),
   );

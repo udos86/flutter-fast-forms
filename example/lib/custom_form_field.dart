@@ -93,7 +93,7 @@ Widget _customFormFieldActiveBuilder(FastCustomFieldState state) {
         height: 4.0,
         color: Colors.black,
       ),
-      for (var option in state.widget.options)
+      for (final option in state.widget.options)
         CheckboxListTile(
           title: Text(option.label),
           value: state.activeValue[option.name],

@@ -144,7 +144,7 @@ AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState state) {
       textDirection: widget.textDirection,
       verticalDirection: widget.verticalDirection,
       children: [
-        for (var value in state.value!) chipBuilder(value, state),
+        for (final value in state.value!) chipBuilder(value, state),
         SizedBox(
           width: widget.fieldViewWidth,
           child: TextFormField(
