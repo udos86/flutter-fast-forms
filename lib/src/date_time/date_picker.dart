@@ -294,18 +294,13 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
 
 InkWell datePickerBuilder(FormFieldState<DateTime> field) {
   final state = field as FastDatePickerState;
-  final context = state.context;
   final widget = state.widget;
-
-  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
-  final iconButtonBuilder =
-      widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
 
   Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
-      context: context,
+      context: state.context,
       currentDate: widget.currentDate,
       errorFormatText: widget.errorFormatText,
       errorInvalidText: widget.errorInvalidText,
@@ -326,6 +321,10 @@ InkWell datePickerBuilder(FormFieldState<DateTime> field) {
       return value;
     });
   }
+
+  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
+  final iconButtonBuilder =
+      widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
 
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
