@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -120,34 +121,50 @@ Widget _feedbackBuilder(String chipValue, FastInputChipsState _field) {
   );
 }
 
-class _FastDraggableInputChip extends StatelessWidget {
-  const _FastDraggableInputChip({
+class FastDraggableInputChip extends StatelessWidget {
+  const FastDraggableInputChip({
     Key? key,
     required this.chipValue,
     required this.field,
     required this.view,
     this.onAccept,
+    this.onAcceptWithDetails,
+    this.onDragCompleted,
     this.onDragEnd,
+    this.onDraggableCanceled,
+    this.onDragStarted,
     this.onDragUpdate,
+    this.onLeave,
+    this.onMove,
+    this.onWillAccept,
   }) : super(key: key);
 
   final String chipValue;
   final FastInputChipsState field;
   final DragTargetAccept<String>? onAccept;
+  final DragTargetAcceptWithDetails<String>? onAcceptWithDetails;
+  final VoidCallback? onDragCompleted;
   final DragEndCallback? onDragEnd;
+  final DraggableCanceledCallback? onDraggableCanceled;
+  final VoidCallback? onDragStarted;
   final DragUpdateCallback? onDragUpdate;
-  final _FastInputChipsViewState view;
+  final DragTargetLeave<String>? onLeave;
+  final DragTargetMove<String>? onMove;
+  final DragTargetWillAccept<String>? onWillAccept;
+  final FastInputChipsViewState view;
 
   EdgeInsets _getDragTargetPadding(bool isTarget) {
     if (isTarget) {
-      if (view.dragX == _FastInputChipsViewState.dragLR) {
+      if (view.dragX == FastInputChipsViewState.dragLR) {
         return const EdgeInsets.only(right: 84.0);
-      } else if (view.dragX == _FastInputChipsViewState.dragRL) {
+      } else if (view.dragX == FastInputChipsViewState.dragRL) {
         return const EdgeInsets.only(left: 84.0);
       }
     }
     return EdgeInsets.zero;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -156,10 +173,17 @@ class _FastDraggableInputChip extends StatelessWidget {
 
     return DragTarget<String>(
       onAccept: onAccept,
+      onAcceptWithDetails: onAcceptWithDetails,
+      onLeave: onLeave,
+      onMove: onMove,
+      onWillAccept: onWillAccept,
       builder: (context, candidateItems, _rejectedItems) {
-        final isTarget = candidateItems.isNotEmpty;
+        final isDropTarget = candidateItems.isNotEmpty;
         return Draggable<String>(
+          onDragCompleted: onDragCompleted,
+          onDraggableCanceled: onDraggableCanceled,
           onDragEnd: onDragEnd,
+          onDragStarted: onDragStarted,
           onDragUpdate: onDragUpdate,
           data: chipValue,
           dragAnchorStrategy: childDragAnchorStrategy,
@@ -168,7 +192,7 @@ class _FastDraggableInputChip extends StatelessWidget {
           childWhenDragging: const Opacity(opacity: 0),
           child: AnimatedPadding(
             duration: Duration(milliseconds: view.dragX == null ? 0 : 200),
-            padding: _getDragTargetPadding(isTarget),
+            padding: _getDragTargetPadding(isDropTarget),
             child: chipBuilder(chipValue, field),
           ),
         );
@@ -177,8 +201,8 @@ class _FastDraggableInputChip extends StatelessWidget {
   }
 }
 
-class _FastInputChipsView extends StatefulWidget {
-  const _FastInputChipsView({
+class FastInputChipsView extends StatefulWidget {
+  const FastInputChipsView({
     Key? key,
     required this.field,
     required this.focusNode,
@@ -192,10 +216,10 @@ class _FastInputChipsView extends StatefulWidget {
   final TextEditingController textEditingController;
 
   @override
-  _FastInputChipsViewState createState() => _FastInputChipsViewState();
+  FastInputChipsViewState createState() => FastInputChipsViewState();
 }
 
-class _FastInputChipsViewState extends State<_FastInputChipsView> {
+class FastInputChipsViewState extends State<FastInputChipsView> {
   static const dragRL = -1;
   static const dragLR = 1;
 
@@ -216,17 +240,21 @@ class _FastInputChipsViewState extends State<_FastInputChipsView> {
       verticalDirection: field.widget.verticalDirection,
       children: [
         for (final chipValue in field.value!)
-          _FastDraggableInputChip(
+          FastDraggableInputChip(
+            key: ,
             chipValue: chipValue,
             field: field,
             view: this,
             onAccept: (data) {
               final acceptIndex = field.value!.indexOf(data);
               final targetIndex = field.value!.indexOf(chipValue);
-
               int insertIndex = targetIndex;
-              if (acceptIndex < targetIndex && dragX == dragRL) insertIndex--;
-              if (acceptIndex > targetIndex && dragX == dragLR) insertIndex++;
+
+              if (acceptIndex < targetIndex && dragX == dragRL) {
+                insertIndex--;
+              } else if (acceptIndex > targetIndex && dragX == dragLR) {
+                insertIndex++;
+              }
 
               widget.field.didChange([...field.value!]
                 ..removeAt(acceptIndex)
@@ -261,6 +289,14 @@ class _FastInputChipsViewState extends State<_FastInputChipsView> {
               },
               validator: field.widget.fieldViewValidator,
             ),
+          )
+        else
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              print(constraints.minWidth);
+              print(constraints.maxWidth);
+              return const Text('Hello');
+            },
           ),
       ],
     );
@@ -285,7 +321,7 @@ AutocompleteOptionsBuilder<String> _optionsBuilder(
 AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
-    return _FastInputChipsView(
+    return FastInputChipsView(
       field: field,
       focusNode: focusNode,
       onFieldSubmitted: onFieldSubmitted,
