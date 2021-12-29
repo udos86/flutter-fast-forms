@@ -94,9 +94,7 @@ Flex radioOptionsBuilder<T>(
       : Row.new;
 
   return wrapper(
-    children: [
-      for (final option in options) optionBuilder(option, state)
-    ],
+    children: [for (final option in options) optionBuilder(option, state)],
   );
 }
 

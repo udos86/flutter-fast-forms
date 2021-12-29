@@ -35,6 +35,7 @@ class FastInputChips extends FastFormField<List<String>> {
     this.crossAxisAlignment = WrapCrossAlignment.start,
     this.direction = Axis.horizontal,
     this.displayStringForOption = RawAutocomplete.defaultStringForOption,
+    this.feedbackBuilder,
     this.fieldViewBuilder,
     this.fieldViewValidator,
     this.fieldViewWidth = 80.0,
@@ -72,6 +73,7 @@ class FastInputChips extends FastFormField<List<String>> {
   final WrapCrossAlignment crossAxisAlignment;
   final Axis direction;
   final AutocompleteOptionToString<String> displayStringForOption;
+  final FastInputChipFeedbackBuilder? feedbackBuilder;
   final FastAutocompleteFieldViewBuilder<String>? fieldViewBuilder;
   final FormFieldValidator<String>? fieldViewValidator;
   final double fieldViewWidth;
@@ -119,15 +121,64 @@ Widget _feedbackBuilder(String chipValue, FastInputChipsState _field) {
 }
 
 class _FastDraggableInputChip extends StatelessWidget {
+  const _FastDraggableInputChip({
+    Key? key,
+    required this.chipValue,
+    required this.field,
+    required this.view,
+    this.onAccept,
+    this.onDragEnd,
+    this.onDragUpdate,
+  }) : super(key: key);
+
+  final String chipValue;
+  final FastInputChipsState field;
+  final DragTargetAccept<String>? onAccept;
+  final DragEndCallback? onDragEnd;
+  final DragUpdateCallback? onDragUpdate;
+  final _FastInputChipsViewState view;
+
+  EdgeInsets _getDragTargetPadding(bool isTarget) {
+    if (isTarget) {
+      if (view.dragX == _FastInputChipsViewState.dragLR) {
+        return const EdgeInsets.only(right: 84.0);
+      } else if (view.dragX == _FastInputChipsViewState.dragRL) {
+        return const EdgeInsets.only(left: 84.0);
+      }
+    }
+    return EdgeInsets.zero;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    final chipBuilder = field.widget.chipBuilder ?? _chipBuilder;
+    final feedbackBuilder = field.widget.feedbackBuilder ?? _feedbackBuilder;
+
+    return DragTarget<String>(
+      onAccept: onAccept,
+      builder: (context, candidateItems, _rejectedItems) {
+        final isTarget = candidateItems.isNotEmpty;
+        return Draggable<String>(
+          onDragEnd: onDragEnd,
+          onDragUpdate: onDragUpdate,
+          data: chipValue,
+          dragAnchorStrategy: childDragAnchorStrategy,
+          maxSimultaneousDrags: 1,
+          feedback: feedbackBuilder(chipValue, field),
+          childWhenDragging: const Opacity(opacity: 0),
+          child: AnimatedPadding(
+            duration: Duration(milliseconds: view.dragX == null ? 0 : 200),
+            padding: _getDragTargetPadding(isTarget),
+            child: chipBuilder(chipValue, field),
+          ),
+        );
+      },
+    );
   }
 }
 
-class _FastInputChipsWrap extends StatefulWidget {
-  const _FastInputChipsWrap({
+class _FastInputChipsView extends StatefulWidget {
+  const _FastInputChipsView({
     Key? key,
     required this.field,
     required this.focusNode,
@@ -141,70 +192,14 @@ class _FastInputChipsWrap extends StatefulWidget {
   final TextEditingController textEditingController;
 
   @override
-  _FastInputChipsWrapState createState() => _FastInputChipsWrapState();
+  _FastInputChipsViewState createState() => _FastInputChipsViewState();
 }
 
-class _FastInputChipsWrapState extends State<_FastInputChipsWrap> {
+class _FastInputChipsViewState extends State<_FastInputChipsView> {
   static const dragRL = -1;
   static const dragLR = 1;
 
   int? dragX;
-
-  EdgeInsets _getDragTargetPadding(bool isTargeted) {
-    if (isTargeted) {
-      if (dragX == dragLR) {
-        return const EdgeInsets.only(right: 84.0);
-      } else if (dragX == dragRL) {
-        return const EdgeInsets.only(left: 84.0);
-      }
-    }
-    return EdgeInsets.zero;
-  }
-
-  Widget _buildChip(String chipValue) {
-    final chipBuilder = widget.field.widget.chipBuilder ?? _chipBuilder;
-    final fieldValue = widget.field.value!;
-
-    return DragTarget<String>(
-      onAccept: (data) {
-        final acceptIndex = fieldValue.indexOf(data);
-        final targetIndex = fieldValue.indexOf(chipValue);
-
-        int insertIndex = targetIndex;
-        if (acceptIndex < targetIndex && dragX == dragRL) insertIndex--;
-        if (acceptIndex > targetIndex && dragX == dragLR) insertIndex++;
-
-        widget.field.didChange([...fieldValue]
-          ..removeAt(acceptIndex)
-          ..insert(insertIndex, data));
-      },
-      builder: (context, candidateItems, _rejectedItems) {
-        final isTarget = candidateItems.isNotEmpty;
-        return Draggable<String>(
-          onDragEnd: (_details) {
-            setState(() => dragX = null);
-          },
-          onDragUpdate: (details) {
-            if (details.delta.dx != 0.0) {
-              setState(() {
-                dragX = details.delta.dx.round().clamp(dragRL, dragLR);
-              });
-            }
-          },
-          data: chipValue,
-          dragAnchorStrategy: childDragAnchorStrategy,
-          maxSimultaneousDrags: 1,
-          feedback: _feedbackBuilder(chipValue, widget.field),
-          childWhenDragging: const Opacity(opacity: 0),
-          child: AnimatedPadding(
-            duration: Duration(milliseconds: dragX == null ? 0 : 200),
-            padding: _getDragTargetPadding(isTarget),
-            child: chipBuilder(chipValue, widget.field),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +215,34 @@ class _FastInputChipsWrapState extends State<_FastInputChipsWrap> {
       textDirection: field.widget.textDirection,
       verticalDirection: field.widget.verticalDirection,
       children: [
-        for (final chipValue in field.value!) _buildChip(chipValue),
+        for (final chipValue in field.value!)
+          _FastDraggableInputChip(
+            chipValue: chipValue,
+            field: field,
+            view: this,
+            onAccept: (data) {
+              final acceptIndex = field.value!.indexOf(data);
+              final targetIndex = field.value!.indexOf(chipValue);
+
+              int insertIndex = targetIndex;
+              if (acceptIndex < targetIndex && dragX == dragRL) insertIndex--;
+              if (acceptIndex > targetIndex && dragX == dragLR) insertIndex++;
+
+              widget.field.didChange([...field.value!]
+                ..removeAt(acceptIndex)
+                ..insert(insertIndex, data));
+            },
+            onDragEnd: (_details) {
+              setState(() => dragX = null);
+            },
+            onDragUpdate: (details) {
+              if (details.delta.dx != 0.0) {
+                setState(() {
+                  dragX = details.delta.dx.round().clamp(dragRL, dragLR);
+                });
+              }
+            },
+          ),
         if (dragX == null)
           SizedBox(
             width: field.widget.fieldViewWidth,
@@ -250,13 +272,25 @@ bool _optionsMatcher(TextEditingValue value, String option) {
 }
 
 AutocompleteOptionsBuilder<String> _optionsBuilder(
-    Iterable<String> options, FastInputChipsState state) {
+    Iterable<String> options, FastInputChipsState field) {
   return (TextEditingValue value) {
     if (value.text.isEmpty) {
       return const Iterable.empty();
     }
-    final optionsMatcher = state.widget.optionsMatcher ?? _optionsMatcher;
+    final optionsMatcher = field.widget.optionsMatcher ?? _optionsMatcher;
     return options.where((option) => optionsMatcher(value, option));
+  };
+}
+
+AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
+  return (BuildContext context, TextEditingController textEditingController,
+      FocusNode focusNode, VoidCallback onFieldSubmitted) {
+    return _FastInputChipsView(
+      field: field,
+      focusNode: focusNode,
+      onFieldSubmitted: onFieldSubmitted,
+      textEditingController: textEditingController,
+    );
   };
 }
 
@@ -268,20 +302,8 @@ void _addChip(String? chipValue, FastInputChipsState field) {
   }
 }
 
-AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
-  return (BuildContext context, TextEditingController textEditingController,
-      FocusNode focusNode, VoidCallback onFieldSubmitted) {
-    return _FastInputChipsWrap(
-      field: field,
-      focusNode: focusNode,
-      onFieldSubmitted: onFieldSubmitted,
-      textEditingController: textEditingController,
-    );
-  };
-}
-
 AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
-    FastInputChipsState state) {
+    FastInputChipsState field) {
   return (BuildContext context, AutocompleteOnSelected<String> onSelected,
       Iterable<String> options) {
     return Align(
@@ -289,7 +311,7 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
       child: Material(
         elevation: 4.0,
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: state.widget.optionsMaxHeight),
+          constraints: BoxConstraints(maxHeight: field.widget.optionsMaxHeight),
           child: ListView.builder(
             padding: EdgeInsets.zero,
             shrinkWrap: true,
@@ -310,7 +332,7 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
                   return Container(
                     color: highlight ? Theme.of(context).focusColor : null,
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(state.widget.displayStringForOption(option)),
+                    child: Text(field.widget.displayStringForOption(option)),
                   );
                 }),
               );
