@@ -134,6 +134,20 @@ class FormPage extends StatelessWidget {
             name: 'time_picker',
             label: 'Time Picker',
           ),
+          FastInputChips(
+            name: 'input_chips',
+            label: 'Input Chips',
+            options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
+            initialValue: const [
+              'One',
+              'Two',
+              'Three',
+              'Four',
+              'Five',
+              'Six',
+              'Seven'
+            ],
+          ),
           FastChoiceChips(
             name: 'choice_chips',
             label: 'Choice Chips',
@@ -245,11 +259,6 @@ class FormPage extends StatelessWidget {
             label: 'Calendar',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
-          ),
-          FastInputChips(
-            name: 'input_chips',
-            label: 'Input Chips',
-            options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
           ),
           const FastCheckbox(
             name: 'checkbox',

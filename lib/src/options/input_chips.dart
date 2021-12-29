@@ -6,26 +6,29 @@ import '../form_field.dart';
 import 'autocomplete.dart';
 
 typedef FastInputChipBuilder = InputChip Function(
-    String value, FastInputChipsState state);
+    String chipValue, FastInputChipsState field);
+
+typedef FastInputChipFeedbackBuilder = Widget Function(
+    String chipValue, FastInputChipsState field);
 
 @immutable
-class FastInputChips extends FastFormField<Set<String>> {
+class FastInputChips extends FastFormField<List<String>> {
   FastInputChips({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<Set<String>>? builder,
+    FormFieldBuilder<List<String>>? builder,
     EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
-    Set<String>? initialValue,
+    List<String>? initialValue,
     Key? key,
     String? label,
     required String name,
-    ValueChanged<Set<String>>? onChanged,
+    ValueChanged<List<String>>? onChanged,
     VoidCallback? onReset,
-    FormFieldSetter<Set<String>>? onSaved,
-    FormFieldValidator<Set<String>>? validator,
+    FormFieldSetter<List<String>>? onSaved,
+    FormFieldValidator<List<String>>? validator,
     this.alignment = WrapAlignment.start,
     this.chipBuilder,
     this.clipBehavior = Clip.none,
@@ -34,7 +37,7 @@ class FastInputChips extends FastFormField<Set<String>> {
     this.displayStringForOption = RawAutocomplete.defaultStringForOption,
     this.fieldViewBuilder,
     this.fieldViewValidator,
-    this.fieldViewWidth = 120.0,
+    this.fieldViewWidth = 80.0,
     this.onSelected,
     this.options = const [],
     this.optionsBuilder,
@@ -53,7 +56,7 @@ class FastInputChips extends FastFormField<Set<String>> {
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
-          initialValue: initialValue ?? <String>{},
+          initialValue: initialValue ?? <String>[],
           key: key,
           label: label,
           name: name,
@@ -88,12 +91,158 @@ class FastInputChips extends FastFormField<Set<String>> {
   FastInputChipsState createState() => FastInputChipsState();
 }
 
-class FastInputChipsState extends FastFormFieldState<Set<String>> {
+class FastInputChipsState extends FastFormFieldState<List<String>> {
   final textEditingController = TextEditingController();
   final textFocusNode = FocusNode();
 
   @override
   FastInputChips get widget => super.widget as FastInputChips;
+}
+
+InputChip _chipBuilder(String chipValue, FastInputChipsState field) {
+  return InputChip(
+    label: Text(chipValue),
+    isEnabled: field.widget.enabled,
+    onDeleted: () => field.didChange([...field.value!]..remove(chipValue)),
+  );
+}
+
+Widget _feedbackBuilder(String chipValue, FastInputChipsState _field) {
+  return Material(
+    type: MaterialType.transparency,
+    child: InputChip(
+      isEnabled: true,
+      label: Text(chipValue),
+      onDeleted: () {},
+    ),
+  );
+}
+
+class _FastDraggableInputChip extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
+class _FastInputChipsWrap extends StatefulWidget {
+  const _FastInputChipsWrap({
+    Key? key,
+    required this.field,
+    required this.focusNode,
+    required this.onFieldSubmitted,
+    required this.textEditingController,
+  }) : super(key: key);
+
+  final FastInputChipsState field;
+  final FocusNode focusNode;
+  final VoidCallback onFieldSubmitted;
+  final TextEditingController textEditingController;
+
+  @override
+  _FastInputChipsWrapState createState() => _FastInputChipsWrapState();
+}
+
+class _FastInputChipsWrapState extends State<_FastInputChipsWrap> {
+  static const dragRL = -1;
+  static const dragLR = 1;
+
+  int? dragX;
+
+  EdgeInsets _getDragTargetPadding(bool isTargeted) {
+    if (isTargeted) {
+      if (dragX == dragLR) {
+        return const EdgeInsets.only(right: 84.0);
+      } else if (dragX == dragRL) {
+        return const EdgeInsets.only(left: 84.0);
+      }
+    }
+    return EdgeInsets.zero;
+  }
+
+  Widget _buildChip(String chipValue) {
+    final chipBuilder = widget.field.widget.chipBuilder ?? _chipBuilder;
+    final fieldValue = widget.field.value!;
+
+    return DragTarget<String>(
+      onAccept: (data) {
+        final acceptIndex = fieldValue.indexOf(data);
+        final targetIndex = fieldValue.indexOf(chipValue);
+
+        int insertIndex = targetIndex;
+        if (acceptIndex < targetIndex && dragX == dragRL) insertIndex--;
+        if (acceptIndex > targetIndex && dragX == dragLR) insertIndex++;
+
+        widget.field.didChange([...fieldValue]
+          ..removeAt(acceptIndex)
+          ..insert(insertIndex, data));
+      },
+      builder: (context, candidateItems, _rejectedItems) {
+        final isTarget = candidateItems.isNotEmpty;
+        return Draggable<String>(
+          onDragEnd: (_details) {
+            setState(() => dragX = null);
+          },
+          onDragUpdate: (details) {
+            if (details.delta.dx != 0.0) {
+              setState(() {
+                dragX = details.delta.dx.round().clamp(dragRL, dragLR);
+              });
+            }
+          },
+          data: chipValue,
+          dragAnchorStrategy: childDragAnchorStrategy,
+          maxSimultaneousDrags: 1,
+          feedback: _feedbackBuilder(chipValue, widget.field),
+          childWhenDragging: const Opacity(opacity: 0),
+          child: AnimatedPadding(
+            duration: Duration(milliseconds: dragX == null ? 0 : 200),
+            padding: _getDragTargetPadding(isTarget),
+            child: chipBuilder(chipValue, widget.field),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final field = widget.field;
+    return Wrap(
+      alignment: field.widget.alignment,
+      clipBehavior: field.widget.clipBehavior,
+      crossAxisAlignment: field.widget.crossAxisAlignment,
+      direction: field.widget.direction,
+      spacing: field.widget.spacing,
+      runAlignment: field.widget.runAlignment,
+      runSpacing: field.widget.runSpacing,
+      textDirection: field.widget.textDirection,
+      verticalDirection: field.widget.verticalDirection,
+      children: [
+        for (final chipValue in field.value!) _buildChip(chipValue),
+        if (dragX == null)
+          SizedBox(
+            width: field.widget.fieldViewWidth,
+            child: TextFormField(
+              controller: widget.textEditingController,
+              decoration: const InputDecoration(border: InputBorder.none),
+              enabled: field.widget.enabled,
+              focusNode: widget.focusNode,
+              onFieldSubmitted: (String value) {
+                if (value.isEmpty) {
+                  widget.focusNode.unfocus();
+                } else {
+                  widget.onFieldSubmitted();
+                  _addChip(value, field);
+                }
+              },
+              validator: field.widget.fieldViewValidator,
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 bool _optionsMatcher(TextEditingValue value, String option) {
@@ -111,59 +260,22 @@ AutocompleteOptionsBuilder<String> _optionsBuilder(
   };
 }
 
-void _updateField(String? value, FastInputChipsState state) {
-  if (value != null) {
-    state.didChange({...state.value!, value});
-    state.textEditingController.clear();
-    state.textFocusNode.requestFocus();
+void _addChip(String? chipValue, FastInputChipsState field) {
+  if (chipValue != null && !field.value!.contains(chipValue)) {
+    field.didChange([...field.value!, chipValue]);
+    field.textEditingController.clear();
+    field.textFocusNode.requestFocus();
   }
 }
 
-InputChip _chipBuilder(String value, FastInputChipsState state) {
-  return InputChip(
-    label: Text(value),
-    isEnabled: state.widget.enabled,
-    onDeleted: () => state.didChange({...state.value!}..remove(value)),
-  );
-}
-
-AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState state) {
+AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
-    final widget = state.widget;
-    final chipBuilder = widget.chipBuilder ?? _chipBuilder;
-
-    return Wrap(
-      alignment: widget.alignment,
-      clipBehavior: widget.clipBehavior,
-      crossAxisAlignment: widget.crossAxisAlignment,
-      direction: widget.direction,
-      spacing: widget.spacing,
-      runAlignment: widget.runAlignment,
-      runSpacing: widget.runSpacing,
-      textDirection: widget.textDirection,
-      verticalDirection: widget.verticalDirection,
-      children: [
-        for (final value in state.value!) chipBuilder(value, state),
-        SizedBox(
-          width: widget.fieldViewWidth,
-          child: TextFormField(
-            controller: textEditingController,
-            decoration: const InputDecoration(border: InputBorder.none),
-            enabled: widget.enabled,
-            focusNode: focusNode,
-            onFieldSubmitted: (String value) {
-              if (value.isEmpty) {
-                focusNode.unfocus();
-              } else {
-                onFieldSubmitted();
-                _updateField(value, state);
-              }
-            },
-            validator: widget.fieldViewValidator,
-          ),
-        )
-      ],
+    return _FastInputChipsWrap(
+      field: field,
+      focusNode: focusNode,
+      onFieldSubmitted: onFieldSubmitted,
+      textEditingController: textEditingController,
     );
   };
 }
@@ -172,14 +284,12 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
     FastInputChipsState state) {
   return (BuildContext context, AutocompleteOnSelected<String> onSelected,
       Iterable<String> options) {
-    final widget = state.widget;
-
     return Align(
       alignment: Alignment.topLeft,
       child: Material(
         elevation: 4.0,
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: widget.optionsMaxHeight),
+          constraints: BoxConstraints(maxHeight: state.widget.optionsMaxHeight),
           child: ListView.builder(
             padding: EdgeInsets.zero,
             shrinkWrap: true,
@@ -200,7 +310,7 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
                   return Container(
                     color: highlight ? Theme.of(context).focusColor : null,
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(widget.displayStringForOption(option)),
+                    child: Text(state.widget.displayStringForOption(option)),
                   );
                 }),
               );
@@ -212,26 +322,26 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
   };
 }
 
-Widget inputChipsBuilder(FormFieldState<Set<String>> field) {
-  final state = field as FastInputChipsState;
-  final widget = state.widget;
+Widget inputChipsBuilder(FormFieldState<List<String>> field) {
+  final _field = field as FastInputChipsState;
+  final widget = _field.widget;
 
   return GestureDetector(
-    onTap: widget.enabled ? () => state.textFocusNode.requestFocus() : null,
+    onTap: widget.enabled ? () => _field.textFocusNode.requestFocus() : null,
     child: InputDecorator(
-      decoration: state.decoration.copyWith(
+      decoration: _field.decoration.copyWith(
         contentPadding: widget.contentPadding,
-        errorText: state.errorText,
+        errorText: _field.errorText,
       ),
       child: RawAutocomplete<String>(
         displayStringForOption: widget.displayStringForOption,
-        fieldViewBuilder: _fieldViewBuilder(state),
-        focusNode: state.textFocusNode,
-        onSelected: (String? value) => _updateField(value, state),
-        optionsBuilder: _optionsBuilder(widget.options, state),
+        fieldViewBuilder: _fieldViewBuilder(_field),
+        focusNode: _field.textFocusNode,
+        onSelected: (String? value) => _addChip(value, _field),
+        optionsBuilder: _optionsBuilder(widget.options, _field),
         optionsViewBuilder:
-            widget.optionsViewBuilder ?? _optionsViewBuilder(state),
-        textEditingController: state.textEditingController,
+            widget.optionsViewBuilder ?? _optionsViewBuilder(_field),
+        textEditingController: _field.textEditingController,
       ),
     ),
   );
