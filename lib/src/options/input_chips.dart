@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../form_field.dart';
@@ -39,7 +39,7 @@ class FastInputChips extends FastFormField<List<String>> {
     this.feedbackBuilder,
     this.fieldViewBuilder,
     this.fieldViewValidator,
-    this.fieldViewWidth = 80.0,
+    this.fieldViewMinWidth = 80.0,
     this.onSelected,
     this.options = const [],
     this.optionsBuilder,
@@ -77,7 +77,7 @@ class FastInputChips extends FastFormField<List<String>> {
   final FastInputChipFeedbackBuilder? feedbackBuilder;
   final FastAutocompleteFieldViewBuilder<String>? fieldViewBuilder;
   final FormFieldValidator<String>? fieldViewValidator;
-  final double fieldViewWidth;
+  final double fieldViewMinWidth;
   final AutocompleteOnSelected<String>? onSelected;
   final Iterable<String> options;
   final AutocompleteOptionsBuilder<String>? optionsBuilder;
@@ -121,6 +121,9 @@ Widget _feedbackBuilder(String chipValue, FastInputChipsState _field) {
   );
 }
 
+typedef ChipDragTargetMove<T> = void Function(
+    DragTargetDetails<T> details, String chip);
+
 class FastDraggableInputChip extends StatelessWidget {
   const FastDraggableInputChip({
     Key? key,
@@ -129,6 +132,7 @@ class FastDraggableInputChip extends StatelessWidget {
     required this.view,
     this.onAccept,
     this.onAcceptWithDetails,
+    this.onAnimationEnd,
     this.onDragCompleted,
     this.onDragEnd,
     this.onDraggableCanceled,
@@ -143,42 +147,30 @@ class FastDraggableInputChip extends StatelessWidget {
   final FastInputChipsState field;
   final DragTargetAccept<String>? onAccept;
   final DragTargetAcceptWithDetails<String>? onAcceptWithDetails;
+  final VoidCallback? onAnimationEnd;
   final VoidCallback? onDragCompleted;
   final DragEndCallback? onDragEnd;
   final DraggableCanceledCallback? onDraggableCanceled;
   final VoidCallback? onDragStarted;
   final DragUpdateCallback? onDragUpdate;
   final DragTargetLeave<String>? onLeave;
-  final DragTargetMove<String>? onMove;
+  final ChipDragTargetMove<String>? onMove;
   final DragTargetWillAccept<String>? onWillAccept;
   final FastInputChipsViewState view;
 
-  EdgeInsets _getDragTargetPadding(bool isTarget) {
-    if (isTarget) {
-      if (view.dragX == FastInputChipsViewState.dragLR) {
-        return const EdgeInsets.only(right: 84.0);
-      } else if (view.dragX == FastInputChipsViewState.dragRL) {
-        return const EdgeInsets.only(left: 84.0);
-      }
-    }
-    return EdgeInsets.zero;
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
-    final chipBuilder = field.widget.chipBuilder ?? _chipBuilder;
     final feedbackBuilder = field.widget.feedbackBuilder ?? _feedbackBuilder;
 
     return DragTarget<String>(
       onAccept: onAccept,
       onAcceptWithDetails: onAcceptWithDetails,
       onLeave: onLeave,
-      onMove: onMove,
+      onMove: (details) => onMove?.call(details, chipValue),
       onWillAccept: onWillAccept,
       builder: (context, candidateItems, _rejectedItems) {
         final isDropTarget = candidateItems.isNotEmpty;
+        final chipBuilder = field.widget.chipBuilder ?? _chipBuilder;
         return Draggable<String>(
           onDragCompleted: onDragCompleted,
           onDraggableCanceled: onDraggableCanceled,
@@ -189,12 +181,15 @@ class FastDraggableInputChip extends StatelessWidget {
           dragAnchorStrategy: childDragAnchorStrategy,
           maxSimultaneousDrags: 1,
           feedback: feedbackBuilder(chipValue, field),
-          childWhenDragging: const Opacity(opacity: 0),
-          child: AnimatedPadding(
-            duration: Duration(milliseconds: view.dragX == null ? 0 : 200),
+          childWhenDragging: const SizedBox.shrink(),
+          child: chipBuilder(chipValue, field),
+          /*
+          child: Padding(
+            // duration: Duration(milliseconds: view.dragX == null ? 0 : 200),
             padding: _getDragTargetPadding(isDropTarget),
             child: chipBuilder(chipValue, field),
           ),
+          */
         );
       },
     );
@@ -223,12 +218,157 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
   static const dragRL = -1;
   static const dragLR = 1;
 
+  final wrapKey = GlobalKey();
+
   int? dragX;
+  String? dragChip;
+  double? freeWidth;
+  int? gapIndex;
+  List<List<RenderBox>> runs = [];
+
+  RenderWrap get renderWrap {
+    return wrapKey.currentContext?.findRenderObject() as RenderWrap;
+  }
+
+  bool get isDragging => dragChip != null;
+
+  List<List<RenderBox>> _getWrapRuns(RenderWrap wrap) {
+    //if (wrap.hasSize) {
+    //freeWidth = runs.last.fold<double>(wrap.paintBounds.width, (width, chip) {
+    //return width - chip.paintBounds.width - widget.field.widget.spacing;
+    //});
+    /*
+      final parentData = lastChip.parentData as BoxParentData;
+      final chipLeft = parentData.offset.dx;
+      final translation = chip.getTransformTo(wrap).getTranslation();
+      final chipLeft = translation.x;
+      final wrapWidth = wrap.paintBounds.width;
+      final chipWidth = lastChip.paintBounds.width;
+      width = wrapWidth - chipLeft - chipWidth - widget.field.widget.spacing;
+      */
+    //} else {
+
+    final runs = <List<RenderBox>>[];
+    final chips = wrap.getChildrenAsList()..removeLast();
+    int runIndex = 0;
+
+    for (final chip in chips) {
+      final prevChip = wrap.childBefore(chip);
+      final offset = (chip.parentData as BoxParentData).offset;
+
+      if (prevChip != null) {
+        final prevOffset = (prevChip.parentData as BoxParentData).offset;
+        if (prevOffset.dy == offset.dy) {
+          runs[runIndex].add(chip);
+        } else if (prevOffset.dy < offset.dy) {
+          runIndex++;
+          runs.add([chip]);
+        }
+      } else {
+        runs.add([chip]);
+      }
+    }
+
+    return runs;
+  }
+
+  bool _isLastInRun(String chipValue) {
+    for (final run in runs) {
+      if (widget.field.value!.indexOf(chipValue) ==
+          renderWrap.getChildrenAsList().indexOf(run.last)) return true;
+    }
+    return false;
+  }
+
+  FastDraggableInputChip _buildChip(String chipValue) {
+    final field = widget.field;
+    return FastDraggableInputChip(
+      chipValue: chipValue,
+      field: field,
+      view: this,
+      onAccept: (data) {
+        final acceptIndex = field.value!.indexOf(data);
+        final targetIndex = field.value!.indexOf(chipValue);
+        int insertIndex = targetIndex;
+
+        if (acceptIndex < targetIndex && dragX == dragRL) {
+          insertIndex--;
+        } else if (acceptIndex > targetIndex && dragX == dragLR) {
+          insertIndex++;
+        }
+        widget.field.didChange([...field.value!]
+          ..removeAt(acceptIndex)
+          ..insert(insertIndex, data));
+      },
+      onDragCompleted: () {
+        setState(() => gapIndex = null);
+      },
+      onDraggableCanceled: (_v, _o) {
+        setState(() {
+          gapIndex = null;
+        });
+      },
+      onDragStarted: () {
+        setState(() {
+          dragChip = chipValue;
+        });
+      },
+      onDragEnd: (_details) {
+        setState(() {
+          dragX = null;
+          dragChip = null;
+        });
+      },
+      onDragUpdate: (details) {
+        if (details.delta.dx != 0.0) {
+          setState(() {
+            dragX = details.delta.dx.round().clamp(dragRL, dragLR);
+            //freeWidth = _getFreeWidth();
+          });
+        }
+      },
+      onMove: (details, targetChip) {
+        //setState(() {
+        //freeWidth = _getFreeWidth();
+        //});
+      },
+    );
+  }
+
+  double _getFreeWidth() {
+    final wrap = renderWrap;
+    final chips = wrap.getChildrenAsList()..removeLast();
+    final wrapWidth =
+    wrap.hasSize ? wrap.paintBounds.width : wrap.constraints.maxWidth;
+
+    if (chips.isNotEmpty) {
+      double runExtent = 0.0;
+
+      for (final chip in chips) {
+        final width = chip.paintBounds.width + widget.field.widget.spacing;
+        final isRunStart = chip == chips.first || runExtent + width > wrapWidth;
+
+        runExtent = isRunStart ? width : runExtent + width;
+      }
+      return wrapWidth - runExtent;
+    }
+
+    return wrapWidth;
+  }
+
+  double _getTextFieldWidth() {
+    final freeWidth = _getFreeWidth();
+    final minWidth = widget.field.widget.fieldViewMinWidth;
+
+    return minWidth > freeWidth ? double.infinity : freeWidth;
+  }
 
   @override
   Widget build(BuildContext context) {
     final field = widget.field;
+
     return Wrap(
+      key: wrapKey,
       alignment: field.widget.alignment,
       clipBehavior: field.widget.clipBehavior,
       crossAxisAlignment: field.widget.crossAxisAlignment,
@@ -239,44 +379,36 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
       textDirection: field.widget.textDirection,
       verticalDirection: field.widget.verticalDirection,
       children: [
-        for (final chipValue in field.value!)
-          FastDraggableInputChip(
-            key: ,
-            chipValue: chipValue,
-            field: field,
-            view: this,
-            onAccept: (data) {
-              final acceptIndex = field.value!.indexOf(data);
-              final targetIndex = field.value!.indexOf(chipValue);
-              int insertIndex = targetIndex;
-
-              if (acceptIndex < targetIndex && dragX == dragRL) {
-                insertIndex--;
-              } else if (acceptIndex > targetIndex && dragX == dragLR) {
-                insertIndex++;
-              }
-
-              widget.field.didChange([...field.value!]
-                ..removeAt(acceptIndex)
-                ..insert(insertIndex, data));
-            },
-            onDragEnd: (_details) {
-              setState(() => dragX = null);
-            },
-            onDragUpdate: (details) {
-              if (details.delta.dx != 0.0) {
-                setState(() {
-                  dragX = details.delta.dx.round().clamp(dragRL, dragLR);
-                });
-              }
-            },
-          ),
-        if (dragX == null)
+        for (final chipValue in field.value!) _chipBuilder(chipValue, field),
+        LayoutBuilder(
+          builder: (_context, _constraints) {
+            return SizedBox(
+              width: _getTextFieldWidth(),
+              child: TextFormField(
+                controller: widget.textEditingController,
+                //decoration: const InputDecoration(border: InputBorder.none),
+                enabled: field.widget.enabled,
+                focusNode: widget.focusNode,
+                onFieldSubmitted: (String value) {
+                  if (value.isEmpty) {
+                    widget.focusNode.unfocus();
+                  } else {
+                    widget.onFieldSubmitted();
+                    _addChip(value, field);
+                  }
+                },
+                validator: field.widget.fieldViewValidator,
+              ),
+            );
+          },
+        ),
+        /*
+        if (!isDragging)
           SizedBox(
-            width: field.widget.fieldViewWidth,
+            width: _getTextFieldWidth(),
             child: TextFormField(
               controller: widget.textEditingController,
-              decoration: const InputDecoration(border: InputBorder.none),
+              // decoration: const InputDecoration(border: InputBorder.none),
               enabled: field.widget.enabled,
               focusNode: widget.focusNode,
               onFieldSubmitted: (String value) {
@@ -292,12 +424,21 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
           )
         else
           LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              print(constraints.minWidth);
-              print(constraints.maxWidth);
-              return const Text('Hello');
+            builder: (context, constraints) {
+              final width = _getFreeWidth();
+              if (width != null) {
+                return Container(
+                  color: Colors.red,
+                  width: width,
+                  height: runs.last.last.paintBounds.height,
+                  child: const Text('Remaining'),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
             },
           ),
+         */
       ],
     );
   }
