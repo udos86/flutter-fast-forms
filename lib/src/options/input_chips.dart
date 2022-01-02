@@ -7,10 +7,10 @@ import '../form_field.dart';
 import 'autocomplete.dart';
 
 typedef FastInputChipBuilder = InputChip Function(
-    String chipValue, FastInputChipsState field);
+    String chip, FastInputChipsState field);
 
 typedef FastInputChipFeedbackBuilder = Widget Function(
-    String chipValue, FastInputChipsState field);
+    String chip, FastInputChipsState field);
 
 @immutable
 class FastInputChips extends FastFormField<List<String>> {
@@ -102,20 +102,20 @@ class FastInputChipsState extends FastFormFieldState<List<String>> {
   FastInputChips get widget => super.widget as FastInputChips;
 }
 
-InputChip _chipBuilder(String chipValue, FastInputChipsState field) {
+InputChip _chipBuilder(String chip, FastInputChipsState field) {
   return InputChip(
-    label: Text(chipValue),
+    label: Text(chip),
     isEnabled: field.widget.enabled,
-    onDeleted: () => field.didChange([...field.value!]..remove(chipValue)),
+    onDeleted: () => field.didChange([...field.value!]..remove(chip)),
   );
 }
 
-Widget _feedbackBuilder(String chipValue, FastInputChipsState _field) {
+Widget _feedbackBuilder(String chip, FastInputChipsState _field) {
   return Material(
     type: MaterialType.transparency,
     child: InputChip(
       isEnabled: true,
-      label: Text(chipValue),
+      label: Text(chip),
       onDeleted: () {},
     ),
   );
@@ -127,7 +127,7 @@ typedef ChipDragTargetMove<T> = void Function(
 class FastDraggableInputChip extends StatelessWidget {
   const FastDraggableInputChip({
     Key? key,
-    required this.chipValue,
+    required this.chip,
     required this.field,
     required this.view,
     this.onAccept,
@@ -143,7 +143,7 @@ class FastDraggableInputChip extends StatelessWidget {
     this.onWillAccept,
   }) : super(key: key);
 
-  final String chipValue;
+  final String chip;
   final FastInputChipsState field;
   final DragTargetAccept<String>? onAccept;
   final DragTargetAcceptWithDetails<String>? onAcceptWithDetails;
@@ -166,10 +166,10 @@ class FastDraggableInputChip extends StatelessWidget {
       onAccept: onAccept,
       onAcceptWithDetails: onAcceptWithDetails,
       onLeave: onLeave,
-      onMove: (details) => onMove?.call(details, chipValue),
+      onMove: (details) => onMove?.call(details, chip),
       onWillAccept: onWillAccept,
       builder: (context, candidateItems, _rejectedItems) {
-        final isDropTarget = candidateItems.isNotEmpty;
+        // final isDropTarget = candidateItems.isNotEmpty;
         final chipBuilder = field.widget.chipBuilder ?? _chipBuilder;
         return Draggable<String>(
           onDragCompleted: onDragCompleted,
@@ -177,17 +177,17 @@ class FastDraggableInputChip extends StatelessWidget {
           onDragEnd: onDragEnd,
           onDragStarted: onDragStarted,
           onDragUpdate: onDragUpdate,
-          data: chipValue,
+          data: chip,
           dragAnchorStrategy: childDragAnchorStrategy,
           maxSimultaneousDrags: 1,
-          feedback: feedbackBuilder(chipValue, field),
+          feedback: feedbackBuilder(chip, field),
           childWhenDragging: const SizedBox.shrink(),
-          child: chipBuilder(chipValue, field),
+          child: chipBuilder(chip, field),
           /*
-          child: Padding(
-            // duration: Duration(milliseconds: view.dragX == null ? 0 : 200),
+          child: AnimatedPadding(
+            duration: Duration(milliseconds: view.dragX == null ? 0 : 200),
             padding: _getDragTargetPadding(isDropTarget),
-            child: chipBuilder(chipValue, field),
+            child: chipBuilder(chip, field),
           ),
           */
         );
@@ -220,75 +220,23 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
 
   final wrapKey = GlobalKey();
 
-  int? dragX;
   String? dragChip;
-  double? freeWidth;
-  int? gapIndex;
-  List<List<RenderBox>> runs = [];
+  int? dragX;
 
-  RenderWrap get renderWrap {
-    return wrapKey.currentContext?.findRenderObject() as RenderWrap;
-  }
+  RenderWrap get renderWrap =>
+      wrapKey.currentContext?.findRenderObject() as RenderWrap;
 
   bool get isDragging => dragChip != null;
 
-  List<List<RenderBox>> _getWrapRuns(RenderWrap wrap) {
-    //if (wrap.hasSize) {
-    //freeWidth = runs.last.fold<double>(wrap.paintBounds.width, (width, chip) {
-    //return width - chip.paintBounds.width - widget.field.widget.spacing;
-    //});
-    /*
-      final parentData = lastChip.parentData as BoxParentData;
-      final chipLeft = parentData.offset.dx;
-      final translation = chip.getTransformTo(wrap).getTranslation();
-      final chipLeft = translation.x;
-      final wrapWidth = wrap.paintBounds.width;
-      final chipWidth = lastChip.paintBounds.width;
-      width = wrapWidth - chipLeft - chipWidth - widget.field.widget.spacing;
-      */
-    //} else {
-
-    final runs = <List<RenderBox>>[];
-    final chips = wrap.getChildrenAsList()..removeLast();
-    int runIndex = 0;
-
-    for (final chip in chips) {
-      final prevChip = wrap.childBefore(chip);
-      final offset = (chip.parentData as BoxParentData).offset;
-
-      if (prevChip != null) {
-        final prevOffset = (prevChip.parentData as BoxParentData).offset;
-        if (prevOffset.dy == offset.dy) {
-          runs[runIndex].add(chip);
-        } else if (prevOffset.dy < offset.dy) {
-          runIndex++;
-          runs.add([chip]);
-        }
-      } else {
-        runs.add([chip]);
-      }
-    }
-
-    return runs;
-  }
-
-  bool _isLastInRun(String chipValue) {
-    for (final run in runs) {
-      if (widget.field.value!.indexOf(chipValue) ==
-          renderWrap.getChildrenAsList().indexOf(run.last)) return true;
-    }
-    return false;
-  }
-
-  FastDraggableInputChip _buildChip(String chipValue) {
+  FastDraggableInputChip _buildDraggableChip(String chip) {
     final field = widget.field;
     return FastDraggableInputChip(
-      chipValue: chipValue,
+      chip: chip,
       field: field,
       view: this,
-      onAccept: (data) {
-        final acceptIndex = field.value!.indexOf(data);
-        final targetIndex = field.value!.indexOf(chipValue);
+      onAccept: (acceptChip) {
+        final acceptIndex = field.value!.indexOf(acceptChip);
+        final targetIndex = field.value!.indexOf(chip);
         int insertIndex = targetIndex;
 
         if (acceptIndex < targetIndex && dragX == dragRL) {
@@ -298,19 +246,11 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
         }
         widget.field.didChange([...field.value!]
           ..removeAt(acceptIndex)
-          ..insert(insertIndex, data));
-      },
-      onDragCompleted: () {
-        setState(() => gapIndex = null);
-      },
-      onDraggableCanceled: (_v, _o) {
-        setState(() {
-          gapIndex = null;
-        });
+          ..insert(insertIndex, acceptChip));
       },
       onDragStarted: () {
         setState(() {
-          dragChip = chipValue;
+          dragChip = chip;
         });
       },
       onDragEnd: (_details) {
@@ -323,49 +263,50 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
         if (details.delta.dx != 0.0) {
           setState(() {
             dragX = details.delta.dx.round().clamp(dragRL, dragLR);
-            //freeWidth = _getFreeWidth();
           });
         }
-      },
-      onMove: (details, targetChip) {
-        //setState(() {
-        //freeWidth = _getFreeWidth();
-        //});
       },
     );
   }
 
-  double _getFreeWidth() {
+  double _getRemainingWidth() {
     final wrap = renderWrap;
-    final chips = wrap.getChildrenAsList()..removeLast();
+    final boxes = wrap.getChildrenAsList()..removeLast();
     final wrapWidth =
-    wrap.hasSize ? wrap.paintBounds.width : wrap.constraints.maxWidth;
+        wrap.hasSize ? wrap.paintBounds.width : wrap.constraints.maxWidth;
+    final runs = <List<RenderBox>>[];
 
-    if (chips.isNotEmpty) {
-      double runExtent = 0.0;
+    if (boxes.isEmpty) return wrapWidth;
 
-      for (final chip in chips) {
-        final width = chip.paintBounds.width + widget.field.widget.spacing;
-        final isRunStart = chip == chips.first || runExtent + width > wrapWidth;
+    double runExtent = 0.0;
 
-        runExtent = isRunStart ? width : runExtent + width;
+    for (final box in boxes) {
+      final width = box.paintBounds.width + widget.field.widget.spacing;
+      final isRunStart = box == boxes.first || runExtent + width > wrapWidth;
+
+      if (isRunStart) {
+        runs.add([box]);
+        runExtent = width;
+      } else {
+        runs.last.add(box);
+        runExtent = runExtent + width;
       }
-      return wrapWidth - runExtent;
     }
 
-    return wrapWidth;
+    return wrapWidth - runExtent;
   }
 
-  double _getTextFieldWidth() {
-    final freeWidth = _getFreeWidth();
+  double _getTextFormFieldWidth() {
+    final width = _getRemainingWidth();
     final minWidth = widget.field.widget.fieldViewMinWidth;
 
-    return minWidth > freeWidth ? double.infinity : freeWidth;
+    return minWidth > width ? double.infinity : width;
   }
 
   @override
   Widget build(BuildContext context) {
     final field = widget.field;
+    final chipBuilder = field.widget.chipBuilder ?? _chipBuilder;
 
     return Wrap(
       key: wrapKey,
@@ -379,14 +320,14 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
       textDirection: field.widget.textDirection,
       verticalDirection: field.widget.verticalDirection,
       children: [
-        for (final chipValue in field.value!) _chipBuilder(chipValue, field),
+        for (final chip in field.value!) chipBuilder(chip, field),
         LayoutBuilder(
           builder: (_context, _constraints) {
             return SizedBox(
-              width: _getTextFieldWidth(),
+              width: _getTextFormFieldWidth(),
               child: TextFormField(
                 controller: widget.textEditingController,
-                //decoration: const InputDecoration(border: InputBorder.none),
+                decoration: const InputDecoration(border: InputBorder.none),
                 enabled: field.widget.enabled,
                 focusNode: widget.focusNode,
                 onFieldSubmitted: (String value) {
@@ -402,43 +343,6 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
             );
           },
         ),
-        /*
-        if (!isDragging)
-          SizedBox(
-            width: _getTextFieldWidth(),
-            child: TextFormField(
-              controller: widget.textEditingController,
-              // decoration: const InputDecoration(border: InputBorder.none),
-              enabled: field.widget.enabled,
-              focusNode: widget.focusNode,
-              onFieldSubmitted: (String value) {
-                if (value.isEmpty) {
-                  widget.focusNode.unfocus();
-                } else {
-                  widget.onFieldSubmitted();
-                  _addChip(value, field);
-                }
-              },
-              validator: field.widget.fieldViewValidator,
-            ),
-          )
-        else
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final width = _getFreeWidth();
-              if (width != null) {
-                return Container(
-                  color: Colors.red,
-                  width: width,
-                  height: runs.last.last.paintBounds.height,
-                  child: const Text('Remaining'),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
-         */
       ],
     );
   }
@@ -471,9 +375,9 @@ AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
   };
 }
 
-void _addChip(String? chipValue, FastInputChipsState field) {
-  if (chipValue != null && !field.value!.contains(chipValue)) {
-    field.didChange([...field.value!, chipValue]);
+void _addChip(String? chip, FastInputChipsState field) {
+  if (chip != null && !field.value!.contains(chip)) {
+    field.didChange([...field.value!, chip]);
     field.textEditingController.clear();
     field.textFocusNode.requestFocus();
   }
