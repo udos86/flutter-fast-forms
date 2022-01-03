@@ -1,3 +1,9 @@
+## [3.0.0] - 01/03/2022
+
+* renames `id` property of `FastFormField` to `name`
+* improves `FastInputChips`
+* adds Dart `2.15` tear-offs
+
 ## [2.1.0] - 11/17/2021
 
 * introduces `FastInputChips`
