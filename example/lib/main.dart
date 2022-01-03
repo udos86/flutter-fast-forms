@@ -137,15 +137,14 @@ class FormPage extends StatelessWidget {
           FastInputChips(
             name: 'input_chips',
             label: 'Input Chips',
-            options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
+            options: const ['Angular', 'React', 'Vue', 'Svelte', 'Flutter'],
             initialValue: const [
-              'One',
-              'Two',
-              'Three',
-              'Four',
-              'Five',
-              'Six',
-              'Seven'
+              'HTML',
+              'CSS',
+              'React',
+              'Dart',
+              'TypeScript',
+              'Angular',
             ],
           ),
           FastChoiceChips(
