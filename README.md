@@ -60,18 +60,18 @@ child: FastForm(
   formKey: formKey,
   children: [
     FastTextField(
-      id: 'field_destination',
+      name: 'field_destination',
       label: 'Destination',
       placeholder: 'Where are you going?',
     ),
     FastDateRangePicker(
-      id: 'field_check_in_out',
+      name: 'field_check_in_out',
       label: 'Check-in - Check-out',
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     ),
     FastCheckbox(
-      id: 'field_travel_purpose',
+      name: 'field_travel_purpose',
       label: 'Travel purpose',
       title: 'I am travelling for work',
     ),
@@ -89,7 +89,7 @@ child: FastForm(
       padding: EdgeInsets.all(16.0),
       children: [
         FastTextField(
-          id: 'field_destination',
+          name: 'field_destination',
           label: 'Destination',
           placeholder: 'Where are you going?',
         ),
