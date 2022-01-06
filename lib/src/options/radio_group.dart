@@ -12,10 +12,10 @@ class FastRadioOption<T> {
 }
 
 typedef FastRadioOptionBuilder<T> = Widget Function(
-    FastRadioOption<T> option, FastRadioGroupState<T> state);
+    FastRadioOption<T> option, FastRadioGroupState<T> field);
 
 typedef FastRadioOptionsBuilder<T> = Widget Function(
-    List<FastRadioOption<T>> options, FastRadioGroupState<T> state);
+    List<FastRadioOption<T>> options, FastRadioGroupState<T> field);
 
 enum FastRadioGroupOrientation { horizontal, vertical }
 
@@ -73,12 +73,12 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 }
 
 Widget radioOptionBuilder<T>(
-    FastRadioOption<T> option, FastRadioGroupState<T> state) {
+    FastRadioOption<T> option, FastRadioGroupState<T> field) {
   final vertical =
-      state.widget.orientation == FastRadioGroupOrientation.vertical;
+      field.widget.orientation == FastRadioGroupOrientation.vertical;
   final tile = RadioListTile<T>(
-    groupValue: state.value,
-    onChanged: state.widget.enabled ? state.didChange : null,
+    groupValue: field.value,
+    onChanged: field.widget.enabled ? field.didChange : null,
     title: Text(option.label),
     value: option.value,
   );
@@ -87,27 +87,26 @@ Widget radioOptionBuilder<T>(
 }
 
 Flex radioOptionsBuilder<T>(
-    List<FastRadioOption<T>> options, FastRadioGroupState<T> state) {
-  final optionBuilder = state.widget.optionBuilder ?? radioOptionBuilder;
-  final wrapper = state.widget.orientation == FastRadioGroupOrientation.vertical
+    List<FastRadioOption<T>> options, FastRadioGroupState<T> field) {
+  final optionBuilder = field.widget.optionBuilder ?? radioOptionBuilder;
+  final wrapper = field.widget.orientation == FastRadioGroupOrientation.vertical
       ? Column.new
       : Row.new;
 
   return wrapper(
-    children: [for (final option in options) optionBuilder(option, state)],
+    children: [for (final option in options) optionBuilder(option, field)],
   );
 }
 
 InputDecorator radioGroupBuilder<T>(FormFieldState<T> field) {
-  final state = field as FastRadioGroupState<T>;
-  final widget = state.widget;
+  final widget = (field as FastRadioGroupState<T>).widget;
   final optionsBuilder = widget.optionsBuilder ?? radioOptionsBuilder;
 
   return InputDecorator(
-    decoration: state.decoration.copyWith(
+    decoration: field.decoration.copyWith(
       contentPadding: widget.contentPadding,
-      errorText: state.errorText,
+      errorText: field.errorText,
     ),
-    child: optionsBuilder(widget.options, state),
+    child: optionsBuilder(widget.options, field),
   );
 }

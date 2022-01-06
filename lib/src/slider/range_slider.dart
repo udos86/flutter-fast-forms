@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 
 typedef FastRangeSliderLabelsBuilder = RangeLabels Function(
-    FastRangeSliderState state);
+    FastRangeSliderState field);
 
-typedef FastRangeSliderFixBuilder = Widget Function(FastRangeSliderState state);
+typedef FastRangeSliderFixBuilder = Widget Function(FastRangeSliderState field);
 
 @immutable
 class FastRangeSlider extends FastFormField<RangeValues> {
@@ -65,31 +65,31 @@ class FastRangeSliderState extends FastFormFieldState<RangeValues> {
   FastRangeSlider get widget => super.widget as FastRangeSlider;
 }
 
-RangeLabels rangeSliderLabelsBuilder(FastRangeSliderState state) {
+RangeLabels rangeSliderLabelsBuilder(FastRangeSliderState field) {
   return RangeLabels(
-    state.value!.start.toStringAsFixed(0),
-    state.value!.end.toStringAsFixed(0),
+    field.value!.start.toStringAsFixed(0),
+    field.value!.end.toStringAsFixed(0),
   );
 }
 
-SizedBox rangeSliderPrefixBuilder(FastRangeSliderState state) {
+SizedBox rangeSliderPrefixBuilder(FastRangeSliderState field) {
   return SizedBox(
     width: 48.0,
     child: Center(
       child: Text(
-        state.value!.start.toStringAsFixed(0),
+        field.value!.start.toStringAsFixed(0),
         style: const TextStyle(fontSize: 16.0),
       ),
     ),
   );
 }
 
-SizedBox rangeSliderSuffixBuilder(FastRangeSliderState state) {
+SizedBox rangeSliderSuffixBuilder(FastRangeSliderState field) {
   return SizedBox(
     width: 48.0,
     child: Center(
       child: Text(
-        state.value!.end.toStringAsFixed(0),
+        field.value!.end.toStringAsFixed(0),
         style: const TextStyle(
           fontSize: 16.0,
         ),
@@ -99,29 +99,28 @@ SizedBox rangeSliderSuffixBuilder(FastRangeSliderState state) {
 }
 
 InputDecorator rangeSliderBuilder(FormFieldState<RangeValues> field) {
-  final state = field as FastRangeSliderState;
-  final widget = state.widget;
+  final widget = (field as FastRangeSliderState).widget;
 
   return InputDecorator(
-    decoration: state.decoration.copyWith(
+    decoration: field.decoration.copyWith(
       contentPadding: widget.contentPadding,
-      errorText: state.errorText,
+      errorText: field.errorText,
     ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        if (widget.prefixBuilder != null) widget.prefixBuilder!(state),
+        if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
         Expanded(
           child: RangeSlider(
             divisions: widget.divisions,
-            labels: widget.labelsBuilder?.call(state),
+            labels: widget.labelsBuilder?.call(field),
             max: widget.max,
             min: widget.min,
-            values: state.value!,
-            onChanged: widget.enabled ? state.didChange : null,
+            values: field.value!,
+            onChanged: widget.enabled ? field.didChange : null,
           ),
         ),
-        if (widget.suffixBuilder != null) widget.suffixBuilder!(state),
+        if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
       ],
     ),
   );

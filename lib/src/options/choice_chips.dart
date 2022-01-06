@@ -86,7 +86,7 @@ class FastChoiceChip
 }
 
 typedef FastChoiceChipBuilder = Widget Function(
-    FastChoiceChip chip, FastChoiceChipsState state);
+    FastChoiceChip chip, FastChoiceChipsState field);
 
 @immutable
 class FastChoiceChips extends FastFormField<Set<FastChoiceChip>> {
@@ -158,7 +158,7 @@ class FastChoiceChipsState extends FastFormFieldState<Set<FastChoiceChip>> {
   FastChoiceChips get widget => super.widget as FastChoiceChips;
 }
 
-ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState state) {
+ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
   return ChoiceChip(
     autofocus: chip.autofocus,
     avatar: chip.avatar,
@@ -172,9 +172,9 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState state) {
     labelPadding: chip.labelPadding,
     labelStyle: chip.labelStyle,
     materialTapTargetSize: chip.materialTapTargetSize,
-    padding: chip.padding ?? state.widget.chipPadding,
+    padding: chip.padding ?? field.widget.chipPadding,
     pressElevation: chip.pressElevation,
-    selected: state.value!.contains(chip),
+    selected: field.value!.contains(chip),
     selectedColor: chip.selectedColor,
     selectedShadowColor: chip.selectedShadowColor,
     shadowColor: chip.shadowColor,
@@ -187,24 +187,22 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState state) {
         chip.onSelected!(selected);
       }
 
-      final value = state.value ?? <FastChoiceChip>{};
+      final value = field.value ?? <FastChoiceChip>{};
       final newValue = selected ? {...value, chip} : ({...value}..remove(chip));
 
-      state.didChange(newValue);
+      field.didChange(newValue);
     },
   );
 }
 
 InputDecorator choiceChipsBuilder(FormFieldState field) {
-  final state = field as FastChoiceChipsState;
-  final widget = state.widget;
-
+  final widget = (field as FastChoiceChipsState).widget;
   final chipBuilder = widget.chipBuilder ?? choiceChipBuilder;
 
   return InputDecorator(
-    decoration: state.decoration.copyWith(
+    decoration: field.decoration.copyWith(
       contentPadding: widget.contentPadding,
-      errorText: state.errorText,
+      errorText: field.errorText,
     ),
     child: Wrap(
       alignment: widget.alignment,
@@ -217,7 +215,7 @@ InputDecorator choiceChipsBuilder(FormFieldState field) {
       textDirection: widget.textDirection,
       verticalDirection: widget.verticalDirection,
       children: [
-        for (final chip in widget.chips) chipBuilder(chip, state),
+        for (final chip in widget.chips) chipBuilder(chip, field),
       ],
     ),
   );

@@ -52,7 +52,7 @@ class FastTextField extends FastFormField<String> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? adaptiveTextFieldBuilder,
+          builder: builder ?? textFieldBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
@@ -124,11 +124,9 @@ Text inputCounterWidgetBuilder(
   );
 }
 
-TextFormField textFieldBuilder(FormFieldState<String> field) {
-  final state = field as FastTextFieldState;
-  final widget = state.widget;
-
-  final InputDecoration decoration = state.decoration.copyWith(
+TextFormField materialTextFieldBuilder(FormFieldState<String> field) {
+  final widget = (field as FastTextFieldState).widget;
+  final InputDecoration decoration = field.decoration.copyWith(
     contentPadding: widget.contentPadding,
     prefix:
         widget.prefix != null && widget.prefix is! Icon ? widget.prefix : null,
@@ -142,7 +140,7 @@ TextFormField textFieldBuilder(FormFieldState<String> field) {
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
-    autovalidateMode: state.autovalidateMode,
+    autovalidateMode: field.autovalidateMode,
     buildCounter: widget.buildCounter,
     decoration: decoration,
     initialValue: widget.initialValue,
@@ -150,7 +148,7 @@ TextFormField textFieldBuilder(FormFieldState<String> field) {
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
-    focusNode: widget.focusNode ?? state.focusNode,
+    focusNode: widget.focusNode ?? field.focusNode,
     keyboardType: widget.keyboardType,
     inputFormatters: widget.inputFormatters,
     maxLength: widget.maxLength,
@@ -159,7 +157,7 @@ TextFormField textFieldBuilder(FormFieldState<String> field) {
     minLines: widget.minLines,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
-    onChanged: widget.enabled ? state.didChange : null,
+    onChanged: widget.enabled ? field.didChange : null,
     onSaved: widget.onSaved,
     readOnly: widget.readOnly,
     textAlign: widget.textAlign,
@@ -171,8 +169,7 @@ TextFormField textFieldBuilder(FormFieldState<String> field) {
 
 CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
     FormFieldState<String> field) {
-  final state = field as FastTextFieldState;
-  final widget = state.widget;
+  final widget = (field as FastTextFieldState).widget;
   final prefix =
       widget.prefix ?? (widget.label is String ? Text(widget.label!) : null);
 
@@ -180,12 +177,12 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
-    autovalidateMode: state.autovalidateMode,
+    autovalidateMode: field.autovalidateMode,
     enabled: widget.enabled,
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
-    focusNode: widget.focusNode ?? state.focusNode,
+    focusNode: widget.focusNode ?? field.focusNode,
     keyboardType: widget.keyboardType,
     initialValue: widget.initialValue,
     inputFormatters: widget.inputFormatters,
@@ -194,7 +191,7 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
     minLines: widget.minLines,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
-    onChanged: widget.enabled ? state.didChange : null,
+    onChanged: widget.enabled ? field.didChange : null,
     padding: widget.padding,
     placeholder: widget.placeholder,
     prefix: prefix,
@@ -206,12 +203,11 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
   );
 }
 
-Widget adaptiveTextFieldBuilder(FormFieldState<String> field) {
-  final state = field as FastTextFieldState;
-  FormFieldBuilder<String> builder = textFieldBuilder;
+Widget textFieldBuilder(FormFieldState<String> field) {
+  FormFieldBuilder<String> builder = materialTextFieldBuilder;
 
-  if (state.adaptive) {
-    final platform = Theme.of(state.context).platform;
+  if ((field as FastTextFieldState).adaptive) {
+    final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoTextFieldBuilder;
   }
 

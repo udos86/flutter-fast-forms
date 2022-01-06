@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef FastCheckboxTitleBuilder = Widget Function(FastCheckboxState state);
+typedef FastCheckboxTitleBuilder = Widget Function(FastCheckboxState field);
 
 @immutable
 class FastCheckbox extends FastFormField<bool> {
@@ -55,32 +55,30 @@ class FastCheckboxState extends FastFormFieldState<bool> {
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
-Text checkboxTitleBuilder(FastCheckboxState state) {
+Text checkboxTitleBuilder(FastCheckboxState field) {
   return Text(
-    state.widget.title,
+    field.widget.title,
     style: TextStyle(
       fontSize: 14.0,
-      color: state.value! ? Colors.black : Colors.grey,
+      color: field.value! ? Colors.black : Colors.grey,
     ),
   );
 }
 
 InputDecorator checkboxBuilder(FormFieldState<bool> field) {
-  final state = field as FastCheckboxState;
-  final widget = state.widget;
-
+  final widget = (field as FastCheckboxState).widget;
   final titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
 
   return InputDecorator(
-    decoration: state.decoration.copyWith(errorText: state.errorText),
+    decoration: field.decoration.copyWith(errorText: field.errorText),
     child: CheckboxListTile(
       autofocus: widget.autofocus,
       contentPadding: widget.contentPadding,
-      onChanged: widget.enabled ? state.didChange : null,
-      selected: state.value ?? false,
-      title: titleBuilder(state),
+      onChanged: widget.enabled ? field.didChange : null,
+      selected: field.value ?? false,
+      title: titleBuilder(field),
       tristate: widget.tristate,
-      value: state.value,
+      value: field.value,
     ),
   );
 }

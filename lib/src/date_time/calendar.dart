@@ -57,17 +57,16 @@ class FastCalendarState extends FastFormFieldState<DateTime> {
 }
 
 InputDecorator calendarBuilder(FormFieldState<DateTime> field) {
-  final state = field as FastCalendarState;
-  final widget = state.widget;
+  final widget = (field as FastCalendarState).widget;
 
   return InputDecorator(
-    decoration: state.decoration.copyWith(errorText: state.errorText),
+    decoration: field.decoration.copyWith(errorText: field.errorText),
     child: CalendarDatePicker(
       firstDate: widget.firstDate,
       initialCalendarMode: widget.initialCalendarMode,
-      initialDate: state.value ?? DateTime.now(),
+      initialDate: field.value ?? DateTime.now(),
       lastDate: widget.lastDate,
-      onDateChanged: state.didChange,
+      onDateChanged: field.didChange,
       selectableDayPredicate: widget.selectableDayPredicate,
     ),
   );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef FastSwitchTitleBuilder = Widget Function(FastSwitchState state);
+typedef FastSwitchTitleBuilder = Widget Function(FastSwitchState field);
 
 @immutable
 class FastSwitch extends FastFormField<bool> {
@@ -32,7 +32,7 @@ class FastSwitch extends FastFormField<bool> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? adaptiveSwitchBuilder,
+          builder: builder ?? switchBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
@@ -61,57 +61,53 @@ class FastSwitchState extends FastFormFieldState<bool> {
   FastSwitch get widget => super.widget as FastSwitch;
 }
 
-Text switchTitleBuilder(FastSwitchState state) {
+Text switchTitleBuilder(FastSwitchState field) {
   return Text(
-    state.widget.title!,
+    field.widget.title!,
     style: TextStyle(
       fontSize: 14.0,
-      color: state.value! ? Colors.black : Colors.grey,
+      color: field.value! ? Colors.black : Colors.grey,
     ),
   );
 }
 
-InputDecorator switchBuilder(FormFieldState<bool> field) {
-  final state = field as FastSwitchState;
-  final widget = state.widget;
-
+InputDecorator materialSwitchBuilder(FormFieldState<bool> field) {
+  final widget = (field as FastSwitchState).widget;
   final titleBuilder = widget.titleBuilder ?? switchTitleBuilder;
 
   return InputDecorator(
-    decoration: state.decoration.copyWith(errorText: state.errorText),
+    decoration: field.decoration.copyWith(errorText: field.errorText),
     child: SwitchListTile.adaptive(
       autofocus: widget.autofocus,
       contentPadding: widget.contentPadding,
-      onChanged: widget.enabled ? state.didChange : null,
-      selected: state.value!,
-      title: widget.title is String ? titleBuilder(state) : null,
-      value: state.value!,
+      onChanged: widget.enabled ? field.didChange : null,
+      selected: field.value!,
+      title: widget.title is String ? titleBuilder(field) : null,
+      value: field.value!,
     ),
   );
 }
 
 CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
-  final state = field as FastSwitchState;
-  final widget = state.widget;
+  final widget = (field as FastSwitchState).widget;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
     prefix: widget.label is String ? Text(widget.label!) : null,
-    helper: (widget.helperBuilder ?? helperBuilder)(state),
-    error: (widget.errorBuilder ?? errorBuilder)(state),
+    helper: (widget.helperBuilder ?? helperBuilder)(field),
+    error: (widget.errorBuilder ?? errorBuilder)(field),
     child: CupertinoSwitch(
-      onChanged: widget.enabled ? state.didChange : null,
-      value: state.value!,
+      onChanged: widget.enabled ? field.didChange : null,
+      value: field.value!,
     ),
   );
 }
 
-Widget adaptiveSwitchBuilder(FormFieldState<bool> field) {
-  final state = field as FastSwitchState;
-  FormFieldBuilder<bool> builder = switchBuilder;
+Widget switchBuilder(FormFieldState<bool> field) {
+  FormFieldBuilder<bool> builder = materialSwitchBuilder;
 
-  if (state.adaptive) {
-    final platform = Theme.of(state.context).platform;
+  if ((field as FastSwitchState).adaptive) {
+    final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoSwitchBuilder;
   }
 

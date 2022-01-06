@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../form_field.dart';
 
 typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
-    List<T> items, FastDropdownState<T> state);
+    List<T> items, FastDropdownState<T> field);
 
 @immutable
 class FastDropdown<T> extends FastFormField<T> {
@@ -63,16 +63,15 @@ class FastDropdownState<T> extends FastFormFieldState<T> {
 }
 
 List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
-    List<T> items, FastDropdownState<T> state) {
-  return items.map((item) {
-    return DropdownMenuItem<T>(value: item, child: Text(item.toString()));
-  }).toList();
+    List<T> items, FastDropdownState<T> field) {
+  return items
+      .map((item) =>
+          DropdownMenuItem<T>(value: item, child: Text(item.toString())))
+      .toList();
 }
 
 DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
-  final state = field as FastDropdownState<T>;
-  final widget = state.widget;
-
+  final widget = (field as FastDropdownState<T>).widget;
   final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
   void _onChanged(T? value) {
@@ -82,15 +81,15 @@ DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
   return DropdownButtonFormField<T>(
     autofocus: widget.autofocus,
     autovalidateMode: widget.autovalidateMode,
-    decoration: state.decoration,
+    decoration: field.decoration,
     dropdownColor: widget.dropdownColor,
     focusNode: widget.focusNode,
     hint: widget.hint,
-    items: itemsBuilder(widget.items, state),
+    items: itemsBuilder(widget.items, field),
     onChanged: widget.enabled ? _onChanged : null,
     onSaved: widget.onSaved,
     selectedItemBuilder: widget.selectedItemBuilder,
     validator: widget.validator,
-    value: state.value,
+    value: field.value,
   );
 }

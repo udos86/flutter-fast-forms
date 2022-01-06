@@ -6,7 +6,7 @@ typedef FastOptionsMatcher<O extends Object> = bool Function(
     TextEditingValue textEditingValue, O option);
 
 typedef FastAutocompleteFieldViewBuilder<O extends Object>
-    = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> state);
+    = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> field);
 
 @immutable
 class FastAutocomplete<O extends Object> extends FastFormField<String> {
@@ -78,28 +78,28 @@ bool _optionsMatcher<O extends Object>(TextEditingValue value, O option) {
 }
 
 AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(
-    Iterable<O> options, FastAutocompleteState<O> state) {
+    Iterable<O> options, FastAutocompleteState<O> field) {
   return (TextEditingValue value) {
     if (value.text.isEmpty) {
       return const Iterable.empty();
     }
-    final optionsMatcher = state.widget.optionsMatcher ?? _optionsMatcher;
+    final optionsMatcher = field.widget.optionsMatcher ?? _optionsMatcher;
     return options.where((O option) => optionsMatcher(value, option));
   };
 }
 
 AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
-    FastAutocompleteState<O> state) {
+    FastAutocompleteState<O> field) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
-    final widget = state.widget;
+    final widget = field.widget;
 
     return TextFormField(
       controller: textEditingController,
       enabled: widget.enabled,
       focusNode: focusNode,
-      decoration: state.decoration.copyWith(errorText: state.errorText),
-      onChanged: widget.enabled ? state.didChange : null,
+      decoration: field.decoration.copyWith(errorText: field.errorText),
+      onChanged: widget.enabled ? field.didChange : null,
       onFieldSubmitted: (String value) => onFieldSubmitted(),
       validator: widget.validator,
     );
@@ -108,23 +108,21 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
 
 Autocomplete autocompleteBuilder<O extends Object>(
     FormFieldState<String> field) {
-  final state = field as FastAutocompleteState<O>;
-  final widget = state.widget;
-
+  final widget = (field as FastAutocompleteState<O>).widget;
   final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
   final AutocompleteOptionsBuilder<O> optionsBuilder;
 
   if (widget.optionsBuilder != null) {
     optionsBuilder = widget.optionsBuilder!;
   } else if (widget.options != null) {
-    optionsBuilder = _optionsBuilder(widget.options!, state);
+    optionsBuilder = _optionsBuilder(widget.options!, field);
   } else {
     throw 'Either optionsBuilder or options must not be null';
   }
 
   return Autocomplete<O>(
     displayStringForOption: widget.displayStringForOption,
-    fieldViewBuilder: fieldViewBuilder(state),
+    fieldViewBuilder: fieldViewBuilder(field),
     initialValue: widget._initialValue,
     onSelected: widget.onSelected,
     optionsBuilder: optionsBuilder,

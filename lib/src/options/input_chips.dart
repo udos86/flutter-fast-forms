@@ -12,6 +12,9 @@ typedef FastInputChipBuilder = Widget Function(
 typedef FastInputChipTextFieldViewBuilder = Widget Function(
     VoidCallback onFieldSubmitted, FastInputChipsState field);
 
+typedef FastInputWillAddChip = bool Function(
+    String value, FastInputChipsState field);
+
 @immutable
 class FastInputChips extends FastFormField<List<String>> {
   FastInputChips({
@@ -51,6 +54,7 @@ class FastInputChips extends FastFormField<List<String>> {
     this.textFieldViewMinWidth = 80.0,
     this.textFieldViewValidator,
     this.verticalDirection = VerticalDirection.down,
+    this.willAddChip,
   }) : super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -88,6 +92,7 @@ class FastInputChips extends FastFormField<List<String>> {
   final FormFieldValidator<String>? textFieldViewValidator;
   final double textFieldViewMinWidth;
   final VerticalDirection verticalDirection;
+  final FastInputWillAddChip? willAddChip;
 
   @override
   FastInputChipsState createState() => FastInputChipsState();
@@ -124,17 +129,6 @@ Widget _textFieldViewBuilder(FastInputChipsState field,
       maxLines: 1,
       onFieldSubmitted: onFieldSubmitted,
       validator: field.widget.textFieldViewValidator,
-    ),
-  );
-}
-
-Widget _feedbackBuilder(String chip, FastInputChipsState _field) {
-  return Material(
-    type: MaterialType.transparency,
-    child: InputChip(
-      isEnabled: true,
-      label: Text(chip),
-      onDeleted: () {},
     ),
   );
 }
@@ -198,7 +192,12 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
         field.textFocusNode.unfocus();
       } else {
         widget.onFieldSubmitted();
-        _addChip(value, field);
+        final willAddChip = field.widget.willAddChip ?? _willAddChip;
+        if (willAddChip(value, field)) {
+          field.didChange([...field.value!, value]);
+          field.textEditingController.clear();
+          field.textFocusNode.requestFocus();
+        }
       }
     }
 
@@ -226,6 +225,13 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
   }
 }
 
+AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
+  return (BuildContext context, TextEditingController textEditingController,
+      FocusNode focusNode, VoidCallback onFieldSubmitted) {
+    return FastInputChipsView(field: field, onFieldSubmitted: onFieldSubmitted);
+  };
+}
+
 bool _optionsMatcher(TextEditingValue value, String option) {
   return option.toLowerCase().contains(value.text.toLowerCase());
 }
@@ -239,21 +245,6 @@ AutocompleteOptionsBuilder<String> _optionsBuilder(
     final optionsMatcher = field.widget.optionsMatcher ?? _optionsMatcher;
     return options.where((option) => optionsMatcher(value, option));
   };
-}
-
-AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
-  return (BuildContext context, TextEditingController textEditingController,
-      FocusNode focusNode, VoidCallback onFieldSubmitted) {
-    return FastInputChipsView(field: field, onFieldSubmitted: onFieldSubmitted);
-  };
-}
-
-void _addChip(String? chip, FastInputChipsState field) {
-  if (chip != null && !field.value!.contains(chip)) {
-    field.didChange([...field.value!, chip]);
-    field.textEditingController.clear();
-    field.textFocusNode.requestFocus();
-  }
 }
 
 AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
@@ -298,26 +289,37 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
   };
 }
 
+bool _willAddChip(String? chip, FastInputChipsState field) {
+  return chip != null && !field.value!.contains(chip);
+}
+
 Widget inputChipsBuilder(FormFieldState<List<String>> field) {
-  final _field = field as FastInputChipsState;
-  final widget = _field.widget;
+  field as FastInputChipsState;
+  final widget = field.widget;
 
   return GestureDetector(
-    onTap: widget.enabled ? () => _field.textFocusNode.requestFocus() : null,
+    onTap: widget.enabled ? () => field.textFocusNode.requestFocus() : null,
     child: InputDecorator(
-      decoration: _field.decoration.copyWith(
+      decoration: field.decoration.copyWith(
         contentPadding: widget.contentPadding,
-        errorText: _field.errorText,
+        errorText: field.errorText,
       ),
       child: RawAutocomplete<String>(
         displayStringForOption: widget.displayStringForOption,
-        fieldViewBuilder: _fieldViewBuilder(_field),
-        focusNode: _field.textFocusNode,
-        onSelected: (String? value) => _addChip(value, _field),
-        optionsBuilder: _optionsBuilder(widget.options, _field),
+        fieldViewBuilder: _fieldViewBuilder(field),
+        focusNode: field.textFocusNode,
+        onSelected: (value) {
+          final willAddChip = field.widget.willAddChip ?? _willAddChip;
+          if (willAddChip(value, field)) {
+            field.didChange([...field.value!, value]);
+            field.textEditingController.clear();
+            field.textFocusNode.requestFocus();
+          }
+        },
+        optionsBuilder: _optionsBuilder(widget.options, field),
         optionsViewBuilder:
-            widget.optionsViewBuilder ?? _optionsViewBuilder(_field),
-        textEditingController: _field.textEditingController,
+            widget.optionsViewBuilder ?? _optionsViewBuilder(field),
+        textEditingController: field.textEditingController,
       ),
     ),
   );
@@ -325,6 +327,17 @@ Widget inputChipsBuilder(FormFieldState<List<String>> field) {
 
 typedef _ChipDragTargetMove<T> = void Function(
     DragTargetDetails<T> details, String chip);
+
+Widget _feedbackBuilder(String chip, FastInputChipsState _field) {
+  return Material(
+    type: MaterialType.transparency,
+    child: InputChip(
+      isEnabled: true,
+      label: Text(chip),
+      onDeleted: () {},
+    ),
+  );
+}
 
 class _FastDraggableInputChip extends StatefulWidget {
   const _FastDraggableInputChip({

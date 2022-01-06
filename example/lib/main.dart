@@ -215,20 +215,20 @@ class FormPage extends StatelessWidget {
             helperText: 'A Slider with prefix and suffix widgets',
             min: 0,
             max: 10,
-            prefixBuilder: (state) {
-              final enabled = state.widget.enabled;
+            prefixBuilder: (field) {
+              final enabled = field.widget.enabled;
               return IconButton(
                 icon: const Icon(Icons.volume_off),
                 onPressed:
-                    enabled ? () => state.didChange(state.widget.min) : null,
+                    enabled ? () => field.didChange(field.widget.min) : null,
               );
             },
-            suffixBuilder: (state) {
-              final enabled = state.widget.enabled;
+            suffixBuilder: (field) {
+              final enabled = field.widget.enabled;
               return IconButton(
                 icon: const Icon(Icons.volume_up),
                 onPressed:
-                    enabled ? () => state.didChange(state.widget.max) : null,
+                    enabled ? () => field.didChange(field.widget.max) : null,
               );
             },
             validator: (value) => value! > 8 ? 'Volume is too high' : null,
@@ -308,25 +308,25 @@ class FormPage extends StatelessWidget {
             name: 'slider',
             min: 0,
             max: 10,
-            prefixBuilder: (state) {
+            prefixBuilder: (field) {
               return CupertinoButton(
                 padding: const EdgeInsets.only(left: 0),
                 child: const Icon(CupertinoIcons.volume_mute),
-                onPressed: state.widget.enabled
-                    ? () => state.didChange(state.widget.min)
+                onPressed: field.widget.enabled
+                    ? () => field.didChange(field.widget.min)
                     : null,
               );
             },
-            suffixBuilder: (state) {
+            suffixBuilder: (field) {
               return CupertinoButton(
                 padding: EdgeInsets.zero,
                 child: const Icon(CupertinoIcons.volume_up),
-                onPressed: state.widget.enabled
-                    ? () => state.didChange(state.widget.max)
+                onPressed: field.widget.enabled
+                    ? () => field.didChange(field.widget.max)
                     : null,
               );
             },
-            helperBuilder: (FormFieldState<double> _state) {
+            helperBuilder: (FormFieldState<double> _field) {
               return const DefaultTextStyle(
                 style: TextStyle(
                   color: CupertinoColors.black,

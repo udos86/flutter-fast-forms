@@ -42,12 +42,12 @@ class FastFormState extends State<FastForm> {
     });
   }
 
-  void register(FastFormFieldState state) {
-    _fields.add(state);
+  void register(FastFormFieldState field) {
+    _fields.add(field);
   }
 
-  void unregister(FastFormFieldState state) {
-    _fields.remove(state);
+  void unregister(FastFormFieldState field) {
+    _fields.remove(field);
   }
 
   void updateValues() {

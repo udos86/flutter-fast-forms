@@ -4,16 +4,16 @@ import 'package:intl/intl.dart';
 
 import '../form_field.dart';
 
-typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState state);
+typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState field);
 
 typedef FastDatePickerModalPopupBuilder = Widget Function(
-    BuildContext context, FastDatePickerState state);
+    BuildContext context, FastDatePickerState field);
 
 typedef ShowFastDatePicker = Future<DateTime?> Function(
     DatePickerEntryMode entryMode);
 
 typedef FastDatePickerIconButtonBuilder = IconButton Function(
-    FastDatePickerState state, ShowFastDatePicker show);
+    FastDatePickerState field, ShowFastDatePicker show);
 
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
@@ -69,7 +69,7 @@ class FastDatePicker extends FastFormField<DateTime> {
           adaptive: adaptive,
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
-          builder: builder ?? adaptiveDatePickerBuilder,
+          builder: builder ?? datePickerBuilder,
           contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
@@ -120,8 +120,8 @@ class FastDatePicker extends FastFormField<DateTime> {
   FastDatePickerState createState() => FastDatePickerState();
 }
 
-DateFormat _datePickerFormat(FastDatePickerState state) {
-  final widget = state.widget;
+DateFormat _datePickerFormat(FastDatePickerState field) {
+  final widget = field.widget;
   final locale = widget.locale;
 
   switch (widget.mode) {
@@ -142,22 +142,22 @@ class FastDatePickerState extends FastFormFieldState<DateTime> {
   FastDatePicker get widget => super.widget as FastDatePicker;
 }
 
-Text datePickerTextBuilder(FastDatePickerState state) {
-  final theme = Theme.of(state.context);
+Text datePickerTextBuilder(FastDatePickerState field) {
+  final theme = Theme.of(field.context);
   final format =
-      state.widget.dateFormat?.format ?? _datePickerFormat(state).format;
-  final value = state.value;
+      field.widget.dateFormat?.format ?? _datePickerFormat(field).format;
+  final value = field.value;
 
   return Text(
-    value != null ? format(state.value!) : '',
+    value != null ? format(field.value!) : '',
     style: theme.textTheme.subtitle1,
     textAlign: TextAlign.left,
   );
 }
 
 IconButton datePickerIconButtonBuilder(
-    FastDatePickerState state, ShowFastDatePicker show) {
-  final widget = state.widget;
+    FastDatePickerState field, ShowFastDatePicker show) {
+  final widget = field.widget;
 
   return IconButton(
     alignment: Alignment.center,
@@ -167,9 +167,9 @@ IconButton datePickerIconButtonBuilder(
 }
 
 Container cupertinoDatePickerModalPopupBuilder(
-    BuildContext context, FastDatePickerState state) {
-  final widget = state.widget;
-  DateTime? modalValue = state.value;
+    BuildContext context, FastDatePickerState field) {
+  final widget = field.widget;
+  DateTime? modalValue = field.value;
 
   return Container(
     color: CupertinoColors.systemBackground,
@@ -206,7 +206,7 @@ Container cupertinoDatePickerModalPopupBuilder(
           padding: const EdgeInsets.only(top: 6.0),
           height: widget.height,
           child: CupertinoDatePicker(
-            initialDateTime: state.value,
+            initialDateTime: field.value,
             maximumDate: widget.lastDate,
             maximumYear: widget.maximumYear,
             minimumDate: widget.firstDate,
@@ -222,11 +222,62 @@ Container cupertinoDatePickerModalPopupBuilder(
   );
 }
 
-CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
-  final state = field as FastDatePickerState;
-  final widget = state.widget;
+InkWell materialDatePickerBuilder(FormFieldState<DateTime> field) {
+  final widget = (field as FastDatePickerState).widget;
 
-  final CupertinoThemeData themeData = CupertinoTheme.of(state.context);
+  Future<DateTime?> show(DatePickerEntryMode entryMode) {
+    return showDatePicker(
+      cancelText: widget.cancelText,
+      confirmText: widget.confirmText,
+      context: field.context,
+      currentDate: widget.currentDate,
+      errorFormatText: widget.errorFormatText,
+      errorInvalidText: widget.errorInvalidText,
+      fieldHintText: widget.fieldHintText,
+      fieldLabelText: widget.fieldLabelText,
+      helpText: widget.helpText,
+      initialDatePickerMode: widget.initialDatePickerMode,
+      initialEntryMode: entryMode,
+      initialDate: widget.initialValue ?? DateTime.now(),
+      firstDate: widget.firstDate,
+      lastDate: widget.lastDate,
+      locale: widget.locale,
+      routeSettings: widget.routeSettings,
+      selectableDayPredicate: widget.selectableDayPredicate,
+      useRootNavigator: widget.useRootNavigator,
+    ).then((value) {
+      if (value != null) field.didChange(value);
+      return value;
+    });
+  }
+
+  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
+  final iconButtonBuilder =
+      widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
+
+  return InkWell(
+    onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
+    child: InputDecorator(
+      decoration: field.decoration.copyWith(
+        contentPadding: widget.contentPadding,
+        errorText: field.errorText,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Expanded(
+            child: textBuilder(field),
+          ),
+          iconButtonBuilder(field, show),
+        ],
+      ),
+    ),
+  );
+}
+
+CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
+  final widget = (field as FastDatePickerState).widget;
+  final CupertinoThemeData themeData = CupertinoTheme.of(field.context);
   final TextStyle textStyle = themeData.textTheme.textStyle;
   final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
 
@@ -234,14 +285,14 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
     alignment: AlignmentDirectional.centerEnd,
     child: Padding(
       padding: const EdgeInsets.all(6.0),
-      child: textBuilder(state),
+      child: textBuilder(field),
     ),
   );
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    helper: (widget.helperBuilder ?? helperBuilder)(state),
-    error: (widget.errorBuilder ?? errorBuilder)(state),
+    helper: (widget.helperBuilder ?? helperBuilder)(field),
+    error: (widget.errorBuilder ?? errorBuilder)(field),
     child: Column(
       children: [
         Row(
@@ -259,12 +310,12 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
                       child: text,
                       onPressed: () {
                         showCupertinoModalPopup<DateTime>(
-                          context: state.context,
+                          context: field.context,
                           builder: (BuildContext context) =>
                               cupertinoDatePickerModalPopupBuilder(
-                                  context, state),
+                                  context, field),
                         ).then((DateTime? value) {
-                          if (value != null) state.didChange(value);
+                          if (value != null) field.didChange(value);
                         });
                       },
                     )
@@ -283,7 +334,7 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
               minimumYear: widget.minimumYear,
               minuteInterval: widget.minuteInterval,
               mode: widget.mode,
-              onDateTimeChanged: state.didChange,
+              onDateTimeChanged: field.didChange,
               use24hFormat: widget.use24hFormat,
             ),
           ),
@@ -292,66 +343,11 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
   );
 }
 
-InkWell datePickerBuilder(FormFieldState<DateTime> field) {
-  final state = field as FastDatePickerState;
-  final widget = state.widget;
+Widget datePickerBuilder(FormFieldState<DateTime> field) {
+  FormFieldBuilder<DateTime> builder = materialDatePickerBuilder;
 
-  Future<DateTime?> show(DatePickerEntryMode entryMode) {
-    return showDatePicker(
-      cancelText: widget.cancelText,
-      confirmText: widget.confirmText,
-      context: state.context,
-      currentDate: widget.currentDate,
-      errorFormatText: widget.errorFormatText,
-      errorInvalidText: widget.errorInvalidText,
-      fieldHintText: widget.fieldHintText,
-      fieldLabelText: widget.fieldLabelText,
-      helpText: widget.helpText,
-      initialDatePickerMode: widget.initialDatePickerMode,
-      initialEntryMode: entryMode,
-      initialDate: widget.initialValue ?? DateTime.now(),
-      firstDate: widget.firstDate,
-      lastDate: widget.lastDate,
-      locale: widget.locale,
-      routeSettings: widget.routeSettings,
-      selectableDayPredicate: widget.selectableDayPredicate,
-      useRootNavigator: widget.useRootNavigator,
-    ).then((value) {
-      if (value != null) state.didChange(value);
-      return value;
-    });
-  }
-
-  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
-  final iconButtonBuilder =
-      widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
-
-  return InkWell(
-    onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
-    child: InputDecorator(
-      decoration: state.decoration.copyWith(
-        contentPadding: widget.contentPadding,
-        errorText: state.errorText,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Expanded(
-            child: textBuilder(state),
-          ),
-          iconButtonBuilder(state, show),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget adaptiveDatePickerBuilder(FormFieldState<DateTime> field) {
-  final state = field as FastDatePickerState;
-  FormFieldBuilder<DateTime> builder = datePickerBuilder;
-
-  if (state.adaptive) {
-    final platform = Theme.of(state.context).platform;
+  if ((field as FastDatePickerState).adaptive) {
+    final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoDatePickerBuilder;
   }
 
