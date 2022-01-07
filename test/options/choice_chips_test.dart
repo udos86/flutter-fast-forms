@@ -8,10 +8,10 @@ void main() {
   late List<FastChoiceChip> chips;
 
   setUp(() {
-    chips = const [
-      FastChoiceChip(label: Text('chip1')),
-      FastChoiceChip(label: Text('chip2')),
-      FastChoiceChip(label: Text('chip3'))
+    chips = [
+      FastChoiceChip(value: 'chip1'),
+      FastChoiceChip(value: 'chip2'),
+      FastChoiceChip(value: 'chip3'),
     ];
   });
 
@@ -44,12 +44,12 @@ void main() {
         tester.state(find.byType(FastChoiceChips)) as FastChoiceChipsState;
 
     expect(state.value, state.widget.initialValue);
-    expect(state.value, <FastChoiceChip>{});
+    expect(state.value, <String>{});
 
     await tester.tap(find.byType(ChoiceChip).first);
     await tester.pumpAndSettle();
 
-    expect(state.value, {chips.first});
+    expect(state.value, {chips.first.value});
   });
 
   testWidgets('validates FastChoiceChips', (WidgetTester tester) async {

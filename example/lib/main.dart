@@ -152,19 +152,19 @@ class FormPage extends StatelessWidget {
             label: 'Choice Chips',
             alignment: WrapAlignment.center,
             chipPadding: const EdgeInsets.all(8.0),
-            chips: const [
+            chips: [
               FastChoiceChip(
-                label: Text('Flutter'),
-                avatar: FlutterLogo(),
+                avatar: const FlutterLogo(),
                 selected: true,
+                value: 'Flutter',
               ),
               FastChoiceChip(
-                label: Text('Android'),
-                avatar: Icon(Icons.android_sharp, size: 16.0),
+                avatar: const Icon(Icons.android_sharp, size: 16.0),
+                value: 'Android',
               ),
               FastChoiceChip(
-                label: Text('Chrome OS'),
                 selected: true,
+                value: 'Chrome OS',
               ),
             ],
             validator: (value) => value == null || value.isEmpty

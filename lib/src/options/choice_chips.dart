@@ -8,7 +8,8 @@ class FastChoiceChip
         ChipAttributes,
         SelectableChipAttributes,
         DisabledChipAttributes {
-  const FastChoiceChip({
+  FastChoiceChip({
+    Widget? label,
     this.autofocus = false,
     this.avatar,
     this.avatarBorder = const CircleBorder(),
@@ -16,8 +17,8 @@ class FastChoiceChip
     this.clipBehavior = Clip.none,
     this.disabledColor,
     this.elevation,
+    this.enabled = true,
     this.focusNode,
-    required this.label,
     this.labelStyle,
     this.labelPadding,
     this.materialTapTargetSize,
@@ -31,8 +32,9 @@ class FastChoiceChip
     this.shape,
     this.side,
     this.tooltip,
+    required this.value,
     this.visualDensity,
-  });
+  }) : label = label is Widget ? label : Text(value);
 
   @override
   final bool autofocus;
@@ -81,31 +83,34 @@ class FastChoiceChip
   @override
   final VisualDensity? visualDensity;
 
+  final bool enabled;
+  final String value;
+
   @override
-  bool get isEnabled => onSelected != null;
+  bool get isEnabled => enabled;
 }
 
 typedef FastChoiceChipBuilder = Widget Function(
     FastChoiceChip chip, FastChoiceChipsState field);
 
 @immutable
-class FastChoiceChips extends FastFormField<Set<FastChoiceChip>> {
+class FastChoiceChips extends FastFormField<Set<String>> {
   FastChoiceChips({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<Set<FastChoiceChip>>? builder,
+    FormFieldBuilder<Set<String>>? builder,
     EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
-    Set<FastChoiceChip>? initialValue,
+    Set<String>? initialValue,
     Key? key,
     String? label,
     required String name,
-    ValueChanged<Set<FastChoiceChip>>? onChanged,
+    ValueChanged<Set<String>>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter? onSaved,
-    FormFieldValidator<Set<FastChoiceChip>>? validator,
+    FormFieldValidator<Set<String>>? validator,
     this.alignment = WrapAlignment.start,
     this.chipBuilder,
     this.chipPadding,
@@ -125,8 +130,11 @@ class FastChoiceChips extends FastFormField<Set<FastChoiceChip>> {
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
-          initialValue:
-              initialValue ?? chips.where((chip) => chip.selected).toSet(),
+          initialValue: initialValue ??
+              chips
+                  .where((chip) => chip.selected)
+                  .map((chip) => chip.value)
+                  .toSet(),
           key: key,
           label: label,
           name: name,
@@ -153,7 +161,7 @@ class FastChoiceChips extends FastFormField<Set<FastChoiceChip>> {
   FastChoiceChipsState createState() => FastChoiceChipsState();
 }
 
-class FastChoiceChipsState extends FastFormFieldState<Set<FastChoiceChip>> {
+class FastChoiceChipsState extends FastFormFieldState<Set<String>> {
   @override
   FastChoiceChips get widget => super.widget as FastChoiceChips;
 }
@@ -174,7 +182,7 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     materialTapTargetSize: chip.materialTapTargetSize,
     padding: chip.padding ?? field.widget.chipPadding,
     pressElevation: chip.pressElevation,
-    selected: field.value!.contains(chip),
+    selected: field.value!.contains(chip.value),
     selectedColor: chip.selectedColor,
     selectedShadowColor: chip.selectedShadowColor,
     shadowColor: chip.shadowColor,
@@ -182,16 +190,20 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     side: chip.side,
     tooltip: chip.tooltip,
     visualDensity: chip.visualDensity,
-    onSelected: (selected) {
-      if (chip.onSelected != null) {
-        chip.onSelected!(selected);
-      }
+    onSelected: chip.isEnabled
+        ? (selected) {
+            if (chip.onSelected != null) {
+              chip.onSelected!(selected);
+            }
 
-      final value = field.value ?? <FastChoiceChip>{};
-      final newValue = selected ? {...value, chip} : ({...value}..remove(chip));
+            final value = field.value ?? <String>{};
+            final newValue = selected
+                ? {...value, chip.value}
+                : ({...value}..remove(chip.value));
 
-      field.didChange(newValue);
-    },
+            field.didChange(newValue);
+          }
+        : null,
   );
 }
 
