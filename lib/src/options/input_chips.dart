@@ -40,6 +40,7 @@ class FastInputChips extends FastFormField<List<String>> {
     // this.direction = Axis.horizontal,
     this.displayStringForOption = RawAutocomplete.defaultStringForOption,
     this.fieldViewBuilder,
+    this.multiLine = true,
     this.onSelected,
     this.options = const [],
     this.optionsBuilder,
@@ -78,6 +79,7 @@ class FastInputChips extends FastFormField<List<String>> {
   final WrapCrossAlignment crossAxisAlignment;
   final AutocompleteOptionToString<String> displayStringForOption;
   final FastAutocompleteFieldViewBuilder<String>? fieldViewBuilder;
+  final bool multiLine;
   final AutocompleteOnSelected<String>? onSelected;
   final Iterable<String> options;
   final AutocompleteOptionsBuilder<String>? optionsBuilder;
@@ -117,13 +119,19 @@ Widget _chipBuilder(String chip, FastInputChipsState field) {
 Widget _textFieldViewBuilder(FastInputChipsState field,
     Function(String) onFieldSubmitted, double freeSpace) {
   final minWidth = field.widget.textFieldViewMinWidth;
-  final width = minWidth > freeSpace ? double.infinity : freeSpace;
+  late double width;
+
+  if (field.widget.multiLine) {
+    width = minWidth > freeSpace ? double.infinity : freeSpace;
+  } else {
+    width = freeSpace > minWidth ? freeSpace : minWidth;
+  }
 
   return SizedBox(
     width: width,
     child: TextFormField(
       controller: field.textEditingController,
-      decoration: const InputDecoration(border: InputBorder.none),
+      //decoration: const InputDecoration(border: InputBorder.none),
       enabled: field.widget.enabled,
       focusNode: field.textFocusNode,
       maxLines: 1,
@@ -148,25 +156,45 @@ class FastInputChipsView extends StatefulWidget {
 }
 
 class FastInputChipsViewState extends State<FastInputChipsView> {
-  final wrapKey = GlobalKey();
+  double _getFreeSingleLineSpace(BuildContext context) {
+    final wrapper =
+        context.findAncestorRenderObjectOfType<RenderConstrainedBox>();
+    final chipsParent =
+        context.findAncestorRenderObjectOfType<RenderListBody>();
 
-  RenderWrap get renderWrap =>
-      wrapKey.currentContext?.findRenderObject() as RenderWrap;
+    assert(wrapper != null && chipsParent != null);
 
-  double _getFreeSpace() {
-    final wrap = renderWrap;
-    final wrapWidth =
-        wrap.hasSize ? wrap.paintBounds.width : wrap.constraints.maxWidth;
-    final boxes = wrap.getChildrenAsList()..removeLast();
+    final maxWidth =
+        wrapper!.hasSize ? wrapper.size.width : wrapper.constraints.maxWidth;
+    final chipBoxes = chipsParent!.getChildrenAsList()..removeLast();
+
+    if (chipBoxes.isEmpty) return maxWidth;
+
+    final axisExtent = chipBoxes.fold<double>(0.0, (extent, box) {
+      return extent + box.paintBounds.width + widget.field.widget.spacing;
+    });
+
+    return (maxWidth - axisExtent).clamp(0.0, double.infinity).toDouble();
+  }
+
+  double _getFreeMultiLineSpace(BuildContext context) {
+    final wrapper = context.findAncestorRenderObjectOfType<RenderWrap>();
+    final boxesParent = wrapper;
+
+    assert(wrapper != null);
+
+    final maxWidth =
+        wrapper!.hasSize ? wrapper.size.width : wrapper.constraints.maxWidth;
+    final chipBoxes = boxesParent!.getChildrenAsList()..removeLast();
     final runs = <List<RenderBox>>[];
 
-    if (boxes.isEmpty) return wrapWidth;
+    if (chipBoxes.isEmpty) return maxWidth;
 
     double runExtent = 0.0;
 
-    for (final box in boxes) {
+    for (final box in chipBoxes) {
       final width = box.paintBounds.width + widget.field.widget.spacing;
-      final isRunStart = box == boxes.first || runExtent + width > wrapWidth;
+      final isRunStart = box == chipBoxes.first || runExtent + width > maxWidth;
 
       if (isRunStart) {
         runs.add([box]);
@@ -177,7 +205,7 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
       }
     }
 
-    return wrapWidth - runExtent;
+    return (maxWidth - runExtent).clamp(0.0, double.infinity).toDouble();
   }
 
   @override
@@ -200,9 +228,8 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
         }
       }
     }
-
+    /*
     return Wrap(
-      key: wrapKey,
       alignment: field.widget.alignment,
       clipBehavior: field.widget.clipBehavior,
       crossAxisAlignment: field.widget.crossAxisAlignment,
@@ -215,12 +242,31 @@ class FastInputChipsViewState extends State<FastInputChipsView> {
       children: [
         for (final chip in field.value!) chipBuilder(chip, field),
         LayoutBuilder(
-          builder: (_context, _constraints) {
-            final freeSpace = _getFreeSpace();
+          builder: (context, _constraints) {
+            final freeSpace = _getFreeMultiLineSpace(context);
             return textFieldViewBuilder(field, onFieldSubmitted, freeSpace);
           },
         ),
       ],
+    );
+    */
+    return SizedBox(
+      height: 48.0,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ListBody(
+          mainAxis: Axis.horizontal,
+          children: [
+            for (final chip in field.value!) chipBuilder(chip, field),
+            LayoutBuilder(
+              builder: (context, _constraints) {
+                final freeSpace = _getFreeSingleLineSpace(context);
+                return textFieldViewBuilder(field, onFieldSubmitted, freeSpace);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

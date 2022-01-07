@@ -94,23 +94,23 @@ typedef FastChoiceChipBuilder = Widget Function(
     FastChoiceChip chip, FastChoiceChipsState field);
 
 @immutable
-class FastChoiceChips extends FastFormField<Set<String>> {
+class FastChoiceChips extends FastFormField<List<String>> {
   FastChoiceChips({
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<Set<String>>? builder,
+    FormFieldBuilder<List<String>>? builder,
     EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
-    Set<String>? initialValue,
+    List<String>? initialValue,
     Key? key,
     String? label,
     required String name,
-    ValueChanged<Set<String>>? onChanged,
+    ValueChanged<List<String>>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter? onSaved,
-    FormFieldValidator<Set<String>>? validator,
+    FormFieldValidator<List<String>>? validator,
     this.alignment = WrapAlignment.start,
     this.chipBuilder,
     this.chipPadding,
@@ -134,7 +134,7 @@ class FastChoiceChips extends FastFormField<Set<String>> {
               chips
                   .where((chip) => chip.selected)
                   .map((chip) => chip.value)
-                  .toSet(),
+                  .toList(),
           key: key,
           label: label,
           name: name,
@@ -161,12 +161,26 @@ class FastChoiceChips extends FastFormField<Set<String>> {
   FastChoiceChipsState createState() => FastChoiceChipsState();
 }
 
-class FastChoiceChipsState extends FastFormFieldState<Set<String>> {
+class FastChoiceChipsState extends FastFormFieldState<List<String>> {
   @override
   FastChoiceChips get widget => super.widget as FastChoiceChips;
 }
 
 ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
+  void onSelected(selected) {
+    if (chip.onSelected != null) {
+      chip.onSelected!(selected);
+    }
+
+    final value = field.value is List ? [...field.value!] : <String>[];
+    if (selected) {
+      value.add(chip.value);
+    } else {
+      value.remove(chip.value);
+    }
+    field.didChange(value);
+  }
+
   return ChoiceChip(
     autofocus: chip.autofocus,
     avatar: chip.avatar,
@@ -190,20 +204,7 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     side: chip.side,
     tooltip: chip.tooltip,
     visualDensity: chip.visualDensity,
-    onSelected: chip.isEnabled
-        ? (selected) {
-            if (chip.onSelected != null) {
-              chip.onSelected!(selected);
-            }
-
-            final value = field.value ?? <String>{};
-            final newValue = selected
-                ? {...value, chip.value}
-                : ({...value}..remove(chip.value));
-
-            field.didChange(newValue);
-          }
-        : null,
+    onSelected: chip.isEnabled ? onSelected : null,
   );
 }
 

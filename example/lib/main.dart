@@ -137,6 +137,7 @@ class FormPage extends StatelessWidget {
           FastInputChips(
             name: 'input_chips',
             label: 'Input Chips',
+            multiLine: false,
             options: const ['Angular', 'React', 'Vue', 'Svelte', 'Flutter'],
             initialValue: const [
               'HTML',
