@@ -4,9 +4,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import 'custom_form_field.dart';
 
-void main() {
-  runApp(const ExampleApp());
-}
+void main() => runApp(const ExampleApp());
 
 class ExampleApp extends StatelessWidget {
   const ExampleApp({Key? key}) : super(key: key);

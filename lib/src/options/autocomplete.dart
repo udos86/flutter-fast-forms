@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../form_field.dart';
 
-typedef FastOptionsMatcher<O extends Object> = bool Function(
-    TextEditingValue textEditingValue, O option);
-
 typedef FastAutocompleteFieldViewBuilder<O extends Object>
     = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> field);
+
+typedef FastAutocompleteWillAddOption<O extends Object> = bool Function(
+    TextEditingValue textEditingValue, O option);
 
 @immutable
 class FastAutocomplete<O extends Object> extends FastFormField<String> {
@@ -31,9 +31,9 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     this.onSelected,
     this.options,
     this.optionsBuilder,
-    this.optionsMatcher,
     this.optionsMaxHeight = 200.00,
     this.optionsViewBuilder,
+    this.willAddOption,
   })  : assert(options != null || optionsBuilder != null),
         _initialValue = initialValue,
         super(
@@ -59,9 +59,9 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
   final AutocompleteOnSelected<O>? onSelected;
   final Iterable<O>? options;
   final AutocompleteOptionsBuilder<O>? optionsBuilder;
-  final FastOptionsMatcher<O>? optionsMatcher;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<O>? optionsViewBuilder;
+  final FastAutocompleteWillAddOption<O>? willAddOption;
 
   @override
   FastAutocompleteState<O> createState() => FastAutocompleteState<O>();
@@ -73,7 +73,7 @@ class FastAutocompleteState<O extends Object>
   FastAutocomplete<O> get widget => super.widget as FastAutocomplete<O>;
 }
 
-bool _optionsMatcher<O extends Object>(TextEditingValue value, O option) {
+bool _willAddOption<O extends Object>(TextEditingValue value, O option) {
   return option.toString().toLowerCase().contains(value.text.toLowerCase());
 }
 
@@ -83,8 +83,8 @@ AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(
     if (value.text.isEmpty) {
       return const Iterable.empty();
     }
-    final optionsMatcher = field.widget.optionsMatcher ?? _optionsMatcher;
-    return options.where((O option) => optionsMatcher(value, option));
+    final willAddOption = field.widget.willAddOption ?? _willAddOption;
+    return options.where((O option) => willAddOption(value, option));
   };
 }
 

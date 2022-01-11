@@ -10,7 +10,8 @@ It adds these missing pieces to the Flutter SDK to make Flutter form development
 
 * `FormField<T>` wrappers for all [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) input widgets **according** to the already built-in [TextFormField](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [DropdownButtonFormField](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
 * **adaptive** and highly **customizable** `FastFormControl<T>` widgets with support of [**validation states**](https://github.com/flutter/flutter/issues/18885).
-* `FastForm` widget that provides current form field values `onChanged`
+* `FastForm` widget that passes current form field values to `onChanged`
+* `FastInputChips` widget that converts text input into chips as defined by [Material Design](https://material.io/components/chips#input-chips)  
 * common `FormFieldValidator<T>` functions
 
 ---
