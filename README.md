@@ -10,7 +10,8 @@ It adds these missing pieces to the Flutter SDK to make Flutter form development
 
 * `FormField<T>` wrappers for all [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) input widgets **according** to the already built-in [TextFormField](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [DropdownButtonFormField](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
 * **adaptive** and highly **customizable** `FastFormControl<T>` widgets with support of [**validation states**](https://github.com/flutter/flutter/issues/18885).
-* `FastForm` widget that provides current form field values `onChanged`
+* `FastForm` widget that passes current form field values to `onChanged`
+* `FastInputChips` widget that converts text input into chips as defined by [Material Design](https://material.io/components/chips#input-chips)  
 * common `FormFieldValidator<T>` functions
 
 ---
@@ -112,7 +113,7 @@ child: FastForm(
 |         `FastDatePicker`         |             `showDatePicker`            |                         `CupertinoDatePicker`                        |                               no                               |
 |       `FastDateRangePicker`      |          `showDateRangePicker`          |                                  no                                  |                               yes                              |
 |          `FastDropdown`          | `DropdownButtonFormField`<br>`<String>` |                                  no                                  |                               yes                              |
-|         `FastInputChips`         |               `InputChip`               |                                  no                                  |                               yes                              |
+|         `FastInputChips`         |       `Autocomplete` + `InputChip`      |                                  no                                  |                               yes                              |
 |         `FastRadioGroup`         |             `RadioListTile`             |                                  no                                  |                               yes                              |
 |         `FastRangeSlider`        |              `RangeSlider`              |                                  no                                  |                               yes                              |
 |      `FastSegmentedControl`      |                    no                   |                `SlidingSegmenteControl`<br>`<String>`                |                               no                               |
@@ -120,3 +121,95 @@ child: FastForm(
 |           `FastSwitch`           |             `SwitchListTile`            |                           `CupertinoSwitch`                          |                               no                               |
 |          `FastTextField`         |             `TextFormField`             |                      `CupertinoTextFormFieldRow`                     |                               no                               |
 |         `FastTimePicker`         |             `showTimePicker`            | no / use `FastDatePicker`<br>with <br>`CupertinoDatePickerMode.time` |                               yes                              |
+
+
+## Custom Form Field Widgets
+
+With Flutter Fast Forms transforming any custom widget into a form field goes smoothly.
+
+Let's assume a simple form field that provides a random integer whenever a button is pressed.
+
+1. Create a minimal `FastFormField<T>` and a corresponding `FastFormFieldState<T>`:
+```dart
+class MyCustomField extends FastFormField<int> {
+  const MyCustomField({
+    Key? key,
+    required String name,
+  }) : super(
+          builder: _myCustomFormFieldBuilder,
+          key: key,
+          name: name,
+        );
+
+  @override
+  MyCustomFieldState createState() => MyCustomFieldState();
+}
+
+class MyCustomFieldState extends FastFormFieldState<int> {
+  @override
+  FastSimpleCustomField get widget => super.widget as FastSimpleCustomField;
+}
+```
+
+2. Add optional parameters and pass them as you like:
+```dart
+class MyCustomField extends FastFormField<int> {
+  const MyCustomField({
+    InputDecoration? decoration,
+    String? helperText,
+    int? initialValue,
+    Key? key,
+    String? label,
+    required String name,
+    ValueChanged<int>? onChanged,
+    VoidCallback? onReset,
+    FormFieldSetter<int>? onSaved,
+    FormFieldValidator<int>? validator,
+  }) : super(
+          builder: _myCustomFormFieldBuilder,
+          helperText: helperText,
+          initialValue: initialValue,
+          key: key,
+          label: label,
+          name: name,
+          onChanged: onChanged,
+          onReset: onReset,
+          onSaved: onSaved,
+          validator: validator,
+        );
+
+  @override
+  MyCustomFieldState createState() => MyCustomFieldState();
+}
+
+class MyCustomFieldState extends FastFormFieldState<int> {
+  @override
+  FastSimpleCustomField get widget => super.widget as FastSimpleCustomField;
+}
+```
+
+3. Implement the required `FormFieldBuilder<T>`:
+```dart
+Widget _myCustomFormFieldBuilder(FormFieldState<int> field) {
+  final decoration = (field as FastSimpleCustomFieldState)
+      .decoration
+      .copyWith(errorText: field.errorText);
+
+  return InputDecorator(
+    decoration: decoration,
+    child: Row(
+      children: [
+        ElevatedButton(
+          child: const Text('Create random number'),
+          onPressed: () => field.didChange(Random().nextInt(1 << 32)),
+        ),
+        if (field.value is int)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Text(field.value!.toString()),
+          )
+      ],
+    ),
+  );
+}
+```
