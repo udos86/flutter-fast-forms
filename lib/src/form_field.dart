@@ -46,7 +46,7 @@ abstract class FastFormField<T> extends FormField<T> {
   final VoidCallback? onReset;
 }
 
-class FastFormFieldState<T> extends FormFieldState<T> {
+abstract class FastFormFieldState<T> extends FormFieldState<T> {
   bool focused = false;
   bool touched = false;
 
@@ -55,14 +55,17 @@ class FastFormFieldState<T> extends FormFieldState<T> {
   FastFormScope? formScope;
 
   @override
-  FastFormField<T> get widget => super.widget as FastFormField<T>;
+  @protected
+  FastFormField<T> get widget;
 
   bool get adaptive => widget.adaptive ?? formScope?.adaptive ?? false;
+
+  String get name => widget.name;
 
   InputDecoration get decoration {
     final theme = Theme.of(context);
     final decoration = widget.decoration ??
-        formScope?.inputDecorator.call(context, widget) ??
+        formScope?.inputDecorator(context, widget) ??
         const InputDecoration();
 
     return decoration.applyDefaults(theme.inputDecorationTheme);

@@ -40,7 +40,7 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
   final Widget? title;
 
   @override
-  FormFieldState<Map<String, bool>> createState() => FastCustomFieldState();
+  FastCustomFieldState createState() => FastCustomFieldState();
 }
 
 class FastCustomFieldState extends FastFormFieldState<Map<String, bool>> {

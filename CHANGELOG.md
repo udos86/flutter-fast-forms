@@ -1,8 +1,9 @@
-## [4.0.0] - 01/12/2022
+## [4.0.0] - 01/14/2022
 
 * `FastChoiceChips` now exposes its value as `List<String>`
 * `FastInputChips` can now scroll horizontally via `wrap` property
 * renames `optionsMatcher` property of `FastAutocomplete` to `willAddOption`
+* `FastFormFieldState<T>` is now `abstract` and its widget getter `@protected`
 
 ## [3.0.0] - 01/03/2022
 

@@ -37,18 +37,13 @@ class FastFormState extends State<FastForm> {
   final Set<FastFormFieldState<dynamic>> _fields = {};
 
   UnmodifiableMapView<String, dynamic> get values {
-    return UnmodifiableMapView({
-      for (final fieldState in _fields) fieldState.widget.name: fieldState.value
-    });
+    return UnmodifiableMapView(
+        {for (final fieldState in _fields) fieldState.name: fieldState.value});
   }
 
-  void register(FastFormFieldState field) {
-    _fields.add(field);
-  }
+  void register(FastFormFieldState field) => _fields.add(field);
 
-  void unregister(FastFormFieldState field) {
-    _fields.remove(field);
-  }
+  void unregister(FastFormFieldState field) => _fields.remove(field);
 
   void updateValues() {
     if (widget.onChanged != null) widget.onChanged!(values);
