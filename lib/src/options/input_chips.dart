@@ -190,15 +190,16 @@ class FastInputChipsView extends StatelessWidget {
     double runExtent = 0.0;
 
     for (final box in chips) {
-      final width = box.size.width + field.widget.spacing;
+      final width = box.size.width;
+      final extent = width + field.widget.spacing;
       final isRunStart = box == chips.first || runExtent + width > maxWidth;
 
       if (isRunStart) {
         runs.add([box]);
-        runExtent = width;
+        runExtent = extent;
       } else {
         runs.last.add(box);
-        runExtent = runExtent + width;
+        runExtent = runExtent + extent;
       }
     }
 
