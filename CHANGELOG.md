@@ -1,3 +1,7 @@
+## [4.0.1] - 01/18/2022
+
+* fixes bug in `FastInputChips` wrap run extent calculation
+
 ## [4.0.0] - 01/14/2022
 
 * `FastChoiceChips` now exposes its value as `List<String>`
