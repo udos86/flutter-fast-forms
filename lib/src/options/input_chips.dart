@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form_field.dart';
 
-import 'autocomplete.dart';
+/// Utility class for safely integrating the zero-width unicode character in
+/// editable text in order to detect delete actions as proposed by Matt Carroll.
+/// see https://medium.com/super-declarative/why-you-cant-detect-a-delete-action-in-an-empty-flutter-text-field-3cf53e47b631
+abstract class Zwsp {
+  static const raw = '\u200b';
+
+  static String strip(String text) => text.replaceAll(raw, '');
+
+  static TextEditingValue value() {
+    const selection = TextSelection.collapsed(offset: raw.length);
+    return const TextEditingValue(text: raw, selection: selection);
+  }
+}
 
 typedef FastInputChipBuilder = Widget Function(
     String chip, FastInputChipsState field);
@@ -16,6 +29,9 @@ typedef FastInputChipTextFieldViewBuilder = Widget Function(
     FastInputChipsState field,
     double freeSpace,
     void Function(String) onFieldSubmitted);
+
+typedef FastInputChipsWillDisplayOption = bool Function(
+    String text, String option, FastInputChipsState field);
 
 typedef FastInputWillAddChip = bool Function(
     String value, FastInputChipsState field);
@@ -47,7 +63,6 @@ class FastInputChips extends FastFormField<List<String>> {
     this.onSelected,
     this.options = const [],
     this.optionsBuilder,
-    this.optionsMatcher,
     this.optionsMaxHeight = 200.0,
     this.optionsViewBuilder,
     this.runAlignment = WrapAlignment.start,
@@ -59,6 +74,7 @@ class FastInputChips extends FastFormField<List<String>> {
     this.textFieldViewValidator,
     this.verticalDirection = VerticalDirection.down,
     this.willAddChip,
+    this.willDisplayOption,
     this.wrap = true,
   }) : super(
           autofocus: autofocus,
@@ -86,7 +102,6 @@ class FastInputChips extends FastFormField<List<String>> {
   final AutocompleteOnSelected<String>? onSelected;
   final Iterable<String> options;
   final AutocompleteOptionsBuilder<String>? optionsBuilder;
-  final FastAutocompleteWillAddOption<String>? optionsMatcher;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<String>? optionsViewBuilder;
   final WrapAlignment runAlignment;
@@ -98,6 +113,7 @@ class FastInputChips extends FastFormField<List<String>> {
   final double textFieldViewMinWidth;
   final VerticalDirection verticalDirection;
   final FastInputWillAddChip? willAddChip;
+  final FastInputChipsWillDisplayOption? willDisplayOption;
   final bool wrap;
 
   @override
@@ -106,11 +122,32 @@ class FastInputChips extends FastFormField<List<String>> {
 
 class FastInputChipsState extends FastFormFieldState<List<String>> {
   final scrollController = ScrollController();
-  final textEditingController = TextEditingController();
+  final textEditingController = TextEditingController(text: Zwsp.raw);
   final textFocusNode = FocusNode();
 
   @override
   FastInputChips get widget => super.widget as FastInputChips;
+
+  @override
+  void initState() {
+    super.initState();
+    textEditingController.addListener(_onTextChanged);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+    textEditingController.dispose();
+    textFocusNode.dispose();
+  }
+
+  void _onTextChanged() {
+    if (value!.isNotEmpty && textEditingController.value.text.isEmpty) {
+      didChange([...value!]..removeLast());
+      textEditingController.value = Zwsp.value();
+    }
+  }
 }
 
 Widget _chipBuilder(String chipValue, FastInputChipsState field) {
@@ -244,8 +281,9 @@ class FastInputChipsView extends StatelessWidget {
           ? chip
           : Padding(
               child: chip,
-              padding: EdgeInsetsDirectional.fromSTEB(
-                  0, 0, field.widget.spacing, 0));
+              padding:
+                  EdgeInsetsDirectional.fromSTEB(0, 0, field.widget.spacing, 0),
+            );
     });
 
     final children = [
@@ -264,18 +302,22 @@ class FastInputChipsView extends StatelessWidget {
   }
 }
 
-bool _optionsMatcher(TextEditingValue value, String option) {
-  return option.toLowerCase().contains(value.text.toLowerCase());
+bool _willDisplayOption(String text, String option, FastInputChipsState field) {
+  return field.value!.contains(option)
+      ? false
+      : option.toLowerCase().contains(text.toLowerCase());
 }
 
 AutocompleteOptionsBuilder<String> _optionsBuilder(
     Iterable<String> options, FastInputChipsState field) {
   return (TextEditingValue value) {
-    if (value.text.isEmpty) {
+    final text = Zwsp.strip(value.text);
+    if (text.isEmpty) {
       return const Iterable.empty();
     }
-    final optionsMatcher = field.widget.optionsMatcher ?? _optionsMatcher;
-    return options.where((option) => optionsMatcher(value, option));
+    final willDisplayOption =
+        field.widget.willDisplayOption ?? _willDisplayOption;
+    return options.where((option) => willDisplayOption(text, option, field));
   };
 }
 
@@ -326,31 +368,47 @@ bool _willAddChip(String? chip, FastInputChipsState field) {
 }
 
 ValueChanged<String> _onFieldSubmitted(
-    FastInputChipsState field, VoidCallback? onFieldSubmitted) {
+    FastInputChipsState field, bool onSelected,
+    [VoidCallback? onFieldSubmitted]) {
   return (String value) {
-    if (value.isEmpty) {
+    if (value == Zwsp.raw) {
       field.textFocusNode.unfocus();
     } else {
-      onFieldSubmitted?.call();
-      final willAddChip = field.widget.willAddChip ?? _willAddChip;
-      if (willAddChip(value, field)) {
-        field.didChange([...field.value!, value]);
-        field.textEditingController.clear();
+      final text = Zwsp.strip(value);
+      final willDisplayOption =
+          field.widget.willDisplayOption ?? _willDisplayOption;
+      final isOption = field.widget.options
+          .any((option) => willDisplayOption(text, option, field));
 
-        if (field.widget.wrap) {
-          field.textFocusNode.requestFocus();
-        } else {
-          WidgetsBinding.instance?.addPostFrameCallback(
-            (_duration) {
-              if (field.scrollController.hasClients) {
-                field.textFocusNode.requestFocus();
-                field.scrollController.animateTo(
-                    field.scrollController.position.maxScrollExtent,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeOut);
-              }
-            },
-          );
+      // Selecting an option via keyboard instead of tap requires the field
+      // view onFieldSubmitted callback to be called manually. Otherwise
+      // onSelected would not be called on RawAutocomplete leading to the
+      // current editing value being added instead of the selected option.
+      // This is a costly but necessary workaround due to the way
+      // RawAutocomplete is implemented.
+      if (!onSelected && isOption) {
+        onFieldSubmitted?.call();
+      } else {
+        final willAddChip = field.widget.willAddChip ?? _willAddChip;
+        if (willAddChip(text, field)) {
+          field.didChange([...field.value!, text]);
+          field.textEditingController.value = Zwsp.value();
+
+          if (field.widget.wrap) {
+            field.textFocusNode.requestFocus();
+          } else {
+            WidgetsBinding.instance?.addPostFrameCallback(
+              (_duration) {
+                if (field.scrollController.hasClients) {
+                  field.textFocusNode.requestFocus();
+                  field.scrollController.animateTo(
+                      field.scrollController.position.maxScrollExtent,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut);
+                }
+              },
+            );
+          }
         }
       }
     }
@@ -362,14 +420,13 @@ AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
     return FastInputChipsView(
       field: field,
-      onFieldSubmitted: _onFieldSubmitted(field, onFieldSubmitted),
+      onFieldSubmitted: _onFieldSubmitted(field, false, onFieldSubmitted),
     );
   };
 }
 
 Widget inputChipsBuilder(FormFieldState<List<String>> field) {
-  field as FastInputChipsState;
-  final widget = field.widget;
+  final widget = (field as FastInputChipsState).widget;
   final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
 
   return GestureDetector(
@@ -383,7 +440,7 @@ Widget inputChipsBuilder(FormFieldState<List<String>> field) {
         displayStringForOption: widget.displayStringForOption,
         fieldViewBuilder: fieldViewBuilder(field),
         focusNode: field.textFocusNode,
-        onSelected: _onFieldSubmitted(field, null),
+        onSelected: _onFieldSubmitted(field, true),
         optionsBuilder: _optionsBuilder(widget.options, field),
         optionsViewBuilder:
             widget.optionsViewBuilder ?? _optionsViewBuilder(field),

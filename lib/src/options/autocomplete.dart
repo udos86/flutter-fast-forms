@@ -5,7 +5,7 @@ import '../form_field.dart';
 typedef FastAutocompleteFieldViewBuilder<O extends Object>
     = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> field);
 
-typedef FastAutocompleteWillAddOption<O extends Object> = bool Function(
+typedef FastAutocompleteWillDisplayOption<O extends Object> = bool Function(
     TextEditingValue textEditingValue, O option);
 
 @immutable
@@ -33,7 +33,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     this.optionsBuilder,
     this.optionsMaxHeight = 200.00,
     this.optionsViewBuilder,
-    this.willAddOption,
+    this.willDisplayOption,
   })  : assert(options != null || optionsBuilder != null),
         _initialValue = initialValue,
         super(
@@ -61,7 +61,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
   final AutocompleteOptionsBuilder<O>? optionsBuilder;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<O>? optionsViewBuilder;
-  final FastAutocompleteWillAddOption<O>? willAddOption;
+  final FastAutocompleteWillDisplayOption<O>? willDisplayOption;
 
   @override
   FastAutocompleteState<O> createState() => FastAutocompleteState<O>();
@@ -73,7 +73,7 @@ class FastAutocompleteState<O extends Object>
   FastAutocomplete<O> get widget => super.widget as FastAutocomplete<O>;
 }
 
-bool _willAddOption<O extends Object>(TextEditingValue value, O option) {
+bool _willDisplayOption<O extends Object>(TextEditingValue value, O option) {
   return option.toString().toLowerCase().contains(value.text.toLowerCase());
 }
 
@@ -83,8 +83,9 @@ AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(
     if (value.text.isEmpty) {
       return const Iterable.empty();
     }
-    final willAddOption = field.widget.willAddOption ?? _willAddOption;
-    return options.where((O option) => willAddOption(value, option));
+    final willDisplayOption =
+        field.widget.willDisplayOption ?? _willDisplayOption;
+    return options.where((O option) => willDisplayOption(value, option));
   };
 }
 
@@ -100,7 +101,7 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
       focusNode: focusNode,
       decoration: field.decoration.copyWith(errorText: field.errorText),
       onChanged: widget.enabled ? field.didChange : null,
-      onFieldSubmitted: (String value) => onFieldSubmitted(),
+      onFieldSubmitted: (value) => onFieldSubmitted(),
       validator: widget.validator,
     );
   };
