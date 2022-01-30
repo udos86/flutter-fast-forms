@@ -2,12 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
-import 'form_field.dart';
-import 'form_scope.dart';
-
-import 'options/autocomplete.dart';
-import 'options/dropdown.dart';
-import 'text/text_field.dart';
+typedef FastInputDecorator = InputDecoration Function(
+    ThemeData theme, FastFormFieldState field);
 
 typedef FastFormChanged = void Function(
     UnmodifiableMapView<String, dynamic> values);
@@ -18,16 +14,22 @@ class FastForm extends StatefulWidget {
     Key? key,
     this.adaptive = false,
     required this.children,
+    this.decorator,
     required this.formKey,
-    this.inputDecorator,
     this.onChanged,
   }) : super(key: key);
 
   final bool adaptive;
   final List<Widget> children;
+  final FastInputDecorator? decorator;
   final GlobalKey<FormState> formKey;
-  final FastInputDecorator? inputDecorator;
   final FastFormChanged? onChanged;
+
+  static FastFormState? of(BuildContext context) {
+    final _FastFormScope? scope =
+        context.dependOnInheritedWidgetOfExactType<_FastFormScope>();
+    return scope?._form;
+  }
 
   @override
   FastFormState createState() => FastFormState();
@@ -38,7 +40,7 @@ class FastFormState extends State<FastForm> {
 
   UnmodifiableMapView<String, dynamic> get values {
     return UnmodifiableMapView(
-        {for (final fieldState in _fields) fieldState.name: fieldState.value});
+        {for (final field in _fields) field.widget.name: field.value});
   }
 
   void register(FastFormFieldState field) => _fields.add(field);
@@ -52,13 +54,12 @@ class FastFormState extends State<FastForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      // Current store cannot be retrieved here due to the framework calling this before widget.onChanged
+      // Current store cannot be retrieved here due to the framework calling
+      // this before widget.onChanged().
       // onChanged: () =>,
       key: widget.formKey,
-      child: FastFormScope(
-        adaptive: widget.adaptive,
-        formState: this,
-        inputDecorator: widget.inputDecorator ?? _inputDecorationCreator,
+      child: _FastFormScope(
+        form: this,
         child: Column(
           children: widget.children,
         ),
@@ -67,23 +68,179 @@ class FastFormState extends State<FastForm> {
   }
 }
 
-InputDecoration _inputDecorationCreator(
-    BuildContext context, FastFormField field) {
-  final theme = Theme.of(context);
-  final enabled = field.enabled;
+class _FastFormScope extends InheritedWidget {
+  const _FastFormScope({
+    required Widget child,
+    Key? key,
+    required FastFormState form,
+  })  : _form = form,
+        super(key: key, child: child);
+
+  final FastFormState _form;
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => true;
+}
+
+typedef FastErrorBuilder<T> = Widget? Function(FastFormFieldState<T> field);
+
+typedef FastHelperBuilder<T> = Widget? Function(FastFormFieldState<T> field);
+
+@immutable
+abstract class FastFormField<T> extends FormField<T> {
+  const FastFormField({
+    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
+    bool enabled = true,
+    required FormFieldBuilder<T> builder,
+    EdgeInsetsGeometry? contentPadding,
+    T? initialValue,
+    Key? key,
+    FormFieldSetter<T>? onSaved,
+    FormFieldValidator<T>? validator,
+    this.adaptive,
+    this.autofocus = false,
+    this.decoration,
+    this.helperText,
+    this.labelText,
+    required this.name,
+    this.onChanged,
+    this.onReset,
+  })  : contentPadding =
+            contentPadding ?? const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+        super(
+          autovalidateMode: autovalidateMode,
+          builder: builder,
+          enabled: enabled,
+          key: key,
+          initialValue: initialValue,
+          onSaved: onSaved,
+          validator: validator,
+        );
+
+  final bool? adaptive;
+  final bool autofocus;
+  final EdgeInsetsGeometry contentPadding;
+  final InputDecoration? decoration;
+  final String? helperText;
+  final String? labelText;
+  final String name;
+  final ValueChanged<T>? onChanged;
+  final VoidCallback? onReset;
+}
+
+abstract class FastFormFieldState<T> extends FormFieldState<T> {
+  bool focused = false;
+  bool touched = false;
+
+  late FocusNode focusNode;
+
+  @override
+  @protected
+  FastFormField<T> get widget;
+
+  bool get adaptive => widget.adaptive ?? form?.widget.adaptive ?? false;
+
+  bool get enabled => widget.enabled;
+
+  FastFormState? get form => FastForm.of(context);
+
+  InputDecoration get decoration {
+    final theme = Theme.of(context);
+    final decoration = widget.decoration ??
+        form?.widget.decorator?.call(theme, this) ??
+        _decorator(theme, this);
+
+    return decoration.applyDefaults(theme.inputDecorationTheme);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode()..addListener(_onFocusChanged);
+    setValue(widget.initialValue);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    form?.unregister(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    focusNode.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    form?.register(this);
+    return super.build(context);
+  }
+
+  @override
+  void didChange(T? value) {
+    super.didChange(value);
+    onChanged(value);
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    onReset();
+  }
+
+  void onChanged(T? value) {
+    if (!touched) setState(() => touched = true);
+    setValue(value);
+    form?.updateValues();
+  }
+
+  void onReset() {
+    setState(() {
+      focused = false;
+      touched = false;
+      setValue(widget.initialValue);
+      form?.updateValues();
+    });
+  }
+
+  void _onFocusChanged() {
+    setState(() {
+      if (focusNode.hasFocus) {
+        focused = true;
+      } else {
+        focused = false;
+        touched = true;
+      }
+    });
+  }
+}
+
+Text? errorBuilder<T>(FastFormFieldState<T> field) {
+  final text = field.errorText;
+  return text is String ? Text(text) : null;
+}
+
+Text? helperBuilder<T>(FastFormFieldState<T> field) {
+  final text = field.widget.helperText;
+  return text is String ? Text(text) : null;
+}
+
+InputDecoration _decorator(ThemeData theme, FastFormFieldState field) {
+  final widget = field.widget;
+
   return InputDecoration(
-    contentPadding: (field is FastDropdown ||
-            field is FastTextField ||
-            field is FastAutocomplete)
-        ? const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0)
-        : const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
-    labelText: field.label,
-    helperText: field.helperText,
-    hintText: field is FastTextField ? field.placeholder : null,
+    contentPadding: widget.contentPadding,
+    errorText: field.errorText,
+    helperText: widget.helperText,
+    labelText: widget.labelText,
     labelStyle: TextStyle(
-      color: enabled ? theme.textTheme.bodyText1!.color : theme.disabledColor,
+      color: field.enabled
+          ? theme.textTheme.bodyText1!.color
+          : theme.disabledColor,
     ),
-    enabled: enabled,
+    enabled: field.enabled,
     disabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: theme.disabledColor, width: 1),
     ),

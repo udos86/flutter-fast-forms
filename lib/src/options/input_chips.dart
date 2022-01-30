@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 /// Utility class for safely integrating the zero-width unicode character in
 /// editable text in order to detect delete actions as proposed by Matt Carroll.
@@ -48,7 +47,7 @@ class FastInputChips extends FastFormField<List<String>> {
     String? helperText,
     List<String>? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<List<String>>? onChanged,
     VoidCallback? onReset,
@@ -80,12 +79,13 @@ class FastInputChips extends FastFormField<List<String>> {
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ?? inputChipsBuilder,
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
           initialValue: initialValue ?? <String>[],
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -432,10 +432,7 @@ Widget inputChipsBuilder(FormFieldState<List<String>> field) {
   return GestureDetector(
     onTap: widget.enabled ? () => field.textFocusNode.requestFocus() : null,
     child: InputDecorator(
-      decoration: field.decoration.copyWith(
-        contentPadding: widget.contentPadding,
-        errorText: field.errorText,
-      ),
+      decoration: field.decoration,
       child: RawAutocomplete<String>(
         displayStringForOption: widget.displayStringForOption,
         fieldViewBuilder: fieldViewBuilder(field),

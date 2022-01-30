@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 typedef FastSwitchTitleBuilder = Widget Function(FastSwitchState field);
 
@@ -18,16 +19,36 @@ class FastSwitch extends FastFormField<bool> {
     String? helperText,
     bool initialValue = false,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<bool>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<bool>? onSaved,
     FormFieldValidator<bool>? validator,
+    this.activeColor,
+    this.activeThumbImage,
+    this.activeTrackColor,
+    this.controlAffinity = ListTileControlAffinity.platform,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.dense,
+    this.enableFeedback,
     this.errorBuilder,
+    this.focusNode,
     this.helperBuilder,
-    this.title,
+    this.hoverColor,
+    this.inactiveThumbColor,
+    this.inactiveThumbImage,
+    this.inactiveTrackColor,
+    this.isThreeLine = false,
+    this.secondary,
+    this.selectedTileColor,
+    this.shapeBorder,
+    this.subtitle,
+    this.thumbColor,
+    this.tileColor,
+    this.titleText,
     this.titleBuilder,
+    this.visualDensity,
   }) : super(
           adaptive: adaptive,
           autofocus: autofocus,
@@ -39,7 +60,7 @@ class FastSwitch extends FastFormField<bool> {
           helperText: helperText,
           initialValue: initialValue,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -47,10 +68,30 @@ class FastSwitch extends FastFormField<bool> {
           validator: validator,
         );
 
+  final Color? activeColor;
+  final ImageProvider<Object>? activeThumbImage;
+  final Color? activeTrackColor;
+  final ListTileControlAffinity controlAffinity;
+  final bool? dense;
+  final DragStartBehavior dragStartBehavior;
+  final bool? enableFeedback;
   final FastErrorBuilder<bool>? errorBuilder;
+  final FocusNode? focusNode;
   final FastHelperBuilder<bool>? helperBuilder;
-  final String? title;
+  final Color? hoverColor;
+  final Color? inactiveThumbColor;
+  final ImageProvider<Object>? inactiveThumbImage;
+  final Color? inactiveTrackColor;
+  final bool isThreeLine;
+  final Widget? secondary;
+  final Color? selectedTileColor;
+  final ShapeBorder? shapeBorder;
+  final Widget? subtitle;
+  final Color? thumbColor;
+  final Color? tileColor;
+  final String? titleText;
   final FastSwitchTitleBuilder? titleBuilder;
+  final VisualDensity? visualDensity;
 
   @override
   FastSwitchState createState() => FastSwitchState();
@@ -63,7 +104,7 @@ class FastSwitchState extends FastFormFieldState<bool> {
 
 Text switchTitleBuilder(FastSwitchState field) {
   return Text(
-    field.widget.title!,
+    field.widget.titleText!,
     style: TextStyle(
       fontSize: 14.0,
       color: field.value! ? Colors.black : Colors.grey,
@@ -76,14 +117,32 @@ InputDecorator materialSwitchBuilder(FormFieldState<bool> field) {
   final titleBuilder = widget.titleBuilder ?? switchTitleBuilder;
 
   return InputDecorator(
-    decoration: field.decoration.copyWith(errorText: field.errorText),
+    decoration: field.decoration,
     child: SwitchListTile.adaptive(
+      activeColor: widget.activeColor,
+      activeThumbImage: widget.activeThumbImage,
+      activeTrackColor: widget.activeTrackColor,
       autofocus: widget.autofocus,
       contentPadding: widget.contentPadding,
+      controlAffinity: widget.controlAffinity,
+      dense: widget.dense,
+      enableFeedback: widget.enableFeedback,
+      focusNode: widget.focusNode,
+      hoverColor: widget.hoverColor,
+      inactiveThumbColor: widget.inactiveThumbColor,
+      inactiveThumbImage: widget.inactiveThumbImage,
+      inactiveTrackColor: widget.inactiveTrackColor,
+      isThreeLine: widget.isThreeLine,
       onChanged: widget.enabled ? field.didChange : null,
+      secondary: widget.secondary,
       selected: field.value!,
-      title: widget.title is String ? titleBuilder(field) : null,
+      selectedTileColor: widget.selectedTileColor,
+      shape: widget.shapeBorder,
+      subtitle: widget.subtitle,
+      tileColor: widget.tileColor,
+      title: widget.titleText is String ? titleBuilder(field) : null,
       value: field.value!,
+      visualDensity: widget.visualDensity,
     ),
   );
 }
@@ -93,11 +152,15 @@ CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    prefix: widget.label is String ? Text(widget.label!) : null,
+    prefix: widget.labelText is String ? Text(widget.labelText!) : null,
     helper: (widget.helperBuilder ?? helperBuilder)(field),
     error: (widget.errorBuilder ?? errorBuilder)(field),
     child: CupertinoSwitch(
+      activeColor: widget.activeColor,
+      dragStartBehavior: widget.dragStartBehavior,
       onChanged: widget.enabled ? field.didChange : null,
+      thumbColor: widget.thumbColor,
+      trackColor: widget.activeTrackColor,
       value: field.value!,
     ),
   );

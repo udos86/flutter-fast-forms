@@ -25,7 +25,7 @@ void main() {
       FastAutocomplete<String>(
         name: 'autocomplete',
         helperText: helper,
-        label: label,
+        labelText: label,
         options: options,
       ),
     ));

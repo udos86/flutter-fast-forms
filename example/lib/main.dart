@@ -113,28 +113,28 @@ class FormPage extends StatelessWidget {
         children: [
           FastAutocomplete<String>(
             name: 'autocomplete',
-            label: 'Autocomplete',
+            labelText: 'Autocomplete',
             options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
           ),
           FastDatePicker(
             name: 'date_picker',
-            label: 'Date Picker',
+            labelText: 'Date Picker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
           FastDateRangePicker(
             name: 'date_range_picker',
-            label: 'Date Range Picker',
+            labelText: 'Date Range Picker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
           const FastTimePicker(
             name: 'time_picker',
-            label: 'Time Picker',
+            labelText: 'Time Picker',
           ),
           FastInputChips(
             name: 'input_chips',
-            label: 'Input Chips',
+            labelText: 'Input Chips',
             options: const ['Angular', 'React', 'Vue', 'Svelte', 'Flutter'],
             initialValue: const [
               'HTML',
@@ -147,7 +147,7 @@ class FormPage extends StatelessWidget {
           ),
           FastChoiceChips(
             name: 'choice_chips',
-            label: 'Choice Chips',
+            labelText: 'Choice Chips',
             alignment: WrapAlignment.center,
             chipPadding: const EdgeInsets.all(8.0),
             chips: [
@@ -171,13 +171,13 @@ class FormPage extends StatelessWidget {
           ),
           const FastSwitch(
             name: 'switch',
-            label: 'Switch',
-            title: 'This is a switch',
+            labelText: 'Switch',
+            titleText: 'This is a switch',
             contentPadding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
           ),
           FastTextField(
             name: 'text_field',
-            label: 'Text Field',
+            labelText: 'Text Field',
             placeholder: 'MM/JJJJ',
             keyboardType: TextInputType.datetime,
             maxLength: 7,
@@ -194,22 +194,22 @@ class FormPage extends StatelessWidget {
           ),
           const FastDropdown<String>(
             name: 'dropdown',
-            label: 'Dropdown Field',
+            labelText: 'Dropdown Field',
             items: ['Norway', 'Sweden', 'Finland', 'Denmark', 'Iceland'],
             initialValue: 'Finland',
           ),
           FastRadioGroup<String>(
             name: 'radio_group',
-            label: 'Radio Group Model',
+            labelText: 'Radio Group Model',
             options: const [
-              FastRadioOption(label: 'Option 1', value: 'option-1'),
-              FastRadioOption(label: 'Option 2', value: 'option-2'),
-              FastRadioOption(label: 'Option 3', value: 'option-3'),
+              FastRadioOption(text: 'Option 1', value: 'option-1'),
+              FastRadioOption(text: 'Option 2', value: 'option-2'),
+              FastRadioOption(text: 'Option 3', value: 'option-3'),
             ],
           ),
           FastSlider(
             name: 'slider',
-            label: 'Slider',
+            labelText: 'Slider',
             helperText: 'A Slider with prefix and suffix widgets',
             min: 0,
             max: 10,
@@ -233,7 +233,7 @@ class FormPage extends StatelessWidget {
           ),
           FastRangeSlider(
             name: 'range_slider',
-            label: 'Range Slider',
+            labelText: 'Range Slider',
             min: 0,
             max: 10,
             divisions: 10,
@@ -243,7 +243,7 @@ class FormPage extends StatelessWidget {
           ),
           const FastCustomField(
             name: 'custom_form_field',
-            label: 'Custom Form Field',
+            labelText: 'Custom Form Field',
             helperText: "Optionally add some extras",
             title: Text('Extras'),
             options: [
@@ -253,14 +253,14 @@ class FormPage extends StatelessWidget {
           ),
           FastCalendar(
             name: 'calendar',
-            label: 'Calendar',
+            labelText: 'Calendar',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
           ),
           const FastCheckbox(
             name: 'checkbox',
-            label: 'Checkbox',
-            title: 'I accept',
+            labelText: 'Checkbox',
+            titleText: 'I accept',
             contentPadding: EdgeInsets.fromLTRB(12.0, 0, 0, 0),
           ),
         ],
@@ -278,24 +278,24 @@ class FormPage extends StatelessWidget {
         children: [
           const FastTextField(
             name: 'text_field',
-            label: 'Text Field',
+            labelText: 'Text Field',
             placeholder: 'Placeholder',
             helperText: 'Helper Text',
           ),
           const FastSwitch(
             name: 'switch',
-            label: 'Remind me on a day',
+            labelText: 'Remind me on a day',
           ),
           FastDatePicker(
             name: 'datepicker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
-            label: 'Datepicker',
+            labelText: 'Datepicker',
             showModalPopup: true,
           ),
           FastSegmentedControl<String>(
             name: 'segmented_control',
-            label: 'Class',
+            labelText: 'Class',
             children: const {
               'economy': Text('Economy'),
               'business': Text('Business'),
@@ -341,7 +341,7 @@ class FormPage extends StatelessWidget {
             name: 'timepicker',
             firstDate: DateTime(1970),
             lastDate: DateTime(2040),
-            label: 'TimePicker',
+            labelText: 'TimePicker',
             mode: CupertinoDatePickerMode.time,
           ),
         ],

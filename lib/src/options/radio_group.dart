@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 @immutable
 class FastRadioOption<T> {
-  const FastRadioOption({required this.label, required this.value});
+  const FastRadioOption({required this.text, required this.value});
 
-  final String label;
+  final String text;
   final T value;
 }
 
@@ -31,7 +31,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
     String? helperText,
     T? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<T>? onChanged,
     VoidCallback? onReset,
@@ -45,12 +45,13 @@ class FastRadioGroup<T> extends FastFormField<T> {
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ?? radioGroupBuilder<T>,
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
           initialValue: initialValue ?? options.first.value,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -79,7 +80,7 @@ Widget radioOptionBuilder<T>(
   final tile = RadioListTile<T>(
     groupValue: field.value,
     onChanged: field.widget.enabled ? field.didChange : null,
-    title: Text(option.label),
+    title: Text(option.text),
     value: option.value,
   );
 
@@ -103,10 +104,7 @@ InputDecorator radioGroupBuilder<T>(FormFieldState<T> field) {
   final optionsBuilder = widget.optionsBuilder ?? radioOptionsBuilder;
 
   return InputDecorator(
-    decoration: field.decoration.copyWith(
-      contentPadding: widget.contentPadding,
-      errorText: field.errorText,
-    ),
+    decoration: field.decoration,
     child: optionsBuilder(widget.options, field),
   );
 }

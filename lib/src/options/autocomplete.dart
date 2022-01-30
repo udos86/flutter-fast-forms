@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 typedef FastAutocompleteFieldViewBuilder<O extends Object>
     = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> field);
@@ -14,13 +14,14 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<String>? builder,
-    EdgeInsetsGeometry? contentPadding,
+    EdgeInsetsGeometry contentPadding =
+        const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
     TextEditingValue? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<String>? onChanged,
     VoidCallback? onReset,
@@ -40,12 +41,13 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ?? autocompleteBuilder<O>,
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
           initialValue: initialValue?.text ?? '',
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -97,9 +99,9 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
 
     return TextFormField(
       controller: textEditingController,
+      decoration: field.decoration,
       enabled: widget.enabled,
       focusNode: focusNode,
-      decoration: field.decoration.copyWith(errorText: field.errorText),
       onChanged: widget.enabled ? field.didChange : null,
       onFieldSubmitted: (value) => onFieldSubmitted(),
       validator: widget.validator,

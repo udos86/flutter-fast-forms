@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
-import '../form_field.dart';
+import '../form.dart';
 
 typedef FastDateRangePickerTextBuilder = Text Function(
     FastDateRangePickerState field);
@@ -21,11 +21,11 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     EdgeInsetsGeometry? contentPadding,
     InputDecoration? decoration,
     bool enabled = true,
-    DateFormat? format,
+    intl.DateFormat? format,
     String? helperText,
     DateTimeRange? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<DateTimeRange>? onChanged,
     VoidCallback? onReset,
@@ -34,6 +34,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.cancelText,
     this.confirmText,
     this.currentDate,
+    this.dialogBuilder,
     this.errorFormatText,
     this.errorInvalidRangeText,
     this.errorInvalidText,
@@ -51,8 +52,9 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.routeSettings,
     this.saveText,
     this.textBuilder,
+    this.textDirection,
     this.useRootNavigator = true,
-  })  : dateFormat = format ?? DateFormat.yMd(),
+  })  : dateFormat = format ?? intl.DateFormat.yMd(),
         super(
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
@@ -63,7 +65,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
           helperText: helperText,
           initialValue: initialValue,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -74,7 +76,8 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final String? cancelText;
   final String? confirmText;
   final DateTime? currentDate;
-  final DateFormat dateFormat;
+  final intl.DateFormat dateFormat;
+  final TransitionBuilder? dialogBuilder;
   final String? errorFormatText;
   final String? errorInvalidRangeText;
   final String? errorInvalidText;
@@ -92,6 +95,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final RouteSettings? routeSettings;
   final String? saveText;
   final FastDateRangePickerTextBuilder? textBuilder;
+  final TextDirection? textDirection;
   final bool useRootNavigator;
 
   @override
@@ -131,6 +135,7 @@ InkWell dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
 
   Future<DateTimeRange?> show(DatePickerEntryMode entryMode) {
     return showDateRangePicker(
+      builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
       context: field.context,
@@ -150,6 +155,7 @@ InkWell dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
       locale: widget.locale,
       routeSettings: widget.routeSettings,
       saveText: widget.saveText,
+      textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
       if (value != null) field.didChange(value);
@@ -164,10 +170,7 @@ InkWell dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
-      decoration: field.decoration.copyWith(
-        contentPadding: field.widget.contentPadding,
-        errorText: field.errorText,
-      ),
+      decoration: field.decoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[

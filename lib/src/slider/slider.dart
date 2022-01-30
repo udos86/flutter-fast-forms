@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 typedef FastSliderFixBuilder = Widget Function(FastSliderState field);
 
@@ -21,20 +21,24 @@ class FastSlider extends FastFormField<double> {
     String? helperText,
     double? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<double>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<double>? onSaved,
     FormFieldValidator<double>? validator,
+    this.activeColor,
     this.divisions,
     this.errorBuilder,
     this.helperBuilder,
+    this.inactiveColor,
     this.max = 1.0,
     this.min = 0.0,
+    this.mouseCursor,
     this.labelBuilder,
     this.prefixBuilder,
     this.suffixBuilder,
+    this.thumbColor,
   }) : super(
           adaptive: adaptive,
           autofocus: autofocus,
@@ -46,7 +50,7 @@ class FastSlider extends FastFormField<double> {
           helperText: helperText,
           initialValue: initialValue ?? min,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -54,14 +58,18 @@ class FastSlider extends FastFormField<double> {
           validator: validator,
         );
 
+  final Color? activeColor;
   final int? divisions;
   final FastErrorBuilder<double>? errorBuilder;
   final FastHelperBuilder<double>? helperBuilder;
+  final Color? inactiveColor;
   final FastSliderLabelBuilder? labelBuilder;
   final double max;
   final double min;
+  final MouseCursor? mouseCursor;
   final FastSliderFixBuilder? prefixBuilder;
   final FastSliderFixBuilder? suffixBuilder;
+  final Color? thumbColor;
 
   @override
   FastSliderState createState() => FastSliderState();
@@ -92,22 +100,23 @@ InputDecorator sliderBuilder(FormFieldState<double> field) {
   final widget = (field as FastSliderState).widget;
 
   return InputDecorator(
-    decoration: field.decoration.copyWith(
-      contentPadding: widget.contentPadding,
-      errorText: field.errorText,
-    ),
+    decoration: field.decoration,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
         Expanded(
           child: Slider.adaptive(
+            activeColor: widget.activeColor,
             autofocus: widget.autofocus,
             divisions: widget.divisions,
             focusNode: field.focusNode,
+            inactiveColor: widget.inactiveColor,
             label: widget.labelBuilder?.call(field),
             max: widget.max,
             min: widget.min,
+            mouseCursor: widget.mouseCursor,
+            thumbColor: widget.thumbColor,
             value: field.value!,
             onChanged: widget.enabled ? field.didChange : null,
           ),
@@ -123,7 +132,7 @@ CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    prefix: widget.label is String ? Text(widget.label!) : null,
+    prefix: widget.labelText is String ? Text(widget.labelText!) : null,
     helper: (widget.helperBuilder ?? helperBuilder)(field),
     error: (widget.errorBuilder ?? errorBuilder)(field),
     child: Row(
@@ -132,9 +141,11 @@ CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
         if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
         Expanded(
           child: CupertinoSlider(
+            activeColor: widget.activeColor,
             divisions: widget.divisions,
             max: widget.max,
             min: widget.min,
+            thumbColor: widget.thumbColor ?? CupertinoColors.white,
             value: field.value!,
             onChanged: widget.enabled ? field.didChange : null,
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 @immutable
 class FastChoiceChip
@@ -105,7 +105,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
     String? helperText,
     List<String>? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<List<String>>? onChanged,
     VoidCallback? onReset,
@@ -127,6 +127,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
           autofocus: autofocus,
           autovalidateMode: autovalidateMode,
           builder: builder ?? choiceChipsBuilder,
+          contentPadding: contentPadding,
           decoration: decoration,
           enabled: enabled,
           helperText: helperText,
@@ -136,7 +137,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
                   .map((chip) => chip.value)
                   .toList(),
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -213,10 +214,7 @@ InputDecorator choiceChipsBuilder(FormFieldState field) {
   final chipBuilder = widget.chipBuilder ?? choiceChipBuilder;
 
   return InputDecorator(
-    decoration: field.decoration.copyWith(
-      contentPadding: widget.contentPadding,
-      errorText: field.errorText,
-    ),
+    decoration: field.decoration,
     child: Wrap(
       alignment: widget.alignment,
       crossAxisAlignment: widget.crossAlignment,

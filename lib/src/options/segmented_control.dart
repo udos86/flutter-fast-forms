@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 @immutable
 class FastSegmentedControl<T> extends FastFormField<T> {
@@ -15,7 +15,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     String? helperText,
     T? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<T>? onChanged,
     VoidCallback? onReset,
@@ -38,7 +38,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
           helperText: helperText,
           initialValue: initialValue ?? children.keys.first,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -67,7 +67,7 @@ CupertinoFormRow cupertinoSegmentedControlBuilder<T>(FormFieldState<T> field) {
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    prefix: widget.label is String ? Text(widget.label!) : null,
+    prefix: widget.labelText is String ? Text(widget.labelText!) : null,
     helper: (widget.helperBuilder ?? helperBuilder)(field),
     error: (widget.errorBuilder ?? errorBuilder)(field),
     child: CupertinoSlidingSegmentedControl<T>(

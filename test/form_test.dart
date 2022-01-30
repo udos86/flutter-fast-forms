@@ -19,7 +19,6 @@ void main() {
 
     expect(find.byType(FastForm), findsOneWidget);
     expect(find.byType(Form), findsOneWidget);
-    expect(find.byType(FastFormScope), findsOneWidget);
     expect(find.byType(FastTextField), findsOneWidget);
   });
 
@@ -39,7 +38,7 @@ void main() {
 
     final fieldState =
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
-    final formState = FastFormScope.of(fieldState.context)?.formState;
+    final formState = FastForm.of(fieldState.context);
 
     expect(formState?.values.containsKey(fieldState.widget.name), true);
     expect(formState?.values.containsValue(fieldState.value), true);
@@ -61,7 +60,7 @@ void main() {
 
     final fieldState =
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
-    final formState = FastFormScope.of(fieldState.context)?.formState;
+    final formState = FastForm.of(fieldState.context);
 
     const text = 'Hello Test';
 

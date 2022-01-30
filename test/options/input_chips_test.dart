@@ -16,7 +16,7 @@ void main() {
     const label = 'label';
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(name: 'input_chips', helperText: helper, label: label),
+      FastInputChips(name: 'input_chips', helperText: helper, labelText: label),
     ));
 
     expect(find.byType(FastInputChips), findsOneWidget);

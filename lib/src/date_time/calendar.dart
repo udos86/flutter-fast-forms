@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 @immutable
 class FastCalendar extends FastFormField<DateTime> {
@@ -14,12 +14,13 @@ class FastCalendar extends FastFormField<DateTime> {
     String? helperText,
     DateTime? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<DateTime>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<DateTime>? onSaved,
     FormFieldValidator<DateTime>? validator,
+    this.currentDate,
     required this.firstDate,
     this.initialCalendarMode = DatePickerMode.day,
     required this.lastDate,
@@ -34,7 +35,7 @@ class FastCalendar extends FastFormField<DateTime> {
           helperText: helperText,
           initialValue: initialValue,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -42,6 +43,7 @@ class FastCalendar extends FastFormField<DateTime> {
           validator: validator,
         );
 
+  final DateTime? currentDate;
   final DateTime firstDate;
   final DatePickerMode initialCalendarMode;
   final DateTime lastDate;
@@ -60,8 +62,9 @@ InputDecorator calendarBuilder(FormFieldState<DateTime> field) {
   final widget = (field as FastCalendarState).widget;
 
   return InputDecorator(
-    decoration: field.decoration.copyWith(errorText: field.errorText),
+    decoration: field.decoration,
     child: CalendarDatePicker(
+      currentDate: widget.currentDate,
       firstDate: widget.firstDate,
       initialCalendarMode: widget.initialCalendarMode,
       initialDate: field.value ?? DateTime.now(),

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 @immutable
 class FastTextField extends FastFormField<String> {
@@ -11,13 +11,14 @@ class FastTextField extends FastFormField<String> {
     bool autofocus = false,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<String>? builder,
-    EdgeInsetsGeometry? contentPadding,
+    EdgeInsetsGeometry contentPadding =
+        const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
     InputDecoration? decoration,
     bool enabled = true,
     String? helperText,
     String initialValue = '',
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<String>? onChanged,
     VoidCallback? onReset,
@@ -26,11 +27,17 @@ class FastTextField extends FastFormField<String> {
     this.autocorrect = true,
     this.autofillHints,
     this.buildCounter,
+    this.cursorColor,
+    this.cursorHeight,
+    this.cursorRadius,
+    this.cursorWidth = 2.0,
+    this.enableIMEPersonalizedLearning = true,
     this.enableInteractiveSelection = true,
     this.enableSuggestions = true,
     this.expands = false,
     this.focusNode,
     this.inputFormatters,
+    this.keyboardAppearance,
     this.keyboardType,
     this.leading,
     this.maxLength,
@@ -41,12 +48,24 @@ class FastTextField extends FastFormField<String> {
     this.obscuringCharacter = '•',
     this.padding,
     this.placeholder,
+    this.placeholderStyle,
     this.prefix,
     this.readOnly = false,
+    this.scrollPadding = const EdgeInsets.all(20.0),
+    this.scrollPhysics,
+    this.selectionControls,
+    this.showCursor,
+    this.smartDashesType,
+    this.smartQuotesType,
+    this.strutStyle,
+    this.style,
     this.suffix,
     this.textAlign = TextAlign.start,
     this.textAlignVertical,
     this.textCapitalization = TextCapitalization.none,
+    this.textDirection,
+    this.textInputAction,
+    this.toolbarOptions,
     this.trailing,
   }) : super(
           adaptive: adaptive,
@@ -59,7 +78,7 @@ class FastTextField extends FastFormField<String> {
           helperText: helperText,
           initialValue: initialValue,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -70,11 +89,17 @@ class FastTextField extends FastFormField<String> {
   final bool autocorrect;
   final Iterable<String>? autofillHints;
   final InputCounterWidgetBuilder? buildCounter;
+  final Color? cursorColor;
+  final double? cursorHeight;
+  final Radius? cursorRadius;
+  final double cursorWidth;
+  final bool enableIMEPersonalizedLearning;
   final bool enableInteractiveSelection;
   final bool enableSuggestions;
   final bool expands;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
+  final Brightness? keyboardAppearance;
   final TextInputType? keyboardType;
   final Widget? leading;
   final int? maxLength;
@@ -85,12 +110,24 @@ class FastTextField extends FastFormField<String> {
   final String obscuringCharacter;
   final EdgeInsetsGeometry? padding;
   final String? placeholder;
+  final TextStyle? placeholderStyle;
   final Widget? prefix;
   final bool readOnly;
+  final EdgeInsets scrollPadding;
+  final ScrollPhysics? scrollPhysics;
+  final TextSelectionControls? selectionControls;
+  final bool? showCursor;
+  final SmartDashesType? smartDashesType;
+  final SmartQuotesType? smartQuotesType;
+  final StrutStyle? strutStyle;
+  final TextStyle? style;
   final Widget? suffix;
   final TextAlign textAlign;
   final TextAlignVertical? textAlignVertical;
   final TextCapitalization textCapitalization;
+  final TextDirection? textDirection;
+  final TextInputAction? textInputAction;
+  final ToolbarOptions? toolbarOptions;
   final Widget? trailing;
 
   @override
@@ -104,7 +141,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   void onChanged(String? value) {
     setValue(value);
-    formState?.updateValues();
+    form?.updateValues();
   }
 
   AutovalidateMode get autovalidateMode {
@@ -127,7 +164,7 @@ Text inputCounterWidgetBuilder(
 TextFormField materialTextFieldBuilder(FormFieldState<String> field) {
   final widget = (field as FastTextFieldState).widget;
   final InputDecoration decoration = field.decoration.copyWith(
-    contentPadding: widget.contentPadding,
+    hintText: widget.placeholder,
     prefix:
         widget.prefix != null && widget.prefix is! Icon ? widget.prefix : null,
     prefixIcon: widget.prefix is Icon ? widget.prefix : null,
@@ -142,13 +179,19 @@ TextFormField materialTextFieldBuilder(FormFieldState<String> field) {
     autofocus: widget.autofocus,
     autovalidateMode: field.autovalidateMode,
     buildCounter: widget.buildCounter,
+    cursorColor: widget.cursorColor,
+    cursorHeight: widget.cursorHeight,
+    cursorRadius: widget.cursorRadius,
+    cursorWidth: widget.cursorWidth,
     decoration: decoration,
     initialValue: widget.initialValue,
     enabled: widget.enabled,
+    enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
     focusNode: widget.focusNode ?? field.focusNode,
+    keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
     inputFormatters: widget.inputFormatters,
     maxLength: widget.maxLength,
@@ -160,9 +203,20 @@ TextFormField materialTextFieldBuilder(FormFieldState<String> field) {
     onChanged: widget.enabled ? field.didChange : null,
     onSaved: widget.onSaved,
     readOnly: widget.readOnly,
+    scrollPadding: widget.scrollPadding,
+    scrollPhysics: widget.scrollPhysics,
+    selectionControls: widget.selectionControls,
+    showCursor: widget.showCursor,
+    smartDashesType: widget.smartDashesType,
+    smartQuotesType: widget.smartQuotesType,
+    strutStyle: widget.strutStyle,
+    style: widget.style,
     textAlign: widget.textAlign,
     textAlignVertical: widget.textAlignVertical,
     textCapitalization: widget.textCapitalization,
+    textDirection: widget.textDirection,
+    textInputAction: widget.textInputAction,
+    toolbarOptions: widget.toolbarOptions,
     validator: widget.validator,
   );
 }
@@ -170,19 +224,23 @@ TextFormField materialTextFieldBuilder(FormFieldState<String> field) {
 CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
     FormFieldState<String> field) {
   final widget = (field as FastTextFieldState).widget;
-  final prefix =
-      widget.prefix ?? (widget.label is String ? Text(widget.label!) : null);
+  final prefix = widget.prefix ??
+      (widget.labelText is String ? Text(widget.labelText!) : null);
 
   return CupertinoTextFormFieldRow(
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
     autovalidateMode: field.autovalidateMode,
+    cursorColor: widget.cursorColor,
+    cursorHeight: widget.cursorHeight,
+    cursorWidth: widget.cursorWidth,
     enabled: widget.enabled,
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
     focusNode: widget.focusNode ?? field.focusNode,
+    keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
     initialValue: widget.initialValue,
     inputFormatters: widget.inputFormatters,
@@ -194,11 +252,23 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
     onChanged: widget.enabled ? field.didChange : null,
     padding: widget.padding,
     placeholder: widget.placeholder,
+    placeholderStyle: widget.placeholderStyle,
     prefix: prefix,
     readOnly: widget.readOnly,
+    scrollPadding: widget.scrollPadding,
+    scrollPhysics: widget.scrollPhysics,
+    selectionControls: widget.selectionControls,
+    showCursor: widget.showCursor,
+    smartDashesType: widget.smartDashesType,
+    smartQuotesType: widget.smartQuotesType,
+    strutStyle: widget.strutStyle,
+    style: widget.style,
     textAlign: widget.textAlign,
     textAlignVertical: widget.textAlignVertical,
     textCapitalization: widget.textCapitalization,
+    textDirection: widget.textDirection,
+    textInputAction: widget.textInputAction,
+    toolbarOptions: widget.toolbarOptions,
     validator: widget.validator,
   );
 }

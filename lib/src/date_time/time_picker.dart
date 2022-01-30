@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 typedef FastTimePickerTextBuilder = Text Function(FastTimePickerState field);
 
@@ -22,7 +22,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     String? helperText,
     TimeOfDay? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<TimeOfDay>? onChanged,
     VoidCallback? onReset,
@@ -30,10 +30,14 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     FormFieldValidator<TimeOfDay>? validator,
     this.cancelText,
     this.confirmText,
+    this.dialogBuilder,
+    this.errorInvalidText,
     this.helpText,
+    this.hourLabelText,
     this.icon,
     this.iconButtonBuilder,
     this.initialEntryMode = TimePickerEntryMode.dial,
+    this.minuteLabelText,
     this.routeSettings,
     this.textBuilder,
     this.useRootNavigator = true,
@@ -46,7 +50,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
           helperText: helperText,
           initialValue: initialValue,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -56,10 +60,14 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
 
   final String? cancelText;
   final String? confirmText;
+  final TransitionBuilder? dialogBuilder;
+  final String? errorInvalidText;
   final String? helpText;
+  final String? hourLabelText;
   final Icon? icon;
   final FastTimePickerIconButtonBuilder? iconButtonBuilder;
   final TimePickerEntryMode initialEntryMode;
+  final String? minuteLabelText;
   final RouteSettings? routeSettings;
   final FastTimePickerTextBuilder? textBuilder;
   final bool useRootNavigator;
@@ -102,12 +110,16 @@ InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
 
   Future<TimeOfDay?> show(TimePickerEntryMode entryMode) {
     return showTimePicker(
+      builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
       context: field.context,
+      errorInvalidText: widget.errorInvalidText,
       helpText: widget.helpText,
+      hourLabelText: widget.hourLabelText,
       initialEntryMode: widget.initialEntryMode,
       initialTime: field.value ?? TimeOfDay.now(),
+      minuteLabelText: widget.minuteLabelText,
       routeSettings: widget.routeSettings,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
@@ -119,10 +131,7 @@ InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
   return InkWell(
     onTap: widget.enabled ? () => show(widget.initialEntryMode) : null,
     child: InputDecorator(
-      decoration: field.decoration.copyWith(
-        contentPadding: field.widget.contentPadding,
-        errorText: field.errorText,
-      ),
+      decoration: field.decoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[

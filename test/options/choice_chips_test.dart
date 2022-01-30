@@ -23,7 +23,7 @@ void main() {
       FastChoiceChips(
         name: 'choice_chips',
         helperText: helper,
-        label: label,
+        labelText: label,
         chips: chips,
       ),
     ));

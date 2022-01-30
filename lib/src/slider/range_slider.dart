@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../form_field.dart';
+import '../form.dart';
 
 typedef FastRangeSliderLabelsBuilder = RangeLabels Function(
     FastRangeSliderState field);
@@ -19,13 +19,15 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     String? helperText,
     RangeValues? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<RangeValues>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<RangeValues>? onSaved,
     FormFieldValidator<RangeValues>? validator,
+    this.activeColor,
     this.divisions,
+    this.inactiveColor,
     this.labelsBuilder,
     this.max = 1.0,
     this.min = 0.0,
@@ -41,7 +43,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
           helperText: helperText,
           key: key,
           initialValue: initialValue ?? RangeValues(min, max),
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -49,7 +51,9 @@ class FastRangeSlider extends FastFormField<RangeValues> {
           validator: validator,
         );
 
+  final Color? activeColor;
   final int? divisions;
+  final Color? inactiveColor;
   final FastRangeSliderLabelsBuilder? labelsBuilder;
   final double max;
   final double min;
@@ -102,17 +106,16 @@ InputDecorator rangeSliderBuilder(FormFieldState<RangeValues> field) {
   final widget = (field as FastRangeSliderState).widget;
 
   return InputDecorator(
-    decoration: field.decoration.copyWith(
-      contentPadding: widget.contentPadding,
-      errorText: field.errorText,
-    ),
+    decoration: field.decoration,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
         Expanded(
           child: RangeSlider(
+            activeColor: widget.activeColor,
             divisions: widget.divisions,
+            inactiveColor: widget.inactiveColor,
             labels: widget.labelsBuilder?.call(field),
             max: widget.max,
             min: widget.min,

@@ -15,7 +15,7 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
     String? helperText,
     Map<String, bool>? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<Map<String, bool>>? onChanged,
     VoidCallback? onReset,
@@ -28,7 +28,7 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
           helperText: helperText,
           initialValue: initialValue,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -112,7 +112,7 @@ Widget _customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
   final widget = (field as FastCustomFieldState).widget;
 
   return InputDecorator(
-    decoration: field.decoration.copyWith(errorText: field.errorText),
+    decoration: field.decoration,
     child: Column(
       children: <Widget>[
         SwitchListTile(

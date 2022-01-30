@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
-import '../form_field.dart';
+import '../form.dart';
 
 typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState field);
 
@@ -28,16 +28,19 @@ class FastDatePicker extends FastFormField<DateTime> {
     String? helperText,
     DateTime? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<DateTime>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<DateTime>? onSaved,
     FormFieldValidator<DateTime>? validator,
+    this.backgroundColor,
     this.cancelText,
     this.confirmText,
     this.currentDate,
     this.dateFormat,
+    this.dateOrder,
+    this.dialogBuilder,
     this.errorBuilder,
     this.errorFormatText,
     this.errorInvalidText,
@@ -63,6 +66,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.selectableDayPredicate,
     this.showModalPopup = false,
     this.textBuilder,
+    this.textDirection,
     this.use24hFormat = false,
     this.useRootNavigator = true,
   }) : super(
@@ -76,7 +80,7 @@ class FastDatePicker extends FastFormField<DateTime> {
           helperText: helperText,
           initialValue: initialValue ?? DateTime.now(),
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
@@ -84,10 +88,13 @@ class FastDatePicker extends FastFormField<DateTime> {
           validator: validator,
         );
 
+  final Color? backgroundColor;
   final String? cancelText;
   final String? confirmText;
   final DateTime? currentDate;
-  final DateFormat? dateFormat;
+  final intl.DateFormat? dateFormat;
+  final DatePickerDateOrder? dateOrder;
+  final TransitionBuilder? dialogBuilder;
   final FastErrorBuilder<DateTime>? errorBuilder;
   final String? errorFormatText;
   final String? errorInvalidText;
@@ -113,6 +120,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final SelectableDayPredicate? selectableDayPredicate;
   final bool showModalPopup;
   final FastDatePickerTextBuilder? textBuilder;
+  final TextDirection? textDirection;
   final bool use24hFormat;
   final bool useRootNavigator;
 
@@ -120,20 +128,21 @@ class FastDatePicker extends FastFormField<DateTime> {
   FastDatePickerState createState() => FastDatePickerState();
 }
 
-DateFormat _datePickerFormat(FastDatePickerState field) {
+intl.DateFormat _datePickerFormat(FastDatePickerState field) {
   final widget = field.widget;
   final locale = widget.locale;
 
   switch (widget.mode) {
     case CupertinoDatePickerMode.dateAndTime:
-      final format = DateFormat.yMMMMEEEEd(locale);
+      final format = intl.DateFormat.yMMMMEEEEd(locale);
       return widget.use24hFormat ? format.add_Hm() : format.add_jm();
     case CupertinoDatePickerMode.time:
-      final format = widget.use24hFormat ? DateFormat.Hm : DateFormat.jm;
+      final format =
+          widget.use24hFormat ? intl.DateFormat.Hm : intl.DateFormat.jm;
       return format(locale);
     case CupertinoDatePickerMode.date:
     default:
-      return DateFormat.yMMMMEEEEd(locale);
+      return intl.DateFormat.yMMMMEEEEd(locale);
   }
 }
 
@@ -227,6 +236,7 @@ InkWell materialDatePickerBuilder(FormFieldState<DateTime> field) {
 
   Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
+      builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
       context: field.context,
@@ -244,6 +254,7 @@ InkWell materialDatePickerBuilder(FormFieldState<DateTime> field) {
       locale: widget.locale,
       routeSettings: widget.routeSettings,
       selectableDayPredicate: widget.selectableDayPredicate,
+      textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
       if (value != null) field.didChange(value);
@@ -258,10 +269,7 @@ InkWell materialDatePickerBuilder(FormFieldState<DateTime> field) {
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
-      decoration: field.decoration.copyWith(
-        contentPadding: widget.contentPadding,
-        errorText: field.errorText,
-      ),
+      decoration: field.decoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -298,10 +306,10 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (widget.label != null)
+            if (widget.labelText != null)
               DefaultTextStyle(
                 style: textStyle,
-                child: Text(widget.label!),
+                child: Text(widget.labelText!),
               ),
             Flexible(
               child: widget.showModalPopup
@@ -327,6 +335,8 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
           SizedBox(
             height: widget.height,
             child: CupertinoDatePicker(
+              backgroundColor: widget.backgroundColor,
+              dateOrder: widget.dateOrder,
               initialDateTime: widget.initialValue,
               maximumDate: widget.lastDate,
               maximumYear: widget.maximumYear,
