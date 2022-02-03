@@ -191,12 +191,8 @@ class MyCustomFieldState extends FastFormFieldState<int> {
 3. Implement the required `FormFieldBuilder<T>`:
 ```dart
 Widget _myCustomFormFieldBuilder(FormFieldState<int> field) {
-  final decoration = (field as FastSimpleCustomFieldState)
-      .decoration
-      .copyWith(errorText: field.errorText);
-
   return InputDecorator(
-    decoration: decoration,
+    decoration: field.decoration,
     child: Row(
       children: [
         ElevatedButton(
