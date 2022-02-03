@@ -1,13 +1,14 @@
-## [5.0.0] - 01/18/2022
+## [5.0.0] - 02/04/2022
 
 * widgets now correctly expose `contentPadding` property
 * renames `label` property of `FastFormField` to `labelText`
 * renames `title` property of `FastCheckbox` to `titleText`
 * renames `willAddOption` property of `FastAutocomplete` to `willDisplayOption`
 * renames `optionsMatcher` property of `FastInputChips` to `willDisplayOption`
+* renames `updateValues()` method of `FastFormState` to `onChanged()`
 * removes `name` getter from `FastFormField`
 * moves `static FastFormState? of(BuildContext context)` to `FastForm`
-* adds `form` getter to `FastFormField`
+* adds `form` getter to `FastFormFieldState`
 * simplifies creation of `InputDecoration` via `decoration` getter of `FastFormFieldState`   
 * `_FastFormScope` now follows internal `_FormScope`
 
