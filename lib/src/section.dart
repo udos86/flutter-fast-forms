@@ -26,17 +26,14 @@ class FastFormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var builder = _buildFormSection;
+
     if (adaptive) {
-      switch (Theme.of(context).platform) {
-        case TargetPlatform.iOS:
-          return _buildCupertinoFormSection(context);
-        case TargetPlatform.android:
-        default:
-          return _buildFormSection(context);
-      }
+      final platform = Theme.of(context).platform;
+      if (platform == TargetPlatform.iOS) builder = _buildCupertinoFormSection;
     }
 
-    return _buildFormSection(context);
+    return builder(context);
   }
 
   Widget _buildFormSection(BuildContext context) {

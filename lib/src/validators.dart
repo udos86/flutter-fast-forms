@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 typedef ErrorTextBuilder<T> = String? Function(T? value);
+
 typedef ErrorTextBuilderWithConstraint<T, C> = String? Function(
     T? value, C constraint);
 
