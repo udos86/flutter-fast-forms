@@ -141,7 +141,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   void onChanged(String? value) {
     setValue(value);
-    form?.updateValues();
+    form?.onChanged();
   }
 
   AutovalidateMode get autovalidateMode {

@@ -62,19 +62,19 @@ child: FastForm(
   children: [
     FastTextField(
       name: 'field_destination',
-      label: 'Destination',
+      labelText: 'Destination',
       placeholder: 'Where are you going?',
     ),
     FastDateRangePicker(
       name: 'field_check_in_out',
-      label: 'Check-in - Check-out',
+      labelText: 'Check-in - Check-out',
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     ),
     FastCheckbox(
       name: 'field_travel_purpose',
-      label: 'Travel purpose',
-      title: 'I am travelling for work',
+      labelText: 'Travel purpose',
+      titleText: 'I am travelling for work',
     ),
   ],
 )
@@ -91,7 +91,7 @@ child: FastForm(
       children: [
         FastTextField(
           name: 'field_destination',
-          label: 'Destination',
+          labelText: 'Destination',
           placeholder: 'Where are you going?',
         ),
         // ...
@@ -159,7 +159,7 @@ class MyCustomField extends FastFormField<int> {
     String? helperText,
     int? initialValue,
     Key? key,
-    String? label,
+    String? labelText,
     required String name,
     ValueChanged<int>? onChanged,
     VoidCallback? onReset,
@@ -170,7 +170,7 @@ class MyCustomField extends FastFormField<int> {
           helperText: helperText,
           initialValue: initialValue,
           key: key,
-          label: label,
+          labelText: labelText,
           name: name,
           onChanged: onChanged,
           onReset: onReset,
