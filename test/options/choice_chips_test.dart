@@ -16,14 +16,14 @@ void main() {
   });
 
   testWidgets('renders FastChoiceChips', (WidgetTester tester) async {
-    const helper = 'helper';
-    const label = 'label';
+    const helperText = 'helper';
+    const labelText = 'label';
 
     await tester.pumpWidget(buildMaterialTestApp(
       FastChoiceChips(
         name: 'choice_chips',
-        helperText: helper,
-        labelText: label,
+        helperText: helperText,
+        labelText: labelText,
         chips: chips,
       ),
     ));
@@ -31,8 +31,8 @@ void main() {
     expect(find.byType(FastChoiceChips), findsOneWidget);
     expect(find.byType(ChoiceChip), findsNWidgets(chips.length));
 
-    expect(find.text(helper), findsOneWidget);
-    expect(find.text(label), findsOneWidget);
+    expect(find.text(helperText), findsOneWidget);
+    expect(find.text(labelText), findsOneWidget);
   });
 
   testWidgets('updates FastChoiceChips', (WidgetTester tester) async {

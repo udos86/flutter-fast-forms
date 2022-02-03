@@ -5,15 +5,19 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastSegmentedControl', (WidgetTester tester) async {
-    final testValues = ['value1', 'value2', 'value3'];
+  late List<String> values;
+  late FastSegmentedControl widget;
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastSegmentedControl<String>(
-        name: 'segmented_control',
-        children: {for (var item in testValues) item: Text(item)},
-      ),
-    ));
+  setUp(() {
+    values = const ['value1', 'value2', 'value3'];
+    widget = FastSegmentedControl<String>(
+      name: 'segmented_control',
+      children: {for (final item in values) item: Text(item)},
+    );
+  });
+
+  testWidgets('renders FastSegmentedControl', (WidgetTester tester) async {
+    await tester.pumpWidget(buildMaterialTestApp(widget));
 
     final fastSegmentedControlFinder =
         find.byType(typeOf<FastSegmentedControl<String>>());
@@ -26,24 +30,17 @@ void main() {
 
     expect(fastSegmentedControlFinder, findsOneWidget);
     expect(segmentedControlFinder, findsOneWidget);
-    expect(segmentedButtonFinder, findsNWidgets(testValues.length));
+    expect(segmentedButtonFinder, findsNWidgets(values.length));
   });
 
   testWidgets('updates FastSegmentedControl', (WidgetTester tester) async {
-    final testValues = ['value1', 'value2', 'value3'];
-
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastSegmentedControl(
-        name: 'segmented_control',
-        children: {for (var item in testValues) item: Text(item)},
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(widget));
 
     final state =
         tester.state(find.byType(typeOf<FastSegmentedControl<String>>()))
             as FastSegmentedControlState;
 
-    expect(state.value, state.widget.initialValue);
+    expect(state.value, widget.initialValue);
 
     final segmentedButtonFinder = find.descendant(
       of: find.byType(typeOf<CupertinoSlidingSegmentedControl<String>>()),
@@ -53,6 +50,6 @@ void main() {
     await tester.tap(segmentedButtonFinder.last);
     await tester.pumpAndSettle();
 
-    expect(state.value, testValues.last);
+    expect(state.value, values.last);
   });
 }
