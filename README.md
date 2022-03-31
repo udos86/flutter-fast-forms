@@ -184,7 +184,7 @@ class MyCustomField extends FastFormField<int> {
 
 class MyCustomFieldState extends FastFormFieldState<int> {
   @override
-  FastSimpleCustomField get widget => super.widget as FastSimpleCustomField;
+  MyCustomField get widget => super.widget as MyCustomField;
 }
 ```
 
