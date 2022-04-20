@@ -21,7 +21,7 @@ class FastSwitch extends FastFormField<bool> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<bool>? onChanged,
+    ValueChanged<bool?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<bool>? onSaved,
     FormFieldValidator<bool>? validator,

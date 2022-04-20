@@ -16,7 +16,7 @@ class FastCalendar extends FastFormField<DateTime> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<DateTime>? onChanged,
+    ValueChanged<DateTime?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<DateTime>? onSaved,
     FormFieldValidator<DateTime>? validator,

@@ -23,7 +23,7 @@ class FastSlider extends FastFormField<double> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<double>? onChanged,
+    ValueChanged<double?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<double>? onSaved,
     FormFieldValidator<double>? validator,

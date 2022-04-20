@@ -20,7 +20,7 @@ class FastTextField extends FastFormField<String> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<String>? onChanged,
+    ValueChanged<String?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<String>? onSaved,
     FormFieldValidator<String>? validator,

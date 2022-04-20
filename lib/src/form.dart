@@ -48,7 +48,7 @@ class FastFormState extends State<FastForm> {
   void unregister(FastFormFieldState field) => _fields.remove(field);
 
   void onChanged() {
-    if (widget.onChanged != null) widget.onChanged!(values);
+    widget.onChanged?.call(values);
   }
 
   @override
@@ -124,7 +124,7 @@ abstract class FastFormField<T> extends FormField<T> {
   final String? helperText;
   final String? labelText;
   final String name;
-  final ValueChanged<T>? onChanged;
+  final ValueChanged<T?>? onChanged;
   final VoidCallback? onReset;
 }
 
@@ -181,26 +181,28 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   @override
   void didChange(T? value) {
     super.didChange(value);
-    onChanged(value);
+    _onChanged(value);
   }
 
   @override
   void reset() {
     super.reset();
-    onReset();
+    _onReset();
   }
 
-  void onChanged(T? value) {
+  void _onChanged(T? value) {
     if (!touched) setState(() => touched = true);
     setValue(value);
+    widget.onChanged?.call(value);
     form?.onChanged();
   }
 
-  void onReset() {
+  void _onReset() {
     setState(() {
       focused = false;
       touched = false;
       setValue(widget.initialValue);
+      widget.onChanged?.call(widget.initialValue);
       form?.onChanged();
     });
   }

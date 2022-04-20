@@ -21,7 +21,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<RangeValues>? onChanged,
+    ValueChanged<RangeValues?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<RangeValues>? onSaved,
     FormFieldValidator<RangeValues>? validator,

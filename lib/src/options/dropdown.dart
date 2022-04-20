@@ -20,7 +20,7 @@ class FastDropdown<T> extends FastFormField<T> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<T>? onChanged,
+    ValueChanged<T?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<T>? onSaved,
     FormFieldValidator<T>? validator,

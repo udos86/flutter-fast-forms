@@ -27,7 +27,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<DateTimeRange>? onChanged,
+    ValueChanged<DateTimeRange?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<DateTimeRange>? onSaved,
     FormFieldValidator<DateTimeRange>? validator,

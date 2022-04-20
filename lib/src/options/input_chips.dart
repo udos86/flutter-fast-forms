@@ -49,7 +49,7 @@ class FastInputChips extends FastFormField<List<String>> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<List<String>>? onChanged,
+    ValueChanged<List<String>?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<List<String>>? onSaved,
     FormFieldValidator<List<String>>? validator,

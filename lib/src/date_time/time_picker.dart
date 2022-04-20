@@ -24,7 +24,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<TimeOfDay>? onChanged,
+    ValueChanged<TimeOfDay?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<TimeOfDay>? onSaved,
     FormFieldValidator<TimeOfDay>? validator,

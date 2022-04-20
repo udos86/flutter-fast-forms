@@ -17,7 +17,7 @@ class FastCustomField extends FastFormField<Map<String, bool>> {
     Key? key,
     String? labelText,
     required String name,
-    ValueChanged<Map<String, bool>>? onChanged,
+    ValueChanged<Map<String, bool>?>? onChanged,
     VoidCallback? onReset,
     FormFieldSetter<Map<String, bool>>? onSaved,
     FormFieldValidator<Map<String, bool>>? validator,
