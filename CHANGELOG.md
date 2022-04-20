@@ -1,3 +1,7 @@
+## [6.0.0] - xx/xx/2022
+
+* `onChanged` now works on any `FastFormField`
+
 ## [5.0.0] - 02/04/2022
 
 * widgets now correctly expose `contentPadding` property
