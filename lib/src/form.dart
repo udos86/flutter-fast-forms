@@ -181,23 +181,23 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   @override
   void didChange(T? value) {
     super.didChange(value);
-    _onChanged(value);
+    onChanged(value);
   }
 
   @override
   void reset() {
     super.reset();
-    _onReset();
+    onReset();
   }
 
-  void _onChanged(T? value) {
+  void onChanged(T? value) {
     if (!touched) setState(() => touched = true);
     setValue(value);
     widget.onChanged?.call(value);
     form?.onChanged();
   }
 
-  void _onReset() {
+  void onReset() {
     setState(() {
       focused = false;
       touched = false;

@@ -141,6 +141,7 @@ class FastTextFieldState extends FastFormFieldState<String> {
   @override
   void onChanged(String? value) {
     setValue(value);
+    widget.onChanged?.call(value);
     form?.onChanged();
   }
 
