@@ -34,6 +34,8 @@ void main() {
   });
 
   testWidgets('updates FastRangeSlider', (WidgetTester tester) async {
+    final spy = OnChangedSpy<RangeValues>();
+
     await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
         name: 'range_slider',
@@ -41,21 +43,20 @@ void main() {
         min: 0,
         prefixBuilder: rangeSliderPrefixBuilder,
         suffixBuilder: rangeSliderSuffixBuilder,
+        onChanged: spy.fn,
       ),
     ));
 
     final state =
         tester.state(find.byType(FastRangeSlider)) as FastRangeSliderState;
-
     const testValues = RangeValues(5, 7);
+
     state.didChange(testValues);
     await tester.pumpAndSettle();
 
-    final prefixFinder = find.text(testValues.start.toStringAsFixed(0));
-    final suffixFinder = find.text(testValues.end.toStringAsFixed(0));
-
-    expect(prefixFinder, findsOneWidget);
-    expect(suffixFinder, findsOneWidget);
+    expect(spy.calledWith, testValues);
+    expect(find.text(testValues.start.toStringAsFixed(0)), findsOneWidget);
+    expect(find.text(testValues.end.toStringAsFixed(0)), findsOneWidget);
   });
 
   testWidgets('validates FastRangeSlider', (WidgetTester tester) async {

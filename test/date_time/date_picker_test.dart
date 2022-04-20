@@ -48,7 +48,6 @@ void main() {
 
     final state =
         tester.state(find.byType(FastDatePicker)) as FastDatePickerState;
-
     expect(state.value, state.widget.initialValue);
 
     await tester.tap(find.byType(IconButton));

@@ -51,18 +51,26 @@ void main() {
   });
 
   testWidgets('updates FastAutocomplete', (WidgetTester tester) async {
+    final spy = OnChangedSpy<String>();
+
     await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(name: 'autocomplete', options: options),
+      FastAutocomplete<String>(
+        name: 'autocomplete',
+        options: options,
+        onChanged: spy.fn,
+      ),
     ));
 
     final state = tester.state(find.byType(typeOf<FastAutocomplete<String>>()))
         as FastAutocompleteState<String>;
-
     expect(state.value, state.widget.initialValue);
 
-    await tester.enterText(find.byType(TextFormField), options.first);
+    final testValue = options.first;
+
+    await tester.enterText(find.byType(TextFormField), testValue);
     await tester.pumpAndSettle();
 
-    expect(state.value, options.first);
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 }

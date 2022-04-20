@@ -36,20 +36,24 @@ void main() {
   });
 
   testWidgets('updates FastChoiceChips', (WidgetTester tester) async {
+    final spy = OnChangedSpy<List<String>>();
+
     await tester.pumpWidget(buildMaterialTestApp(
-      FastChoiceChips(name: 'choice_chips', chips: chips),
+      FastChoiceChips(name: 'choice_chips', chips: chips, onChanged: spy.fn),
     ));
 
     final state =
         tester.state(find.byType(FastChoiceChips)) as FastChoiceChipsState;
-
     expect(state.value, state.widget.initialValue);
     expect(state.value, <String>{});
+
+    final testValue = {chips.first.value};
 
     await tester.tap(find.byType(ChoiceChip).first);
     await tester.pumpAndSettle();
 
-    expect(state.value, {chips.first.value});
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 
   testWidgets('validates FastChoiceChips', (WidgetTester tester) async {

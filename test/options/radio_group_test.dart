@@ -51,20 +51,27 @@ void main() {
       FastRadioOption(text: 'Option 1', value: 'option-1'),
       FastRadioOption(text: 'Option 2', value: 'option-2'),
     ];
+    final spy = OnChangedSpy<String>();
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastRadioGroup<String>(name: 'radio_group', options: options),
+      FastRadioGroup<String>(
+        name: 'radio_group',
+        options: options,
+        onChanged: spy.fn,
+      ),
     ));
 
     final state = tester.state(find.byType(typeOf<FastRadioGroup<String>>()))
         as FastRadioGroupState<String>;
-
     expect(state.value, options.first.value);
 
     await tester.tap(find.byType(typeOf<RadioListTile<String>>()).last);
     await tester.pumpAndSettle();
 
-    expect(state.value, options.last.value);
+    final testValue = options.last.value;
+
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 
   testWidgets('validates FastRadioGroup', (WidgetTester tester) async {

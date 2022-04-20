@@ -35,7 +35,6 @@ void main() {
 
     final state = tester.state(find.byType(FastDateRangePicker))
         as FastDateRangePickerState;
-
     expect(state.value, state.widget.initialValue);
 
     state.didChange(DateTimeRange(

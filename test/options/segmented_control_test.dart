@@ -6,13 +6,16 @@ import '../test_utils.dart';
 
 void main() {
   late List<String> values;
-  late FastSegmentedControl widget;
+  late FastSegmentedControl<String> widget;
+  late OnChangedSpy spy;
 
   setUp(() {
     values = const ['value1', 'value2', 'value3'];
-    widget = FastSegmentedControl<String>(
+    spy = OnChangedSpy<String>();
+    widget = FastSegmentedControl(
       name: 'segmented_control',
       children: {for (final item in values) item: Text(item)},
+      onChanged: spy.fn,
     );
   });
 
@@ -38,18 +41,19 @@ void main() {
 
     final state =
         tester.state(find.byType(typeOf<FastSegmentedControl<String>>()))
-            as FastSegmentedControlState;
-
+            as FastSegmentedControlState<String>;
     expect(state.value, widget.initialValue);
 
     final segmentedButtonFinder = find.descendant(
       of: find.byType(typeOf<CupertinoSlidingSegmentedControl<String>>()),
       matching: find.byType(Text),
     );
-
     await tester.tap(segmentedButtonFinder.last);
     await tester.pumpAndSettle();
 
-    expect(state.value, values.last);
+    final testValue = values.last;
+
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 }

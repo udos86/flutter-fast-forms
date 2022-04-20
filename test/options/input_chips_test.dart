@@ -58,8 +58,10 @@ void main() {
 
   testWidgets('updates FastInputChips by text input',
       (WidgetTester tester) async {
+    final spy = OnChangedSpy<List<String>>();
+
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(name: 'input_chips', options: options),
+      FastInputChips(name: 'input_chips', options: options, onChanged: spy.fn),
     ));
 
     final state =
@@ -73,7 +75,10 @@ void main() {
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
-    expect(state.value, {text});
+    final testValue = {text};
+
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 
   testWidgets('updates FastInputChips by selecting option',

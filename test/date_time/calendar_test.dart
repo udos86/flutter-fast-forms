@@ -19,24 +19,27 @@ void main() {
   });
 
   testWidgets('updates FastCalendar', (WidgetTester tester) async {
+    final spy = OnChangedSpy<DateTime>();
+
     await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
         name: 'calendar',
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(const Duration(days: 365)),
+        onChanged: spy.fn,
       ),
     ));
 
     final state = tester.state(find.byType(FastCalendar)) as FastCalendarState;
-
     expect(state.value, state.widget.initialValue);
 
-    const testValue = 21;
+    const day = 21;
 
-    await tester.tap(find.text(testValue.toString()));
+    await tester.tap(find.text(day.toString()));
     await tester.pumpAndSettle();
 
-    expect(state.value?.day, testValue);
+    expect(spy.calledWith?.day, day);
+    expect(state.value?.day, day);
   });
 
   testWidgets('validates FastCalendar', (WidgetTester tester) async {

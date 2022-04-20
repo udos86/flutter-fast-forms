@@ -21,18 +21,22 @@ void main() {
   });
 
   testWidgets('updates FastSwitch', (WidgetTester tester) async {
+    final spy = OnChangedSpy<bool>();
+
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSwitch(name: 'switch', titleText: 'title'),
+      FastSwitch(name: 'switch', titleText: 'title', onChanged: spy.fn),
     ));
 
     final state = tester.state(find.byType(FastSwitch)) as FastSwitchState;
-
     expect(state.value, state.widget.initialValue);
+
+    final testValue = !state.widget.initialValue!;
 
     await tester.tap(find.byType(SwitchListTile));
     await tester.pumpAndSettle();
 
-    expect(state.value, !state.widget.initialValue!);
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 
   testWidgets('validates FastSwitch', (WidgetTester tester) async {

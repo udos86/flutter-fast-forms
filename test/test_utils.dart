@@ -29,3 +29,11 @@ CupertinoApp buildCupertinoTestApp(Widget testWidget,
     ),
   );
 }
+
+class OnChangedSpy<T> {
+  T? _arg;
+
+  T? get calledWith => _arg;
+
+  void fn(T? value) => _arg = value;
+}

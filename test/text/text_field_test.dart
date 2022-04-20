@@ -49,13 +49,14 @@ void main() {
   });
 
   testWidgets('updates FastTextField', (WidgetTester tester) async {
+    final spy = OnChangedSpy<String>();
+
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(name: 'text_field'),
+      FastTextField(name: 'text_field', onChanged: spy.fn),
     ));
 
     final state =
         tester.state(find.byType(FastTextField)) as FastTextFieldState;
-
     expect(state.value, state.widget.initialValue);
 
     const text = 'This is a test';
@@ -63,6 +64,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField), text);
     await tester.pumpAndSettle();
 
+    expect(spy.calledWith, text);
     expect(state.value, text);
   });
 

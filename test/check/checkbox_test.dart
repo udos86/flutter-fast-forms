@@ -27,18 +27,22 @@ void main() {
   });
 
   testWidgets('updates FastCheckbox', (WidgetTester tester) async {
+    final spy = OnChangedSpy<bool>();
+
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastCheckbox(name: 'checkbox', titleText: 'title'),
+      FastCheckbox(name: 'checkbox', titleText: 'title', onChanged: spy.fn),
     ));
 
     final state = tester.state(find.byType(FastCheckbox)) as FastCheckboxState;
-
     expect(state.value, state.widget.initialValue);
+
+    final testValue = !state.widget.initialValue!;
 
     await tester.tap(find.byType(CheckboxListTile));
     await tester.pumpAndSettle();
 
-    expect(state.value, !state.widget.initialValue!);
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 
   testWidgets('validates FastCheckbox', (WidgetTester tester) async {

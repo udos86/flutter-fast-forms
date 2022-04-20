@@ -20,16 +20,16 @@ void main() {
     const testIndex = 2;
     const itemsLength = 3;
     final items = List.generate(itemsLength, (int index) => 'item $index');
+    final spy = OnChangedSpy<String>();
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastDropdown<String>(name: 'dropdown', items: items),
+      FastDropdown<String>(name: 'dropdown', items: items, onChanged: spy.fn),
     ));
 
     final state = tester.state(find.byType(typeOf<FastDropdown<String>>()))
         as FastDropdownState<String>;
 
     final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());
-
     expect(itemsFinder, findsNWidgets(itemsLength));
 
     await tester.tap(find.byType(typeOf<DropdownButton<String>>()));
@@ -41,7 +41,10 @@ void main() {
         warnIfMissed: false);
     await tester.pumpAndSettle();
 
-    expect(state.value, items[testIndex]);
+    final testValue = items[testIndex];
+
+    expect(spy.calledWith, testValue);
+    expect(state.value, testValue);
   });
 
   testWidgets('validates FastDropdown', (WidgetTester tester) async {

@@ -59,17 +59,24 @@ void main() {
   });
 
   testWidgets('updates FastSlider', (WidgetTester tester) async {
+    final spy = OnChangedSpy<double>();
+
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastSlider(name: 'slider', suffixBuilder: sliderSuffixBuilder),
+      FastSlider(
+        name: 'slider',
+        suffixBuilder: sliderSuffixBuilder,
+        onChanged: spy.fn,
+      ),
     ));
 
     final state = tester.state(find.byType(FastSlider)) as FastSliderState;
+    final testValue = state.widget.max;
 
-    state.didChange(state.widget.max);
+    state.didChange(testValue);
     await tester.pumpAndSettle();
 
-    final suffixFinder = find.text(state.widget.max.toStringAsFixed(0));
-    expect(suffixFinder, findsOneWidget);
+    expect(spy.calledWith, testValue);
+    expect(find.text(testValue.toStringAsFixed(0)), findsOneWidget);
   });
 
   testWidgets('validates FastSlider', (WidgetTester tester) async {
