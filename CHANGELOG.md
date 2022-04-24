@@ -1,4 +1,4 @@
-## [6.0.0] - xx/xx/2022
+## [6.0.0] - 04/24/2022
 
 * `onChanged` now works on any `FastFormField`
 
