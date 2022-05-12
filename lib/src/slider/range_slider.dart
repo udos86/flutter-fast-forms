@@ -11,12 +11,11 @@ typedef FastRangeSliderFixBuilder = Widget Function(FastRangeSliderState field);
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
     RangeValues? initialValue,
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = rangeSliderBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.key,
     super.labelText,

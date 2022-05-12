@@ -38,12 +38,11 @@ typedef FastInputWillAddChip = bool Function(
 @immutable
 class FastInputChips extends FastFormField<List<String>> {
   const FastInputChips({
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = inputChipsBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue = const <String>[],
     super.key,

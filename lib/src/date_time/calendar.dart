@@ -5,12 +5,11 @@ import '../form.dart';
 @immutable
 class FastCalendar extends FastFormField<DateTime> {
   const FastCalendar({
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = calendarBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue,
     super.key,

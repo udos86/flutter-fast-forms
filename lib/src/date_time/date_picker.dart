@@ -20,12 +20,11 @@ class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
     DateTime? initialValue,
     super.adaptive,
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = datePickerBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.key,
     super.labelText,
@@ -337,9 +336,10 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
 }
 
 Widget datePickerBuilder(FormFieldState<DateTime> field) {
+  field as FastDatePickerState;
   FormFieldBuilder<DateTime> builder = materialDatePickerBuilder;
 
-  if ((field as FastDatePickerState).adaptive) {
+  if (field.adaptive) {
     final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoDatePickerBuilder;
   }

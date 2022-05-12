@@ -10,12 +10,11 @@ typedef FastSwitchTitleBuilder = Widget Function(FastSwitchState field);
 class FastSwitch extends FastFormField<bool> {
   const FastSwitch({
     super.adaptive,
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = switchBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue = false,
     super.key,
@@ -28,6 +27,7 @@ class FastSwitch extends FastFormField<bool> {
     this.activeColor,
     this.activeThumbImage,
     this.activeTrackColor,
+    this.autofocus = false,
     this.controlAffinity = ListTileControlAffinity.platform,
     this.dragStartBehavior = DragStartBehavior.start,
     this.dense,
@@ -54,6 +54,7 @@ class FastSwitch extends FastFormField<bool> {
   final Color? activeColor;
   final ImageProvider<Object>? activeThumbImage;
   final Color? activeTrackColor;
+  final bool autofocus;
   final ListTileControlAffinity controlAffinity;
   final bool? dense;
   final DragStartBehavior dragStartBehavior;
@@ -150,9 +151,10 @@ CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
 }
 
 Widget switchBuilder(FormFieldState<bool> field) {
+  field as FastSwitchState;
   FormFieldBuilder<bool> builder = materialSwitchBuilder;
 
-  if ((field as FastSwitchState).adaptive) {
+  if (field.adaptive) {
     final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoSwitchBuilder;
   }

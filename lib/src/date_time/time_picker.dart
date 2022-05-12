@@ -13,12 +13,11 @@ typedef FastTimePickerIconButtonBuilder = IconButton Function(
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
   const FastTimePicker({
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = timePickerBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue,
     super.key,

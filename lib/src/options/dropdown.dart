@@ -9,11 +9,10 @@ typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
 class FastDropdown<T> extends FastFormField<T> {
   const FastDropdown({
     FormFieldBuilder<T>? builder,
-    super.autofocus = false,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue,
     super.key,
@@ -24,6 +23,7 @@ class FastDropdown<T> extends FastFormField<T> {
     super.onSaved,
     super.validator,
     this.alignment = AlignmentDirectional.centerStart,
+    this.autofocus = false,
     this.disabledHint,
     this.dropdownColor,
     this.elevation = 8,
@@ -46,6 +46,7 @@ class FastDropdown<T> extends FastFormField<T> {
   }) : super(builder: builder ?? dropdownBuilder<T>);
 
   final AlignmentGeometry alignment;
+  final bool autofocus;
   final Widget? disabledHint;
   final Color? dropdownColor;
   final int elevation;

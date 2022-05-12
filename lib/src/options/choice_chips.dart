@@ -97,12 +97,11 @@ typedef FastChoiceChipBuilder = Widget Function(
 class FastChoiceChips extends FastFormField<List<String>> {
   FastChoiceChips({
     List<String>? initialValue,
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = choiceChipsBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.key,
     super.labelText,

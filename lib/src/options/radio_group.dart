@@ -24,11 +24,10 @@ class FastRadioGroup<T> extends FastFormField<T> {
   FastRadioGroup({
     FormFieldBuilder<T>? builder,
     T? initialValue,
-    super.autofocus = false,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.key,
     super.labelText,

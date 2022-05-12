@@ -84,31 +84,31 @@ typedef FastErrorBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 
 typedef FastHelperBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 
+const defaultContentPadding = EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0);
+
 @immutable
 abstract class FastFormField<T> extends FormField<T> {
   const FastFormField({
     EdgeInsetsGeometry? contentPadding,
+    bool? enabled,
     super.autovalidateMode = AutovalidateMode.onUserInteraction,
-    super.enabled,
     required super.builder,
     super.initialValue,
     super.key,
     super.onSaved,
     super.validator,
     this.adaptive,
-    this.autofocus = false,
     this.decoration,
     this.helperText,
     this.labelText,
     required this.name,
     this.onChanged,
     this.onReset,
-  }) : contentPadding =
-            contentPadding ?? const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0);
+  })  : contentPadding = contentPadding ?? defaultContentPadding,
+        super(enabled: enabled ?? true);
 
-  /// null represents non-adaptive form field widget
+  /// null represents a non-adaptive form field widget
   final bool? adaptive;
-  final bool autofocus;
   final EdgeInsetsGeometry contentPadding;
   final InputDecoration? decoration;
   final String? helperText;

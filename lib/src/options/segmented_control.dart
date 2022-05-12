@@ -7,11 +7,10 @@ class FastSegmentedControl<T> extends FastFormField<T> {
   FastSegmentedControl({
     FormFieldBuilder<T>? builder,
     T? initialValue,
-    super.autofocus = false,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.key,
     super.labelText,
@@ -28,7 +27,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     this.thumbColor,
   })  : assert(children.length >= 2),
         super(
-          builder: builder ?? cupertinoSegmentedControlBuilder,
+          builder: builder ?? segmentedControlBuilder,
           initialValue: initialValue ?? children.keys.first,
         );
 
@@ -48,7 +47,7 @@ class FastSegmentedControlState<T> extends FastFormFieldState<T> {
   FastSegmentedControl<T> get widget => super.widget as FastSegmentedControl<T>;
 }
 
-CupertinoFormRow cupertinoSegmentedControlBuilder<T>(FormFieldState<T> field) {
+CupertinoFormRow segmentedControlBuilder<T>(FormFieldState<T> field) {
   final widget = (field as FastSegmentedControlState<T>).widget;
 
   return CupertinoFormRow(

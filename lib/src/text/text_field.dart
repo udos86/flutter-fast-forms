@@ -8,7 +8,6 @@ import '../form.dart';
 class FastTextField extends FastFormField<String> {
   const FastTextField({
     super.adaptive = true,
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = textFieldBuilder,
     super.contentPadding,
@@ -25,6 +24,7 @@ class FastTextField extends FastFormField<String> {
     super.validator,
     this.autocorrect = true,
     this.autofillHints,
+    this.autofocus = false,
     this.buildCounter,
     this.cursorColor,
     this.cursorHeight,
@@ -70,6 +70,7 @@ class FastTextField extends FastFormField<String> {
 
   final bool autocorrect;
   final Iterable<String>? autofillHints;
+  final bool autofocus;
   final InputCounterWidgetBuilder? buildCounter;
   final Color? cursorColor;
   final double? cursorHeight;
@@ -257,9 +258,10 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
 }
 
 Widget textFieldBuilder(FormFieldState<String> field) {
+  field as FastTextFieldState;
   FormFieldBuilder<String> builder = materialTextFieldBuilder;
 
-  if ((field as FastTextFieldState).adaptive) {
+  if (field.adaptive) {
     final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoTextFieldBuilder;
   }

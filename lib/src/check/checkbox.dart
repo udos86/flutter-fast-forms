@@ -7,12 +7,11 @@ typedef FastCheckboxTitleBuilder = Widget Function(FastCheckboxState field);
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   const FastCheckbox({
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = checkboxBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue = false,
     super.key,
@@ -23,6 +22,7 @@ class FastCheckbox extends FastFormField<bool> {
     super.onSaved,
     super.validator,
     this.activeColor,
+    this.autofocus = false,
     this.checkColor,
     this.controlAffinity = ListTileControlAffinity.platform,
     this.dense,
@@ -40,6 +40,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.visualDensity,
   });
 
+  final bool autofocus;
   final Color? activeColor;
   final Color? checkColor;
   final ListTileControlAffinity controlAffinity;

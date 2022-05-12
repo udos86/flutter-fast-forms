@@ -13,11 +13,10 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
   FastAutocomplete({
     TextEditingValue? initialValue,
     FormFieldBuilder<String>? builder,
-    super.autofocus = false,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.key,
     super.labelText,

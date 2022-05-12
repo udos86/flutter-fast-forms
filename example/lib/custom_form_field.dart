@@ -11,10 +11,9 @@ class FastCustomOption {
 
 class FastCustomField extends FastFormField<Map<String, bool>> {
   const FastCustomField({
-    super.autofocus = false,
-    super.builder = _customFormFieldBuilder,
+    super.builder = customFormFieldBuilder,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue,
     super.key,
@@ -100,7 +99,7 @@ Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
   );
 }
 
-Widget _customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
+Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
   final widget = (field as FastCustomFieldState).widget;
 
   return InputDecorator(

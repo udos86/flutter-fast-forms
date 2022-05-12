@@ -16,12 +16,11 @@ typedef FastDateRangePickerIconButtonBuilder = IconButton Function(
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
     intl.DateFormat? format,
-    super.autofocus = false,
     super.autovalidateMode,
     super.builder = dateRangePickerBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue,
     super.key,
