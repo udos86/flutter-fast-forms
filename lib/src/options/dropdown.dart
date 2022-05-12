@@ -8,22 +8,21 @@ typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
 @immutable
 class FastDropdown<T> extends FastFormField<T> {
   const FastDropdown({
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<T>? builder,
-    EdgeInsetsGeometry contentPadding =
-        const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
-    T? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<T?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<T>? onSaved,
-    FormFieldValidator<T>? validator,
+    super.autofocus = false,
+    super.autovalidateMode,
+    super.contentPadding,
+    super.decoration,
+    super.enabled = true,
+    super.helperText,
+    super.initialValue,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.alignment = AlignmentDirectional.centerStart,
     this.disabledHint,
     this.dropdownColor,
@@ -44,23 +43,7 @@ class FastDropdown<T> extends FastFormField<T> {
     this.menuMaxHeight,
     this.selectedItemBuilder,
     this.style,
-  }) : super(
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? dropdownBuilder<T>,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
-          initialValue: initialValue,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  }) : super(builder: builder ?? dropdownBuilder<T>);
 
   final AlignmentGeometry alignment;
   final Widget? disabledHint;

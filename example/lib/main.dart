@@ -132,11 +132,11 @@ class FormPage extends StatelessWidget {
             name: 'time_picker',
             labelText: 'Time Picker',
           ),
-          FastInputChips(
+          const FastInputChips(
             name: 'input_chips',
             labelText: 'Input Chips',
-            options: const ['Angular', 'React', 'Vue', 'Svelte', 'Flutter'],
-            initialValue: const [
+            options: ['Angular', 'React', 'Vue', 'Svelte', 'Flutter'],
+            initialValue: [
               'HTML',
               'CSS',
               'React',
