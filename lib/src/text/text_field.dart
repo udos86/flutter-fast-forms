@@ -7,25 +7,24 @@ import '../form.dart';
 @immutable
 class FastTextField extends FastFormField<String> {
   const FastTextField({
-    bool? adaptive,
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<String>? builder,
-    EdgeInsetsGeometry contentPadding =
-        const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
-    String initialValue = '',
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<String?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<String>? onSaved,
-    FormFieldValidator<String>? validator,
+    super.adaptive = true,
+    super.autovalidateMode,
+    super.builder = textFieldBuilder,
+    super.contentPadding,
+    super.decoration,
+    super.enabled = true,
+    super.helperText,
+    super.initialValue = '',
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.autocorrect = true,
     this.autofillHints,
+    this.autofocus = false,
     this.buildCounter,
     this.cursorColor,
     this.cursorHeight,
@@ -67,27 +66,11 @@ class FastTextField extends FastFormField<String> {
     this.textInputAction,
     this.toolbarOptions,
     this.trailing,
-  }) : super(
-          adaptive: adaptive,
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? textFieldBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
-          initialValue: initialValue,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  });
 
   final bool autocorrect;
   final Iterable<String>? autofillHints;
+  final bool autofocus;
   final InputCounterWidgetBuilder? buildCounter;
   final Color? cursorColor;
   final double? cursorHeight;
@@ -275,9 +258,10 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
 }
 
 Widget textFieldBuilder(FormFieldState<String> field) {
+  field as FastTextFieldState;
   FormFieldBuilder<String> builder = materialTextFieldBuilder;
 
-  if ((field as FastTextFieldState).adaptive) {
+  if (field.adaptive) {
     final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoTextFieldBuilder;
   }

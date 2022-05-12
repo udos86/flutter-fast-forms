@@ -11,13 +11,13 @@ typedef FastFormChanged = void Function(
 @immutable
 class FastForm extends StatefulWidget {
   const FastForm({
-    Key? key,
+    super.key,
     this.adaptive = false,
     required this.children,
     this.decorator,
     required this.formKey,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final bool adaptive;
   final List<Widget> children;
@@ -70,11 +70,9 @@ class FastFormState extends State<FastForm> {
 
 class _FastFormScope extends InheritedWidget {
   const _FastFormScope({
-    required Widget child,
-    Key? key,
+    required super.child,
     required FastFormState formState,
-  })  : _formState = formState,
-        super(key: key, child: child);
+  }) : _formState = formState;
 
   final FastFormState _formState;
 
@@ -86,39 +84,31 @@ typedef FastErrorBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 
 typedef FastHelperBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 
+const defaultContentPadding = EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0);
+
 @immutable
 abstract class FastFormField<T> extends FormField<T> {
   const FastFormField({
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    bool enabled = true,
-    required FormFieldBuilder<T> builder,
     EdgeInsetsGeometry? contentPadding,
-    T? initialValue,
-    Key? key,
-    FormFieldSetter<T>? onSaved,
-    FormFieldValidator<T>? validator,
+    bool? enabled,
+    super.autovalidateMode = AutovalidateMode.onUserInteraction,
+    required super.builder,
+    super.initialValue,
+    super.key,
+    super.onSaved,
+    super.validator,
     this.adaptive,
-    this.autofocus = false,
     this.decoration,
     this.helperText,
     this.labelText,
     required this.name,
     this.onChanged,
     this.onReset,
-  })  : contentPadding =
-            contentPadding ?? const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
-        super(
-          autovalidateMode: autovalidateMode,
-          builder: builder,
-          enabled: enabled,
-          key: key,
-          initialValue: initialValue,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  })  : contentPadding = contentPadding ?? defaultContentPadding,
+        super(enabled: enabled ?? true);
 
+  /// null represents a non-adaptive form field widget
   final bool? adaptive;
-  final bool autofocus;
   final EdgeInsetsGeometry contentPadding;
   final InputDecoration? decoration;
   final String? helperText;

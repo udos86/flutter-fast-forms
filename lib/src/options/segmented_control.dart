@@ -1,26 +1,24 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import '../form.dart';
 
 @immutable
 class FastSegmentedControl<T> extends FastFormField<T> {
   FastSegmentedControl({
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormFieldBuilder<T>? builder,
-    EdgeInsetsGeometry? contentPadding,
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
     T? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<T?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<T>? onSaved,
-    FormFieldValidator<T>? validator,
+    super.autovalidateMode,
+    super.contentPadding,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.backgroundColor = CupertinoColors.tertiarySystemFill,
     required this.children,
     this.errorBuilder,
@@ -29,21 +27,8 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     this.thumbColor,
   })  : assert(children.length >= 2),
         super(
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? cupertinoSegmentedControlBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
+          builder: builder ?? segmentedControlBuilder,
           initialValue: initialValue ?? children.keys.first,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
         );
 
   final Color backgroundColor;
@@ -62,7 +47,7 @@ class FastSegmentedControlState<T> extends FastFormFieldState<T> {
   FastSegmentedControl<T> get widget => super.widget as FastSegmentedControl<T>;
 }
 
-CupertinoFormRow cupertinoSegmentedControlBuilder<T>(FormFieldState<T> field) {
+CupertinoFormRow segmentedControlBuilder<T>(FormFieldState<T> field) {
   final widget = (field as FastSegmentedControlState<T>).widget;
 
   return CupertinoFormRow(

@@ -7,22 +7,22 @@ typedef FastCheckboxTitleBuilder = Widget Function(FastCheckboxState field);
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   const FastCheckbox({
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<bool>? builder,
-    EdgeInsetsGeometry? contentPadding,
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
-    bool initialValue = false,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<bool?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<bool>? onSaved,
-    FormFieldValidator<bool>? validator,
+    super.autovalidateMode,
+    super.builder = checkboxBuilder,
+    super.contentPadding,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.initialValue = false,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.activeColor,
+    this.autofocus = false,
     this.checkColor,
     this.controlAffinity = ListTileControlAffinity.platform,
     this.dense,
@@ -38,24 +38,9 @@ class FastCheckbox extends FastFormField<bool> {
     this.titleBuilder,
     this.tristate = false,
     this.visualDensity,
-  }) : super(
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? checkboxBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
-          initialValue: initialValue,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  });
 
+  final bool autofocus;
   final Color? activeColor;
   final Color? checkColor;
   final ListTileControlAffinity controlAffinity;

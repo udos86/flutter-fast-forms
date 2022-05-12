@@ -37,22 +37,21 @@ typedef FastInputWillAddChip = bool Function(
 
 @immutable
 class FastInputChips extends FastFormField<List<String>> {
-  FastInputChips({
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<List<String>>? builder,
-    EdgeInsetsGeometry? contentPadding,
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
-    List<String>? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<List<String>?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<List<String>>? onSaved,
-    FormFieldValidator<List<String>>? validator,
+  const FastInputChips({
+    super.autovalidateMode,
+    super.builder = inputChipsBuilder,
+    super.contentPadding,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.initialValue = const <String>[],
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.alignment = WrapAlignment.start,
     this.chipBuilder,
     this.clipBehavior = Clip.none,
@@ -75,23 +74,7 @@ class FastInputChips extends FastFormField<List<String>> {
     this.willAddChip,
     this.willDisplayOption,
     this.wrap = true,
-  }) : super(
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? inputChipsBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
-          initialValue: initialValue ?? <String>[],
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  });
 
   final WrapAlignment alignment;
   final FastInputChipBuilder? chipBuilder;

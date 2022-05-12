@@ -9,25 +9,25 @@ typedef FastSwitchTitleBuilder = Widget Function(FastSwitchState field);
 @immutable
 class FastSwitch extends FastFormField<bool> {
   const FastSwitch({
-    bool? adaptive,
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<bool>? builder,
-    EdgeInsetsGeometry? contentPadding,
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
-    bool initialValue = false,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<bool?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<bool>? onSaved,
-    FormFieldValidator<bool>? validator,
+    super.adaptive,
+    super.autovalidateMode,
+    super.builder = switchBuilder,
+    super.contentPadding,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.initialValue = false,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.activeColor,
     this.activeThumbImage,
     this.activeTrackColor,
+    this.autofocus = false,
     this.controlAffinity = ListTileControlAffinity.platform,
     this.dragStartBehavior = DragStartBehavior.start,
     this.dense,
@@ -49,28 +49,12 @@ class FastSwitch extends FastFormField<bool> {
     this.titleText,
     this.titleBuilder,
     this.visualDensity,
-  }) : super(
-          adaptive: adaptive,
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? switchBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
-          initialValue: initialValue,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  });
 
   final Color? activeColor;
   final ImageProvider<Object>? activeThumbImage;
   final Color? activeTrackColor;
+  final bool autofocus;
   final ListTileControlAffinity controlAffinity;
   final bool? dense;
   final DragStartBehavior dragStartBehavior;
@@ -167,9 +151,10 @@ CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
 }
 
 Widget switchBuilder(FormFieldState<bool> field) {
+  field as FastSwitchState;
   FormFieldBuilder<bool> builder = materialSwitchBuilder;
 
-  if ((field as FastSwitchState).adaptive) {
+  if (field.adaptive) {
     final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoSwitchBuilder;
   }

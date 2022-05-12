@@ -10,24 +10,23 @@ typedef FastSliderLabelBuilder = String Function(FastSliderState field);
 @immutable
 class FastSlider extends FastFormField<double> {
   const FastSlider({
-    bool adaptive = true,
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<double>? builder,
-    EdgeInsetsGeometry? contentPadding,
-    InputDecoration? decoration,
-    bool enabled = true,
-    FocusNode? focusNode,
-    String? helperText,
     double? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<double?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<double>? onSaved,
-    FormFieldValidator<double>? validator,
+    super.adaptive,
+    super.autovalidateMode,
+    super.builder = sliderBuilder,
+    super.contentPadding,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.activeColor,
+    this.autofocus = false,
     this.divisions,
     this.errorBuilder,
     this.helperBuilder,
@@ -39,26 +38,10 @@ class FastSlider extends FastFormField<double> {
     this.prefixBuilder,
     this.suffixBuilder,
     this.thumbColor,
-  }) : super(
-          adaptive: adaptive,
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? adaptiveSliderBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
-          initialValue: initialValue ?? min,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  }) : super(initialValue: initialValue ?? min);
 
   final Color? activeColor;
+  final bool autofocus;
   final int? divisions;
   final FastErrorBuilder<double>? errorBuilder;
   final FastHelperBuilder<double>? helperBuilder;
@@ -96,7 +79,7 @@ SizedBox sliderSuffixBuilder(FastSliderState field) {
   );
 }
 
-InputDecorator sliderBuilder(FormFieldState<double> field) {
+InputDecorator materialSliderBuilder(FormFieldState<double> field) {
   final widget = (field as FastSliderState).widget;
 
   return InputDecorator(
@@ -156,9 +139,9 @@ CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
   );
 }
 
-Widget adaptiveSliderBuilder(FormFieldState<double> field) {
+Widget sliderBuilder(FormFieldState<double> field) {
   field as FastSliderState;
-  FormFieldBuilder<double> builder = sliderBuilder;
+  FormFieldBuilder<double> builder = materialSliderBuilder;
 
   if (field.adaptive) {
     final platform = Theme.of(field.context).platform;

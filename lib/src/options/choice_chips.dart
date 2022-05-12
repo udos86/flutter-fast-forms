@@ -96,21 +96,20 @@ typedef FastChoiceChipBuilder = Widget Function(
 @immutable
 class FastChoiceChips extends FastFormField<List<String>> {
   FastChoiceChips({
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<List<String>>? builder,
-    EdgeInsetsGeometry? contentPadding,
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
     List<String>? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<List<String>?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter? onSaved,
-    FormFieldValidator<List<String>>? validator,
+    super.autovalidateMode,
+    super.builder = choiceChipsBuilder,
+    super.contentPadding,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.alignment = WrapAlignment.start,
     this.chipBuilder,
     this.chipPadding,
@@ -124,25 +123,11 @@ class FastChoiceChips extends FastFormField<List<String>> {
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
   }) : super(
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? choiceChipsBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
           initialValue: initialValue ??
               chips
                   .where((chip) => chip.selected)
                   .map((chip) => chip.value)
                   .toList(),
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
         );
 
   final WrapAlignment alignment;

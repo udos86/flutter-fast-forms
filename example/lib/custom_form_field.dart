@@ -11,30 +11,21 @@ class FastCustomOption {
 
 class FastCustomField extends FastFormField<Map<String, bool>> {
   const FastCustomField({
-    InputDecoration? decoration,
-    String? helperText,
-    Map<String, bool>? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<Map<String, bool>?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<Map<String, bool>>? onSaved,
-    FormFieldValidator<Map<String, bool>>? validator,
+    super.builder = customFormFieldBuilder,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.initialValue,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     required this.options,
     this.title,
-  }) : super(
-          builder: _customFormFieldBuilder,
-          helperText: helperText,
-          initialValue: initialValue,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  });
 
   final List<FastCustomOption> options;
   final Widget? title;
@@ -108,7 +99,7 @@ Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
   );
 }
 
-Widget _customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
+Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
   final widget = (field as FastCustomFieldState).widget;
 
   return InputDecorator(

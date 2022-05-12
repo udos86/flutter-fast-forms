@@ -18,22 +18,21 @@ typedef FastDatePickerIconButtonBuilder = IconButton Function(
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
-    bool? adaptive,
-    bool autofocus = false,
-    AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
-    FormFieldBuilder<DateTime>? builder,
-    EdgeInsetsGeometry? contentPadding,
-    InputDecoration? decoration,
-    bool enabled = true,
-    String? helperText,
     DateTime? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<DateTime?>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<DateTime>? onSaved,
-    FormFieldValidator<DateTime>? validator,
+    super.adaptive,
+    super.autovalidateMode,
+    super.builder = datePickerBuilder,
+    super.contentPadding,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
     this.backgroundColor,
     this.cancelText,
     this.confirmText,
@@ -69,24 +68,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.textDirection,
     this.use24hFormat = false,
     this.useRootNavigator = true,
-  }) : super(
-          adaptive: adaptive,
-          autofocus: autofocus,
-          autovalidateMode: autovalidateMode,
-          builder: builder ?? datePickerBuilder,
-          contentPadding: contentPadding,
-          decoration: decoration,
-          enabled: enabled,
-          helperText: helperText,
-          initialValue: initialValue ?? DateTime.now(),
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+  }) : super(initialValue: initialValue ?? DateTime.now());
 
   final Color? backgroundColor;
   final String? cancelText;
@@ -354,9 +336,10 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
 }
 
 Widget datePickerBuilder(FormFieldState<DateTime> field) {
+  field as FastDatePickerState;
   FormFieldBuilder<DateTime> builder = materialDatePickerBuilder;
 
-  if ((field as FastDatePickerState).adaptive) {
+  if (field.adaptive) {
     final platform = Theme.of(field.context).platform;
     if (platform == TargetPlatform.iOS) builder = cupertinoDatePickerBuilder;
   }
