@@ -280,16 +280,16 @@ class FastInputChipsView extends StatelessWidget {
       return field.widget.wrap
           ? chip
           : Padding(
-              child: chip,
               padding:
                   EdgeInsetsDirectional.fromSTEB(0, 0, field.widget.spacing, 0),
+              child: chip,
             );
     });
 
     final children = [
       ...chips,
       LayoutBuilder(
-        builder: (context, _constraints) {
+        builder: (context, constraints) {
           final freeSpace = field.widget.wrap
               ? _getFreeWrapSpace(context)
               : _getFreeNoWrapSpace(context);
@@ -343,7 +343,7 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
                   final bool highlight =
                       AutocompleteHighlightedOption.of(context) == index;
                   if (highlight) {
-                    SchedulerBinding.instance!
+                    SchedulerBinding.instance
                         .addPostFrameCallback((Duration timeStamp) {
                       Scrollable.ensureVisible(context, alignment: 0.5);
                     });
@@ -397,8 +397,8 @@ ValueChanged<String> _onFieldSubmitted(
           if (field.widget.wrap) {
             field.textFocusNode.requestFocus();
           } else {
-            WidgetsBinding.instance?.addPostFrameCallback(
-              (_duration) {
+            WidgetsBinding.instance.addPostFrameCallback(
+              (duration) {
                 if (field.scrollController.hasClients) {
                   field.textFocusNode.requestFocus();
                   field.scrollController.animateTo(

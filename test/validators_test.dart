@@ -3,14 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('required', () {
-    String? errorTextBuilder1(String? _value) => 'error text';
+    String? errorTextBuilder1(String? value) => 'error text';
     final validator1 = Validators.required<String>(errorTextBuilder1);
 
     expect(validator1('test'), null);
     expect(validator1(''), errorTextBuilder1(''));
     expect(validator1(null), errorTextBuilder1(null));
 
-    String? errorTextBuilder2(Iterable? _value) => 'error text';
+    String? errorTextBuilder2(Iterable? value) => 'error text';
     final validator2 = Validators.required<Iterable>(errorTextBuilder2);
 
     expect(validator2([]), errorTextBuilder2([]));
@@ -18,7 +18,7 @@ void main() {
   });
 
   test('requiredTrue', () {
-    String? errorTextBuilder(bool? _value) => 'error text';
+    String? errorTextBuilder(bool? value) => 'error text';
     final validator = Validators.requiredTrue(errorTextBuilder);
 
     expect(validator(true), null);
@@ -28,7 +28,7 @@ void main() {
 
   test('pattern', () {
     const pattern = "^test\$";
-    String? errorTextBuilder(String? _value, Pattern _pattern) => 'error text';
+    String? errorTextBuilder(String? value, Pattern pattern) => 'error text';
     final validator = Validators.pattern(pattern, errorTextBuilder);
 
     expect(validator('test'), null);
@@ -39,7 +39,7 @@ void main() {
 
   test('maxLength', () {
     const maxLength = 4;
-    String? errorTextBuilder1(String? _value, int _maxLength) => 'error text';
+    String? errorTextBuilder1(String? value, int maxLength) => 'error text';
     final validator1 =
         Validators.maxLength<String>(maxLength, errorTextBuilder1);
 
@@ -48,7 +48,7 @@ void main() {
     expect(validator1('testtest'), errorTextBuilder1('testtest', maxLength));
     expect(validator1(''), null);
 
-    String? errorTextBuilder2(Iterable? _value, int _maxLength) => 'error text';
+    String? errorTextBuilder2(Iterable? value, int maxLength) => 'error text';
     final validator2 =
         Validators.maxLength<Iterable>(maxLength, errorTextBuilder2);
 
@@ -61,7 +61,7 @@ void main() {
 
   test('minLength', () {
     const minLength = 4;
-    String? errorTextBuilder1(String? _value, int _minLength) => 'error text';
+    String? errorTextBuilder1(String? value, int minLength) => 'error text';
     final validator1 =
         Validators.minLength<String>(minLength, errorTextBuilder1);
 
@@ -70,7 +70,7 @@ void main() {
     expect(validator1(''), errorTextBuilder1('', minLength));
     expect(validator1(null), null);
 
-    String? errorTextBuilder2(Iterable? _value, int _minLength) => 'error text';
+    String? errorTextBuilder2(Iterable? value, int minLength) => 'error text';
     final validator2 =
         Validators.minLength<Iterable>(minLength, errorTextBuilder2);
 
@@ -80,7 +80,7 @@ void main() {
 
   test('max', () {
     const max = 4;
-    String? errorTextBuilder(num? _value, num _max) => 'error text';
+    String? errorTextBuilder(num? value, num max) => 'error text';
     final validator = Validators.max(max, errorTextBuilder);
 
     expect(validator(max - 1), null);
@@ -90,7 +90,7 @@ void main() {
 
   test('min', () {
     const min = 4;
-    String? errorTextBuilder(num? _value, num _min) => 'error text';
+    String? errorTextBuilder(num? value, num min) => 'error text';
     final validator = Validators.min(min, errorTextBuilder);
 
     expect(validator(min + 1), null);
@@ -100,8 +100,8 @@ void main() {
 
   test('compose', () {
     const minLength = 4;
-    String? errorTextBuilderRequired(String? _value) => 'error text required';
-    String? errorTextBuilderMinLength(String? _value, int _minLength) =>
+    String? errorTextBuilderRequired(String? value) => 'error text required';
+    String? errorTextBuilderMinLength(String? value, int minLength) =>
         'error text minLength';
     final validator = Validators.compose<String>([
       Validators.required(errorTextBuilderRequired),
