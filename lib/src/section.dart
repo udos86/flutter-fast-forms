@@ -76,11 +76,12 @@ class FastFormSection extends StatelessWidget {
         ? CupertinoFormSection.insetGrouped
         : CupertinoFormSection.new;
 
-    final _children = [
-      for (final child in children)
-        child is FastFormField ? _buildFormField(context, child) : child,
-    ];
-
-    return builder(header: header, children: _children);
+    return builder(
+      header: header,
+      children: [
+        for (final child in children)
+          child is FastFormField ? _buildFormField(context, child) : child,
+      ],
+    );
   }
 }

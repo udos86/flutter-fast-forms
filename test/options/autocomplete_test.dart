@@ -13,7 +13,7 @@ void main() {
 
   testWidgets(
       'throws when no options or optionsBuilder is present on FastAutocomplete',
-      (WidgetTester _tester) async {
+      (WidgetTester tester) async {
     expect(() => FastAutocomplete<String>(name: 'id'), throwsAssertionError);
   });
 

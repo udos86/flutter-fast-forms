@@ -185,10 +185,10 @@ class FormPage extends StatelessWidget {
             buildCounter: inputCounterWidgetBuilder,
             inputFormatters: const [],
             validator: Validators.compose([
-              Validators.required((_value) => 'Field is required'),
+              Validators.required((value) => 'Field is required'),
               Validators.minLength(
                   7,
-                  (_value, minLength) =>
+                  (value, minLength) =>
                       'Field must contain at least $minLength characters')
             ]),
           ),
@@ -309,22 +309,22 @@ class FormPage extends StatelessWidget {
             prefixBuilder: (field) {
               return CupertinoButton(
                 padding: const EdgeInsets.only(left: 0),
-                child: const Icon(CupertinoIcons.volume_mute),
                 onPressed: field.widget.enabled
                     ? () => field.didChange(field.widget.min)
                     : null,
+                child: const Icon(CupertinoIcons.volume_mute),
               );
             },
             suffixBuilder: (field) {
               return CupertinoButton(
                 padding: EdgeInsets.zero,
-                child: const Icon(CupertinoIcons.volume_up),
                 onPressed: field.widget.enabled
                     ? () => field.didChange(field.widget.max)
                     : null,
+                child: const Icon(CupertinoIcons.volume_up),
               );
             },
-            helperBuilder: (FormFieldState<double> _field) {
+            helperBuilder: (FormFieldState<double> field) {
               return const DefaultTextStyle(
                 style: TextStyle(
                   color: CupertinoColors.black,
