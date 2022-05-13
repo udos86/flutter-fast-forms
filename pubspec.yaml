@@ -1,6 +1,6 @@
 name: flutter_fast_forms
 description: Enhances the Flutter SDK with adaptive form field wrapper widgets and validation states to speed up building forms.
-version: 6.0.0
+version: 7.0.0
 repository: https://github.com/udos86/flutter-fast-forms
 
 environment:

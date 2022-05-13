@@ -1,6 +1,9 @@
-## [7.0.0] - 04/24/2022
+## [7.0.0] - 05/13/2022
 
 * update to Flutter `3.0.0` and Dart `2.17.0`
+* removes `autofocus` property from `FastFormField`
+* adds `autofocus` property to `FastCheckbox`, `FastSwitch`, `FastDropdown`, `FastChoiceChips`, `FastSlider` and `FastTextField`
+* uses Dart `2.17.0` super-initializer parameters now wherever possible
 
 ## [6.0.0] - 04/24/2022
 

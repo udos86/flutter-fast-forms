@@ -133,13 +133,10 @@ Let's assume a simple form field that provides a random integer whenever a butto
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
-    Key? key,
-    required String name,
-  }) : super(
-          builder: _myCustomFormFieldBuilder,
-          key: key,
-          name: name,
-        );
+    super.builder = myCustomFormFieldBuilder,
+    super.key,
+    required super.name,
+  });
 
   @override
   MyCustomFieldState createState() => MyCustomFieldState();
@@ -151,32 +148,23 @@ class MyCustomFieldState extends FastFormFieldState<int> {
 }
 ```
 
-2. Add optional parameters and pass them as you like:
+2. Add optional super-initializer parameters as you like:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
-    InputDecoration? decoration,
-    String? helperText,
-    int? initialValue,
-    Key? key,
-    String? labelText,
-    required String name,
-    ValueChanged<int>? onChanged,
-    VoidCallback? onReset,
-    FormFieldSetter<int>? onSaved,
-    FormFieldValidator<int>? validator,
-  }) : super(
-          builder: _myCustomFormFieldBuilder,
-          helperText: helperText,
-          initialValue: initialValue,
-          key: key,
-          labelText: labelText,
-          name: name,
-          onChanged: onChanged,
-          onReset: onReset,
-          onSaved: onSaved,
-          validator: validator,
-        );
+    super.builder = customFormFieldBuilder,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.initialValue,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
+  });
 
   @override
   MyCustomFieldState createState() => MyCustomFieldState();
@@ -190,7 +178,7 @@ class MyCustomFieldState extends FastFormFieldState<int> {
 
 3. Implement the required `FormFieldBuilder<T>`:
 ```dart
-Widget _myCustomFormFieldBuilder(FormFieldState<int> field) {
+Widget myCustomFormFieldBuilder(FormFieldState<int> field) {
   return InputDecorator(
     decoration: field.decoration,
     child: Row(
