@@ -148,7 +148,7 @@ class MyCustomFieldState extends FastFormFieldState<int> {
 }
 ```
 
-2. Add optional super-initializer parameters as you like:
+2. Add optional super-initializer parameters to your constructor as you like:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
@@ -168,11 +168,6 @@ class MyCustomField extends FastFormField<int> {
 
   @override
   MyCustomFieldState createState() => MyCustomFieldState();
-}
-
-class MyCustomFieldState extends FastFormFieldState<int> {
-  @override
-  MyCustomField get widget => super.widget as MyCustomField;
 }
 ```
 
