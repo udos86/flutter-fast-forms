@@ -23,6 +23,7 @@ class FastCheckbox extends FastFormField<bool> {
     super.validator,
     this.activeColor,
     this.autofocus = false,
+    this.checkboxShape,
     this.checkColor,
     this.controlAffinity = ListTileControlAffinity.platform,
     this.dense,
@@ -32,6 +33,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.secondary,
     this.selectedTileColor,
     this.shapeBorder,
+    this.side,
     this.subtitle,
     this.tileColor,
     required this.titleText,
@@ -42,6 +44,7 @@ class FastCheckbox extends FastFormField<bool> {
 
   final bool autofocus;
   final Color? activeColor;
+  final OutlinedBorder? checkboxShape;
   final Color? checkColor;
   final ListTileControlAffinity controlAffinity;
   final bool? dense;
@@ -51,6 +54,7 @@ class FastCheckbox extends FastFormField<bool> {
   final Widget? secondary;
   final Color? selectedTileColor;
   final ShapeBorder? shapeBorder;
+  final BorderSide? side;
   final Widget? subtitle;
   final Color? tileColor;
   final String titleText;
@@ -67,7 +71,7 @@ class FastCheckboxState extends FastFormFieldState<bool> {
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
-Text checkboxTitleBuilder(FastCheckboxState field) {
+Widget checkboxTitleBuilder(FastCheckboxState field) {
   return Text(
     field.widget.titleText,
     style: TextStyle(
@@ -77,7 +81,7 @@ Text checkboxTitleBuilder(FastCheckboxState field) {
   );
 }
 
-InputDecorator checkboxBuilder(FormFieldState<bool> field) {
+Widget checkboxBuilder(FormFieldState<bool> field) {
   final widget = (field as FastCheckboxState).widget;
   final titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
 
@@ -87,6 +91,7 @@ InputDecorator checkboxBuilder(FormFieldState<bool> field) {
       activeColor: widget.activeColor,
       autofocus: widget.autofocus,
       checkColor: widget.checkColor,
+      checkboxShape: widget.checkboxShape,
       contentPadding: widget.contentPadding,
       controlAffinity: widget.controlAffinity,
       dense: widget.dense,
@@ -98,6 +103,7 @@ InputDecorator checkboxBuilder(FormFieldState<bool> field) {
       selected: field.value ?? false,
       selectedTileColor: widget.selectedTileColor,
       shape: widget.shapeBorder,
+      side: widget.side,
       subtitle: widget.subtitle,
       tileColor: widget.tileColor,
       title: titleBuilder(field),

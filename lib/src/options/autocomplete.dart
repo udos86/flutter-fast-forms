@@ -94,8 +94,7 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
   };
 }
 
-Autocomplete autocompleteBuilder<O extends Object>(
-    FormFieldState<String> field) {
+Widget autocompleteBuilder<O extends Object>(FormFieldState<String> field) {
   final widget = (field as FastAutocompleteState<O>).widget;
   final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
   final AutocompleteOptionsBuilder<O> optionsBuilder;

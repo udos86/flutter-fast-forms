@@ -59,7 +59,7 @@ RangeLabels rangeSliderLabelsBuilder(FastRangeSliderState field) {
   );
 }
 
-SizedBox rangeSliderPrefixBuilder(FastRangeSliderState field) {
+Widget rangeSliderPrefixBuilder(FastRangeSliderState field) {
   return SizedBox(
     width: 48.0,
     child: Center(
@@ -71,7 +71,7 @@ SizedBox rangeSliderPrefixBuilder(FastRangeSliderState field) {
   );
 }
 
-SizedBox rangeSliderSuffixBuilder(FastRangeSliderState field) {
+Widget rangeSliderSuffixBuilder(FastRangeSliderState field) {
   return SizedBox(
     width: 48.0,
     child: Center(
@@ -85,7 +85,7 @@ SizedBox rangeSliderSuffixBuilder(FastRangeSliderState field) {
   );
 }
 
-InputDecorator rangeSliderBuilder(FormFieldState<RangeValues> field) {
+Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
   final widget = (field as FastRangeSliderState).widget;
 
   return InputDecorator(

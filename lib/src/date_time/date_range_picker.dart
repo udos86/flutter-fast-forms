@@ -30,6 +30,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     super.onReset,
     super.onSaved,
     super.validator,
+    this.anchorPoint,
     this.cancelText,
     this.confirmText,
     this.currentDate,
@@ -55,6 +56,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.useRootNavigator = true,
   }) : dateFormat = format ?? intl.DateFormat.yMd();
 
+  final Offset? anchorPoint;
   final String? cancelText;
   final String? confirmText;
   final DateTime? currentDate;
@@ -112,11 +114,12 @@ IconButton dateRangePickerIconButtonBuilder(
   );
 }
 
-InkWell dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
+Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
   final widget = (field as FastDateRangePickerState).widget;
 
   Future<DateTimeRange?> show(DatePickerEntryMode entryMode) {
     return showDateRangePicker(
+      anchorPoint: widget.anchorPoint,
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -33,6 +34,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     super.onReset,
     super.onSaved,
     super.validator,
+    this.anchorPoint,
     this.backgroundColor,
     this.cancelText,
     this.confirmText,
@@ -53,6 +55,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.iconButtonBuilder,
     this.initialDatePickerMode = DatePickerMode.day,
     this.initialEntryMode = DatePickerEntryMode.calendar,
+    this.keyboardType,
     required this.lastDate,
     this.locale,
     this.maximumYear,
@@ -70,6 +73,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.useRootNavigator = true,
   }) : super(initialValue: initialValue ?? DateTime.now());
 
+  final Offset? anchorPoint;
   final Color? backgroundColor;
   final String? cancelText;
   final String? confirmText;
@@ -90,6 +94,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final FastDatePickerIconButtonBuilder? iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
+  final TextInputType? keyboardType;
   final DateTime lastDate;
   final Locale? locale;
   final int? maximumYear;
@@ -197,6 +202,8 @@ Container cupertinoDatePickerModalPopupBuilder(
           padding: const EdgeInsets.only(top: 6.0),
           height: widget.height,
           child: CupertinoDatePicker(
+            backgroundColor: widget.backgroundColor,
+            dateOrder: widget.dateOrder,
             initialDateTime: field.value,
             maximumDate: widget.lastDate,
             maximumYear: widget.maximumYear,
@@ -213,11 +220,12 @@ Container cupertinoDatePickerModalPopupBuilder(
   );
 }
 
-InkWell materialDatePickerBuilder(FormFieldState<DateTime> field) {
+Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
   final widget = (field as FastDatePickerState).widget;
 
   Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
+      anchorPoint: widget.anchorPoint,
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
@@ -227,11 +235,12 @@ InkWell materialDatePickerBuilder(FormFieldState<DateTime> field) {
       errorInvalidText: widget.errorInvalidText,
       fieldHintText: widget.fieldHintText,
       fieldLabelText: widget.fieldLabelText,
+      firstDate: widget.firstDate,
       helpText: widget.helpText,
       initialDatePickerMode: widget.initialDatePickerMode,
       initialEntryMode: entryMode,
       initialDate: widget.initialValue ?? DateTime.now(),
-      firstDate: widget.firstDate,
+      keyboardType: widget.keyboardType,
       lastDate: widget.lastDate,
       locale: widget.locale,
       routeSettings: widget.routeSettings,
@@ -265,7 +274,7 @@ InkWell materialDatePickerBuilder(FormFieldState<DateTime> field) {
   );
 }
 
-CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
+Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
   final widget = (field as FastDatePickerState).widget;
   final CupertinoThemeData themeData = CupertinoTheme.of(field.context);
   final TextStyle textStyle = themeData.textTheme.textStyle;
@@ -336,12 +345,22 @@ CupertinoFormRow cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
 }
 
 Widget datePickerBuilder(FormFieldState<DateTime> field) {
-  field as FastDatePickerState;
-  FormFieldBuilder<DateTime> builder = materialDatePickerBuilder;
+  var builder = materialDatePickerBuilder;
 
-  if (field.adaptive) {
-    final platform = Theme.of(field.context).platform;
-    if (platform == TargetPlatform.iOS) builder = cupertinoDatePickerBuilder;
+  if ((field as FastDatePickerState).adaptive) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        builder = cupertinoDatePickerBuilder;
+        break;
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+      default:
+        builder = materialDatePickerBuilder;
+        break;
+    }
   }
 
   return builder(field);

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form.dart';
 
@@ -35,7 +37,10 @@ class FastSlider extends FastFormField<double> {
     this.min = 0.0,
     this.mouseCursor,
     this.labelBuilder,
+    this.onChangeEnd,
+    this.onChangeStart,
     this.prefixBuilder,
+    this.semanticFormatterCallback,
     this.suffixBuilder,
     this.thumbColor,
   }) : super(initialValue: initialValue ?? min);
@@ -50,7 +55,10 @@ class FastSlider extends FastFormField<double> {
   final double max;
   final double min;
   final MouseCursor? mouseCursor;
+  final ValueChanged<double>? onChangeEnd;
+  final ValueChanged<double>? onChangeStart;
   final FastSliderFixBuilder? prefixBuilder;
+  final SemanticFormatterCallback? semanticFormatterCallback;
   final FastSliderFixBuilder? suffixBuilder;
   final Color? thumbColor;
 
@@ -67,7 +75,7 @@ String sliderLabelBuilder(FastSliderState field) {
   return field.value!.toStringAsFixed(0);
 }
 
-SizedBox sliderSuffixBuilder(FastSliderState field) {
+Widget sliderSuffixBuilder(FastSliderState field) {
   return SizedBox(
     width: 32.0,
     child: Text(
@@ -79,7 +87,7 @@ SizedBox sliderSuffixBuilder(FastSliderState field) {
   );
 }
 
-InputDecorator materialSliderBuilder(FormFieldState<double> field) {
+Widget materialSliderBuilder(FormFieldState<double> field) {
   final widget = (field as FastSliderState).widget;
 
   return InputDecorator(
@@ -99,6 +107,9 @@ InputDecorator materialSliderBuilder(FormFieldState<double> field) {
             max: widget.max,
             min: widget.min,
             mouseCursor: widget.mouseCursor,
+            onChangeEnd: widget.onChangeEnd,
+            onChangeStart: widget.onChangeStart,
+            semanticFormatterCallback: widget.semanticFormatterCallback,
             thumbColor: widget.thumbColor,
             value: field.value!,
             onChanged: widget.enabled ? field.didChange : null,
@@ -110,7 +121,7 @@ InputDecorator materialSliderBuilder(FormFieldState<double> field) {
   );
 }
 
-CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
+Widget cupertinoSliderBuilder(FormFieldState<double> field) {
   final widget = (field as FastSliderState).widget;
 
   return CupertinoFormRow(
@@ -131,6 +142,8 @@ CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
             thumbColor: widget.thumbColor ?? CupertinoColors.white,
             value: field.value!,
             onChanged: widget.enabled ? field.didChange : null,
+            onChangeEnd: widget.onChangeEnd,
+            onChangeStart: widget.onChangeStart,
           ),
         ),
         if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
@@ -140,12 +153,22 @@ CupertinoFormRow cupertinoSliderBuilder(FormFieldState<double> field) {
 }
 
 Widget sliderBuilder(FormFieldState<double> field) {
-  field as FastSliderState;
-  FormFieldBuilder<double> builder = materialSliderBuilder;
+  var builder = materialSliderBuilder;
 
-  if (field.adaptive) {
-    final platform = Theme.of(field.context).platform;
-    if (platform == TargetPlatform.iOS) builder = cupertinoSliderBuilder;
+  if ((field as FastSliderState).adaptive) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        builder = cupertinoSliderBuilder;
+        break;
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+      default:
+        builder = materialSliderBuilder;
+        break;
+    }
   }
 
   return builder(field);

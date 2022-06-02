@@ -24,6 +24,7 @@ class FastDropdown<T> extends FastFormField<T> {
     super.validator,
     this.alignment = AlignmentDirectional.centerStart,
     this.autofocus = false,
+    this.borderRadius,
     this.disabledHint,
     this.dropdownColor,
     this.elevation = 8,
@@ -47,6 +48,7 @@ class FastDropdown<T> extends FastFormField<T> {
 
   final AlignmentGeometry alignment;
   final bool autofocus;
+  final BorderRadius? borderRadius;
   final Widget? disabledHint;
   final Color? dropdownColor;
   final int elevation;
@@ -84,7 +86,7 @@ List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
       .toList();
 }
 
-DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
+Widget dropdownBuilder<T>(FormFieldState<T> field) {
   final widget = (field as FastDropdownState<T>).widget;
   final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
@@ -96,6 +98,7 @@ DropdownButtonFormField<T> dropdownBuilder<T>(FormFieldState<T> field) {
     alignment: widget.alignment,
     autofocus: widget.autofocus,
     autovalidateMode: widget.autovalidateMode,
+    borderRadius: widget.borderRadius,
     decoration: field.decoration,
     disabledHint: widget.disabledHint,
     dropdownColor: widget.dropdownColor,

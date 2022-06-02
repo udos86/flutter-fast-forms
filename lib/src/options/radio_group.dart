@@ -73,7 +73,7 @@ Widget radioOptionBuilder<T>(
   return vertical ? tile : Expanded(child: tile);
 }
 
-Flex radioOptionsBuilder<T>(
+Widget radioOptionsBuilder<T>(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> field) {
   final optionBuilder = field.widget.optionBuilder ?? radioOptionBuilder;
   final wrapper = field.widget.orientation == FastRadioGroupOrientation.vertical
@@ -85,7 +85,7 @@ Flex radioOptionsBuilder<T>(
   );
 }
 
-InputDecorator radioGroupBuilder<T>(FormFieldState<T> field) {
+Widget radioGroupBuilder<T>(FormFieldState<T> field) {
   final widget = (field as FastRadioGroupState<T>).widget;
   final optionsBuilder = widget.optionsBuilder ?? radioOptionsBuilder;
 

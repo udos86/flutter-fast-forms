@@ -194,7 +194,7 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
   );
 }
 
-InputDecorator choiceChipsBuilder(FormFieldState field) {
+Widget choiceChipsBuilder(FormFieldState field) {
   final widget = (field as FastChoiceChipsState).widget;
   final chipBuilder = widget.chipBuilder ?? choiceChipBuilder;
 

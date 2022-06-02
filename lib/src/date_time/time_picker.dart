@@ -27,6 +27,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     super.onReset,
     super.onSaved,
     super.validator,
+    this.anchorPoint,
     this.cancelText,
     this.confirmText,
     this.dialogBuilder,
@@ -37,11 +38,13 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     this.iconButtonBuilder,
     this.initialEntryMode = TimePickerEntryMode.dial,
     this.minuteLabelText,
+    this.onEntryModeChanged,
     this.routeSettings,
     this.textBuilder,
     this.useRootNavigator = true,
   });
 
+  final Offset? anchorPoint;
   final String? cancelText;
   final String? confirmText;
   final TransitionBuilder? dialogBuilder;
@@ -52,6 +55,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   final FastTimePickerIconButtonBuilder? iconButtonBuilder;
   final TimePickerEntryMode initialEntryMode;
   final String? minuteLabelText;
+  final EntryModeChangeCallback? onEntryModeChanged;
   final RouteSettings? routeSettings;
   final FastTimePickerTextBuilder? textBuilder;
   final bool useRootNavigator;
@@ -86,7 +90,7 @@ IconButton timePickerIconButtonBuilder(
   );
 }
 
-InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
+Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
   final widget = (field as FastTimePickerState).widget;
   final textBuilder = widget.textBuilder ?? timePickerTextBuilder;
   final iconButtonBuilder =
@@ -94,6 +98,7 @@ InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
 
   Future<TimeOfDay?> show(TimePickerEntryMode entryMode) {
     return showTimePicker(
+      anchorPoint: widget.anchorPoint,
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
@@ -104,6 +109,7 @@ InkWell timePickerBuilder(FormFieldState<TimeOfDay> field) {
       initialEntryMode: widget.initialEntryMode,
       initialTime: field.value ?? TimeOfDay.now(),
       minuteLabelText: widget.minuteLabelText,
+      onEntryModeChanged: widget.onEntryModeChanged,
       routeSettings: widget.routeSettings,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {

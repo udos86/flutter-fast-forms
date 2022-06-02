@@ -23,6 +23,7 @@ class FastCalendar extends FastFormField<DateTime> {
     required this.firstDate,
     this.initialCalendarMode = DatePickerMode.day,
     required this.lastDate,
+    this.onDisplayedMonthChanged,
     this.selectableDayPredicate,
   });
 
@@ -30,6 +31,7 @@ class FastCalendar extends FastFormField<DateTime> {
   final DateTime firstDate;
   final DatePickerMode initialCalendarMode;
   final DateTime lastDate;
+  final ValueChanged<DateTime>? onDisplayedMonthChanged;
   final SelectableDayPredicate? selectableDayPredicate;
 
   @override
@@ -41,7 +43,7 @@ class FastCalendarState extends FastFormFieldState<DateTime> {
   FastCalendar get widget => super.widget as FastCalendar;
 }
 
-InputDecorator calendarBuilder(FormFieldState<DateTime> field) {
+Widget calendarBuilder(FormFieldState<DateTime> field) {
   final widget = (field as FastCalendarState).widget;
 
   return InputDecorator(
@@ -53,6 +55,7 @@ InputDecorator calendarBuilder(FormFieldState<DateTime> field) {
       initialDate: field.value ?? DateTime.now(),
       lastDate: widget.lastDate,
       onDateChanged: field.didChange,
+      onDisplayedMonthChanged: widget.onDisplayedMonthChanged,
       selectableDayPredicate: widget.selectableDayPredicate,
     ),
   );

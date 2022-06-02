@@ -40,11 +40,9 @@ class FastCustomFieldState extends FastFormFieldState<Map<String, bool>> {
 
   bool get active => _active;
 
-  Map<String, bool> get activeValue => _activeValue;
+  set active(bool value) => setState(() => _active = value);
 
-  set active(bool value) {
-    setState(() => _active = value);
-  }
+  Map<String, bool> get activeValue => _activeValue;
 
   Map<String, bool> get initialActiveValue {
     return widget.initialValue ??
@@ -79,7 +77,7 @@ class FastCustomFieldState extends FastFormFieldState<Map<String, bool>> {
 
 Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
   return Column(
-    children: <Widget>[
+    children: [
       const Divider(
         height: 4.0,
         color: Colors.black,
@@ -88,7 +86,7 @@ Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
         CheckboxListTile(
           title: Text(option.label),
           value: field.activeValue[option.name],
-          onChanged: (bool? checked) {
+          onChanged: (checked) {
             field.didChange({
               ...field.activeValue,
               option.name: checked ?? false,
@@ -105,14 +103,14 @@ Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
   return InputDecorator(
     decoration: field.decoration,
     child: Column(
-      children: <Widget>[
+      children: [
         SwitchListTile(
           contentPadding: const EdgeInsets.all(0),
           title: widget.title,
           value: field.active,
-          onChanged: (bool? active) {
-            field.active = active ?? false;
-            field.didChange(field.active ? field.activeValue : null);
+          onChanged: (active) {
+            field.didChange(active ? field.activeValue : null);
+            field.active = active;
           },
         ),
         if (field.active) _customFormFieldActiveBuilder(field),

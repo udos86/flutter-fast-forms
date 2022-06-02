@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -145,7 +146,7 @@ Text inputCounterWidgetBuilder(
   );
 }
 
-TextFormField materialTextFieldBuilder(FormFieldState<String> field) {
+Widget materialTextFieldBuilder(FormFieldState<String> field) {
   final widget = (field as FastTextFieldState).widget;
   final InputDecoration decoration = field.decoration.copyWith(
     hintText: widget.placeholder,
@@ -205,8 +206,7 @@ TextFormField materialTextFieldBuilder(FormFieldState<String> field) {
   );
 }
 
-CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
-    FormFieldState<String> field) {
+Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
   final widget = (field as FastTextFieldState).widget;
   final prefix = widget.prefix ??
       (widget.labelText is String ? Text(widget.labelText!) : null);
@@ -234,6 +234,7 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
     onChanged: widget.enabled ? field.didChange : null,
+    onSaved: widget.onSaved,
     padding: widget.padding,
     placeholder: widget.placeholder,
     placeholderStyle: widget.placeholderStyle,
@@ -258,12 +259,22 @@ CupertinoTextFormFieldRow cupertinoTextFieldBuilder(
 }
 
 Widget textFieldBuilder(FormFieldState<String> field) {
-  field as FastTextFieldState;
-  FormFieldBuilder<String> builder = materialTextFieldBuilder;
+  var builder = materialTextFieldBuilder;
 
-  if (field.adaptive) {
-    final platform = Theme.of(field.context).platform;
-    if (platform == TargetPlatform.iOS) builder = cupertinoTextFieldBuilder;
+  if ((field as FastTextFieldState).adaptive) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        builder = cupertinoTextFieldBuilder;
+        break;
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+      default:
+        builder = materialTextFieldBuilder;
+        break;
+    }
   }
 
   return builder(field);

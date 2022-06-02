@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -86,7 +87,7 @@ class FastSwitchState extends FastFormFieldState<bool> {
   FastSwitch get widget => super.widget as FastSwitch;
 }
 
-Text switchTitleBuilder(FastSwitchState field) {
+Widget switchTitleBuilder(FastSwitchState field) {
   return Text(
     field.widget.titleText!,
     style: TextStyle(
@@ -96,7 +97,7 @@ Text switchTitleBuilder(FastSwitchState field) {
   );
 }
 
-InputDecorator materialSwitchBuilder(FormFieldState<bool> field) {
+Widget materialSwitchBuilder(FormFieldState<bool> field) {
   final widget = (field as FastSwitchState).widget;
   final titleBuilder = widget.titleBuilder ?? switchTitleBuilder;
 
@@ -131,7 +132,7 @@ InputDecorator materialSwitchBuilder(FormFieldState<bool> field) {
   );
 }
 
-CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
+Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
   final widget = (field as FastSwitchState).widget;
 
   return CupertinoFormRow(
@@ -151,12 +152,22 @@ CupertinoFormRow cupertinoSwitchBuilder(FormFieldState<bool> field) {
 }
 
 Widget switchBuilder(FormFieldState<bool> field) {
-  field as FastSwitchState;
-  FormFieldBuilder<bool> builder = materialSwitchBuilder;
+  var builder = materialSwitchBuilder;
 
-  if (field.adaptive) {
-    final platform = Theme.of(field.context).platform;
-    if (platform == TargetPlatform.iOS) builder = cupertinoSwitchBuilder;
+  if ((field as FastSwitchState).adaptive) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        builder = cupertinoSwitchBuilder;
+        break;
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+      default:
+        builder = materialSwitchBuilder;
+        break;
+    }
   }
 
   return builder(field);
