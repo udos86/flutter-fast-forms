@@ -1,3 +1,9 @@
+## [7.1.0] - 06/04/2022
+
+* adds missing properties to `FastFormField` widgets
+* uses `defaultTargetPlatform` instead of `Theme.of(context).platform`
+* improves typing
+
 ## [7.0.0] - 05/13/2022
 
 * update to Flutter `3.0.0` and Dart `2.17.0`
