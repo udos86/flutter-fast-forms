@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
+import 'package:flutter_fast_forms_example/form_array_item.dart';
 
 import 'custom_form_field.dart';
 
@@ -115,6 +116,14 @@ class FormPage extends StatelessWidget {
             name: 'autocomplete',
             labelText: 'Autocomplete',
             options: const ['Alaska', 'Alabama', 'Connecticut', 'Delaware'],
+          ),
+          FastFormArray<String>(
+            name: 'form_array',
+            labelText: 'Form Array',
+            initialValue: const ['One', 'Two', 'Three'],
+            itemBuilder: (key, index, field) {
+              return FastFormArrayItem(key, index, field);
+            },
           ),
           FastDatePicker(
             name: 'date_picker',

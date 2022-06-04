@@ -15,5 +15,6 @@ export 'src/slider/slider.dart';
 export 'src/text/text_field.dart';
 
 export 'src/form.dart';
-export 'src/section.dart';
+export 'src/form_array.dart';
+export 'src/form_section.dart';
 export 'src/validators.dart';
