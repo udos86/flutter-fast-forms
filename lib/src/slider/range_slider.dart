@@ -23,6 +23,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.activeColor,
     this.divisions,

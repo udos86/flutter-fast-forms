@@ -24,6 +24,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.displayStringForOption = RawAutocomplete.defaultStringForOption,
     this.fieldViewBuilder,

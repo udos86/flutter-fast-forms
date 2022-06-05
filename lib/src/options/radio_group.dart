@@ -35,6 +35,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.orientation = FastRadioGroupOrientation.vertical,
     required this.options,

@@ -26,6 +26,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.anchorPoint,
     this.cancelText,

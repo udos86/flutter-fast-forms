@@ -24,6 +24,7 @@ class FastSwitch extends FastFormField<bool> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.activeColor,
     this.activeThumbImage,

@@ -21,6 +21,7 @@ class FastDropdown<T> extends FastFormField<T> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.alignment = AlignmentDirectional.centerStart,
     this.autofocus = false,

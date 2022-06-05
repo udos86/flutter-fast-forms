@@ -21,6 +21,7 @@ class FastFormArray<T> extends FastFormField<List<T>> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     required this.itemBuilder,
   }) : super(builder: builder ?? formArrayBuilder<T>);

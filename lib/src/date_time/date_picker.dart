@@ -33,6 +33,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.anchorPoint,
     this.backgroundColor,

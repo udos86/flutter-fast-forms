@@ -29,6 +29,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.anchorPoint,
     this.cancelText,

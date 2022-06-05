@@ -26,6 +26,7 @@ class FastSlider extends FastFormField<double> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.activeColor,
     this.autofocus = false,

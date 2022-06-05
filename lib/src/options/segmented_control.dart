@@ -18,6 +18,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.backgroundColor = CupertinoColors.tertiarySystemFill,
     required this.children,

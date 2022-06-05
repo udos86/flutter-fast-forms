@@ -96,6 +96,7 @@ abstract class FastFormField<T> extends FormField<T> {
     super.initialValue,
     super.key,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.adaptive,
     this.decoration,

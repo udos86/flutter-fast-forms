@@ -109,6 +109,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.restorationId,
     super.validator,
     this.alignment = WrapAlignment.start,
     this.chipBuilder,
