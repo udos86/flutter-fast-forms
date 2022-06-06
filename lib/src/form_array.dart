@@ -5,9 +5,12 @@ import 'form.dart';
 typedef FastFormArrayItemBuilder<T> = Widget Function(
     UniqueKey key, int index, FastFormArrayState<T> field);
 
-class FastFormArray<T> extends FastFormField<List<T>> {
+typedef FastFormEmptyArrayBuilder<T> = Widget Function(
+    FastFormArrayState<T> field);
+
+class FastFormArray<T> extends FastFormField<List<T?>> {
   const FastFormArray({
-    FormFieldBuilder<List<T>>? builder,
+    FormFieldBuilder<List<T?>>? builder,
     super.adaptive,
     super.autovalidateMode,
     super.contentPadding,
@@ -23,17 +26,19 @@ class FastFormArray<T> extends FastFormField<List<T>> {
     super.onSaved,
     super.restorationId,
     super.validator,
+    this.emptyBuilder,
     required this.itemBuilder,
   }) : super(builder: builder ?? formArrayBuilder<T>);
 
+  final FastFormEmptyArrayBuilder? emptyBuilder;
   final FastFormArrayItemBuilder<T> itemBuilder;
 
   @override
   FastFormArrayState<T> createState() => FastFormArrayState<T>();
 }
 
-class FastFormArrayState<T> extends FastFormFieldState<List<T>> {
-  final List<UniqueKey> keys = [];
+class FastFormArrayState<T> extends FastFormFieldState<List<T?>> {
+  final List<UniqueKey> _keys = [];
 
   @override
   FastFormArray<T> get widget => super.widget as FastFormArray<T>;
@@ -44,33 +49,36 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T>> {
 
     if (widget.initialValue != null) {
       for (var index = 0; index < widget.initialValue!.length; index++) {
-        keys.add(UniqueKey());
+        _keys.add(UniqueKey());
       }
     }
   }
 
-  void didItemChange(int index, T value) {
-    final newValue = [...this.value!];
+  void didItemChange(int index, T? value) {
+    final newValue = this.value != null ? [...this.value!] : <T?>[];
     newValue[index] = value;
     didChange(newValue);
   }
 
-  void add(T value) {
-    keys.add(UniqueKey());
-    didChange([...this.value!, value]);
+  void add(T? value) {
+    _keys.add(UniqueKey());
+    final newValue = this.value != null ? [...this.value!, value] : [value];
+    didChange(newValue);
   }
 
-  void insert(int index, T value) {
-    keys.insert(index, UniqueKey());
-    didChange([...this.value!]..insert(index, value));
+  void insert(int index, T? value) {
+    _keys.insert(index, UniqueKey());
+    final newValue = (this.value != null ? [...this.value!] : <T?>[])
+      ..insert(index, value);
+    didChange(newValue);
   }
 
   void move(int oldIndex, int newIndex) {
     if (newIndex >= 0 && newIndex < value!.length) {
       final item = value![oldIndex];
-      final key = keys[oldIndex];
+      final key = _keys[oldIndex];
 
-      keys
+      _keys
         ..removeAt(oldIndex)
         ..insert(newIndex, key);
 
@@ -81,12 +89,15 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T>> {
   }
 
   void remove(int index) {
-    keys.removeAt(index);
-    didChange([...value!]..removeAt(index));
+    if (value != null && index >= 0 && index < value!.length) {
+      _keys.removeAt(index);
+      final newValue = [...value!]..removeAt(index);
+      didChange(newValue);
+    }
   }
 }
 
-Widget formArrayBuilder<T>(FormFieldState<List<T>> field) {
+Widget formArrayBuilder<T>(FormFieldState<List<T?>> field) {
   final widget = (field as FastFormArrayState<T>).widget;
   final value = field.value;
 
@@ -96,13 +107,15 @@ Widget formArrayBuilder<T>(FormFieldState<List<T>> field) {
       children: [
         if (value != null)
           for (var index = 0; index < value.length; index++)
-            widget.itemBuilder(field.keys[index], index, field),
+            widget.itemBuilder(field._keys[index], index, field),
+        if (value == null && widget.emptyBuilder != null)
+          widget.emptyBuilder!(field),
       ],
     ),
   );
 }
 
-Widget reorderableFormArrayBuilder<T>(FormFieldState<List<T>> field) {
+Widget reorderableFormArrayBuilder<T>(FormFieldState<List<T?>> field) {
   final widget = (field as FastFormArrayState<T>).widget;
   final value = field.value;
 
@@ -117,7 +130,9 @@ Widget reorderableFormArrayBuilder<T>(FormFieldState<List<T>> field) {
       children: [
         if (value != null)
           for (var index = 0; index < value.length; index++)
-            widget.itemBuilder(field.keys[index], index, field),
+            widget.itemBuilder(field._keys[index], index, field),
+        if (value == null && widget.emptyBuilder != null)
+          widget.emptyBuilder!(field),
       ],
     ),
   );
