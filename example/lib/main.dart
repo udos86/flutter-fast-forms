@@ -119,6 +119,7 @@ class FormPage extends StatelessWidget {
           ),
           FastFormArray<String>(
             name: 'form_array',
+            builder: reorderableFormArrayBuilder,
             labelText: 'Form Array',
             initialValue: const ['One', 'Two', 'Three'],
             itemBuilder: (key, index, field) {
