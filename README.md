@@ -4,13 +4,14 @@
 [![Pub Version](https://img.shields.io/pub/v/flutter_fast_forms)](https://pub.dev/packages/flutter_fast_forms)
 [![codecov](https://codecov.io/gh/udos86/flutter-fast-forms/branch/master/graph/badge.svg)](https://codecov.io/gh/udos86/flutter-fast-forms)
 
-Flutter Fast Forms is a Dart package for building Flutter forms fast.
+Flutter Fast Forms is the only Dart package you'll ever need to build Flutter forms fast.
 
-It adds these missing pieces to the Flutter SDK to make Flutter form development a breeze: 
+It adds these features to the Flutter SDK: 
 
 * `FormField<T>` wrappers for all [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) input widgets **according** to the already built-in [TextFormField](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [DropdownButtonFormField](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
 * **adaptive** and highly **customizable** `FastFormControl<T>` widgets with support for [**validation states**](https://github.com/flutter/flutter/issues/18885).
 * `FastForm` widget that passes current form field values to `onChanged`
+* `FastFormArray` widget that aggregates a flexible list of homogeneous controls similar to `ListView.builder`
 * `FastInputChips` widget that converts text input into chips as defined by [Material Design](https://material.io/components/chips#input-chips)  
 * common `FormFieldValidator<T>` functions
 
