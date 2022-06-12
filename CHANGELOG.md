@@ -1,3 +1,7 @@
+## [7.2.1] - 06/12/2022
+
+* resets `FastFormArray` properly 
+
 ## [7.2.0] - 06/11/2022
 
 * adds new `FastFormArray` widget (see [example](https://github.com/udos86/flutter-fast-forms/blob/master/example/lib/main.dart#L120) for usage and implementing [`FastFormArray` items](https://github.com/udos86/flutter-fast-forms/blob/master/example/lib/form_array_item.dart))

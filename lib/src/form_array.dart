@@ -46,12 +46,13 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T?>> {
   @override
   void initState() {
     super.initState();
+    _initKeys();
+  }
 
-    if (widget.initialValue != null) {
-      for (var index = 0; index < widget.initialValue!.length; index++) {
-        _keys.add(UniqueKey());
-      }
-    }
+  @override
+  void onReset() {
+    super.onReset();
+    _initKeys();
   }
 
   void didItemChange(int index, T? value) {
@@ -93,6 +94,15 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T?>> {
       _keys.removeAt(index);
       final newValue = [...value!]..removeAt(index);
       didChange(newValue);
+    }
+  }
+
+  void _initKeys() {
+    if (_keys.isNotEmpty) _keys.clear();
+    if (widget.initialValue != null) {
+      for (var index = 0; index < widget.initialValue!.length; index++) {
+        _keys.add(UniqueKey());
+      }
     }
   }
 }
