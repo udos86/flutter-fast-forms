@@ -191,4 +191,39 @@ void main() {
         .elementAt(newIndex);
     expect(itemState.counter, testValue);
   });
+
+  testWidgets('resets FastFormArray', (WidgetTester tester) async {
+    final formKey = GlobalKey<FormState>();
+    const initialValue = [0, 42, 99];
+
+    await tester.pumpWidget(buildMaterialTestApp(
+      FastFormArray<int>(
+        name: 'form_array',
+        initialValue: initialValue,
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+      ),
+      formKey: formKey,
+    ));
+
+    final state = tester.state<FastFormArrayState<int>>(
+        find.byType(typeOf<FastFormArray<int>>()));
+    const testValue = 1001;
+
+    state.didItemChange(initialValue.indexOf(initialValue.first), testValue);
+    state.remove(initialValue.indexOf(initialValue.last));
+
+    await tester.pumpAndSettle();
+    expect(find.byType(TestItem), findsNWidgets(state.value!.length));
+    expect(state.value, [
+      testValue,
+      ...[...initialValue]
+        ..remove(initialValue.first)
+        ..remove(initialValue.last)
+    ]);
+
+    formKey.currentState?.reset();
+    await tester.pumpAndSettle();
+    expect(find.byType(TestItem), findsNWidgets(initialValue.length));
+    expect(state.value, [...initialValue]);
+  });
 }
