@@ -93,7 +93,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
   final widget = (field as FastDropdownState<T>).widget;
   final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
-  void _onChanged(T? value) {
+  void onChanged(T? value) {
     if (value != field.value) field.didChange(value);
   }
 
@@ -119,7 +119,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     itemHeight: widget.itemHeight,
     items: itemsBuilder(widget.items, field),
     menuMaxHeight: widget.menuMaxHeight,
-    onChanged: widget.enabled ? _onChanged : null,
+    onChanged: widget.enabled ? onChanged : null,
     onSaved: widget.onSaved,
     onTap: widget.onTap,
     selectedItemBuilder: widget.selectedItemBuilder,
