@@ -11,19 +11,19 @@ void main() {
     options = const ['Alabama', 'Montana', 'Nebraska', 'Wyoming'];
   });
 
-  testWidgets('renders FastInputChips as Wrap', (WidgetTester tester) async {
+  testWidgets('renders FastChipsInput as Wrap', (WidgetTester tester) async {
     const helperText = 'helper';
     const labelText = 'label';
 
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastInputChips(
+      const FastChipsInput(
         name: 'input_chips',
         helperText: helperText,
         labelText: labelText,
       ),
     ));
 
-    expect(find.byType(FastInputChips), findsOneWidget);
+    expect(find.byType(FastChipsInput), findsOneWidget);
     expect(find.byType(Wrap), findsOneWidget);
     expect(find.byType(TextFormField), findsOneWidget);
 
@@ -31,20 +31,20 @@ void main() {
     expect(find.text(labelText), findsOneWidget);
   });
 
-  testWidgets('renders FastInputChips as ListView',
+  testWidgets('renders FastChipsInput as ListView',
       (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      const FastInputChips(name: 'input_chips', wrap: false),
+      const FastChipsInput(name: 'input_chips', wrap: false),
     ));
 
-    expect(find.byType(FastInputChips), findsOneWidget);
+    expect(find.byType(FastChipsInput), findsOneWidget);
     expect(find.byType(ListView), findsOneWidget);
     expect(find.byType(TextFormField), findsOneWidget);
   });
 
   testWidgets('shows InputChip', (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(name: 'input_chips', options: options),
+      FastChipsInput(name: 'input_chips', options: options),
     ));
 
     const text = 'Test';
@@ -56,16 +56,16 @@ void main() {
     expect(find.byType(InputChip), findsOneWidget);
   });
 
-  testWidgets('updates FastInputChips by text input',
+  testWidgets('updates FastChipsInput by text input',
       (WidgetTester tester) async {
     final spy = OnChangedSpy<List<String>>();
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(name: 'input_chips', options: options, onChanged: spy.fn),
+      FastChipsInput(name: 'input_chips', options: options, onChanged: spy.fn),
     ));
 
     final state =
-        tester.state(find.byType(FastInputChips)) as FastInputChipsState;
+        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
 
     expect(state.value, state.widget.initialValue);
 
@@ -81,14 +81,14 @@ void main() {
     expect(state.value, testValue);
   });
 
-  testWidgets('updates FastInputChips by selecting option',
+  testWidgets('updates FastChipsInput by selecting option',
       (WidgetTester tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
-      FastInputChips(name: 'input_chips', options: options),
+      FastChipsInput(name: 'input_chips', options: options),
     ));
 
     final state =
-        tester.state(find.byType(FastInputChips)) as FastInputChipsState;
+        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
     final text = options.last;
 
     await tester.enterText(find.byType(TextFormField), text);

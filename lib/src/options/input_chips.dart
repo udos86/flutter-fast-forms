@@ -18,28 +18,28 @@ abstract class Zwsp {
   }
 }
 
-typedef FastInputChipBuilder = Widget Function(
-    String chip, FastInputChipsState field);
+typedef FastChipsInputChipBuilder = Widget Function(
+    String chip, FastChipsInputState field);
 
-typedef FastInputChipsFieldViewBuilder = AutocompleteFieldViewBuilder Function(
-    FastInputChipsState field);
+typedef FastChipsInputFieldViewBuilder = AutocompleteFieldViewBuilder Function(
+    FastChipsInputState field);
 
-typedef FastInputChipTextFieldViewBuilder = Widget Function(
-    FastInputChipsState field,
+typedef FastChipsInputTextFieldViewBuilder = Widget Function(
+    FastChipsInputState field,
     double freeSpace,
     void Function(String) onFieldSubmitted);
 
-typedef FastInputChipsWillDisplayOption = bool Function(
-    String text, String option, FastInputChipsState field);
+typedef FastChipsInputWillDisplayOption = bool Function(
+    String text, String option, FastChipsInputState field);
 
-typedef FastInputWillAddChip = bool Function(
-    String value, FastInputChipsState field);
+typedef FastChipsInputWillAddChip = bool Function(
+    String value, FastChipsInputState field);
 
 @immutable
-class FastInputChips extends FastFormField<List<String>> {
-  const FastInputChips({
+class FastChipsInput extends FastFormField<List<String>> {
+  const FastChipsInput({
     super.autovalidateMode,
-    super.builder = inputChipsBuilder,
+    super.builder = chipsInputBuilder,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -78,11 +78,11 @@ class FastInputChips extends FastFormField<List<String>> {
   });
 
   final WrapAlignment alignment;
-  final FastInputChipBuilder? chipBuilder;
+  final FastChipsInputChipBuilder? chipBuilder;
   final Clip clipBehavior;
   final WrapCrossAlignment crossAxisAlignment;
   final AutocompleteOptionToString<String> displayStringForOption;
-  final FastInputChipsFieldViewBuilder? fieldViewBuilder;
+  final FastChipsInputFieldViewBuilder? fieldViewBuilder;
   final AutocompleteOnSelected<String>? onSelected;
   final Iterable<String> options;
   final AutocompleteOptionsBuilder<String>? optionsBuilder;
@@ -92,25 +92,25 @@ class FastInputChips extends FastFormField<List<String>> {
   final double runSpacing;
   final double spacing;
   final TextDirection? textDirection;
-  final FastInputChipTextFieldViewBuilder? textFieldViewBuilder;
+  final FastChipsInputTextFieldViewBuilder? textFieldViewBuilder;
   final FormFieldValidator<String>? textFieldViewValidator;
   final double textFieldViewMinWidth;
   final VerticalDirection verticalDirection;
-  final FastInputWillAddChip? willAddChip;
-  final FastInputChipsWillDisplayOption? willDisplayOption;
+  final FastChipsInputWillAddChip? willAddChip;
+  final FastChipsInputWillDisplayOption? willDisplayOption;
   final bool wrap;
 
   @override
-  FastInputChipsState createState() => FastInputChipsState();
+  FastChipsInputState createState() => FastChipsInputState();
 }
 
-class FastInputChipsState extends FastFormFieldState<List<String>> {
+class FastChipsInputState extends FastFormFieldState<List<String>> {
   final scrollController = ScrollController();
   final textEditingController = TextEditingController(text: Zwsp.raw);
   final textFocusNode = FocusNode();
 
   @override
-  FastInputChips get widget => super.widget as FastInputChips;
+  FastChipsInput get widget => super.widget as FastChipsInput;
 
   @override
   void initState() {
@@ -134,7 +134,7 @@ class FastInputChipsState extends FastFormFieldState<List<String>> {
   }
 }
 
-Widget _chipBuilder(String chipValue, FastInputChipsState field) {
+Widget _chipBuilder(String chipValue, FastChipsInputState field) {
   return InputChip(
     label: Text(chipValue),
     isEnabled: field.widget.enabled,
@@ -142,7 +142,8 @@ Widget _chipBuilder(String chipValue, FastInputChipsState field) {
   );
 }
 
-Widget _textFieldViewBuilder(FastInputChipsState field, double freeSpace,
+/// builds the TextFormField where new chip values are entered by the user
+Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
     void Function(String) onFieldSubmitted) {
   final minWidth = field.widget.textFieldViewMinWidth;
   final baseWidth = field.widget.wrap ? double.infinity : minWidth;
@@ -163,12 +164,12 @@ Widget _textFieldViewBuilder(FastInputChipsState field, double freeSpace,
 
 class FastInputChipsView extends StatelessWidget {
   const FastInputChipsView({
-    Key? key,
+    super.key,
     required this.field,
     required this.onFieldSubmitted,
-  }) : super(key: key);
+  });
 
-  final FastInputChipsState field;
+  final FastChipsInputState field;
   final ValueChanged<String> onFieldSubmitted;
 
   double _getFreeNoWrapSpace(BuildContext context) {
@@ -286,14 +287,14 @@ class FastInputChipsView extends StatelessWidget {
   }
 }
 
-bool _willDisplayOption(String text, String option, FastInputChipsState field) {
+bool _willDisplayOption(String text, String option, FastChipsInputState field) {
   return field.value!.contains(option)
       ? false
       : option.toLowerCase().contains(text.toLowerCase());
 }
 
 AutocompleteOptionsBuilder<String> _optionsBuilder(
-    Iterable<String> options, FastInputChipsState field) {
+    Iterable<String> options, FastChipsInputState field) {
   return (TextEditingValue value) {
     final text = Zwsp.strip(value.text);
     if (text.isEmpty) {
@@ -306,7 +307,7 @@ AutocompleteOptionsBuilder<String> _optionsBuilder(
 }
 
 AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
-    FastInputChipsState field) {
+    FastChipsInputState field) {
   return (BuildContext context, AutocompleteOnSelected<String> onSelected,
       Iterable<String> options) {
     return Align(
@@ -347,12 +348,12 @@ AutocompleteOptionsViewBuilder<String> _optionsViewBuilder(
   };
 }
 
-bool _willAddChip(String? chip, FastInputChipsState field) {
+bool _willAddChip(String? chip, FastChipsInputState field) {
   return chip != null && !field.value!.contains(chip);
 }
 
 ValueChanged<String> _onFieldSubmitted(
-    FastInputChipsState field, bool onSelected,
+    FastChipsInputState field, bool onSelected,
     [VoidCallback? onFieldSubmitted]) {
   return (String value) {
     if (value == Zwsp.raw) {
@@ -399,7 +400,7 @@ ValueChanged<String> _onFieldSubmitted(
   };
 }
 
-AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
+AutocompleteFieldViewBuilder _fieldViewBuilder(FastChipsInputState field) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
     return FastInputChipsView(
@@ -409,8 +410,8 @@ AutocompleteFieldViewBuilder _fieldViewBuilder(FastInputChipsState field) {
   };
 }
 
-Widget inputChipsBuilder(FormFieldState<List<String>> field) {
-  final widget = (field as FastInputChipsState).widget;
+Widget chipsInputBuilder(FormFieldState<List<String>> field) {
+  final widget = (field as FastChipsInputState).widget;
   final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
 
   return GestureDetector(

@@ -8,7 +8,7 @@ import 'custom_form_field.dart';
 void main() => runApp(const ExampleApp());
 
 class ExampleApp extends StatelessWidget {
-  const ExampleApp({Key? key}) : super(key: key);
+  const ExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class ExampleApp extends StatelessWidget {
 }
 
 class FormPage extends StatelessWidget {
-  FormPage({Key? key, required this.title}) : super(key: key);
+  FormPage({super.key, required this.title});
 
   final formKey = GlobalKey<FormState>();
   final String title;
@@ -119,12 +119,11 @@ class FormPage extends StatelessWidget {
           ),
           FastFormArray<String>(
             name: 'form_array',
-            builder: reorderableFormArrayBuilder,
+            reorderable: true,
             labelText: 'Form Array',
             initialValue: const ['One', 'Two', 'Three'],
-            itemBuilder: (key, index, field) {
-              return FastFormArrayItem(key, index, field);
-            },
+            itemBuilder: (key, index, field) =>
+                FastFormArrayItem(key, index, field),
           ),
           FastDatePicker(
             name: 'date_picker',
@@ -142,7 +141,7 @@ class FormPage extends StatelessWidget {
             name: 'time_picker',
             labelText: 'Time Picker',
           ),
-          const FastInputChips(
+          const FastChipsInput(
             name: 'input_chips',
             labelText: 'Input Chips',
             options: ['Angular', 'React', 'Vue', 'Svelte', 'Flutter'],

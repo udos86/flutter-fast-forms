@@ -164,7 +164,7 @@ void main() {
     await tester.pumpWidget(buildMaterialTestApp(
       FastFormArray<int>(
         name: 'form_array',
-        builder: reorderableFormArrayBuilder,
+        reorderable: true,
         initialValue: initialValue,
         itemBuilder: (key, index, field) => TestItem(key, index, field),
       ),

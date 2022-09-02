@@ -3,7 +3,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 class FastFormArrayItem extends StatefulWidget {
   FastFormArrayItem(Key key, this.index, this.field)
-      : value = field.value != null ? field.value![index] : null,
+      : value = field.value?.elementAt(index),
         super(key: key);
 
   final FastFormArrayState<String> field;

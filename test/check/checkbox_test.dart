@@ -6,24 +6,20 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastCheckbox', (WidgetTester tester) async {
-    const helperText = 'helper';
-    const labelText = 'label';
-    const titleText = 'title';
+    const widget = FastCheckbox(
+      name: 'checkbox',
+      helperText: 'helper',
+      labelText: 'label',
+      titleText: 'title',
+    );
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastCheckbox(
-        name: 'checkbox',
-        helperText: helperText,
-        labelText: labelText,
-        titleText: titleText,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(widget));
 
     expect(find.byType(FastCheckbox), findsOneWidget);
     expect(find.byType(CheckboxListTile), findsOneWidget);
-    expect(find.text(helperText), findsOneWidget);
-    expect(find.text(labelText), findsOneWidget);
-    expect(find.text(titleText), findsOneWidget);
+    expect(find.text(widget.helperText!), findsOneWidget);
+    expect(find.text(widget.labelText!), findsOneWidget);
+    expect(find.text(widget.titleText), findsOneWidget);
   });
 
   testWidgets('updates FastCheckbox', (WidgetTester tester) async {

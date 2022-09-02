@@ -1,3 +1,10 @@
+## [8.0.0] - 03/09/2022
+
+* adds compatibility for Flutter `3.3.0`
+* adds `reorderable` property to `FastFormArray`
+* renames `FastInputChips` to `FastChipsInput` 
+* removes `reorderableFormArrayBuilder` 
+
 ## [7.2.1] - 06/12/2022
 
 * resets `FastFormArray` properly 

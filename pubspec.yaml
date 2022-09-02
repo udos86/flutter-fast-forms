@@ -23,7 +23,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
 
-  test: ^1.17.12
+  test: ^1.21.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

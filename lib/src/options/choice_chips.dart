@@ -19,6 +19,7 @@ class FastChoiceChip
     this.elevation,
     this.enabled = true,
     this.focusNode,
+    this.iconTheme,
     this.labelStyle,
     this.labelPadding,
     this.materialTapTargetSize,
@@ -31,6 +32,7 @@ class FastChoiceChip
     this.shadowColor,
     this.shape,
     this.side,
+    this.surfaceTintColor,
     this.tooltip,
     required this.value,
     this.visualDensity,
@@ -52,6 +54,8 @@ class FastChoiceChip
   final double? elevation;
   @override
   final FocusNode? focusNode;
+  @override
+  final IconThemeData? iconTheme;
   @override
   final Widget label;
   @override
@@ -78,6 +82,8 @@ class FastChoiceChip
   final OutlinedBorder? shape;
   @override
   final BorderSide? side;
+  @override
+  final Color? surfaceTintColor;
   @override
   final String? tooltip;
   @override

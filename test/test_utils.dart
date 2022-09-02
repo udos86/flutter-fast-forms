@@ -12,7 +12,7 @@ MaterialApp buildMaterialTestApp(Widget testWidget,
     home: Scaffold(
       body: FastForm(
         formKey: formKey ?? GlobalKey<FormState>(),
-        children: <Widget>[testWidget],
+        children: [testWidget],
       ),
     ),
   );
@@ -24,7 +24,7 @@ CupertinoApp buildCupertinoTestApp(Widget testWidget,
     home: CupertinoPageScaffold(
       child: FastForm(
         formKey: formKey ?? GlobalKey<FormState>(),
-        children: <Widget>[testWidget],
+        children: [testWidget],
       ),
     ),
   );

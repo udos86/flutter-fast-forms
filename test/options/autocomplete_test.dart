@@ -18,23 +18,20 @@ void main() {
   });
 
   testWidgets('renders FastAutocomplete', (WidgetTester tester) async {
-    const helperText = 'helper';
-    const labelText = 'label';
+    final widget = FastAutocomplete<String>(
+      name: 'autocomplete',
+      helperText: 'helper',
+      labelText: 'label',
+      options: options,
+    );
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(
-        name: 'autocomplete',
-        helperText: helperText,
-        labelText: labelText,
-        options: options,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(widget));
 
     expect(find.byType(typeOf<FastAutocomplete<String>>()), findsOneWidget);
     expect(find.byType(TextFormField), findsOneWidget);
 
-    expect(find.text(helperText), findsOneWidget);
-    expect(find.text(labelText), findsOneWidget);
+    expect(find.text(widget.helperText!), findsOneWidget);
+    expect(find.text(widget.labelText!), findsOneWidget);
   });
 
   testWidgets('shows FastAutocomplete options', (WidgetTester tester) async {

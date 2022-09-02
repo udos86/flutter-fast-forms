@@ -8,16 +8,14 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastSwitch', (WidgetTester tester) async {
-    const titleText = 'title';
+    const widget = FastSwitch(name: 'switch', titleText: 'title');
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastSwitch(name: 'switch', titleText: titleText),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(widget));
 
     expect(find.byType(FastSwitch), findsOneWidget);
     expect(find.byType(SwitchListTile), findsOneWidget);
     expect(find.byType(Switch), findsOneWidget);
-    expect(find.text(titleText), findsOneWidget);
+    expect(find.text(widget.titleText!), findsOneWidget);
   });
 
   testWidgets('updates FastSwitch', (WidgetTester tester) async {

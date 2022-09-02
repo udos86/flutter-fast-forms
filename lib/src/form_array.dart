@@ -28,10 +28,12 @@ class FastFormArray<T> extends FastFormField<List<T?>> {
     super.validator,
     this.emptyBuilder,
     required this.itemBuilder,
+    this.reorderable = false,
   }) : super(builder: builder ?? formArrayBuilder<T>);
 
   final FastFormEmptyArrayBuilder? emptyBuilder;
   final FastFormArrayItemBuilder<T> itemBuilder;
+  final bool reorderable;
 
   @override
   FastFormArrayState<T> createState() => FastFormArrayState<T>();
@@ -110,40 +112,26 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T?>> {
 Widget formArrayBuilder<T>(FormFieldState<List<T?>> field) {
   final widget = (field as FastFormArrayState<T>).widget;
   final value = field.value;
+  final hasItems = value is List<T?> && value.isNotEmpty;
+  final children = <Widget>[
+    if (hasItems)
+      for (var index = 0; index < value.length; index++)
+        widget.itemBuilder(field._keys[index], index, field),
+    if (!hasItems && widget.emptyBuilder != null) widget.emptyBuilder!(field),
+  ];
 
   return InputDecorator(
     decoration: field.decoration,
-    child: Column(
-      children: [
-        if (value != null)
-          for (var index = 0; index < value.length; index++)
-            widget.itemBuilder(field._keys[index], index, field),
-        if (value == null && widget.emptyBuilder != null)
-          widget.emptyBuilder!(field),
-      ],
-    ),
-  );
-}
-
-Widget reorderableFormArrayBuilder<T>(FormFieldState<List<T?>> field) {
-  final widget = (field as FastFormArrayState<T>).widget;
-  final value = field.value;
-
-  return InputDecorator(
-    decoration: field.decoration,
-    child: ReorderableListView(
-      shrinkWrap: true,
-      onReorder: (int oldIndex, int newIndex) {
-        final trueNewIndex = oldIndex > newIndex ? newIndex : newIndex - 1;
-        field.move(oldIndex, trueNewIndex);
-      },
-      children: [
-        if (value != null)
-          for (var index = 0; index < value.length; index++)
-            widget.itemBuilder(field._keys[index], index, field),
-        if (value == null && widget.emptyBuilder != null)
-          widget.emptyBuilder!(field),
-      ],
-    ),
+    child: widget.reorderable
+        ? ReorderableListView(
+            shrinkWrap: true,
+            onReorder: (int oldIndex, int newIndex) {
+              final trueNewIndex =
+                  oldIndex > newIndex ? newIndex : newIndex - 1;
+              field.move(oldIndex, trueNewIndex);
+            },
+            children: children,
+          )
+        : Column(children: children),
   );
 }

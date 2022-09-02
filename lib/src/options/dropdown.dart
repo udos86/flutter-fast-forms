@@ -43,6 +43,7 @@ class FastDropdown<T> extends FastFormField<T> {
     this.items = const [],
     this.itemsBuilder,
     this.menuMaxHeight,
+    this.onTap,
     this.selectedItemBuilder,
     this.style,
   }) : super(builder: builder ?? dropdownBuilder<T>);
@@ -67,6 +68,7 @@ class FastDropdown<T> extends FastFormField<T> {
   final List<T> items;
   final FastDropdownMenuItemsBuilder<T>? itemsBuilder;
   final double? menuMaxHeight;
+  final VoidCallback? onTap;
   final DropdownButtonBuilder? selectedItemBuilder;
   final TextStyle? style;
 
@@ -119,6 +121,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     menuMaxHeight: widget.menuMaxHeight,
     onChanged: widget.enabled ? _onChanged : null,
     onSaved: widget.onSaved,
+    onTap: widget.onTap,
     selectedItemBuilder: widget.selectedItemBuilder,
     style: widget.style,
     validator: widget.validator,
