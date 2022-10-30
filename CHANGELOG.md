@@ -1,3 +1,8 @@
+## [8.1.0] - 30/10/2022
+
+* adds compatibility for Flutter `3.3.5`
+* adds `mouseCursor`, `onFieldSubmitted`, `onEditingComplete` and `onTap` to `FastTextField`
+
 ## [8.0.0] - 03/09/2022
 
 * adds compatibility for Flutter `3.3.0`
