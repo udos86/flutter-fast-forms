@@ -45,8 +45,12 @@ class FastTextField extends FastFormField<String> {
     this.maxLengthEnforcement,
     this.maxLines = 1,
     this.minLines,
+    this.mouseCursor,
     this.obscureText = false,
     this.obscuringCharacter = '•',
+    this.onEditingComplete,
+    this.onFieldSubmitted,
+    this.onTap,
     this.padding,
     this.placeholder,
     this.placeholderStyle,
@@ -91,8 +95,12 @@ class FastTextField extends FastFormField<String> {
   final MaxLengthEnforcement? maxLengthEnforcement;
   final int? maxLines;
   final int? minLines;
+  final MouseCursor? mouseCursor;
   final bool obscureText;
   final String obscuringCharacter;
+  final VoidCallback? onEditingComplete;
+  final ValueChanged<String>? onFieldSubmitted;
+  final GestureTapCallback? onTap;
   final EdgeInsetsGeometry? padding;
   final String? placeholder;
   final TextStyle? placeholderStyle;
@@ -184,10 +192,14 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     maxLengthEnforcement: widget.maxLengthEnforcement,
     maxLines: widget.maxLines,
     minLines: widget.minLines,
+    mouseCursor: widget.mouseCursor,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
     onChanged: widget.enabled ? field.didChange : null,
+    onEditingComplete: widget.onEditingComplete,
+    onFieldSubmitted: widget.onFieldSubmitted,
     onSaved: widget.onSaved,
+    onTap: widget.onTap,
     readOnly: widget.readOnly,
     scrollPadding: widget.scrollPadding,
     scrollPhysics: widget.scrollPhysics,
@@ -235,7 +247,10 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
     onChanged: widget.enabled ? field.didChange : null,
+    onFieldSubmitted: widget.onFieldSubmitted,
+    onEditingComplete: widget.onEditingComplete,
     onSaved: widget.onSaved,
+    onTap: widget.onTap,
     padding: widget.padding,
     placeholder: widget.placeholder,
     placeholderStyle: widget.placeholderStyle,

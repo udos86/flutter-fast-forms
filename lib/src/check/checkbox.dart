@@ -96,6 +96,7 @@ Widget checkboxBuilder(FormFieldState<bool> field) {
       contentPadding: widget.contentPadding,
       controlAffinity: widget.controlAffinity,
       dense: widget.dense,
+      enabled: widget.enabled,
       enableFeedback: widget.enableFeedback,
       focusNode: widget.focusNode,
       isThreeLine: widget.isThreeLine,
