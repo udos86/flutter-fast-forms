@@ -111,7 +111,10 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   final textFieldFocusNode = FocusNode();
   final selectedChipKeyboardFocusNode = FocusNode();
 
+  /// indicates that backspace was pressed on an already via backspace selected chip
   bool backspaceRemove = false;
+
+  /// stores the index of the via backspace selected chip
   int? selectedChipIndex;
 
   @override
