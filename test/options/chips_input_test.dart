@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -105,5 +106,30 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(state.value, {text});
+  });
+
+  testWidgets('removes InputChip via backspace', (WidgetTester tester) async {
+    const initialValue = ['Test1', 'Test2', 'Test3'];
+
+    await tester.pumpWidget(buildMaterialTestApp(
+      const FastChipsInput(name: 'input_chips', initialValue: initialValue),
+    ));
+
+    final state =
+        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
+
+    await tester.showKeyboard(find.byType(TextFormField));
+    await tester.pumpAndSettle();
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pumpAndSettle();
+
+    expect(state.selectedChipIndex, initialValue.indexOf(initialValue.last));
+    expect(state.backspaceRemove, true);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pumpAndSettle();
+
+    expect(state.value, ['Test1', 'Test2']);
   });
 }

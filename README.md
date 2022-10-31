@@ -12,7 +12,7 @@ It adds these features to the Flutter SDK:
 * **adaptive** and highly **customizable** `FastFormControl<T>` widgets with support for [**validation states**](https://github.com/flutter/flutter/issues/18885).
 * `FastForm` widget that passes current form field values to `onChanged`
 * `FastFormArray` widget that aggregates a flexible list of homogeneous controls similar to `ListView.builder`
-* `FastInputChips` widget that converts text input into chips as defined by [Material Design](https://material.io/components/chips#input-chips)  
+* `FastChipsInput` widget that converts text input into chips as defined by [Material Design](https://material.io/components/chips#input-chips)  
 * common `FormFieldValidator<T>` functions
 
 ---

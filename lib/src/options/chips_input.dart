@@ -109,7 +109,7 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   final scrollController = ScrollController();
   final textFieldController = TextEditingController(text: Zwsp.raw);
   final textFieldFocusNode = FocusNode();
-  final selectedChipKeyboardFocusNode = FocusNode();
+  final textFieldKeyboardFocusNode = FocusNode();
 
   /// indicates that backspace was pressed on an already via backspace selected chip
   bool backspaceRemove = false;
@@ -133,28 +133,47 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
     scrollController.dispose();
     textFieldController.dispose();
     textFieldFocusNode.dispose();
-    selectedChipKeyboardFocusNode.dispose();
+    textFieldKeyboardFocusNode.dispose();
   }
 
   void onSelectedChipKeyPressed(KeyEvent keyEvent) {
-    if (keyEvent is KeyUpEvent && keyEvent.logicalKey.keyLabel == 'Backspace') {
-      if (backspaceRemove) {
+    if (keyEvent is KeyUpEvent &&
+        keyEvent.logicalKey == LogicalKeyboardKey.backspace) {
+      if (backspaceRemove && textFieldController.value.text.isEmpty) {
+        didChange([...value!]..remove(value![selectedChipIndex!]));
         setState(() {
-          didChange([...value!]..remove(value![selectedChipIndex!]));
           selectedChipIndex =
               selectedChipIndex! > 0 ? selectedChipIndex! - 1 : null;
         });
-      } else {
+      } else if (!backspaceRemove && textFieldController.value.text.isEmpty) {
         setState(() => backspaceRemove = true);
       }
     }
   }
 
   void _onTextFieldChanged() {
-    if (value!.isNotEmpty && textFieldController.value.text.isEmpty) {
-      selectedChipIndex = value!.indexOf(value!.last);
-      selectedChipKeyboardFocusNode.requestFocus();
-      textFieldFocusNode.unfocus();
+    final text = textFieldController.value.text;
+
+    if (value!.isNotEmpty && text.isEmpty) {
+      setState(() {
+        selectedChipIndex = value!.indexOf(value!.last);
+      });
+    } else {
+      setState(() {
+        backspaceRemove = false;
+        selectedChipIndex = null;
+      });
+    }
+
+    if (text.length == 1 && text != Zwsp.raw) {
+      final newText = Zwsp.raw + text;
+      textFieldController.text = newText;
+      textFieldController.selection =
+          TextSelection.collapsed(offset: newText.length);
+
+      setState(() {
+        backspaceRemove = false;
+      });
     }
   }
 
@@ -175,21 +194,13 @@ Widget _chipBuilder(String chipValue, FastChipsInputState field) {
   final chipIndex = field.value!.indexOf(chipValue);
   final isSelectedChip = chipIndex == field.selectedChipIndex;
 
-  final chip = InputChip(
+  return InputChip(
     label: Text(chipValue),
     isEnabled: field.widget.enabled,
     onDeleted: () => field.didChange([...field.value!]..remove(chipValue)),
     selected: isSelectedChip,
     showCheckmark: false,
   );
-
-  return isSelectedChip
-      ? KeyboardListener(
-          focusNode: field.selectedChipKeyboardFocusNode,
-          onKeyEvent: field.onSelectedChipKeyPressed,
-          child: chip,
-        )
-      : chip;
 }
 
 /// builds the TextFormField where new chip values are entered by the user
@@ -200,14 +211,18 @@ Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
 
   return SizedBox(
     width: minWidth > freeSpace ? baseWidth : freeSpace,
-    child: TextFormField(
-      controller: field.textFieldController,
-      decoration: const InputDecoration(border: InputBorder.none),
-      enabled: field.widget.enabled,
-      focusNode: field.textFieldFocusNode,
-      maxLines: 1,
-      onFieldSubmitted: onFieldSubmitted,
-      validator: field.widget.textFieldViewValidator,
+    child: KeyboardListener(
+      focusNode: field.textFieldKeyboardFocusNode,
+      onKeyEvent: field.onSelectedChipKeyPressed,
+      child: TextFormField(
+        controller: field.textFieldController,
+        decoration: const InputDecoration(border: InputBorder.none),
+        enabled: field.widget.enabled,
+        focusNode: field.textFieldFocusNode,
+        maxLines: 1,
+        onFieldSubmitted: onFieldSubmitted,
+        validator: field.widget.textFieldViewValidator,
+      ),
     ),
   );
 }
