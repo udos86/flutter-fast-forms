@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 
 import '../form.dart';
 
@@ -106,8 +107,12 @@ class FastChipsInput extends FastFormField<List<String>> {
 
 class FastChipsInputState extends FastFormFieldState<List<String>> {
   final scrollController = ScrollController();
-  final textEditingController = TextEditingController(text: Zwsp.raw);
-  final textFocusNode = FocusNode();
+  final textFieldController = TextEditingController(text: Zwsp.raw);
+  final textFieldFocusNode = FocusNode();
+  final selectedChipKeyboardFocusNode = FocusNode();
+
+  bool backspaceRemove = false;
+  int? selectedChipIndex;
 
   @override
   FastChipsInput get widget => super.widget as FastChipsInput;
@@ -115,31 +120,73 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   @override
   void initState() {
     super.initState();
-    textEditingController.addListener(_onTextChanged);
+    textFieldController.addListener(_onTextFieldChanged);
+    textFieldFocusNode.addListener(_onTextFieldFocusChanged);
   }
 
   @override
   void dispose() {
     super.dispose();
     scrollController.dispose();
-    textEditingController.dispose();
-    textFocusNode.dispose();
+    textFieldController.dispose();
+    textFieldFocusNode.dispose();
+    selectedChipKeyboardFocusNode.dispose();
   }
 
-  void _onTextChanged() {
-    if (value!.isNotEmpty && textEditingController.value.text.isEmpty) {
-      didChange([...value!]..removeLast());
-      textEditingController.value = Zwsp.value();
+  void onSelectedChipKeyPressed(KeyEvent keyEvent) {
+    if (keyEvent is KeyUpEvent && keyEvent.logicalKey.keyLabel == 'Backspace') {
+      if (backspaceRemove) {
+        setState(() {
+          didChange([...value!]..remove(value![selectedChipIndex!]));
+          selectedChipIndex =
+              selectedChipIndex! > 0 ? selectedChipIndex! - 1 : null;
+        });
+      } else {
+        setState(() => backspaceRemove = true);
+      }
+    }
+  }
+
+  void _onTextFieldChanged() {
+    if (value!.isNotEmpty && textFieldController.value.text.isEmpty) {
+      selectedChipIndex = value!.indexOf(value!.last);
+      selectedChipKeyboardFocusNode.requestFocus();
+      textFieldFocusNode.unfocus();
+    }
+  }
+
+  void _onTextFieldFocusChanged() {
+    if (textFieldFocusNode.hasFocus) {
+      if (textFieldController.value.text.isEmpty) {
+        textFieldController.value = Zwsp.value();
+      }
+      setState(() {
+        selectedChipIndex = null;
+        backspaceRemove = false;
+      });
     }
   }
 }
 
 Widget _chipBuilder(String chipValue, FastChipsInputState field) {
-  return InputChip(
+  final chipIndex = field.value!.indexOf(chipValue);
+  final isSelectedChip = chipIndex == field.selectedChipIndex;
+
+  final chip = InputChip(
     label: Text(chipValue),
     isEnabled: field.widget.enabled,
     onDeleted: () => field.didChange([...field.value!]..remove(chipValue)),
+    selected: isSelectedChip,
+    showCheckmark: false,
   );
+
+  return isSelectedChip
+      ? KeyboardListener(
+          focusNode: field.selectedChipKeyboardFocusNode,
+          onKeyEvent: field.onSelectedChipKeyPressed,
+          child: chip,
+        )
+      : chip;
 }
 
 /// builds the TextFormField where new chip values are entered by the user
@@ -151,10 +198,10 @@ Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
   return SizedBox(
     width: minWidth > freeSpace ? baseWidth : freeSpace,
     child: TextFormField(
-      controller: field.textEditingController,
+      controller: field.textFieldController,
       decoration: const InputDecoration(border: InputBorder.none),
       enabled: field.widget.enabled,
-      focusNode: field.textFocusNode,
+      focusNode: field.textFieldFocusNode,
       maxLines: 1,
       onFieldSubmitted: onFieldSubmitted,
       validator: field.widget.textFieldViewValidator,
@@ -357,7 +404,7 @@ ValueChanged<String> _onFieldSubmitted(
     [VoidCallback? onFieldSubmitted]) {
   return (String value) {
     if (value == Zwsp.raw) {
-      field.textFocusNode.unfocus();
+      field.textFieldFocusNode.unfocus();
     } else {
       final text = Zwsp.strip(value);
       final willDisplayOption =
@@ -377,15 +424,15 @@ ValueChanged<String> _onFieldSubmitted(
         final willAddChip = field.widget.willAddChip ?? _willAddChip;
         if (willAddChip(text, field)) {
           field.didChange([...field.value!, text]);
-          field.textEditingController.value = Zwsp.value();
+          field.textFieldController.value = Zwsp.value();
 
           if (field.widget.wrap) {
-            field.textFocusNode.requestFocus();
+            field.textFieldFocusNode.requestFocus();
           } else {
             WidgetsBinding.instance.addPostFrameCallback(
               (duration) {
                 if (field.scrollController.hasClients) {
-                  field.textFocusNode.requestFocus();
+                  field.textFieldFocusNode.requestFocus();
                   field.scrollController.animateTo(
                       field.scrollController.position.maxScrollExtent,
                       duration: const Duration(milliseconds: 200),
@@ -415,18 +462,19 @@ Widget chipsInputBuilder(FormFieldState<List<String>> field) {
   final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
 
   return GestureDetector(
-    onTap: widget.enabled ? () => field.textFocusNode.requestFocus() : null,
+    onTap:
+        widget.enabled ? () => field.textFieldFocusNode.requestFocus() : null,
     child: InputDecorator(
       decoration: field.decoration,
       child: RawAutocomplete<String>(
         displayStringForOption: widget.displayStringForOption,
         fieldViewBuilder: fieldViewBuilder(field),
-        focusNode: field.textFocusNode,
+        focusNode: field.textFieldFocusNode,
         onSelected: _onFieldSubmitted(field, true),
         optionsBuilder: _optionsBuilder(widget.options, field),
         optionsViewBuilder:
             widget.optionsViewBuilder ?? _optionsViewBuilder(field),
-        textEditingController: field.textEditingController,
+        textEditingController: field.textFieldController,
       ),
     ),
   );
