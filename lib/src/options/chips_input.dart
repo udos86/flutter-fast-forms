@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 
 import '../form.dart';
 
@@ -19,7 +20,7 @@ abstract class Zwsp {
 }
 
 typedef FastChipsInputChipBuilder = Widget Function(
-    String chip, FastChipsInputState field);
+    String chipValue, int chipIndex, FastChipsInputState field);
 
 typedef FastChipsInputFieldViewBuilder = AutocompleteFieldViewBuilder Function(
     FastChipsInputState field);
@@ -106,8 +107,16 @@ class FastChipsInput extends FastFormField<List<String>> {
 
 class FastChipsInputState extends FastFormFieldState<List<String>> {
   final scrollController = ScrollController();
-  final textEditingController = TextEditingController(text: Zwsp.raw);
-  final textFocusNode = FocusNode();
+  final textFieldController = TextEditingController(text: Zwsp.raw);
+  final textFieldFocusNode = FocusNode();
+  final textFieldKeyboardFocusNode = FocusNode();
+  final hiddenTextFieldFocusNode = FocusNode();
+
+  /// indicates that backspace was pressed on an already via backspace selected chip
+  bool backspaceRemove = false;
+
+  /// stores the index of the via backspace selected chip
+  int? selectedChipIndex;
 
   @override
   FastChipsInput get widget => super.widget as FastChipsInput;
@@ -115,30 +124,90 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   @override
   void initState() {
     super.initState();
-    textEditingController.addListener(_onTextChanged);
+    textFieldController.addListener(_onTextFieldChanged);
+    textFieldFocusNode.addListener(_onTextFieldFocusChanged);
   }
 
   @override
   void dispose() {
     super.dispose();
     scrollController.dispose();
-    textEditingController.dispose();
-    textFocusNode.dispose();
+    textFieldController.dispose();
+    textFieldFocusNode.dispose();
+    textFieldKeyboardFocusNode.dispose();
+    hiddenTextFieldFocusNode.dispose();
   }
 
-  void _onTextChanged() {
-    if (value!.isNotEmpty && textEditingController.value.text.isEmpty) {
-      didChange([...value!]..removeLast());
-      textEditingController.value = Zwsp.value();
+  String get text => textFieldController.value.text;
+
+  void onKeyPressed(KeyEvent keyEvent) {
+    final isBackspaceUp = keyEvent is KeyUpEvent &&
+        keyEvent.logicalKey == LogicalKeyboardKey.backspace;
+
+    if (isBackspaceUp && text.isEmpty) {
+      if (backspaceRemove) {
+        didChange([...value!]..remove(value![selectedChipIndex!]));
+        setState(() {
+          selectedChipIndex =
+              selectedChipIndex! > 0 ? selectedChipIndex! - 1 : null;
+        });
+      } else {
+        setState(() => backspaceRemove = true);
+      }
+    }
+  }
+
+  void _onTextFieldChanged() {
+    /// whenever backspace was pressed removing the zwsp character
+    /// and chips input contains at least one chip
+    /// select the chip next to the text field
+    if (value!.isNotEmpty && text.isEmpty) {
+      textFieldFocusNode.unfocus();
+      hiddenTextFieldFocusNode.requestFocus();
+      setState(() {
+        selectedChipIndex = value!.indexOf(value!.last);
+      });
+    } else {
+      setState(() {
+        backspaceRemove = false;
+        selectedChipIndex = null;
+      });
+    }
+
+    /// whenever new text is entered again after a chip was removed via backspace
+    /// add zwsp in front of it
+    if (text.length == 1 && text != Zwsp.raw) {
+      final textWithZwsp = Zwsp.raw + text;
+      final selection = TextSelection.collapsed(offset: textWithZwsp.length);
+
+      textFieldController.text = textWithZwsp;
+      textFieldController.selection = selection;
+
+      setState(() => backspaceRemove = false);
+    }
+  }
+
+  void _onTextFieldFocusChanged() {
+    if (textFieldFocusNode.hasFocus) {
+      if (text.isEmpty) {
+        textFieldController.value = Zwsp.value();
+      }
+      setState(() {
+        selectedChipIndex = null;
+        backspaceRemove = false;
+      });
     }
   }
 }
 
-Widget _chipBuilder(String chipValue, FastChipsInputState field) {
+Widget _chipBuilder(
+    String chipValue, int chipIndex, FastChipsInputState field) {
   return InputChip(
     label: Text(chipValue),
     isEnabled: field.widget.enabled,
     onDeleted: () => field.didChange([...field.value!]..remove(chipValue)),
+    selected: chipIndex == field.selectedChipIndex,
+    showCheckmark: false,
   );
 }
 
@@ -150,14 +219,35 @@ Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
 
   return SizedBox(
     width: minWidth > freeSpace ? baseWidth : freeSpace,
-    child: TextFormField(
-      controller: field.textEditingController,
-      decoration: const InputDecoration(border: InputBorder.none),
-      enabled: field.widget.enabled,
-      focusNode: field.textFocusNode,
-      maxLines: 1,
-      onFieldSubmitted: onFieldSubmitted,
-      validator: field.widget.textFieldViewValidator,
+    child: KeyboardListener(
+      focusNode: field.textFieldKeyboardFocusNode,
+      onKeyEvent: field.onKeyPressed,
+      child: Stack(
+        children: [
+          /// hidden text field is needed to keep keyboard open
+          /// whenever a chip is selected for removal via backspace
+          SizedBox(
+            height: 0,
+            width: 0,
+            child: Baseline(
+              baseline: 0,
+              baselineType: TextBaseline.alphabetic,
+              child: TextFormField(
+                focusNode: field.hiddenTextFieldFocusNode,
+              ),
+            ),
+          ),
+          TextFormField(
+            controller: field.textFieldController,
+            decoration: const InputDecoration(border: InputBorder.none),
+            enabled: field.widget.enabled,
+            focusNode: field.textFieldFocusNode,
+            maxLines: 1,
+            onFieldSubmitted: onFieldSubmitted,
+            validator: field.widget.textFieldViewValidator,
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -260,8 +350,10 @@ class FastInputChipsView extends StatelessWidget {
     final textFieldViewBuilder =
         field.widget.textFieldViewBuilder ?? _textFieldViewBuilder;
 
-    final chips = field.value!.map((chipValue) {
-      final chip = chipBuilder(chipValue, field);
+    final chips = field.value!.asMap().entries.map((entry) {
+      final index = entry.key;
+      final chipValue = entry.value;
+      final chip = chipBuilder(chipValue, index, field);
       return field.widget.wrap
           ? chip
           : Padding(
@@ -357,7 +449,7 @@ ValueChanged<String> _onFieldSubmitted(
     [VoidCallback? onFieldSubmitted]) {
   return (String value) {
     if (value == Zwsp.raw) {
-      field.textFocusNode.unfocus();
+      field.textFieldFocusNode.unfocus();
     } else {
       final text = Zwsp.strip(value);
       final willDisplayOption =
@@ -377,15 +469,15 @@ ValueChanged<String> _onFieldSubmitted(
         final willAddChip = field.widget.willAddChip ?? _willAddChip;
         if (willAddChip(text, field)) {
           field.didChange([...field.value!, text]);
-          field.textEditingController.value = Zwsp.value();
+          field.textFieldController.value = Zwsp.value();
 
           if (field.widget.wrap) {
-            field.textFocusNode.requestFocus();
+            field.textFieldFocusNode.requestFocus();
           } else {
             WidgetsBinding.instance.addPostFrameCallback(
               (duration) {
                 if (field.scrollController.hasClients) {
-                  field.textFocusNode.requestFocus();
+                  field.textFieldFocusNode.requestFocus();
                   field.scrollController.animateTo(
                       field.scrollController.position.maxScrollExtent,
                       duration: const Duration(milliseconds: 200),
@@ -415,18 +507,19 @@ Widget chipsInputBuilder(FormFieldState<List<String>> field) {
   final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
 
   return GestureDetector(
-    onTap: widget.enabled ? () => field.textFocusNode.requestFocus() : null,
+    onTap:
+        widget.enabled ? () => field.textFieldFocusNode.requestFocus() : null,
     child: InputDecorator(
       decoration: field.decoration,
       child: RawAutocomplete<String>(
         displayStringForOption: widget.displayStringForOption,
         fieldViewBuilder: fieldViewBuilder(field),
-        focusNode: field.textFocusNode,
+        focusNode: field.textFieldFocusNode,
         onSelected: _onFieldSubmitted(field, true),
         optionsBuilder: _optionsBuilder(widget.options, field),
         optionsViewBuilder:
             widget.optionsViewBuilder ?? _optionsViewBuilder(field),
-        textEditingController: field.textEditingController,
+        textEditingController: field.textFieldController,
       ),
     ),
   );
