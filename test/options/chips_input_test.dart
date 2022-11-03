@@ -26,7 +26,7 @@ void main() {
 
     expect(find.byType(FastChipsInput), findsOneWidget);
     expect(find.byType(Wrap), findsOneWidget);
-    expect(find.byType(TextFormField), findsOneWidget);
+    expect(find.byType(TextFormField), findsNWidgets(2));
 
     expect(find.text(helperText), findsOneWidget);
     expect(find.text(labelText), findsOneWidget);
@@ -40,7 +40,7 @@ void main() {
 
     expect(find.byType(FastChipsInput), findsOneWidget);
     expect(find.byType(ListView), findsOneWidget);
-    expect(find.byType(TextFormField), findsOneWidget);
+    expect(find.byType(TextFormField), findsNWidgets(2));
   });
 
   testWidgets('shows InputChip', (WidgetTester tester) async {
@@ -50,7 +50,7 @@ void main() {
 
     const text = 'Test';
 
-    await tester.enterText(find.byType(TextFormField), text);
+    await tester.enterText(find.byType(TextFormField).last, text);
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
@@ -72,7 +72,7 @@ void main() {
 
     const text = 'Test';
 
-    await tester.enterText(find.byType(TextFormField), text);
+    await tester.enterText(find.byType(TextFormField).last, text);
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
@@ -92,7 +92,7 @@ void main() {
         tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
     final text = options.last;
 
-    await tester.enterText(find.byType(TextFormField), text);
+    await tester.enterText(find.byType(TextFormField).last, text);
     await tester.pumpAndSettle();
 
     final optionFinder = find.descendant(
@@ -118,7 +118,7 @@ void main() {
     final state =
         tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
 
-    await tester.showKeyboard(find.byType(TextFormField));
+    await tester.showKeyboard(find.byType(TextFormField).last);
     await tester.pumpAndSettle();
 
     await tester.sendKeyEvent(LogicalKeyboardKey.backspace);

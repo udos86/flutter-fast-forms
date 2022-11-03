@@ -20,7 +20,7 @@ abstract class Zwsp {
 }
 
 typedef FastChipsInputChipBuilder = Widget Function(
-    String chip, FastChipsInputState field);
+    String chipValue, int chipIndex, FastChipsInputState field);
 
 typedef FastChipsInputFieldViewBuilder = AutocompleteFieldViewBuilder Function(
     FastChipsInputState field);
@@ -110,6 +110,7 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   final textFieldController = TextEditingController(text: Zwsp.raw);
   final textFieldFocusNode = FocusNode();
   final textFieldKeyboardFocusNode = FocusNode();
+  final hiddenTextFieldFocusNode = FocusNode();
 
   /// indicates that backspace was pressed on an already via backspace selected chip
   bool backspaceRemove = false;
@@ -134,27 +135,35 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
     textFieldController.dispose();
     textFieldFocusNode.dispose();
     textFieldKeyboardFocusNode.dispose();
+    hiddenTextFieldFocusNode.dispose();
   }
 
-  void onSelectedChipKeyPressed(KeyEvent keyEvent) {
-    if (keyEvent is KeyUpEvent &&
-        keyEvent.logicalKey == LogicalKeyboardKey.backspace) {
-      if (backspaceRemove && textFieldController.value.text.isEmpty) {
+  String get text => textFieldController.value.text;
+
+  void onKeyPressed(KeyEvent keyEvent) {
+    final isBackspaceUp = keyEvent is KeyUpEvent &&
+        keyEvent.logicalKey == LogicalKeyboardKey.backspace;
+
+    if (isBackspaceUp && text.isEmpty) {
+      if (backspaceRemove) {
         didChange([...value!]..remove(value![selectedChipIndex!]));
         setState(() {
           selectedChipIndex =
               selectedChipIndex! > 0 ? selectedChipIndex! - 1 : null;
         });
-      } else if (!backspaceRemove && textFieldController.value.text.isEmpty) {
+      } else {
         setState(() => backspaceRemove = true);
       }
     }
   }
 
   void _onTextFieldChanged() {
-    final text = textFieldController.value.text;
-
+    /// whenever backspace was pressed removing the zwsp character
+    /// and chips input contains at least one chip
+    /// select the chip next to the text field
     if (value!.isNotEmpty && text.isEmpty) {
+      textFieldFocusNode.unfocus();
+      hiddenTextFieldFocusNode.requestFocus();
       setState(() {
         selectedChipIndex = value!.indexOf(value!.last);
       });
@@ -165,21 +174,22 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
       });
     }
 
+    /// whenever new text is entered again after a chip was removed via backspace
+    /// add zwsp in front of it
     if (text.length == 1 && text != Zwsp.raw) {
-      final newText = Zwsp.raw + text;
-      textFieldController.text = newText;
-      textFieldController.selection =
-          TextSelection.collapsed(offset: newText.length);
+      final textWithZwsp = Zwsp.raw + text;
+      final selection = TextSelection.collapsed(offset: textWithZwsp.length);
 
-      setState(() {
-        backspaceRemove = false;
-      });
+      textFieldController.text = textWithZwsp;
+      textFieldController.selection = selection;
+
+      setState(() => backspaceRemove = false);
     }
   }
 
   void _onTextFieldFocusChanged() {
     if (textFieldFocusNode.hasFocus) {
-      if (textFieldController.value.text.isEmpty) {
+      if (text.isEmpty) {
         textFieldController.value = Zwsp.value();
       }
       setState(() {
@@ -190,15 +200,13 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   }
 }
 
-Widget _chipBuilder(String chipValue, FastChipsInputState field) {
-  final chipIndex = field.value!.indexOf(chipValue);
-  final isSelectedChip = chipIndex == field.selectedChipIndex;
-
+Widget _chipBuilder(
+    String chipValue, int chipIndex, FastChipsInputState field) {
   return InputChip(
     label: Text(chipValue),
     isEnabled: field.widget.enabled,
     onDeleted: () => field.didChange([...field.value!]..remove(chipValue)),
-    selected: isSelectedChip,
+    selected: chipIndex == field.selectedChipIndex,
     showCheckmark: false,
   );
 }
@@ -213,15 +221,32 @@ Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
     width: minWidth > freeSpace ? baseWidth : freeSpace,
     child: KeyboardListener(
       focusNode: field.textFieldKeyboardFocusNode,
-      onKeyEvent: field.onSelectedChipKeyPressed,
-      child: TextFormField(
-        controller: field.textFieldController,
-        decoration: const InputDecoration(border: InputBorder.none),
-        enabled: field.widget.enabled,
-        focusNode: field.textFieldFocusNode,
-        maxLines: 1,
-        onFieldSubmitted: onFieldSubmitted,
-        validator: field.widget.textFieldViewValidator,
+      onKeyEvent: field.onKeyPressed,
+      child: Stack(
+        children: [
+          /// hidden text field is needed to keep keyboard open
+          /// whenever a chip is selected for removal via backspace
+          SizedBox(
+            height: 0,
+            width: 0,
+            child: Baseline(
+              baseline: 0,
+              baselineType: TextBaseline.alphabetic,
+              child: TextFormField(
+                focusNode: field.hiddenTextFieldFocusNode,
+              ),
+            ),
+          ),
+          TextFormField(
+            controller: field.textFieldController,
+            decoration: const InputDecoration(border: InputBorder.none),
+            enabled: field.widget.enabled,
+            focusNode: field.textFieldFocusNode,
+            maxLines: 1,
+            onFieldSubmitted: onFieldSubmitted,
+            validator: field.widget.textFieldViewValidator,
+          ),
+        ],
       ),
     ),
   );
@@ -325,8 +350,10 @@ class FastInputChipsView extends StatelessWidget {
     final textFieldViewBuilder =
         field.widget.textFieldViewBuilder ?? _textFieldViewBuilder;
 
-    final chips = field.value!.map((chipValue) {
-      final chip = chipBuilder(chipValue, field);
+    final chips = field.value!.asMap().entries.map((entry) {
+      final index = entry.key;
+      final chipValue = entry.value;
+      final chip = chipBuilder(chipValue, index, field);
       return field.widget.wrap
           ? chip
           : Padding(
