@@ -132,4 +132,21 @@ void main() {
 
     expect(state.value, ['Test1', 'Test2']);
   });
+
+  testWidgets('adds zwsp character on new text input',
+      (WidgetTester tester) async {
+    const testInput = 't';
+
+    await tester.pumpWidget(buildMaterialTestApp(
+      const FastChipsInput(name: 'input_chips'),
+    ));
+
+    final state =
+        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
+
+    await tester.enterText(find.byType(TextFormField).last, testInput);
+    await tester.pumpAndSettle();
+
+    expect(state.text, Zwsp.raw + testInput);
+  });
 }
