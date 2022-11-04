@@ -1,3 +1,8 @@
+## [9.0.0] - 11/04/2022
+
+* `FastChipsInput` now supports removal of single chips via backspace according to Material Design spec
+* adds `chipIndex` parameter to `FastChipsInputChipBuilder` 
+
 ## [8.1.0] - 30/10/2022
 
 * adds compatibility for Flutter `3.3.5`
