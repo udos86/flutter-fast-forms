@@ -1,3 +1,7 @@
+## [9.0.1] - 01/24/2023
+
+* upgrades `intl`to `0.18.0`
+
 ## [9.0.0] - 11/04/2022
 
 * `FastChipsInput` now supports removal of single chips via backspace according to Material Design spec
