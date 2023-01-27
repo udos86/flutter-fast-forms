@@ -1,3 +1,10 @@
+## [10.0.0] - 01/29/2023
+
+* upgrades to Flutter `3.7.0`
+* minimum Dart SDK now is `2.19.0`
+* removes `toolbarOptions` property from `FastTextField`
+* adds `contextMenuBuilder` property to `FastTextField`
+
 ## [9.0.1] - 01/24/2023
 
 * upgrades `intl`to `0.18.0`

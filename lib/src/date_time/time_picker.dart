@@ -75,7 +75,7 @@ Text timePickerTextBuilder(FastTimePickerState field) {
 
   return Text(
     field.value?.format(field.context) ?? '',
-    style: theme.textTheme.subtitle1,
+    style: theme.textTheme.titleMedium,
     textAlign: TextAlign.left,
   );
 }

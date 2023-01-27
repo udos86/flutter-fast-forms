@@ -28,6 +28,7 @@ class FastTextField extends FastFormField<String> {
     this.autofillHints,
     this.autofocus = false,
     this.buildCounter,
+    this.contextMenuBuilder,
     this.cursorColor,
     this.cursorHeight,
     this.cursorRadius,
@@ -70,7 +71,6 @@ class FastTextField extends FastFormField<String> {
     this.textCapitalization = TextCapitalization.none,
     this.textDirection,
     this.textInputAction,
-    this.toolbarOptions,
     this.trailing,
   });
 
@@ -78,6 +78,7 @@ class FastTextField extends FastFormField<String> {
   final Iterable<String>? autofillHints;
   final bool autofocus;
   final InputCounterWidgetBuilder? buildCounter;
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
   final Color? cursorColor;
   final double? cursorHeight;
   final Radius? cursorRadius;
@@ -120,7 +121,6 @@ class FastTextField extends FastFormField<String> {
   final TextCapitalization textCapitalization;
   final TextDirection? textDirection;
   final TextInputAction? textInputAction;
-  final ToolbarOptions? toolbarOptions;
   final Widget? trailing;
 
   @override
@@ -173,6 +173,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     autofocus: widget.autofocus,
     autovalidateMode: field.autovalidateMode,
     buildCounter: widget.buildCounter,
+    contextMenuBuilder: widget.contextMenuBuilder,
     cursorColor: widget.cursorColor,
     cursorHeight: widget.cursorHeight,
     cursorRadius: widget.cursorRadius,
@@ -214,7 +215,6 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     textCapitalization: widget.textCapitalization,
     textDirection: widget.textDirection,
     textInputAction: widget.textInputAction,
-    toolbarOptions: widget.toolbarOptions,
     validator: widget.validator,
   );
 }
@@ -229,6 +229,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
     autovalidateMode: field.autovalidateMode,
+    contextMenuBuilder: widget.contextMenuBuilder,
     cursorColor: widget.cursorColor,
     cursorHeight: widget.cursorHeight,
     cursorWidth: widget.cursorWidth,
@@ -269,7 +270,6 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     textCapitalization: widget.textCapitalization,
     textDirection: widget.textDirection,
     textInputAction: widget.textInputAction,
-    toolbarOptions: widget.toolbarOptions,
     validator: widget.validator,
   );
 }
