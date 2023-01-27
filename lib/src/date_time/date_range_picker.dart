@@ -99,7 +99,7 @@ Text dateRangPickerTextBuilder(FastDateRangePickerState field) {
 
   return Text(
     value != null ? '${format(value.start)} - ${format(value.end)}' : '',
-    style: theme.textTheme.subtitle1,
+    style: theme.textTheme.titleMedium,
     textAlign: TextAlign.left,
   );
 }

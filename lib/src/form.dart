@@ -230,7 +230,7 @@ InputDecoration _decorator(ThemeData theme, FastFormFieldState field) {
     labelText: widget.labelText,
     labelStyle: TextStyle(
       color: field.enabled
-          ? theme.textTheme.bodyText1!.color
+          ? theme.textTheme.bodyLarge!.color
           : theme.disabledColor,
     ),
     enabled: field.enabled,
