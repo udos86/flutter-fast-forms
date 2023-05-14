@@ -13,7 +13,7 @@ class FastTextField extends FastFormField<String> {
     super.builder = textFieldBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled = true,
+    super.enabled,
     super.helperText,
     super.initialValue = '',
     super.key,

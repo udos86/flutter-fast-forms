@@ -9,7 +9,6 @@ class FastCalendar extends FastFormField<DateTime> {
     super.builder = calendarBuilder,
     super.contentPadding,
     super.decoration,
-    super.enabled,
     super.helperText,
     super.initialValue,
     super.key,
@@ -26,7 +25,7 @@ class FastCalendar extends FastFormField<DateTime> {
     required this.lastDate,
     this.onDisplayedMonthChanged,
     this.selectableDayPredicate,
-  });
+  }) : super(enabled: true);
 
   final DateTime? currentDate;
   final DateTime firstDate;

@@ -199,7 +199,7 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     surfaceTintColor: chip.surfaceTintColor,
     tooltip: chip.tooltip,
     visualDensity: chip.visualDensity,
-    onSelected: chip.isEnabled ? onSelected : null,
+    onSelected: field.enabled && chip.isEnabled ? onSelected : null,
   );
 }
 

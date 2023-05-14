@@ -89,9 +89,9 @@ typedef FastHelperBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 @immutable
 abstract class FastFormField<T> extends FormField<T> {
   const FastFormField({
-    bool? enabled,
     super.autovalidateMode = AutovalidateMode.onUserInteraction,
     required super.builder,
+    super.enabled = true,
     super.initialValue,
     super.key,
     super.onSaved,
@@ -105,7 +105,7 @@ abstract class FastFormField<T> extends FormField<T> {
     required this.name,
     this.onChanged,
     this.onReset,
-  }) : super(enabled: enabled ?? true);
+  });
 
   /// null represents a non-adaptive form field widget
   final bool? adaptive;
