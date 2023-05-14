@@ -65,11 +65,13 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.modalCancelButtonText = 'Cancel',
     this.modalDoneButtonText = 'Done',
     this.mode = CupertinoDatePickerMode.date,
+    this.onDatePickerModeChange,
     this.routeSettings,
     this.selectableDayPredicate,
     this.showModalPopup = false,
     this.textBuilder,
     this.textDirection,
+    this.textStyle,
     this.use24hFormat = false,
     this.useRootNavigator = true,
   }) : super(initialValue: initialValue ?? DateTime.now());
@@ -104,11 +106,13 @@ class FastDatePicker extends FastFormField<DateTime> {
   final String modalCancelButtonText;
   final String modalDoneButtonText;
   final CupertinoDatePickerMode mode;
+  final void Function(DatePickerEntryMode)? onDatePickerModeChange;
   final RouteSettings? routeSettings;
   final SelectableDayPredicate? selectableDayPredicate;
   final bool showModalPopup;
   final FastDatePickerTextBuilder? textBuilder;
   final TextDirection? textDirection;
+  final TextStyle? textStyle;
   final bool use24hFormat;
   final bool useRootNavigator;
 
@@ -144,10 +148,11 @@ Text datePickerTextBuilder(FastDatePickerState field) {
   final format =
       field.widget.dateFormat?.format ?? _datePickerFormat(field).format;
   final value = field.value;
+  final style = field.widget.textStyle ?? theme.textTheme.titleMedium;
 
   return Text(
     value != null ? format(field.value!) : '',
-    style: theme.textTheme.titleMedium,
+    style: field.enabled ? style : style?.copyWith(color: theme.disabledColor),
     textAlign: TextAlign.left,
   );
 }
@@ -244,6 +249,7 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
       keyboardType: widget.keyboardType,
       lastDate: widget.lastDate,
       locale: widget.locale,
+      onDatePickerModeChange: widget.onDatePickerModeChange,
       routeSettings: widget.routeSettings,
       selectableDayPredicate: widget.selectableDayPredicate,
       textDirection: widget.textDirection,
