@@ -4,8 +4,9 @@
 * upgrades to Dart `3.0.0`
 * upgrades sample to Material 3
 * adds adaptiveness to `FastCheckbox` via `CupertinoCheckbox`
-* adds all new styling properties to `FastCheckbox` and `FastSwitch
+* adds all new styling properties to `FastCheckbox`, `FastRangeSlider`, `FastSlider` and `FastSwitch`
 * adds `textStyle` property to all date time fields
+* adds `inputDecorationTheme` property to `FastForm`
 * fixes styling issues when `enabled: true`  
 * fixes incorrect default content padding on iOS
 
