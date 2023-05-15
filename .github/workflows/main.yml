@@ -26,6 +26,6 @@ jobs:
     - name: Run tests
       run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
 
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v3
       with:
         file: ./coverage/lcov.info
