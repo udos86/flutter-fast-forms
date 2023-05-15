@@ -30,15 +30,13 @@ void main() {
         as FastDropdownState<String>;
 
     final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());
-    expect(itemsFinder, findsNWidgets(itemsLength));
 
     await tester.tap(find.byType(typeOf<DropdownButton<String>>()));
     await tester.pumpAndSettle();
 
-    expect(itemsFinder, findsNWidgets(itemsLength * 2));
+    expect(itemsFinder, findsNWidgets(itemsLength));
 
-    await tester.tap(itemsFinder.at(itemsLength + testIndex),
-        warnIfMissed: false);
+    await tester.tap(itemsFinder.at(testIndex), warnIfMissed: false);
     await tester.pumpAndSettle();
 
     final testValue = items[testIndex];

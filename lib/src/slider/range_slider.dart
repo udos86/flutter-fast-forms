@@ -31,6 +31,8 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     this.labelsBuilder,
     this.max = 1.0,
     this.min = 0.0,
+    this.mouseCursor,
+    this.overlayColor,
     this.prefixBuilder,
     this.suffixBuilder,
   }) : super(initialValue: initialValue ?? RangeValues(min, max));
@@ -41,6 +43,8 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   final FastRangeSliderLabelsBuilder? labelsBuilder;
   final double max;
   final double min;
+  final MaterialStateProperty<MouseCursor?>? mouseCursor;
+  final MaterialStateProperty<Color?>? overlayColor;
   final FastRangeSliderFixBuilder? prefixBuilder;
   final FastRangeSliderFixBuilder? suffixBuilder;
 
@@ -103,7 +107,9 @@ Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
             labels: widget.labelsBuilder?.call(field),
             max: widget.max,
             min: widget.min,
+            mouseCursor: widget.mouseCursor,
             onChanged: widget.enabled ? field.didChange : null,
+            overlayColor: widget.overlayColor,
             values: field.value!,
           ),
         ),

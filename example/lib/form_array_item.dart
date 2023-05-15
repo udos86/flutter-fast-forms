@@ -34,24 +34,28 @@ class FastFormArrayItemState extends State<FastFormArrayItem> {
 
   @override
   Widget build(BuildContext context) {
+    final enabled = widget.field.enabled;
+
     return Row(
       children: [
         Expanded(
           child: TextField(
             controller: _controller,
+            enabled: enabled,
           ),
         ),
         IconButton(
           icon: const Icon(Icons.add),
-          onPressed: () => widget.field.insert(widget.index + 1, ''),
+          onPressed:
+              enabled ? () => widget.field.insert(widget.index + 1, '') : null,
         ),
         IconButton(
           icon: const Icon(Icons.delete),
-          onPressed: () => widget.field.remove(widget.index),
+          onPressed: enabled ? () => widget.field.remove(widget.index) : null,
         ),
         IconButton(
           icon: const Icon(Icons.drag_handle),
-          onPressed: () {},
+          onPressed: enabled ? () {} : null,
         )
       ],
     );

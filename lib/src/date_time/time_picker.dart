@@ -42,6 +42,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     this.onEntryModeChanged,
     this.routeSettings,
     this.textBuilder,
+    this.textStyle,
     this.useRootNavigator = true,
   });
 
@@ -59,6 +60,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   final EntryModeChangeCallback? onEntryModeChanged;
   final RouteSettings? routeSettings;
   final FastTimePickerTextBuilder? textBuilder;
+  final TextStyle? textStyle;
   final bool useRootNavigator;
 
   @override
@@ -72,10 +74,11 @@ class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
 
 Text timePickerTextBuilder(FastTimePickerState field) {
   final theme = Theme.of(field.context);
+  final style = field.widget.textStyle ?? theme.textTheme.titleMedium;
 
   return Text(
     field.value?.format(field.context) ?? '',
-    style: theme.textTheme.titleMedium,
+    style: field.enabled ? style : style?.copyWith(color: theme.disabledColor),
     textAlign: TextAlign.left,
   );
 }

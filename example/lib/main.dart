@@ -24,10 +24,18 @@ class ExampleApp extends StatelessWidget {
       case TargetPlatform.android:
       default:
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: title,
+          themeMode: ThemeMode.light,
           theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
+            useMaterial3: true,
+            brightness: Brightness.light,
+            colorSchemeSeed: Colors.green[700],
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            colorSchemeSeed: Colors.green[700],
           ),
           home: FormPage(title: title),
         );
@@ -43,7 +51,9 @@ class FormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
+    final theme = Theme.of(context);
+
+    switch (theme.platform) {
       case TargetPlatform.iOS:
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(middle: Text(title)),
@@ -75,6 +85,8 @@ class FormPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(title),
+            elevation: 4.0,
+            shadowColor: theme.shadowColor,
           ),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -82,6 +94,27 @@ class FormPage extends StatelessWidget {
                 children: [
                   FastForm(
                     formKey: formKey,
+                    inputDecorationTheme: InputDecorationTheme(
+                      disabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(width: 1),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.grey[700]!, width: 1),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(width: 2),
+                      ),
+                      errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 2),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.red[500]!, width: 2),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
                     children: _buildForm(context),
                     onChanged: (value) {
                       // ignore: avoid_print
@@ -103,7 +136,7 @@ class FormPage extends StatelessWidget {
   List<Widget> _buildForm(BuildContext context) {
     return [
       FastFormSection(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        padding: const EdgeInsets.all(16.0),
         header: const Padding(
           padding: EdgeInsets.all(12.0),
           child: Text(
@@ -294,6 +327,10 @@ class FormPage extends StatelessWidget {
           const FastSwitch(
             name: 'switch',
             labelText: 'Remind me on a day',
+          ),
+          const FastCheckbox(
+            name: 'checkbox',
+            labelText: 'I accept',
           ),
           FastDatePicker(
             name: 'datepicker',

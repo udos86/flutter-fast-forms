@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastCheckboxTitleBuilder = Widget Function(FastCheckboxState field);
+typedef FastCheckboxTitleBuilder = Widget? Function(FastCheckboxState field);
 
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   const FastCheckbox({
+    super.adaptive,
     super.autovalidateMode,
     super.builder = checkboxBuilder,
     super.contentPadding,
@@ -29,15 +32,26 @@ class FastCheckbox extends FastFormField<bool> {
     this.controlAffinity = ListTileControlAffinity.platform,
     this.dense,
     this.enableFeedback,
+    this.errorBuilder,
+    this.fillColor,
+    this.focusColor,
     this.focusNode,
+    this.helperBuilder,
+    this.hoverColor,
+    this.inactiveColor,
     this.isThreeLine = false,
+    this.materialTapTargetSize,
+    this.mouseCursor,
+    this.overlayColor,
     this.secondary,
     this.selectedTileColor,
+    this.shape,
     this.shapeBorder,
     this.side,
+    this.splashRadius,
     this.subtitle,
     this.tileColor,
-    required this.titleText,
+    this.titleText,
     this.titleBuilder,
     this.tristate = false,
     this.visualDensity,
@@ -50,15 +64,26 @@ class FastCheckbox extends FastFormField<bool> {
   final ListTileControlAffinity controlAffinity;
   final bool? dense;
   final bool? enableFeedback;
+  final FastErrorBuilder<bool>? errorBuilder;
+  final MaterialStateProperty<Color?>? fillColor;
+  final Color? focusColor;
   final FocusNode? focusNode;
+  final FastHelperBuilder<bool>? helperBuilder;
+  final Color? hoverColor;
+  final Color? inactiveColor;
   final bool isThreeLine;
+  final MaterialTapTargetSize? materialTapTargetSize;
+  final MouseCursor? mouseCursor;
+  final MaterialStateProperty<Color?>? overlayColor;
   final Widget? secondary;
   final Color? selectedTileColor;
+  final OutlinedBorder? shape;
   final ShapeBorder? shapeBorder;
   final BorderSide? side;
+  final double? splashRadius;
   final Widget? subtitle;
   final Color? tileColor;
-  final String titleText;
+  final String? titleText;
   final FastCheckboxTitleBuilder? titleBuilder;
   final bool tristate;
   final VisualDensity? visualDensity;
@@ -72,23 +97,25 @@ class FastCheckboxState extends FastFormFieldState<bool> {
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
-Widget checkboxTitleBuilder(FastCheckboxState field) {
-  return Text(
-    field.widget.titleText,
-    style: TextStyle(
-      fontSize: 14.0,
-      color: field.value! ? Colors.black : Colors.grey,
-    ),
-  );
+Widget? checkboxTitleBuilder(FastCheckboxState field) {
+  return field.widget.titleText is String
+      ? Text(
+          field.widget.titleText!,
+          style: TextStyle(
+            fontSize: 14.0,
+            color: field.value! ? Colors.black : Colors.grey,
+          ),
+        )
+      : null;
 }
 
-Widget checkboxBuilder(FormFieldState<bool> field) {
+Widget materialCheckboxBuilder(FormFieldState<bool> field) {
   final widget = (field as FastCheckboxState).widget;
   final titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
 
   return InputDecorator(
     decoration: field.decoration,
-    child: CheckboxListTile(
+    child: CheckboxListTile.adaptive(
       activeColor: widget.activeColor,
       autofocus: widget.autofocus,
       checkColor: widget.checkColor,
@@ -98,14 +125,20 @@ Widget checkboxBuilder(FormFieldState<bool> field) {
       dense: widget.dense,
       enabled: widget.enabled,
       enableFeedback: widget.enableFeedback,
+      fillColor: widget.fillColor,
       focusNode: widget.focusNode,
+      hoverColor: widget.hoverColor,
       isThreeLine: widget.isThreeLine,
+      materialTapTargetSize: widget.materialTapTargetSize,
+      mouseCursor: widget.mouseCursor,
       onChanged: widget.enabled ? field.didChange : null,
+      overlayColor: widget.overlayColor,
       secondary: widget.secondary,
       selected: field.value ?? false,
       selectedTileColor: widget.selectedTileColor,
       shape: widget.shapeBorder,
       side: widget.side,
+      splashRadius: widget.splashRadius,
       subtitle: widget.subtitle,
       tileColor: widget.tileColor,
       title: titleBuilder(field),
@@ -114,4 +147,50 @@ Widget checkboxBuilder(FormFieldState<bool> field) {
       visualDensity: widget.visualDensity,
     ),
   );
+}
+
+Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
+  final widget = (field as FastCheckboxState).widget;
+
+  return CupertinoFormRow(
+    padding: widget.contentPadding,
+    prefix: widget.labelText is String ? Text(widget.labelText!) : null,
+    helper: (widget.helperBuilder ?? helperBuilder)(field),
+    error: (widget.errorBuilder ?? errorBuilder)(field),
+    child: CupertinoCheckbox(
+      activeColor: widget.activeColor,
+      autofocus: widget.autofocus,
+      checkColor: widget.checkColor,
+      focusColor: widget.focusColor,
+      focusNode: widget.focusNode,
+      inactiveColor: widget.inactiveColor,
+      onChanged: widget.enabled ? field.didChange : null,
+      shape: widget.shape,
+      side: widget.side,
+      tristate: widget.tristate,
+      value: field.value!,
+    ),
+  );
+}
+
+Widget checkboxBuilder(FormFieldState<bool> field) {
+  var builder = materialCheckboxBuilder;
+
+  if ((field as FastCheckboxState).adaptive) {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        builder = cupertinoCheckboxBuilder;
+        break;
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+      default:
+        builder = materialCheckboxBuilder;
+        break;
+    }
+  }
+
+  return builder(field);
 }

@@ -183,6 +183,7 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     disabledColor: chip.disabledColor,
     elevation: chip.elevation,
     focusNode: chip.focusNode,
+    iconTheme: chip.iconTheme,
     label: chip.label,
     labelPadding: chip.labelPadding,
     labelStyle: chip.labelStyle,
@@ -195,9 +196,10 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     shadowColor: chip.shadowColor,
     shape: chip.shape,
     side: chip.side,
+    surfaceTintColor: chip.surfaceTintColor,
     tooltip: chip.tooltip,
     visualDensity: chip.visualDensity,
-    onSelected: chip.isEnabled ? onSelected : null,
+    onSelected: field.enabled && chip.isEnabled ? onSelected : null,
   );
 }
 

@@ -54,6 +54,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.saveText,
     this.textBuilder,
     this.textDirection,
+    this.textStyle,
     this.useRootNavigator = true,
   }) : dateFormat = format ?? intl.DateFormat.yMd();
 
@@ -81,6 +82,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final String? saveText;
   final FastDateRangePickerTextBuilder? textBuilder;
   final TextDirection? textDirection;
+  final TextStyle? textStyle;
   final bool useRootNavigator;
 
   @override
@@ -96,10 +98,11 @@ Text dateRangPickerTextBuilder(FastDateRangePickerState field) {
   final theme = Theme.of(field.context);
   final format = field.widget.dateFormat.format;
   final value = field.value;
+  final style = field.widget.textStyle ?? theme.textTheme.titleMedium;
 
   return Text(
     value != null ? '${format(value.start)} - ${format(value.end)}' : '',
-    style: theme.textTheme.titleMedium,
+    style: field.enabled ? style : style?.copyWith(color: theme.disabledColor),
     textAlign: TextAlign.left,
   );
 }

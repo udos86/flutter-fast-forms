@@ -40,8 +40,11 @@ class FastSlider extends FastFormField<double> {
     this.labelBuilder,
     this.onChangeEnd,
     this.onChangeStart,
+    this.overlayColor,
     this.prefixBuilder,
     this.semanticFormatterCallback,
+    this.secondaryActiveColor,
+    this.secondaryTrackValue,
     this.suffixBuilder,
     this.thumbColor,
   }) : super(initialValue: initialValue ?? min);
@@ -58,7 +61,10 @@ class FastSlider extends FastFormField<double> {
   final MouseCursor? mouseCursor;
   final ValueChanged<double>? onChangeEnd;
   final ValueChanged<double>? onChangeStart;
+  final MaterialStateProperty<Color?>? overlayColor;
   final FastSliderFixBuilder? prefixBuilder;
+  final Color? secondaryActiveColor;
+  final double? secondaryTrackValue;
   final SemanticFormatterCallback? semanticFormatterCallback;
   final FastSliderFixBuilder? suffixBuilder;
   final Color? thumbColor;
@@ -110,6 +116,9 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
             mouseCursor: widget.mouseCursor,
             onChangeEnd: widget.onChangeEnd,
             onChangeStart: widget.onChangeStart,
+            overlayColor: widget.overlayColor,
+            secondaryActiveColor: widget.secondaryActiveColor,
+            secondaryTrackValue: widget.secondaryTrackValue,
             semanticFormatterCallback: widget.semanticFormatterCallback,
             thumbColor: widget.thumbColor,
             value: field.value!,

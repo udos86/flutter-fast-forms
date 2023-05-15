@@ -86,12 +86,14 @@ Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
         CheckboxListTile(
           title: Text(option.label),
           value: field.activeValue[option.name],
-          onChanged: (checked) {
-            field.didChange({
-              ...field.activeValue,
-              option.name: checked ?? false,
-            });
-          },
+          onChanged: field.enabled
+              ? (checked) {
+                  field.didChange({
+                    ...field.activeValue,
+                    option.name: checked ?? false,
+                  });
+                }
+              : null,
         ),
     ],
   );
@@ -108,10 +110,12 @@ Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
           contentPadding: const EdgeInsets.all(0),
           title: widget.title,
           value: field.active,
-          onChanged: (active) {
-            field.didChange(active ? field.activeValue : null);
-            field.active = active;
-          },
+          onChanged: field.enabled
+              ? (active) {
+                  field.didChange(active ? field.activeValue : null);
+                  field.active = active;
+                }
+              : null,
         ),
         if (field.active) _customFormFieldActiveBuilder(field),
       ],
