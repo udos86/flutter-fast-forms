@@ -1,3 +1,35 @@
+## [11.0.0] - 05/16/2023
+
+* upgrades to Flutter `3.10.0`
+* upgrades to Dart `3.0.0`
+* upgrades sample to Material 3
+* adds adaptiveness to `FastCheckbox` via `CupertinoCheckbox`
+* adds all new styling properties to `FastCheckbox` and `FastSwitch
+* adds `textStyle` property to all date time fields
+* fixes styling issues when `enabled: true`  
+* fixes incorrect default content padding on iOS
+
+**Breaking Changes**
+
+* reduces the default `InputDecoration` of `FastFormField<T>` to:
+```dart
+InputDecoration(
+  contentPadding: widget.contentPadding ?? const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+  enabled: enabled,
+  errorText: errorText, 
+  helperText: widget.helperText,
+  labelText: widget.labelText,
+);
+```
+For any further styling now use `inputDecorationTheme` or `inputDecorationBuilder` properties 
+of `FastForm` (see example app).
+
+* renames `decorator` property on `FastForm` to `inputDecorationBuilder` and changes its typedef to: 
+```dart
+typedef FastInputDecorationBuilder = InputDecoration Function(FastFormFieldState field);
+```
+For retrieving current theme now use `Theme.of(context)` within the function body.
+
 ## [10.0.0] - 01/29/2023
 
 * upgrades to Flutter `3.7.0`
