@@ -12,6 +12,7 @@
 **Breaking Changes**
 
 * reduces the default `InputDecoration` of `FastFormField<T>`
+
 **old**
 ```dart
 InputDecoration(
@@ -58,7 +59,8 @@ InputDecoration(
 For any further styling now use `inputDecorationTheme` or `inputDecorationBuilder` properties 
 of `FastForm` (see example app).
 
-* renames `decorator` property on `FastForm` to `inputDecorationBuilder` and changes its typedef to:
+* renames `decorator` property on `FastForm` to `inputDecorationBuilder` and changes its typedef
+
 **old**
 ```dart
 typedef FastInputDecorator = InputDecoration Function(ThemeData theme, FastFormFieldState field);
