@@ -7,7 +7,7 @@
 * adds all new styling properties to `FastCheckbox`, `FastRangeSlider`, `FastSlider` and `FastSwitch`
 * adds `textStyle` property to all date time fields
 * adds `inputDecorationTheme` property to `FastForm`
-* fixes styling issues when `enabled: true`  
+* fixes styling issues when `enabled: false`  
 * fixes incorrect default content padding on iOS
 
 **Breaking Changes**
