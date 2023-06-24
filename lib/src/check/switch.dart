@@ -46,6 +46,9 @@ class FastSwitch extends FastFormField<bool> {
     this.isThreeLine = false,
     this.materialTapTargetSize,
     this.mouseCursor,
+    this.onActiveThumbImageError,
+    this.onFocusChange,
+    this.onInactiveThumbImageError,
     this.overlayColor,
     this.secondary,
     this.selectedTileColor,
@@ -82,6 +85,9 @@ class FastSwitch extends FastFormField<bool> {
   final bool isThreeLine;
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
+  final void Function(Object, StackTrace?)? onActiveThumbImageError;
+  final void Function(bool)? onFocusChange;
+  final void Function(Object, StackTrace?)? onInactiveThumbImageError;
   final MaterialStateProperty<Color?>? overlayColor;
   final Widget? secondary;
   final Color? selectedTileColor;
@@ -144,7 +150,10 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
       isThreeLine: widget.isThreeLine,
       materialTapTargetSize: widget.materialTapTargetSize,
       mouseCursor: widget.mouseCursor,
+      onActiveThumbImageError: widget.onActiveThumbImageError,
       onChanged: widget.enabled ? field.didChange : null,
+      onFocusChange: widget.onFocusChange,
+      onInactiveThumbImageError: widget.onInactiveThumbImageError,
       overlayColor: widget.overlayColor,
       secondary: widget.secondary,
       selected: field.value!,

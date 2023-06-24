@@ -39,9 +39,11 @@ class FastCheckbox extends FastFormField<bool> {
     this.helperBuilder,
     this.hoverColor,
     this.inactiveColor,
+    this.isError = false,
     this.isThreeLine = false,
     this.materialTapTargetSize,
     this.mouseCursor,
+    this.onFocusChange,
     this.overlayColor,
     this.secondary,
     this.selectedTileColor,
@@ -71,9 +73,11 @@ class FastCheckbox extends FastFormField<bool> {
   final FastHelperBuilder<bool>? helperBuilder;
   final Color? hoverColor;
   final Color? inactiveColor;
+  final bool isError;
   final bool isThreeLine;
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
+  final void Function(bool)? onFocusChange;
   final MaterialStateProperty<Color?>? overlayColor;
   final Widget? secondary;
   final Color? selectedTileColor;
@@ -128,10 +132,12 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
       fillColor: widget.fillColor,
       focusNode: widget.focusNode,
       hoverColor: widget.hoverColor,
+      isError: widget.isError,
       isThreeLine: widget.isThreeLine,
       materialTapTargetSize: widget.materialTapTargetSize,
       mouseCursor: widget.mouseCursor,
       onChanged: widget.enabled ? field.didChange : null,
+      onFocusChange: widget.onFocusChange,
       overlayColor: widget.overlayColor,
       secondary: widget.secondary,
       selected: field.value ?? false,
@@ -144,6 +150,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
       title: titleBuilder(field),
       tristate: widget.tristate,
       value: field.value,
+
       visualDensity: widget.visualDensity,
     ),
   );

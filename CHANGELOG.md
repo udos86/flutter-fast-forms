@@ -1,3 +1,19 @@
+## [11.1.0] - 06/25/2023
+
+* `text` property on `FastRadioOption` is now deprecated
+* adds `isThreeLine`, `secondary`, `selected`. `subtitle`, `title` and `visualDensity` properties to `FastRadioOption`
+* adds `activeColor`, `controlAffinity`, `fillColor`, `hoverColor`, `materialTapTargetSize`, `mouseCursor`,
+`overlayColor`, `selectedTileColor`, `shapeBorder`, `splashRadius`, `tileColor` and `toggleable` properties to `FastRadioGroup`
+
+* adds `isError` and `onFocus` properties to `FastCheckbox`
+* adds `onActiveThumbImageError`, `onFocusChange` and `onInactiveThumbImageError` properties to `FastSwitch`
+* adds `showDayOfWeek` property to `FastDatePicker`
+* adds `keyboardType` property to `FastDateRangePicker`
+* adds `orientation` property to `FastTimePicker`
+* adds `onChangeEnd`, `onChangeStart` and `semanticFormatterCallback` properties to `FastRangeSlider`
+* adds `onChanged` property to `FastSlider`
+* adds `magnifierConfiguration`, `onTapOutside` and `spellCheckConfiguration` properties to `FastTextField`
+
 ## [11.0.0] - 05/16/2023
 
 * upgrades to Flutter `3.10.0`

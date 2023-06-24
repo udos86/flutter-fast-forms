@@ -5,10 +5,27 @@ import '../form.dart';
 
 @immutable
 class FastRadioOption<T> {
-  const FastRadioOption({required this.text, required this.value});
+  const FastRadioOption({
+    this.isThreeLine = false,
+    this.secondary,
+    this.selected = false,
+    this.subtitle,
+    @Deprecated('Use title instead') this.text,
+    this.title,
+    required this.value,
+    this.visualDensity,
+  }) : assert(!(text == null && title == null),
+            'Either text or title must be set');
 
-  final String text;
+  final bool isThreeLine;
+  @Deprecated('Use title instead')
+  final Widget? secondary;
+  final bool selected;
+  final Widget? subtitle;
+  final String? text;
+  final Widget? title;
   final T value;
+  final VisualDensity? visualDensity;
 }
 
 typedef FastRadioOptionBuilder<T> = Widget Function(
@@ -37,19 +54,48 @@ class FastRadioGroup<T> extends FastFormField<T> {
     super.onSaved,
     super.restorationId,
     super.validator,
+    this.activeColor,
+    this.controlAffinity = ListTileControlAffinity.platform,
+    this.fillColor,
+    this.hoverColor,
+    this.materialTapTargetSize,
+    this.mouseCursor,
     this.orientation = FastRadioGroupOrientation.vertical,
     required this.options,
     this.optionBuilder,
     this.optionsBuilder,
+    this.overlayColor,
+    this.selectedTileColor,
+    this.shapeBorder,
+    this.splashRadius,
+    this.tileColor,
+    this.toggleable = false,
   }) : super(
-          builder: builder ?? radioGroupBuilder<T>,
-          initialValue: initialValue ?? options.first.value,
-        );
+            builder: builder ?? radioGroupBuilder<T>,
+            initialValue: initialValue ??
+                options
+                    .lastWhere(
+                      (option) => option.selected,
+                      orElse: () => options.first,
+                    )
+                    .value);
 
+  final Color? activeColor;
+  final ListTileControlAffinity controlAffinity;
+  final MaterialStateProperty<Color?>? fillColor;
+  final Color? hoverColor;
+  final MaterialTapTargetSize? materialTapTargetSize;
+  final MouseCursor? mouseCursor;
   final List<FastRadioOption<T>> options;
   final FastRadioOptionBuilder<T>? optionBuilder;
   final FastRadioOptionsBuilder<T>? optionsBuilder;
   final FastRadioGroupOrientation orientation;
+  final MaterialStateProperty<Color?>? overlayColor;
+  final Color? selectedTileColor;
+  final ShapeBorder? shapeBorder;
+  final double? splashRadius;
+  final Color? tileColor;
+  final bool toggleable;
 
   @override
   FastRadioGroupState<T> createState() => FastRadioGroupState<T>();
@@ -62,13 +108,30 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 
 Widget radioOptionBuilder<T>(
     FastRadioOption<T> option, FastRadioGroupState<T> field) {
-  final vertical =
-      field.widget.orientation == FastRadioGroupOrientation.vertical;
+  final widget = field.widget;
+  final vertical = widget.orientation == FastRadioGroupOrientation.vertical;
   final tile = RadioListTile<T>(
+    activeColor: widget.activeColor,
+    controlAffinity: widget.controlAffinity,
+    fillColor: widget.fillColor,
+    hoverColor: widget.hoverColor,
     groupValue: field.value,
+    isThreeLine: option.isThreeLine,
+    materialTapTargetSize: widget.materialTapTargetSize,
+    mouseCursor: widget.mouseCursor,
     onChanged: field.widget.enabled ? field.didChange : null,
-    title: Text(option.text),
+    overlayColor: widget.overlayColor,
+    secondary: option.secondary,
+    selected: option.selected,
+    selectedTileColor: widget.selectedTileColor,
+    shape: widget.shapeBorder,
+    splashRadius: widget.splashRadius,
+    subtitle: option.subtitle,
+    tileColor: widget.tileColor,
+    title: option.title ?? Text(option.text!),
+    toggleable: widget.toggleable,
     value: option.value,
+    visualDensity: option.visualDensity,
   );
 
   return vertical ? tile : Expanded(child: tile);

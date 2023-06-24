@@ -40,6 +40,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     this.initialEntryMode = TimePickerEntryMode.dial,
     this.minuteLabelText,
     this.onEntryModeChanged,
+    this.orientation,
     this.routeSettings,
     this.textBuilder,
     this.textStyle,
@@ -58,6 +59,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   final TimePickerEntryMode initialEntryMode;
   final String? minuteLabelText;
   final EntryModeChangeCallback? onEntryModeChanged;
+  final Orientation? orientation;
   final RouteSettings? routeSettings;
   final FastTimePickerTextBuilder? textBuilder;
   final TextStyle? textStyle;
@@ -114,6 +116,7 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
       initialTime: field.value ?? TimeOfDay.now(),
       minuteLabelText: widget.minuteLabelText,
       onEntryModeChanged: widget.onEntryModeChanged,
+      orientation: widget.orientation,
       routeSettings: widget.routeSettings,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
