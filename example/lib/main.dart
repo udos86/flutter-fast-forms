@@ -244,9 +244,9 @@ class FormPage extends StatelessWidget {
             name: 'radio_group',
             labelText: 'Radio Group Model',
             options: const [
-              FastRadioOption(text: 'Option 1', value: 'option-1'),
-              FastRadioOption(text: 'Option 2', value: 'option-2'),
-              FastRadioOption(text: 'Option 3', value: 'option-3'),
+              FastRadioOption(title: Text('Option 1'), value: 'option-1'),
+              FastRadioOption(title: Text('Option 2'), value: 'option-2'),
+              FastRadioOption(title: Text('Option 3'), value: 'option-3'),
             ],
           ),
           FastSlider(

@@ -48,6 +48,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.icon,
     this.iconButtonBuilder,
     this.initialEntryMode = DatePickerEntryMode.calendar,
+    this.keyboardType = TextInputType.datetime,
     this.locale,
     required this.lastDate,
     this.routeSettings,
@@ -76,6 +77,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final Icon? icon;
   final FastDateRangePickerIconButtonBuilder? iconButtonBuilder;
   final DatePickerEntryMode initialEntryMode;
+  final TextInputType keyboardType;
   final DateTime lastDate;
   final Locale? locale;
   final RouteSettings? routeSettings;
@@ -140,6 +142,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
       helpText: widget.helpText,
       initialEntryMode: entryMode,
       initialDateRange: field.value,
+      keyboardType: widget.keyboardType,
       lastDate: widget.lastDate,
       locale: widget.locale,
       routeSettings: widget.routeSettings,

@@ -32,8 +32,11 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     this.max = 1.0,
     this.min = 0.0,
     this.mouseCursor,
+    this.onChangeEnd,
+    this.onChangeStart,
     this.overlayColor,
     this.prefixBuilder,
+    this.semanticFormatterCallback,
     this.suffixBuilder,
   }) : super(initialValue: initialValue ?? RangeValues(min, max));
 
@@ -44,8 +47,11 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   final double max;
   final double min;
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
+  final void Function(RangeValues)? onChangeEnd;
+  final void Function(RangeValues)? onChangeStart;
   final MaterialStateProperty<Color?>? overlayColor;
   final FastRangeSliderFixBuilder? prefixBuilder;
+  final String Function(double)? semanticFormatterCallback;
   final FastRangeSliderFixBuilder? suffixBuilder;
 
   @override
@@ -109,7 +115,10 @@ Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
             min: widget.min,
             mouseCursor: widget.mouseCursor,
             onChanged: widget.enabled ? field.didChange : null,
+            onChangeEnd: widget.onChangeEnd,
+            onChangeStart: widget.onChangeStart,
             overlayColor: widget.overlayColor,
+            semanticFormatterCallback: widget.semanticFormatterCallback,
             values: field.value!,
           ),
         ),

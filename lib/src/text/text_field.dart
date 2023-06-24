@@ -42,6 +42,7 @@ class FastTextField extends FastFormField<String> {
     this.keyboardAppearance,
     this.keyboardType,
     this.leading,
+    this.magnifierConfiguration,
     this.maxLength,
     this.maxLengthEnforcement,
     this.maxLines = 1,
@@ -52,6 +53,7 @@ class FastTextField extends FastFormField<String> {
     this.onEditingComplete,
     this.onFieldSubmitted,
     this.onTap,
+    this.onTapOutside,
     this.padding,
     this.placeholder,
     this.placeholderStyle,
@@ -63,6 +65,7 @@ class FastTextField extends FastFormField<String> {
     this.showCursor,
     this.smartDashesType,
     this.smartQuotesType,
+    this.spellCheckConfiguration,
     this.strutStyle,
     this.style,
     this.suffix,
@@ -94,6 +97,7 @@ class FastTextField extends FastFormField<String> {
   final Widget? leading;
   final int? maxLength;
   final MaxLengthEnforcement? maxLengthEnforcement;
+  final TextMagnifierConfiguration? magnifierConfiguration;
   final int? maxLines;
   final int? minLines;
   final MouseCursor? mouseCursor;
@@ -102,6 +106,7 @@ class FastTextField extends FastFormField<String> {
   final VoidCallback? onEditingComplete;
   final ValueChanged<String>? onFieldSubmitted;
   final GestureTapCallback? onTap;
+  final void Function(PointerDownEvent)? onTapOutside;
   final EdgeInsetsGeometry? padding;
   final String? placeholder;
   final TextStyle? placeholderStyle;
@@ -113,6 +118,7 @@ class FastTextField extends FastFormField<String> {
   final bool? showCursor;
   final SmartDashesType? smartDashesType;
   final SmartQuotesType? smartQuotesType;
+  final SpellCheckConfiguration? spellCheckConfiguration;
   final StrutStyle? strutStyle;
   final TextStyle? style;
   final Widget? suffix;
@@ -193,6 +199,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     maxLengthEnforcement: widget.maxLengthEnforcement,
     maxLines: widget.maxLines,
     minLines: widget.minLines,
+    magnifierConfiguration: widget.magnifierConfiguration,
     mouseCursor: widget.mouseCursor,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
@@ -201,6 +208,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     onFieldSubmitted: widget.onFieldSubmitted,
     onSaved: widget.onSaved,
     onTap: widget.onTap,
+    onTapOutside: widget.onTapOutside,
     readOnly: widget.readOnly,
     scrollPadding: widget.scrollPadding,
     scrollPhysics: widget.scrollPhysics,
@@ -208,6 +216,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     showCursor: widget.showCursor,
     smartDashesType: widget.smartDashesType,
     smartQuotesType: widget.smartQuotesType,
+    spellCheckConfiguration: widget.spellCheckConfiguration,
     strutStyle: widget.strutStyle,
     style: widget.style,
     textAlign: widget.textAlign,
