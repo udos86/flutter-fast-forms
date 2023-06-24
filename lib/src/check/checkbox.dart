@@ -150,7 +150,6 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
       title: titleBuilder(field),
       tristate: widget.tristate,
       value: field.value,
-
       visualDensity: widget.visualDensity,
     ),
   );

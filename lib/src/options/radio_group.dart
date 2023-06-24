@@ -18,10 +18,10 @@ class FastRadioOption<T> {
             'Either text or title must be set');
 
   final bool isThreeLine;
-  @Deprecated('Use title instead')
   final Widget? secondary;
   final bool selected;
   final Widget? subtitle;
+  @Deprecated('Use title instead')
   final String? text;
   final Widget? title;
   final T value;
@@ -128,6 +128,7 @@ Widget radioOptionBuilder<T>(
     splashRadius: widget.splashRadius,
     subtitle: option.subtitle,
     tileColor: widget.tileColor,
+    // ignore: deprecated_member_use_from_same_package
     title: option.title ?? Text(option.text!),
     toggleable: widget.toggleable,
     value: option.value,

@@ -225,7 +225,6 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     textDirection: widget.textDirection,
     textInputAction: widget.textInputAction,
     validator: widget.validator,
-
   );
 }
 
