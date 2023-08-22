@@ -56,9 +56,6 @@ class FastFormState extends State<FastForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      // Current store cannot be retrieved here due to the framework calling
-      // this before widget.onChanged().
-      // onChanged: () =>,
       key: widget.formKey,
       child: _FastFormScope(
         formState: this,

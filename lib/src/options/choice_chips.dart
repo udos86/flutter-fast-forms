@@ -15,6 +15,7 @@ class FastChoiceChip
     this.avatarBorder = const CircleBorder(),
     this.backgroundColor,
     this.clipBehavior = Clip.none,
+    this.color,
     this.disabledColor,
     this.elevation,
     this.enabled = true,
@@ -48,6 +49,8 @@ class FastChoiceChip
   final Color? backgroundColor;
   @override
   final Clip clipBehavior;
+  @override
+  final MaterialStateProperty<Color?>? color;
   @override
   final Color? disabledColor;
   @override

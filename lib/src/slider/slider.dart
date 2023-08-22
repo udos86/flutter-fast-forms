@@ -29,6 +29,7 @@ class FastSlider extends FastFormField<double> {
     super.restorationId,
     super.validator,
     this.activeColor,
+    this.allowedInteraction,
     this.autofocus = false,
     this.divisions,
     this.errorBuilder,
@@ -50,6 +51,7 @@ class FastSlider extends FastFormField<double> {
   }) : super(initialValue: initialValue ?? min);
 
   final Color? activeColor;
+  final SliderInteraction? allowedInteraction;
   final bool autofocus;
   final int? divisions;
   final FastErrorBuilder<double>? errorBuilder;
@@ -106,6 +108,7 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
         Expanded(
           child: Slider.adaptive(
             activeColor: widget.activeColor,
+            allowedInteraction: widget.allowedInteraction,
             autofocus: widget.autofocus,
             divisions: widget.divisions,
             focusNode: field.focusNode,
