@@ -185,9 +185,12 @@ Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
     child: CupertinoSwitch(
       activeColor: widget.activeColor,
       applyTheme: widget.applyTheme,
+      autofocus: widget.autofocus,
       dragStartBehavior: widget.dragStartBehavior,
       focusColor: widget.focusColor,
+      focusNode: widget.focusNode,
       onChanged: widget.enabled ? field.didChange : null,
+      onFocusChange: widget.onFocusChange,
       thumbColor: widget.thumbColor,
       trackColor: widget.activeTrackColor,
       value: field.value!,

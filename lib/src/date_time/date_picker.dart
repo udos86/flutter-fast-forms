@@ -68,8 +68,10 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.onDatePickerModeChange,
     this.routeSettings,
     this.selectableDayPredicate,
-    this.showDayOfWeek,
+    this.showDayOfWeek = false,
     this.showModalPopup = false,
+    this.switchToCalendarEntryModeIcon,
+    this.switchToInputEntryModeIcon,
     this.textBuilder,
     this.textDirection,
     this.textStyle,
@@ -110,8 +112,10 @@ class FastDatePicker extends FastFormField<DateTime> {
   final void Function(DatePickerEntryMode)? onDatePickerModeChange;
   final RouteSettings? routeSettings;
   final SelectableDayPredicate? selectableDayPredicate;
-  final bool? showDayOfWeek;
+  final bool showDayOfWeek;
   final bool showModalPopup;
+  final Icon? switchToCalendarEntryModeIcon;
+  final Icon? switchToInputEntryModeIcon;
   final FastDatePickerTextBuilder? textBuilder;
   final TextDirection? textDirection;
   final TextStyle? textStyle;
@@ -254,6 +258,8 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
       onDatePickerModeChange: widget.onDatePickerModeChange,
       routeSettings: widget.routeSettings,
       selectableDayPredicate: widget.selectableDayPredicate,
+      switchToCalendarEntryModeIcon: widget.switchToCalendarEntryModeIcon,
+      switchToInputEntryModeIcon: widget.switchToInputEntryModeIcon,
       textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
@@ -345,7 +351,7 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
               minuteInterval: widget.minuteInterval,
               mode: widget.mode,
               onDateTimeChanged: field.didChange,
-              showDayOfWeek: widget.showDayOfWeek ?? false,
+              showDayOfWeek: widget.showDayOfWeek,
               use24hFormat: widget.use24hFormat,
             ),
           ),

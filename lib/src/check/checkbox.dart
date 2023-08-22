@@ -27,6 +27,7 @@ class FastCheckbox extends FastFormField<bool> {
     super.validator,
     this.activeColor,
     this.autofocus = false,
+    this.checkboxSemanticLabel,
     this.checkboxShape,
     this.checkColor,
     this.controlAffinity = ListTileControlAffinity.platform,
@@ -61,6 +62,7 @@ class FastCheckbox extends FastFormField<bool> {
 
   final bool autofocus;
   final Color? activeColor;
+  final String? checkboxSemanticLabel;
   final OutlinedBorder? checkboxShape;
   final Color? checkColor;
   final ListTileControlAffinity controlAffinity;
@@ -123,6 +125,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
       activeColor: widget.activeColor,
       autofocus: widget.autofocus,
       checkColor: widget.checkColor,
+      checkboxSemanticLabel: widget.checkboxSemanticLabel,
       checkboxShape: widget.checkboxShape,
       contentPadding: widget.contentPadding,
       controlAffinity: widget.controlAffinity,

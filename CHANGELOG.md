@@ -1,10 +1,19 @@
+## [12.0.0] - 08/22/2023
+
+* upgrades to Flutter `3.13.0`
+* upgrades to Dart `3.1.0`
+* adds `checkboxSemanticLabel` properties to `FastCheckbox`
+* sets `autofocus`, `focusNode` and `onFocusChange` on `CupertinoSwitch` in `FastSwitch`,
+* adds `switchToCalendarEntryModeIcon` and `switchToInputEntryModeIcon` properties to `FastDatePicker` and `FastDateRangePicker`
+* adds `color` property to `FastChoiceChip`
+* adds `allowedInteraction` property to `FastSlider`
+
 ## [11.1.0] - 06/25/2023
 
 * `text` property on `FastRadioOption` is now deprecated
 * adds `isThreeLine`, `secondary`, `selected`. `subtitle`, `title` and `visualDensity` properties to `FastRadioOption`
 * adds `activeColor`, `controlAffinity`, `fillColor`, `hoverColor`, `materialTapTargetSize`, `mouseCursor`,
 `overlayColor`, `selectedTileColor`, `shapeBorder`, `splashRadius`, `tileColor` and `toggleable` properties to `FastRadioGroup`
-
 * adds `isError` and `onFocus` properties to `FastCheckbox`
 * adds `onActiveThumbImageError`, `onFocusChange` and `onInactiveThumbImageError` properties to `FastSwitch`
 * adds `showDayOfWeek` property to `FastDatePicker`
