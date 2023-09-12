@@ -6,7 +6,7 @@
 
 Flutter Fast Forms is the only Dart package you'll ever need to build Flutter forms fast.
 
-It adds these features to the Flutter SDK: 
+It adds these essential features to the Flutter SDK: 
 
 * `FormField<T>` wrappers for all [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) input widgets **according** to the already built-in [TextFormField](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [DropdownButtonFormField](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
 * **adaptive** and highly **customizable** `FastFormControl<T>` widgets with support for [**validation states**](https://github.com/flutter/flutter/issues/18885).
@@ -126,11 +126,11 @@ child: FastForm(
 
 ## Custom Form Field Widgets
 
-With Flutter Fast Forms transforming any custom widget into a form field goes smoothly.
+Transforming any custom widget into a form field is easy to do with Flutter Fast Forms.
 
-Let's assume a simple form field that provides a random integer whenever a button is pressed.
+Let's assume a simple sample widget that provides a random integer whenever a button is pressed.
 
-1. Create a minimal `FastFormField<T>` and a corresponding `FastFormFieldState<T>`:
+1. Create a stateful widget extending `FastFormField<T>` with a corresponding `FastFormFieldState<T>`:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
@@ -145,34 +145,11 @@ class MyCustomField extends FastFormField<int> {
 
 class MyCustomFieldState extends FastFormFieldState<int> {
   @override
-  FastSimpleCustomField get widget => super.widget as FastSimpleCustomField;
+  MyCustomField get widget => super.widget as MyCustomField;
 }
 ```
 
-2. Add optional super-initializer parameters to your constructor as you like:
-```dart
-class MyCustomField extends FastFormField<int> {
-  const MyCustomField({
-    super.builder = customFormFieldBuilder,
-    super.decoration,
-    super.enabled,
-    super.helperText,
-    super.initialValue,
-    super.key,
-    super.labelText,
-    required super.name,
-    super.onChanged,
-    super.onReset,
-    super.onSaved,
-    super.validator,
-  });
-
-  @override
-  MyCustomFieldState createState() => MyCustomFieldState();
-}
-```
-
-3. Implement the required `FormFieldBuilder<T>`:
+2. Implement a `FormFieldBuilder<T>` returning your custom widget and calling `field.didChange()`:
 ```dart
 Widget myCustomFormFieldBuilder(FormFieldState<int> field) {
   return InputDecorator(
@@ -191,5 +168,28 @@ Widget myCustomFormFieldBuilder(FormFieldState<int> field) {
       ],
     ),
   );
+}
+```
+
+3. Add optional super-initializer parameters to your constructor as you like:
+```dart
+class MyCustomField extends FastFormField<int> {
+  const MyCustomField({
+    super.builder = myCustomFormFieldBuilder,
+    super.decoration,
+    super.enabled,
+    super.helperText,
+    super.initialValue,
+    super.key,
+    super.labelText,
+    required super.name,
+    super.onChanged,
+    super.onReset,
+    super.onSaved,
+    super.validator,
+  });
+
+  @override
+  MyCustomFieldState createState() => MyCustomFieldState();
 }
 ```
