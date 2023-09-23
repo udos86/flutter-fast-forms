@@ -114,7 +114,7 @@ child: FastForm(
 |         `FastDatePicker`         |             `showDatePicker`            |                        `CupertinoDatePicker`                         |                               no                               |
 |       `FastDateRangePicker`      |          `showDateRangePicker`          |                                  no                                  |                               yes                              |
 |          `FastDropdown`          | `DropdownButtonFormField`<br>`<String>` |                                  no                                  |                               yes                              |
-|         `FastInputChips`         |       `Autocomplete` + `InputChip`      |                                  no                                  |                               yes                              |
+|         `FastChipsInput`         |       `Autocomplete` + `InputChip`      |                                  no                                  |                               yes                              |
 |         `FastRadioGroup`         |             `RadioListTile`             |                                  no                                  |                               yes                              |
 |         `FastRangeSlider`        |              `RangeSlider`              |                                  no                                  |                               yes                              |
 |      `FastSegmentedControl`      |                    no                   |                `SlidingSegmenteControl`<br>`<String>`                |                               no                               |
