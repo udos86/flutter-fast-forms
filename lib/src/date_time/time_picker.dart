@@ -29,6 +29,9 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     super.restorationId,
     super.validator,
     this.anchorPoint,
+    this.barrierColor,
+    this.barrierDismissible = true,
+    this.barrierLabel,
     this.cancelText,
     this.confirmText,
     this.dialogBuilder,
@@ -48,6 +51,9 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   });
 
   final Offset? anchorPoint;
+  final Color? barrierColor;
+  final bool barrierDismissible;
+  final String? barrierLabel;
   final String? cancelText;
   final String? confirmText;
   final TransitionBuilder? dialogBuilder;
@@ -105,6 +111,9 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
   Future<TimeOfDay?> show(TimePickerEntryMode entryMode) {
     return showTimePicker(
       anchorPoint: widget.anchorPoint,
+      barrierColor: widget.barrierColor,
+      barrierDismissible: widget.barrierDismissible,
+      barrierLabel: widget.barrierLabel,
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,

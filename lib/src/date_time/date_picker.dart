@@ -37,6 +37,9 @@ class FastDatePicker extends FastFormField<DateTime> {
     super.validator,
     this.anchorPoint,
     this.backgroundColor,
+    this.barrierColor,
+    this.barrierDismissible = true,
+    this.barrierLabel,
     this.cancelText,
     this.confirmText,
     this.currentDate,
@@ -81,6 +84,9 @@ class FastDatePicker extends FastFormField<DateTime> {
 
   final Offset? anchorPoint;
   final Color? backgroundColor;
+  final Color? barrierColor;
+  final bool barrierDismissible;
+  final String? barrierLabel;
   final String? cancelText;
   final String? confirmText;
   final DateTime? currentDate;
@@ -224,6 +230,7 @@ Container cupertinoDatePickerModalPopupBuilder(
             minuteInterval: widget.minuteInterval,
             mode: widget.mode,
             onDateTimeChanged: (DateTime value) => modalValue = value,
+            showDayOfWeek: widget.showDayOfWeek,
             use24hFormat: widget.use24hFormat,
           ),
         ),
@@ -238,6 +245,9 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
   Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
       anchorPoint: widget.anchorPoint,
+      barrierColor: widget.barrierColor,
+      barrierDismissible: widget.barrierDismissible,
+      barrierLabel: widget.barrierLabel,
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,

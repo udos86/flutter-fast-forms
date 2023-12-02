@@ -46,9 +46,11 @@ class FastSwitch extends FastFormField<bool> {
     this.isThreeLine = false,
     this.materialTapTargetSize,
     this.mouseCursor,
+    this.offLabelColor,
     this.onActiveThumbImageError,
     this.onFocusChange,
     this.onInactiveThumbImageError,
+    this.onLabelColor,
     this.overlayColor,
     this.secondary,
     this.selectedTileColor,
@@ -85,9 +87,11 @@ class FastSwitch extends FastFormField<bool> {
   final bool isThreeLine;
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
+  final Color? offLabelColor;
   final void Function(Object, StackTrace?)? onActiveThumbImageError;
   final void Function(bool)? onFocusChange;
   final void Function(Object, StackTrace?)? onInactiveThumbImageError;
+  final Color? onLabelColor;
   final MaterialStateProperty<Color?>? overlayColor;
   final Widget? secondary;
   final Color? selectedTileColor;
@@ -183,6 +187,8 @@ Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
     helper: (widget.helperBuilder ?? helperBuilder)(field),
     error: (widget.errorBuilder ?? errorBuilder)(field),
     child: CupertinoSwitch(
+      offLabelColor: widget.offLabelColor,
+      onLabelColor: widget.onLabelColor,
       activeColor: widget.activeColor,
       applyTheme: widget.applyTheme,
       autofocus: widget.autofocus,

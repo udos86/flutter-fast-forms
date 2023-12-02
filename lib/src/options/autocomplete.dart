@@ -33,6 +33,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     this.optionsBuilder,
     this.optionsMaxHeight = 200.00,
     this.optionsViewBuilder,
+    this.optionsViewOpenDirection = OptionsViewOpenDirection.down,
     this.willDisplayOption,
   })  : assert(options != null || optionsBuilder != null),
         _initialValue = initialValue,
@@ -49,6 +50,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
   final AutocompleteOptionsBuilder<O>? optionsBuilder;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<O>? optionsViewBuilder;
+  final OptionsViewOpenDirection optionsViewOpenDirection;
   final FastAutocompleteWillDisplayOption<O>? willDisplayOption;
 
   @override
@@ -116,5 +118,6 @@ Widget autocompleteBuilder<O extends Object>(FormFieldState<String> field) {
     optionsBuilder: optionsBuilder,
     optionsMaxHeight: widget.optionsMaxHeight,
     optionsViewBuilder: widget.optionsViewBuilder,
+    optionsViewOpenDirection: widget.optionsViewOpenDirection,
   );
 }
