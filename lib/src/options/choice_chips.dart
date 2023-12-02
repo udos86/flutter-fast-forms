@@ -134,6 +134,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
     this.spacing = 12.0,
     this.runAlignment = WrapAlignment.start,
     this.runSpacing = 0.0,
+    this.showCheckmark,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
   }) : super(
@@ -153,6 +154,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
   final Axis direction;
   final WrapAlignment runAlignment;
   final double runSpacing;
+  final bool? showCheckmark;
   final double spacing;
   final TextDirection? textDirection;
   final VerticalDirection verticalDirection;
@@ -205,7 +207,7 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     selectedShadowColor: chip.selectedShadowColor,
     shadowColor: chip.shadowColor,
     shape: chip.shape,
-    showCheckmark: chip.showCheckmark,
+    showCheckmark: chip.showCheckmark ?? field.widget.showCheckmark,
     side: chip.side,
     surfaceTintColor: chip.surfaceTintColor,
     tooltip: chip.tooltip,
