@@ -1,12 +1,13 @@
 ## [13.0.0] - 12/02/2023
 
-* upgrades to Flutter `3.16.0`
+* upgrades to Flutter `3.16.2`
 * upgrades to Dart `3.2.0`
 * removes deprecated `text` property from `FastRadioOption<T>`
 * adds `offLabelColor` and `onLabelColor` properties to `FastSwitch`
 * adds `barrierColor`, `barrierDismissible` and `barrierLabel` properties to `FastDatePicker`, `FastDateRangePicker` and `FastTimePicker`
 * adds `optionsViewOpenDirection` property to `FastAutocomplete`
 * adds `checkmarkColor` and `showCheckmark` properties to `FastChoiceChip`
+* adds `showCheckmark` property to `FastChoiceChips`
 * adds `canRequestFocus`, `clipBehavior`, `contentInsertionConfiguration`, `cursorOpacityAnimates`, 
 `dragStartBehavior`, `onAppPrivateCommand`, `scribbleEnabled`, `scrollController`, 
 `selectionHeightStyle`, `selectionWidthStyle` and `undoController` properties to `FastTextField`

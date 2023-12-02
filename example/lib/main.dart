@@ -106,11 +106,11 @@ class FormPage extends StatelessWidget {
                         borderSide: BorderSide(width: 2),
                       ),
                       errorBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2),
+                        borderSide: BorderSide(color: Colors.red, width: 1),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(color: Colors.red[500]!, width: 2),
+                            BorderSide(color: Colors.red[500]!, width: 1),
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -191,6 +191,7 @@ class FormPage extends StatelessWidget {
             name: 'choice_chips',
             labelText: 'Choice Chips',
             alignment: WrapAlignment.center,
+            showCheckmark: false,
             chipPadding: const EdgeInsets.all(8.0),
             chips: [
               FastChoiceChip(
