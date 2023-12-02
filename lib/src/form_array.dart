@@ -76,27 +76,27 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T?>> {
     didChange(newValue);
   }
 
-  void move(int oldIndex, int newIndex) {
-    if (newIndex >= 0 && newIndex < value!.length) {
-      final item = value![oldIndex];
-      final key = _keys[oldIndex];
+  void move(int index, int newIndex) {
+    if (newIndex < 0 || newIndex >= value!.length) return;
 
-      _keys
-        ..removeAt(oldIndex)
-        ..insert(newIndex, key);
+    final item = value![index];
+    final key = _keys[index];
 
-      didChange([...value!]
-        ..removeAt(oldIndex)
-        ..insert(newIndex, item));
-    }
+    _keys
+      ..removeAt(index)
+      ..insert(newIndex, key);
+
+    didChange([...value!]
+      ..removeAt(index)
+      ..insert(newIndex, item));
   }
 
   void remove(int index) {
-    if (value != null && index >= 0 && index < value!.length) {
-      _keys.removeAt(index);
-      final newValue = [...value!]..removeAt(index);
-      didChange(newValue);
-    }
+    if (value == null || index < 0 || index >= value!.length) return;
+
+    _keys.removeAt(index);
+    final newValue = [...value!]..removeAt(index);
+    didChange(newValue);
   }
 
   void _initKeys() {

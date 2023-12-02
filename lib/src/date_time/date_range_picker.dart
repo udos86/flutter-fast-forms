@@ -32,6 +32,9 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     super.restorationId,
     super.validator,
     this.anchorPoint,
+    this.barrierColor,
+    this.barrierDismissible = true,
+    this.barrierLabel,
     this.cancelText,
     this.confirmText,
     this.currentDate,
@@ -62,6 +65,9 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   }) : dateFormat = format ?? intl.DateFormat.yMd();
 
   final Offset? anchorPoint;
+  final Color? barrierColor;
+  final bool barrierDismissible;
+  final String? barrierLabel;
   final String? cancelText;
   final String? confirmText;
   final DateTime? currentDate;
@@ -130,6 +136,9 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
   Future<DateTimeRange?> show(DatePickerEntryMode entryMode) {
     return showDateRangePicker(
       anchorPoint: widget.anchorPoint,
+      barrierColor: widget.barrierColor,
+      barrierDismissible: widget.barrierDismissible,
+      barrierLabel: widget.barrierLabel,
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,

@@ -30,7 +30,7 @@ class FastForm extends StatefulWidget {
   static FastFormState? of(BuildContext context) {
     final _FastFormScope? scope =
         context.dependOnInheritedWidgetOfExactType<_FastFormScope>();
-    return scope?._formState;
+    return scope?.formState;
   }
 
   @override
@@ -70,10 +70,10 @@ class FastFormState extends State<FastForm> {
 class _FastFormScope extends InheritedWidget {
   const _FastFormScope({
     required super.child,
-    required FastFormState formState,
-  }) : _formState = formState;
+    required this.formState,
+  });
 
-  final FastFormState _formState;
+  final FastFormState formState;
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;

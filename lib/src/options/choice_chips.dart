@@ -14,6 +14,7 @@ class FastChoiceChip
     this.avatar,
     this.avatarBorder = const CircleBorder(),
     this.backgroundColor,
+    this.checkmarkColor,
     this.clipBehavior = Clip.none,
     this.color,
     this.disabledColor,
@@ -32,6 +33,7 @@ class FastChoiceChip
     this.selectedShadowColor,
     this.shadowColor,
     this.shape,
+    this.showCheckmark,
     this.side,
     this.surfaceTintColor,
     this.tooltip,
@@ -93,6 +95,8 @@ class FastChoiceChip
   final VisualDensity? visualDensity;
 
   final bool enabled;
+  final Color? checkmarkColor;
+  final bool? showCheckmark;
   final String value;
 
   @override
@@ -182,7 +186,9 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     avatar: chip.avatar,
     avatarBorder: chip.avatarBorder,
     backgroundColor: chip.backgroundColor,
+    checkmarkColor: chip.checkmarkColor,
     clipBehavior: chip.clipBehavior,
+    color: chip.color,
     disabledColor: chip.disabledColor,
     elevation: chip.elevation,
     focusNode: chip.focusNode,
@@ -191,6 +197,7 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     labelPadding: chip.labelPadding,
     labelStyle: chip.labelStyle,
     materialTapTargetSize: chip.materialTapTargetSize,
+    onSelected: field.enabled && chip.isEnabled ? onSelected : null,
     padding: chip.padding ?? field.widget.chipPadding,
     pressElevation: chip.pressElevation,
     selected: field.value!.contains(chip.value),
@@ -198,11 +205,11 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     selectedShadowColor: chip.selectedShadowColor,
     shadowColor: chip.shadowColor,
     shape: chip.shape,
+    showCheckmark: chip.showCheckmark,
     side: chip.side,
     surfaceTintColor: chip.surfaceTintColor,
     tooltip: chip.tooltip,
     visualDensity: chip.visualDensity,
-    onSelected: field.enabled && chip.isEnabled ? onSelected : null,
   );
 }
 

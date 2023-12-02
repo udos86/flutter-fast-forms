@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,11 +31,16 @@ class FastTextField extends FastFormField<String> {
     this.autofillHints,
     this.autofocus = false,
     this.buildCounter,
+    this.canRequestFocus = true,
+    this.clipBehavior = Clip.hardEdge,
+    this.contentInsertionConfiguration,
     this.contextMenuBuilder,
     this.cursorColor,
     this.cursorHeight,
+    this.cursorOpacityAnimates,
     this.cursorRadius,
     this.cursorWidth = 2.0,
+    this.dragStartBehavior = DragStartBehavior.start,
     this.enableIMEPersonalizedLearning = true,
     this.enableInteractiveSelection = true,
     this.enableSuggestions = true,
@@ -50,6 +58,7 @@ class FastTextField extends FastFormField<String> {
     this.mouseCursor,
     this.obscureText = false,
     this.obscuringCharacter = '•',
+    this.onAppPrivateCommand,
     this.onEditingComplete,
     this.onFieldSubmitted,
     this.onTap,
@@ -59,9 +68,13 @@ class FastTextField extends FastFormField<String> {
     this.placeholderStyle,
     this.prefix,
     this.readOnly = false,
+    this.scribbleEnabled = true,
+    this.scrollController,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.scrollPhysics,
     this.selectionControls,
+    this.selectionHeightStyle = BoxHeightStyle.tight,
+    this.selectionWidthStyle = BoxWidthStyle.tight,
     this.showCursor,
     this.smartDashesType,
     this.smartQuotesType,
@@ -75,17 +88,23 @@ class FastTextField extends FastFormField<String> {
     this.textDirection,
     this.textInputAction,
     this.trailing,
+    this.undoController,
   });
 
   final bool autocorrect;
   final Iterable<String>? autofillHints;
   final bool autofocus;
   final InputCounterWidgetBuilder? buildCounter;
+  final bool canRequestFocus;
+  final Clip clipBehavior;
+  final ContentInsertionConfiguration? contentInsertionConfiguration;
   final EditableTextContextMenuBuilder? contextMenuBuilder;
   final Color? cursorColor;
   final double? cursorHeight;
   final Radius? cursorRadius;
+  final bool? cursorOpacityAnimates;
   final double cursorWidth;
+  final DragStartBehavior dragStartBehavior;
   final bool enableIMEPersonalizedLearning;
   final bool enableInteractiveSelection;
   final bool enableSuggestions;
@@ -103,6 +122,7 @@ class FastTextField extends FastFormField<String> {
   final MouseCursor? mouseCursor;
   final bool obscureText;
   final String obscuringCharacter;
+  final void Function(String, Map<String, dynamic>)? onAppPrivateCommand;
   final VoidCallback? onEditingComplete;
   final ValueChanged<String>? onFieldSubmitted;
   final GestureTapCallback? onTap;
@@ -112,9 +132,13 @@ class FastTextField extends FastFormField<String> {
   final TextStyle? placeholderStyle;
   final Widget? prefix;
   final bool readOnly;
+  final bool scribbleEnabled;
+  final ScrollController? scrollController;
   final EdgeInsets scrollPadding;
   final ScrollPhysics? scrollPhysics;
   final TextSelectionControls? selectionControls;
+  final BoxHeightStyle selectionHeightStyle;
+  final BoxWidthStyle selectionWidthStyle;
   final bool? showCursor;
   final SmartDashesType? smartDashesType;
   final SmartQuotesType? smartQuotesType;
@@ -128,6 +152,7 @@ class FastTextField extends FastFormField<String> {
   final TextDirection? textDirection;
   final TextInputAction? textInputAction;
   final Widget? trailing;
+  final UndoHistoryController? undoController;
 
   @override
   FastTextFieldState createState() => FastTextFieldState();
@@ -179,14 +204,18 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     autofocus: widget.autofocus,
     autovalidateMode: field.autovalidateMode,
     buildCounter: widget.buildCounter,
+    canRequestFocus: widget.canRequestFocus,
+    clipBehavior: widget.clipBehavior,
+    contentInsertionConfiguration: widget.contentInsertionConfiguration,
     contextMenuBuilder: widget.contextMenuBuilder,
     cursorColor: widget.cursorColor,
     cursorHeight: widget.cursorHeight,
+    cursorOpacityAnimates: widget.cursorOpacityAnimates,
     cursorRadius: widget.cursorRadius,
     cursorWidth: widget.cursorWidth,
     decoration: decoration,
-    initialValue: widget.initialValue,
     enabled: widget.enabled,
+    dragStartBehavior: widget.dragStartBehavior,
     enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
@@ -194,6 +223,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     focusNode: widget.focusNode ?? field.focusNode,
     keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
+    initialValue: widget.initialValue,
     inputFormatters: widget.inputFormatters,
     maxLength: widget.maxLength,
     maxLengthEnforcement: widget.maxLengthEnforcement,
@@ -203,6 +233,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     mouseCursor: widget.mouseCursor,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
+    onAppPrivateCommand: widget.onAppPrivateCommand,
     onChanged: widget.enabled ? field.didChange : null,
     onEditingComplete: widget.onEditingComplete,
     onFieldSubmitted: widget.onFieldSubmitted,
@@ -210,9 +241,13 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     onTap: widget.onTap,
     onTapOutside: widget.onTapOutside,
     readOnly: widget.readOnly,
+    scribbleEnabled: widget.scribbleEnabled,
+    scrollController: widget.scrollController,
     scrollPadding: widget.scrollPadding,
     scrollPhysics: widget.scrollPhysics,
     selectionControls: widget.selectionControls,
+    selectionHeightStyle: widget.selectionHeightStyle,
+    selectionWidthStyle: widget.selectionWidthStyle,
     showCursor: widget.showCursor,
     smartDashesType: widget.smartDashesType,
     smartQuotesType: widget.smartQuotesType,
@@ -224,6 +259,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     textCapitalization: widget.textCapitalization,
     textDirection: widget.textDirection,
     textInputAction: widget.textInputAction,
+    undoController: widget.undoController,
     validator: widget.validator,
   );
 }

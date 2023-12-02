@@ -10,19 +10,15 @@ class FastRadioOption<T> {
     this.secondary,
     this.selected = false,
     this.subtitle,
-    @Deprecated('Use title instead') this.text,
     this.title,
     required this.value,
     this.visualDensity,
-  }) : assert(!(text == null && title == null),
-            'Either text or title must be set');
+  });
 
   final bool isThreeLine;
   final Widget? secondary;
   final bool selected;
   final Widget? subtitle;
-  @Deprecated('Use title instead')
-  final String? text;
   final Widget? title;
   final T value;
   final VisualDensity? visualDensity;
@@ -128,8 +124,7 @@ Widget radioOptionBuilder<T>(
     splashRadius: widget.splashRadius,
     subtitle: option.subtitle,
     tileColor: widget.tileColor,
-    // ignore: deprecated_member_use_from_same_package
-    title: option.title ?? Text(option.text!),
+    title: option.title,
     toggleable: widget.toggleable,
     value: option.value,
     visualDensity: option.visualDensity,
