@@ -2,114 +2,116 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  String? staticErrorText<T>(T? value) => 'error text';
+  String? dynamicErrorText<T, C>(T? value, C constraint) =>
+      'error text with $constraint';
+
   test('required', () {
-    String? errorTextBuilder1(String? value) => 'error text';
-    final validator1 = Validators.required<String>(errorTextBuilder1);
+    final validator = Validators.required(staticErrorText);
 
-    expect(validator1('test'), null);
-    expect(validator1(''), errorTextBuilder1(''));
-    expect(validator1(null), errorTextBuilder1(null));
-
-    String? errorTextBuilder2(Iterable? value) => 'error text';
-    final validator2 = Validators.required<Iterable>(errorTextBuilder2);
-
-    expect(validator2([]), errorTextBuilder2([]));
-    expect(validator2({}), errorTextBuilder2({}));
+    expect(validator('test'), null);
+    expect(validator(''), staticErrorText(''));
+    expect(validator(null), staticErrorText(null));
+    expect(validator([]), staticErrorText([]));
+    expect(validator({}), staticErrorText({}));
   });
 
   test('requiredTrue', () {
-    String? errorTextBuilder(bool? value) => 'error text';
-    final validator = Validators.requiredTrue(errorTextBuilder);
+    final validator = Validators.requiredTrue(staticErrorText);
 
     expect(validator(true), null);
-    expect(validator(false), errorTextBuilder(false));
-    expect(validator(null), errorTextBuilder(null));
+    expect(validator(false), staticErrorText(false));
+    expect(validator(null), staticErrorText(null));
   });
 
   test('pattern', () {
     const pattern = "^test\$";
-    String? errorTextBuilder(String? value, Pattern pattern) => 'error text';
-    final validator = Validators.pattern(pattern, errorTextBuilder);
+    final validator = Validators.pattern(pattern, dynamicErrorText);
 
     expect(validator('test'), null);
     expect(validator(''), null);
-    expect(validator('abc'), errorTextBuilder('abc', pattern));
+    expect(validator('abc'), dynamicErrorText('abc', pattern));
     expect(validator(null), null);
-  });
-
-  test('maxLength', () {
-    const maxLength = 4;
-    String? errorTextBuilder1(String? value, int maxLength) => 'error text';
-    final validator1 =
-        Validators.maxLength<String>(maxLength, errorTextBuilder1);
-
-    expect(validator1('test'), null);
-    expect(validator1('abc'), null);
-    expect(validator1('testtest'), errorTextBuilder1('testtest', maxLength));
-    expect(validator1(''), null);
-
-    String? errorTextBuilder2(Iterable? value, int maxLength) => 'error text';
-    final validator2 =
-        Validators.maxLength<Iterable>(maxLength, errorTextBuilder2);
-
-    expect(validator2([1, 2, 3, 4]), null);
-    expect(validator2([]), null);
-    expect(validator2([1, 2, 3, 4, 5]),
-        errorTextBuilder2([1, 2, 3, 4, 5], maxLength));
-    expect(validator2(null), null);
-  });
-
-  test('minLength', () {
-    const minLength = 4;
-    String? errorTextBuilder1(String? value, int minLength) => 'error text';
-    final validator1 =
-        Validators.minLength<String>(minLength, errorTextBuilder1);
-
-    expect(validator1('test'), null);
-    expect(validator1('abc'), errorTextBuilder1('abc', minLength));
-    expect(validator1(''), errorTextBuilder1('', minLength));
-    expect(validator1(null), null);
-
-    String? errorTextBuilder2(Iterable? value, int minLength) => 'error text';
-    final validator2 =
-        Validators.minLength<Iterable>(minLength, errorTextBuilder2);
-
-    expect(validator2([]), errorTextBuilder2([], minLength));
-    expect(validator2([1, 2, 3]), errorTextBuilder2([1, 2, 3], minLength));
   });
 
   test('max', () {
     const max = 4;
-    String? errorTextBuilder(num? value, num max) => 'error text';
-    final validator = Validators.max(max, errorTextBuilder);
+    final validator = Validators.max(max, dynamicErrorText);
 
     expect(validator(max - 1), null);
-    expect(validator(max + 1), errorTextBuilder(max + 1, max));
+    expect(validator(max + 1), dynamicErrorText(max + 1, max));
     expect(validator(null), null);
   });
 
   test('min', () {
     const min = 4;
-    String? errorTextBuilder(num? value, num min) => 'error text';
-    final validator = Validators.min(min, errorTextBuilder);
+    final validator = Validators.min(min, dynamicErrorText);
 
     expect(validator(min + 1), null);
-    expect(validator(min - 1), errorTextBuilder(min - 1, min));
+    expect(validator(min - 1), dynamicErrorText(min - 1, min));
     expect(validator(null), null);
+  });
+
+  group('minLength / maxLength', () {
+    const cases = [
+      [
+        [1, 2, 3, 4],
+        [1, 2, 3],
+        [],
+      ],
+      [
+        {'k1': 1, 'k2': 2, 'k3': 3, 'k4': 4},
+        {'k1': 1, 'k2': 2, 'k3': 3},
+        {},
+      ],
+      [
+        'test',
+        'abc',
+        '',
+      ]
+    ];
+
+    test('minLength', () {
+      const minLength = 4;
+
+      for (var [length4, length3, empty] in cases) {
+        final validator = Validators.minLength(minLength, dynamicErrorText);
+
+        expect(validator(length4), null);
+        expect(validator(length3), dynamicErrorText(length3, minLength));
+        expect(validator(empty), dynamicErrorText(empty, minLength));
+        expect(validator(null), null);
+      }
+    });
+
+    test('maxLength', () {
+      const maxLength = 3;
+
+      for (var [length4, length3, empty] in cases) {
+        final validator = Validators.maxLength(maxLength, dynamicErrorText);
+
+        expect(validator(length4), dynamicErrorText(length4, maxLength));
+        expect(validator(length3), null);
+        expect(validator(empty), null);
+        expect(validator(null), null);
+      }
+    });
   });
 
   test('compose', () {
     const minLength = 4;
-    String? errorTextBuilderRequired(String? value) => 'error text required';
-    String? errorTextBuilderMinLength(String? value, int minLength) =>
-        'error text minLength';
-    final validator = Validators.compose<String>([
-      Validators.required(errorTextBuilderRequired),
-      Validators.minLength(minLength, errorTextBuilderMinLength),
+
+    String? errorTextRequired(String? value) => 'value is required';
+    String? errorTextMinLength(String? value, int minLength) =>
+        'value requires a minimum length of $minLength';
+
+    final validator = Validators.compose([
+      Validators.required(errorTextRequired),
+      Validators.minLength(minLength, errorTextMinLength),
     ]);
 
     expect(validator('test'), null);
-    expect(validator('abc'), errorTextBuilderMinLength('abc', minLength));
-    expect(validator(null), errorTextBuilderRequired(null));
+    expect(validator('abc'), errorTextMinLength('abc', minLength));
+    expect(validator(null), errorTextRequired(null));
   });
 }
