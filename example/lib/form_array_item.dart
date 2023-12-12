@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
+@immutable
 class FastFormArrayItem extends StatefulWidget {
   FastFormArrayItem(Key key, this.index, this.field)
       : value = field.value?.elementAt(index),

@@ -103,7 +103,7 @@ class FormPage extends StatelessWidget {
                             BorderSide(color: Colors.grey[700]!, width: 1),
                       ),
                       focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(width: 2),
+                        borderSide: BorderSide(width: 1),
                       ),
                       errorBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.red, width: 1),
