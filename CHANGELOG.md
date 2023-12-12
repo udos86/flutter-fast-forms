@@ -1,3 +1,9 @@
+## [14.0.0] - 12/12/2023
+* upgrades to Flutter `3.16.3`
+* upgrades to intl `0.19.0.`
+* adds internal `Validators` refactoring
+* adds documentation
+
 ## [13.0.0] - 12/02/2023
 
 * upgrades to Flutter `3.16.2`

@@ -109,18 +109,18 @@ child: FastForm(
 |:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------:|
 |        `FastAutocomplete`        |              `Autocomplete`             |                                  no                                  |                               yes                              |
 |          `FastCheckbox`          |            `CheckboxListTile`           |                         `CupertinoCheckbox`                          |                               yes                              |
-|         `FastChoiceChips`        |               `ChoiceChip`              |                                  no                                  |                               yes                              |
+|        `FastChoiceChips`         |               `ChoiceChip`              |                                  no                                  |                               yes                              |
 |          `FastCalendar`          |           `CalendarDatePicker`          |                                  no                                  |                               yes                              |
 |         `FastDatePicker`         |             `showDatePicker`            |                        `CupertinoDatePicker`                         |                               no                               |
-|       `FastDateRangePicker`      |          `showDateRangePicker`          |                                  no                                  |                               yes                              |
+|      `FastDateRangePicker`       |          `showDateRangePicker`          |                                  no                                  |                               yes                              |
 |          `FastDropdown`          | `DropdownButtonFormField`<br>`<String>` |                                  no                                  |                               yes                              |
-|         `FastInputChips`         |       `Autocomplete` + `InputChip`      |                                  no                                  |                               yes                              |
+|         `FastChipsInput`         |       `Autocomplete` + `InputChip`      |                                  no                                  |                               yes                              |
 |         `FastRadioGroup`         |             `RadioListTile`             |                                  no                                  |                               yes                              |
-|         `FastRangeSlider`        |              `RangeSlider`              |                                  no                                  |                               yes                              |
+|        `FastRangeSlider`         |              `RangeSlider`              |                                  no                                  |                               yes                              |
 |      `FastSegmentedControl`      |                    no                   |                `SlidingSegmenteControl`<br>`<String>`                |                               no                               |
 |           `FastSlider`           |            `Slider.adaptive`            |                          `CupertinoSlider`                           |                               no                               |
 |           `FastSwitch`           |             `SwitchListTile`            |                          `CupertinoSwitch`                           |                               no                               |
-|          `FastTextField`         |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |                               no                               |
+|         `FastTextField`          |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |                               no                               |
 |         `FastTimePicker`         |             `showTimePicker`            | no / use `FastDatePicker`<br>with <br>`CupertinoDatePickerMode.time` |                               yes                              |
 
 
