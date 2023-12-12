@@ -8,6 +8,14 @@ typedef FastInputDecorationBuilder = InputDecoration Function(
 typedef FastFormChanged = void Function(
     UnmodifiableMapView<String, dynamic> values);
 
+/// Wraps a [Form] widget and passes [FastFormField] widgets as [children] to
+/// it.
+///
+/// Allows configuring uniform adaptiveness and decoration across the entire
+/// [Form].
+///
+/// Optionally accepts a [FastFormChanged] listener that is called whenever a
+/// a child [FastFormField] widget changes its value.
 @immutable
 class FastForm extends StatefulWidget {
   const FastForm({
@@ -27,22 +35,33 @@ class FastForm extends StatefulWidget {
   final InputDecorationTheme? inputDecorationTheme;
   final FastFormChanged? onChanged;
 
+  /// Returns the [FastFormState] instance for this [FastForm] widget via
+  /// [_FastFormScope] inherited widget.
   static FastFormState? of(BuildContext context) {
     final _FastFormScope? scope =
         context.dependOnInheritedWidgetOfExactType<_FastFormScope>();
-    return scope?.formState;
+    return scope?._formState;
   }
 
   @override
   FastFormState createState() => FastFormState();
 }
 
+/// State associated with a [FastForm] widget.
+///
+/// Works identical to built-in [FormState].
+///
+/// Enhances [FormState] by triggering [FastForm.onChanged] whenever a
+/// [FastFormField] changes and passing an [UnmodifiableMapView] of all current
+/// [values].
+///
+/// Typically obtained via [FastForm.of].
 class FastFormState extends State<FastForm> {
   final Set<FastFormFieldState<dynamic>> _fields = {};
 
   UnmodifiableMapView<String, dynamic> get values {
-    return UnmodifiableMapView(
-        {for (final field in _fields) field.widget.name: field.value});
+    final map = {for (final field in _fields) field.widget.name: field.value};
+    return UnmodifiableMapView(map);
   }
 
   void register(FastFormFieldState field) => _fields.add(field);
@@ -67,13 +86,19 @@ class FastFormState extends State<FastForm> {
   }
 }
 
+/// Inherited widget for passing [FastFormState] down the widget tree.
+///
+/// Works identical to built-in [_FormScope].
+///
+/// Typically is used to register / unregister [FastFormFieldState] instances.
+@immutable
 class _FastFormScope extends InheritedWidget {
   const _FastFormScope({
     required super.child,
-    required this.formState,
-  });
+    required FastFormState formState,
+  }) : _formState = formState;
 
-  final FastFormState formState;
+  final FastFormState _formState;
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
@@ -83,6 +108,12 @@ typedef FastErrorBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 
 typedef FastHelperBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 
+/// A single fast form field.
+///
+/// Works identical to built-in [FormField].
+///
+/// Enhances [FormField] by adding additional parameters for configuring
+/// adaptiveness and description texts.
 @immutable
 abstract class FastFormField<T> extends FormField<T> {
   const FastFormField({
@@ -115,22 +146,41 @@ abstract class FastFormField<T> extends FormField<T> {
   final VoidCallback? onReset;
 }
 
+/// State associated with a [FastFormField] widget.
+///
+/// Works identical to built-in [FormFieldState].
+///
+/// Enhances [FormFieldState] by tracking [touched] state via [focusNode].
+///
 abstract class FastFormFieldState<T> extends FormFieldState<T> {
+  /// Indicates if the [FastFormField] is currently focused.
   bool focused = false;
+
+  /// Indicates if the user has touched the [FastFormField].
+  ///
+  /// The [FastFormField] must have been both focused and unfocused at least
+  /// once to be marked as touched.
   bool touched = false;
 
   late FocusNode focusNode;
 
+  /// Returns the [FastFormField] widget for this [FastFormFieldState] instance.
+  /// Must be overriden in the concrete child class.
   @override
   @protected
   FastFormField<T> get widget;
 
+  /// Returns if the [FastFormField.builder] should adapt to the
+  /// [TargetPlatform] provided that the [FastFormField] type does support it
   bool get adaptive => widget.adaptive ?? form?.widget.adaptive ?? false;
 
   bool get enabled => widget.enabled;
 
+  /// Returns the [FastFormState] of the parent [FastForm]
   FastFormState? get form => FastForm.of(context);
 
+  /// Creates the [InputDecoration] based on the current theme and the
+  /// corresponding [FastFormField] widget configuration
   InputDecoration get decoration {
     final theme = form?.widget.inputDecorationTheme ??
         Theme.of(context).inputDecorationTheme;
@@ -149,6 +199,8 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     return decoration.applyDefaults(theme);
   }
 
+  /// Adds the [_onFocusChanged] listener to [focusNode] and sets the initial
+  /// [FormFieldState] value.
   @override
   void initState() {
     super.initState();
@@ -156,6 +208,7 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     setValue(widget.initialValue);
   }
 
+  /// Unregisters this [FastFormFieldState] instance on the [FastFormState].
   @override
   void deactivate() {
     super.deactivate();
@@ -168,6 +221,11 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     focusNode.dispose();
   }
 
+  /// Registers this [FastFormFieldState] instance on the [FastFormState] and
+  /// builds the widget.
+  ///
+  /// Registration cannot be done in [initState] as [form] is retrieved via an
+  /// [InheritedWidget] which is not available outside the widget tree.
   @override
   Widget build(BuildContext context) {
     form?.register(this);
@@ -215,11 +273,13 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   }
 }
 
+/// The default function for building a [CupertinoFormRow.error] text
 Text? errorBuilder<T>(FastFormFieldState<T> field) {
   final text = field.errorText;
   return text is String ? Text(text) : null;
 }
 
+/// The default function for building a [CupertinoFormRow.helper] text
 Text? helperBuilder<T>(FastFormFieldState<T> field) {
   final text = field.widget.helperText;
   return text is String ? Text(text) : null;

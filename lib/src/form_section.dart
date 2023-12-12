@@ -5,6 +5,10 @@ import 'form.dart';
 
 enum FastFormSectionOrientation { horizontal, vertical }
 
+/// A widget for visually dividing a [FastForm] into multiple sections.
+///
+/// Builds a [CupertinoFormSection] when [adaptive] is true and platform is
+/// [TargetPlatform.iOS].
 @immutable
 class FastFormSection extends StatelessWidget {
   const FastFormSection({
