@@ -103,9 +103,6 @@ class FastChoiceChip
   bool get isEnabled => enabled;
 }
 
-typedef FastChoiceChipBuilder = Widget Function(
-    FastChoiceChip chip, FastChoiceChipsState field);
-
 @immutable
 class FastChoiceChips extends FastFormField<List<String>> {
   FastChoiceChips({
@@ -146,7 +143,8 @@ class FastChoiceChips extends FastFormField<List<String>> {
         );
 
   final WrapAlignment alignment;
-  final FastChoiceChipBuilder? chipBuilder;
+  final Widget Function(FastChoiceChip chip, FastChoiceChipsState field)?
+      chipBuilder;
   final EdgeInsetsGeometry? chipPadding;
   final List<FastChoiceChip> chips;
   final Clip clipBehavior;
@@ -169,18 +167,16 @@ class FastChoiceChipsState extends FastFormFieldState<List<String>> {
 }
 
 ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
+  final FastChoiceChipsState(:didChange, :enabled, :value!, :widget) = field;
+
   void onSelected(selected) {
     if (chip.onSelected != null) {
       chip.onSelected!(selected);
     }
 
-    final value = field.value is List ? [...field.value!] : <String>[];
-    if (selected) {
-      value.add(chip.value);
-    } else {
-      value.remove(chip.value);
-    }
-    field.didChange(value);
+    final newValue =
+        selected ? ([...value, chip.value]) : ([...value]..remove(chip.value));
+    didChange(newValue);
   }
 
   return ChoiceChip(
@@ -199,15 +195,15 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
     labelPadding: chip.labelPadding,
     labelStyle: chip.labelStyle,
     materialTapTargetSize: chip.materialTapTargetSize,
-    onSelected: field.enabled && chip.isEnabled ? onSelected : null,
-    padding: chip.padding ?? field.widget.chipPadding,
+    onSelected: enabled && chip.isEnabled ? onSelected : null,
+    padding: chip.padding ?? widget.chipPadding,
     pressElevation: chip.pressElevation,
-    selected: field.value!.contains(chip.value),
+    selected: value.contains(chip.value),
     selectedColor: chip.selectedColor,
     selectedShadowColor: chip.selectedShadowColor,
     shadowColor: chip.shadowColor,
     shape: chip.shape,
-    showCheckmark: chip.showCheckmark ?? field.widget.showCheckmark,
+    showCheckmark: chip.showCheckmark ?? widget.showCheckmark,
     side: chip.side,
     surfaceTintColor: chip.surfaceTintColor,
     tooltip: chip.tooltip,
@@ -216,11 +212,12 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
 }
 
 Widget choiceChipsBuilder(FormFieldState field) {
-  final widget = (field as FastChoiceChipsState).widget;
+  field as FastChoiceChipsState;
+  final FastChoiceChipsState(:decoration, :widget) = field;
   final chipBuilder = widget.chipBuilder ?? choiceChipBuilder;
 
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: Wrap(
       alignment: widget.alignment,
       crossAxisAlignment: widget.crossAlignment,

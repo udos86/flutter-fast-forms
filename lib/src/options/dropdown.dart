@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
-    List<T> items, FastDropdownState<T> field);
-
 @immutable
 class FastDropdown<T> extends FastFormField<T> {
   const FastDropdown({
@@ -66,7 +63,8 @@ class FastDropdown<T> extends FastFormField<T> {
   final bool isExpanded;
   final double? itemHeight;
   final List<T> items;
-  final FastDropdownMenuItemsBuilder<T>? itemsBuilder;
+  final List<DropdownMenuItem<T>> Function(
+      List<T> items, FastDropdownState<T> field)? itemsBuilder;
   final double? menuMaxHeight;
   final VoidCallback? onTap;
   final DropdownButtonBuilder? selectedItemBuilder;
@@ -90,11 +88,12 @@ List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
 }
 
 Widget dropdownBuilder<T>(FormFieldState<T> field) {
-  final widget = (field as FastDropdownState<T>).widget;
+  field as FastDropdownState<T>;
+  final FastDropdownState<T>(:decoration, :didChange, :value, :widget) = field;
   final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
   void onChanged(T? value) {
-    if (value != field.value) field.didChange(value);
+    if (value != field.value) didChange(value);
   }
 
   return DropdownButtonFormField<T>(
@@ -102,7 +101,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     autofocus: widget.autofocus,
     autovalidateMode: widget.autovalidateMode,
     borderRadius: widget.borderRadius,
-    decoration: field.decoration,
+    decoration: decoration,
     disabledHint: widget.disabledHint,
     dropdownColor: widget.dropdownColor,
     elevation: widget.elevation,
@@ -125,6 +124,6 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     selectedItemBuilder: widget.selectedItemBuilder,
     style: widget.style,
     validator: widget.validator,
-    value: field.value,
+    value: value,
   );
 }

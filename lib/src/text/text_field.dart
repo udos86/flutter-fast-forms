@@ -187,7 +187,9 @@ Text inputCounterWidgetBuilder(
 }
 
 Widget materialTextFieldBuilder(FormFieldState<String> field) {
-  final widget = (field as FastTextFieldState).widget;
+  field as FastTextFieldState;
+  final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
+      field;
   final InputDecoration decoration = field.decoration.copyWith(
     hintText: widget.placeholder,
     prefix:
@@ -202,7 +204,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
-    autovalidateMode: field.autovalidateMode,
+    autovalidateMode: autovalidateMode,
     buildCounter: widget.buildCounter,
     canRequestFocus: widget.canRequestFocus,
     clipBehavior: widget.clipBehavior,
@@ -220,7 +222,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
-    focusNode: widget.focusNode ?? field.focusNode,
+    focusNode: widget.focusNode ?? focusNode,
     keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
     initialValue: widget.initialValue,
@@ -234,7 +236,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
     onAppPrivateCommand: widget.onAppPrivateCommand,
-    onChanged: widget.enabled ? field.didChange : null,
+    onChanged: widget.enabled ? didChange : null,
     onEditingComplete: widget.onEditingComplete,
     onFieldSubmitted: widget.onFieldSubmitted,
     onSaved: widget.onSaved,
@@ -265,7 +267,9 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
 }
 
 Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
-  final widget = (field as FastTextFieldState).widget;
+  field as FastTextFieldState;
+  final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
+      field;
   final prefix = widget.prefix ??
       (widget.labelText is String ? Text(widget.labelText!) : null);
 
@@ -273,7 +277,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
-    autovalidateMode: field.autovalidateMode,
+    autovalidateMode: autovalidateMode,
     contextMenuBuilder: widget.contextMenuBuilder,
     cursorColor: widget.cursorColor,
     cursorHeight: widget.cursorHeight,
@@ -282,7 +286,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
-    focusNode: widget.focusNode ?? field.focusNode,
+    focusNode: widget.focusNode ?? focusNode,
     keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
     initialValue: widget.initialValue,
@@ -292,7 +296,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     minLines: widget.minLines,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
-    onChanged: widget.enabled ? field.didChange : null,
+    onChanged: widget.enabled ? didChange : null,
     onFieldSubmitted: widget.onFieldSubmitted,
     onEditingComplete: widget.onEditingComplete,
     onSaved: widget.onSaved,
@@ -320,23 +324,12 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
 }
 
 Widget textFieldBuilder(FormFieldState<String> field) {
-  var builder = materialTextFieldBuilder;
+  field as FastTextFieldState;
 
-  if ((field as FastTextFieldState).adaptive) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        builder = cupertinoTextFieldBuilder;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-      default:
-        builder = materialTextFieldBuilder;
-        break;
-    }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS when field.adaptive:
+      return cupertinoTextFieldBuilder(field);
+    default:
+      return materialTextFieldBuilder(field);
   }
-
-  return builder(field);
 }

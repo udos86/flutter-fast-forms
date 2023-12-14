@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form.dart';
 
-typedef FastSliderFixBuilder = Widget Function(FastSliderState field);
-
-typedef FastSliderLabelBuilder = String Function(FastSliderState field);
-
+/// A [FastFormField] that contains either a [Slider.adaptive] or a
+/// [CupertinoSlider].
 @immutable
 class FastSlider extends FastFormField<double> {
   const FastSlider({
@@ -57,33 +54,41 @@ class FastSlider extends FastFormField<double> {
   final FastErrorBuilder<double>? errorBuilder;
   final FastHelperBuilder<double>? helperBuilder;
   final Color? inactiveColor;
-  final FastSliderLabelBuilder? labelBuilder;
+  final String Function(FastSliderState field)? labelBuilder;
   final double max;
   final double min;
   final MouseCursor? mouseCursor;
   final ValueChanged<double>? onChangeEnd;
   final ValueChanged<double>? onChangeStart;
   final MaterialStateProperty<Color?>? overlayColor;
-  final FastSliderFixBuilder? prefixBuilder;
+  final Widget Function(FastSliderState field)? prefixBuilder;
   final Color? secondaryActiveColor;
   final double? secondaryTrackValue;
   final SemanticFormatterCallback? semanticFormatterCallback;
-  final FastSliderFixBuilder? suffixBuilder;
+  final Widget Function(FastSliderState field)? suffixBuilder;
   final Color? thumbColor;
 
   @override
   FastSliderState createState() => FastSliderState();
 }
 
+/// State associated with a [FastSlider] widget.
 class FastSliderState extends FastFormFieldState<double> {
   @override
   FastSlider get widget => super.widget as FastSlider;
 }
 
+/// The default [FastSlider.labelBuilder].
+///
+/// Returns the current [FastSliderState.value] converted to a [String].
 String sliderLabelBuilder(FastSliderState field) {
   return field.value!.toStringAsFixed(0);
 }
 
+/// The default [FastSlider.suffixBuilder].
+///
+/// Returns a [SizedBox] that contains a [Text] widget that shows
+/// the current [FastSliderState.value] converted to a [String].
 Widget sliderSuffixBuilder(FastSliderState field) {
   return SizedBox(
     width: 32.0,
@@ -96,11 +101,16 @@ Widget sliderSuffixBuilder(FastSliderState field) {
   );
 }
 
+/// The default [FastSlider] Material [FormFieldBuilder].
+///
+/// Returns an [InputDecorator] that contains an expanded [Slider.adaptive]
+/// as the only child of a [Row].
 Widget materialSliderBuilder(FormFieldState<double> field) {
-  final widget = (field as FastSliderState).widget;
+  field as FastSliderState;
+  final FastSliderState(:decoration, :didChange, :value!, :widget) = field;
 
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -118,14 +128,14 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
             min: widget.min,
             mouseCursor: widget.mouseCursor,
             onChangeEnd: widget.onChangeEnd,
-            onChanged: widget.enabled ? field.didChange : null,
+            onChanged: widget.enabled ? didChange : null,
             onChangeStart: widget.onChangeStart,
             overlayColor: widget.overlayColor,
             secondaryActiveColor: widget.secondaryActiveColor,
             secondaryTrackValue: widget.secondaryTrackValue,
             semanticFormatterCallback: widget.semanticFormatterCallback,
             thumbColor: widget.thumbColor,
-            value: field.value!,
+            value: value,
           ),
         ),
         if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
@@ -134,8 +144,13 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
   );
 }
 
+/// The default [FastSlider] Cupertino [FormFieldBuilder].
+///
+/// Returns a [CupertinoFormRow] that contains an expanded [CupertinoSlider]
+/// as the only child of a [Row].
 Widget cupertinoSliderBuilder(FormFieldState<double> field) {
-  final widget = (field as FastSliderState).widget;
+  field as FastSliderState;
+  final FastSliderState(:didChange, :value!, :widget) = field;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
@@ -153,10 +168,10 @@ Widget cupertinoSliderBuilder(FormFieldState<double> field) {
             max: widget.max,
             min: widget.min,
             thumbColor: widget.thumbColor ?? CupertinoColors.white,
-            onChanged: widget.enabled ? field.didChange : null,
+            onChanged: widget.enabled ? didChange : null,
             onChangeEnd: widget.onChangeEnd,
             onChangeStart: widget.onChangeStart,
-            value: field.value!,
+            value: value,
           ),
         ),
         if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
@@ -165,24 +180,19 @@ Widget cupertinoSliderBuilder(FormFieldState<double> field) {
   );
 }
 
+/// The default [FastSlider.builder].
+///
+/// Uses [materialSliderBuilder] by default on any [TargetPlatform].
+///
+/// Uses [cupertinoSliderBuilder] on [TargetPlatform.iOS] when
+/// [FastSliderState.adaptive] is true.
 Widget sliderBuilder(FormFieldState<double> field) {
-  var builder = materialSliderBuilder;
+  field as FastSliderState;
 
-  if ((field as FastSliderState).adaptive) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        builder = cupertinoSliderBuilder;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-      default:
-        builder = materialSliderBuilder;
-        break;
-    }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS when field.adaptive:
+      return cupertinoSliderBuilder(field);
+    default:
+      return materialSliderBuilder(field);
   }
-
-  return builder(field);
 }

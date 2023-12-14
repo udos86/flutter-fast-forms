@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'form.dart';
 
@@ -30,14 +30,12 @@ class FastFormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var builder = _buildFormSection;
-
-    if (adaptive) {
-      final platform = Theme.of(context).platform;
-      if (platform == TargetPlatform.iOS) builder = _buildCupertinoFormSection;
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS when adaptive:
+        return _buildCupertinoFormSection(context);
+      default:
+        return _buildFormSection(context);
     }
-
-    return builder(context);
   }
 
   Widget _buildFormSection(BuildContext context) {

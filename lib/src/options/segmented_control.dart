@@ -49,7 +49,8 @@ class FastSegmentedControlState<T> extends FastFormFieldState<T> {
 }
 
 Widget segmentedControlBuilder<T>(FormFieldState<T> field) {
-  final widget = (field as FastSegmentedControlState<T>).widget;
+  field as FastSegmentedControlState<T>;
+  final FastSegmentedControlState<T>(:didChange, :value, :widget) = field;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
@@ -59,8 +60,8 @@ Widget segmentedControlBuilder<T>(FormFieldState<T> field) {
     child: CupertinoSlidingSegmentedControl<T>(
       backgroundColor: widget.backgroundColor,
       children: widget.children,
-      groupValue: field.value,
-      onValueChanged: field.didChange,
+      groupValue: value,
+      onValueChanged: didChange,
       padding: widget.padding,
       thumbColor: widget.thumbColor ??
           const CupertinoDynamicColor.withBrightness(

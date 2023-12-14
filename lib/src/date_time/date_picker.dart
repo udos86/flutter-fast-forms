@@ -5,17 +5,11 @@ import 'package:intl/intl.dart' as intl;
 
 import '../form.dart';
 
-typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState field);
-
-typedef FastDatePickerModalPopupBuilder = Widget Function(
-    BuildContext context, FastDatePickerState field);
-
 typedef ShowFastDatePicker = Future<DateTime?> Function(
     DatePickerEntryMode entryMode);
 
-typedef FastDatePickerIconButtonBuilder = IconButton Function(
-    FastDatePickerState field, ShowFastDatePicker show);
-
+/// A [FastFormField] that shows either a Material Design date picker via
+/// [showDatePicker] or a [CupertinoDatePicker] via [showCupertinoModalPopup].
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
@@ -103,7 +97,8 @@ class FastDatePicker extends FastFormField<DateTime> {
   final FastHelperBuilder<DateTime>? helperBuilder;
   final String? helpText;
   final Icon? icon;
-  final FastDatePickerIconButtonBuilder? iconButtonBuilder;
+  final IconButton Function(FastDatePickerState field, ShowFastDatePicker show)?
+      iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final TextInputType? keyboardType;
@@ -122,7 +117,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final bool showModalPopup;
   final Icon? switchToCalendarEntryModeIcon;
   final Icon? switchToInputEntryModeIcon;
-  final FastDatePickerTextBuilder? textBuilder;
+  final Text Function(FastDatePickerState field)? textBuilder;
   final TextDirection? textDirection;
   final TextStyle? textStyle;
   final bool use24hFormat;
@@ -156,22 +151,22 @@ class FastDatePickerState extends FastFormFieldState<DateTime> {
 }
 
 Text datePickerTextBuilder(FastDatePickerState field) {
-  final theme = Theme.of(field.context);
-  final format =
-      field.widget.dateFormat?.format ?? _datePickerFormat(field).format;
-  final value = field.value;
-  final style = field.widget.textStyle ?? theme.textTheme.titleMedium;
+  final FastDatePickerState(:context, :enabled, :value, :widget) = field;
+
+  final theme = Theme.of(context);
+  final format = widget.dateFormat?.format ?? _datePickerFormat(field).format;
+  final style = widget.textStyle ?? theme.textTheme.titleMedium;
 
   return Text(
-    value != null ? format(field.value!) : '',
-    style: field.enabled ? style : style?.copyWith(color: theme.disabledColor),
+    value != null ? format(value) : '',
+    style: enabled ? style : style?.copyWith(color: theme.disabledColor),
     textAlign: TextAlign.left,
   );
 }
 
 IconButton datePickerIconButtonBuilder(
     FastDatePickerState field, ShowFastDatePicker show) {
-  final widget = field.widget;
+  final FastDatePickerState(:widget) = field;
 
   return IconButton(
     alignment: Alignment.center,
@@ -182,8 +177,8 @@ IconButton datePickerIconButtonBuilder(
 
 Container cupertinoDatePickerModalPopupBuilder(
     BuildContext context, FastDatePickerState field) {
-  final widget = field.widget;
-  DateTime? modalValue = field.value;
+  final FastDatePickerState(:value, :widget) = field;
+  DateTime? modalValue = value;
 
   return Container(
     color: CupertinoColors.systemBackground,
@@ -222,7 +217,7 @@ Container cupertinoDatePickerModalPopupBuilder(
           child: CupertinoDatePicker(
             backgroundColor: widget.backgroundColor,
             dateOrder: widget.dateOrder,
-            initialDateTime: field.value,
+            initialDateTime: value,
             maximumDate: widget.lastDate,
             maximumYear: widget.maximumYear,
             minimumDate: widget.firstDate,
@@ -240,7 +235,8 @@ Container cupertinoDatePickerModalPopupBuilder(
 }
 
 Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
-  final widget = (field as FastDatePickerState).widget;
+  field as FastDatePickerState;
+  final FastDatePickerState(:context, :didChange, :widget) = field;
 
   Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
@@ -251,7 +247,7 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
-      context: field.context,
+      context: context,
       currentDate: widget.currentDate,
       errorFormatText: widget.errorFormatText,
       errorInvalidText: widget.errorInvalidText,
@@ -273,7 +269,7 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
       textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
-      if (value != null) field.didChange(value);
+      if (value != null) didChange(value);
       return value;
     });
   }
@@ -300,7 +296,8 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
 }
 
 Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
-  final widget = (field as FastDatePickerState).widget;
+  field as FastDatePickerState;
+  final FastDatePickerState(:context, :didChange, :widget) = field;
   final CupertinoThemeData themeData = CupertinoTheme.of(field.context);
   final TextStyle textStyle = themeData.textTheme.textStyle;
   final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
@@ -334,12 +331,12 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
                       child: text,
                       onPressed: () {
                         showCupertinoModalPopup<DateTime>(
-                          context: field.context,
+                          context: context,
                           builder: (BuildContext context) =>
                               cupertinoDatePickerModalPopupBuilder(
                                   context, field),
                         ).then((DateTime? value) {
-                          if (value != null) field.didChange(value);
+                          if (value != null) didChange(value);
                         });
                       },
                     )
@@ -360,7 +357,7 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
               minimumYear: widget.minimumYear,
               minuteInterval: widget.minuteInterval,
               mode: widget.mode,
-              onDateTimeChanged: field.didChange,
+              onDateTimeChanged: didChange,
               showDayOfWeek: widget.showDayOfWeek,
               use24hFormat: widget.use24hFormat,
             ),
@@ -371,23 +368,12 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
 }
 
 Widget datePickerBuilder(FormFieldState<DateTime> field) {
-  var builder = materialDatePickerBuilder;
+  field as FastDatePickerState;
 
-  if ((field as FastDatePickerState).adaptive) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        builder = cupertinoDatePickerBuilder;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-      default:
-        builder = materialDatePickerBuilder;
-        break;
-    }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS when field.adaptive:
+      return cupertinoDatePickerBuilder(field);
+    default:
+      return materialDatePickerBuilder(field);
   }
-
-  return builder(field);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+/// A [FastFormField] that contains a [CalendarDatePicker].
 @immutable
 class FastCalendar extends FastFormField<DateTime> {
   const FastCalendar({
@@ -38,23 +39,29 @@ class FastCalendar extends FastFormField<DateTime> {
   FastCalendarState createState() => FastCalendarState();
 }
 
+/// State associated with a [FastCalendar] widget.
 class FastCalendarState extends FastFormFieldState<DateTime> {
   @override
   FastCalendar get widget => super.widget as FastCalendar;
 }
 
+/// The default [FastCalendar.builder].
+///
+/// Returns an [InputDecorator] that contains a [CalendarDatePicker] on any
+/// [TargetPlatform].
 Widget calendarBuilder(FormFieldState<DateTime> field) {
-  final widget = (field as FastCalendarState).widget;
+  field as FastCalendarState;
+  final FastCalendarState(:decoration, :didChange, :value, :widget) = field;
 
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: CalendarDatePicker(
       currentDate: widget.currentDate,
       firstDate: widget.firstDate,
       initialCalendarMode: widget.initialCalendarMode,
-      initialDate: field.value ?? DateTime.now(),
+      initialDate: value ?? DateTime.now(),
       lastDate: widget.lastDate,
-      onDateChanged: field.didChange,
+      onDateChanged: didChange,
       onDisplayedMonthChanged: widget.onDisplayedMonthChanged,
       selectableDayPredicate: widget.selectableDayPredicate,
     ),

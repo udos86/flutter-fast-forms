@@ -24,12 +24,6 @@ class FastRadioOption<T> {
   final VisualDensity? visualDensity;
 }
 
-typedef FastRadioOptionBuilder<T> = Widget Function(
-    FastRadioOption<T> option, FastRadioGroupState<T> field);
-
-typedef FastRadioOptionsBuilder<T> = Widget Function(
-    List<FastRadioOption<T>> options, FastRadioGroupState<T> field);
-
 enum FastRadioGroupOrientation { horizontal, vertical }
 
 @immutable
@@ -83,8 +77,11 @@ class FastRadioGroup<T> extends FastFormField<T> {
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
   final List<FastRadioOption<T>> options;
-  final FastRadioOptionBuilder<T>? optionBuilder;
-  final FastRadioOptionsBuilder<T>? optionsBuilder;
+  final Widget Function(
+      FastRadioOption<T> option, FastRadioGroupState<T> field)? optionBuilder;
+  final Widget Function(
+          List<FastRadioOption<T>> options, FastRadioGroupState<T> field)?
+      optionsBuilder;
   final FastRadioGroupOrientation orientation;
   final MaterialStateProperty<Color?>? overlayColor;
   final Color? selectedTileColor;
@@ -104,18 +101,18 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 
 Widget radioOptionBuilder<T>(
     FastRadioOption<T> option, FastRadioGroupState<T> field) {
-  final widget = field.widget;
+  final FastRadioGroupState<T>(:didChange, :value, :widget) = field;
   final vertical = widget.orientation == FastRadioGroupOrientation.vertical;
   final tile = RadioListTile<T>(
     activeColor: widget.activeColor,
     controlAffinity: widget.controlAffinity,
     fillColor: widget.fillColor,
     hoverColor: widget.hoverColor,
-    groupValue: field.value,
+    groupValue: value,
     isThreeLine: option.isThreeLine,
     materialTapTargetSize: widget.materialTapTargetSize,
     mouseCursor: widget.mouseCursor,
-    onChanged: field.widget.enabled ? field.didChange : null,
+    onChanged: widget.enabled ? didChange : null,
     overlayColor: widget.overlayColor,
     secondary: option.secondary,
     selected: option.selected,
@@ -135,8 +132,9 @@ Widget radioOptionBuilder<T>(
 
 Widget radioOptionsBuilder<T>(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> field) {
-  final optionBuilder = field.widget.optionBuilder ?? radioOptionBuilder;
-  final wrapper = field.widget.orientation == FastRadioGroupOrientation.vertical
+  final FastRadioGroupState<T>(:widget) = field;
+  final optionBuilder = widget.optionBuilder ?? radioOptionBuilder;
+  final wrapper = widget.orientation == FastRadioGroupOrientation.vertical
       ? Column.new
       : Row.new;
 
@@ -146,11 +144,12 @@ Widget radioOptionsBuilder<T>(
 }
 
 Widget radioGroupBuilder<T>(FormFieldState<T> field) {
-  final widget = (field as FastRadioGroupState<T>).widget;
+  field as FastRadioGroupState<T>;
+  final FastRadioGroupState<T>(:decoration, :widget) = field;
   final optionsBuilder = widget.optionsBuilder ?? radioOptionsBuilder;
 
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: optionsBuilder(widget.options, field),
   );
 }

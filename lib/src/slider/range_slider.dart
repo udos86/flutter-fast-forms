@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastRangeSliderLabelsBuilder = RangeLabels Function(
-    FastRangeSliderState field);
-
-typedef FastRangeSliderFixBuilder = Widget Function(FastRangeSliderState field);
-
+/// A [FastFormField] that contains a [RangeSlider].
 @immutable
 class FastRangeSlider extends FastFormField<RangeValues> {
   FastRangeSlider({
@@ -43,33 +39,44 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   final Color? activeColor;
   final int? divisions;
   final Color? inactiveColor;
-  final FastRangeSliderLabelsBuilder? labelsBuilder;
+  final RangeLabels Function(FastRangeSliderState field)? labelsBuilder;
   final double max;
   final double min;
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
   final void Function(RangeValues)? onChangeEnd;
   final void Function(RangeValues)? onChangeStart;
   final MaterialStateProperty<Color?>? overlayColor;
-  final FastRangeSliderFixBuilder? prefixBuilder;
+  final Widget Function(FastRangeSliderState field)? prefixBuilder;
   final String Function(double)? semanticFormatterCallback;
-  final FastRangeSliderFixBuilder? suffixBuilder;
+  final Widget Function(FastRangeSliderState field)? suffixBuilder;
 
   @override
   FastRangeSliderState createState() => FastRangeSliderState();
 }
 
+/// State associated with a [FastRangeSlider] widget.
 class FastRangeSliderState extends FastFormFieldState<RangeValues> {
   @override
   FastRangeSlider get widget => super.widget as FastRangeSlider;
 }
 
+/// The default [FastRangeSlider.labelsBuilder].
+///
+/// Returns [RangeLabels] by converting [RangeValues.start] and
+/// [RangeValues.end] of the current [FastRangeSliderState.value] to a [String].
 RangeLabels rangeSliderLabelsBuilder(FastRangeSliderState field) {
+  final FastRangeSliderState(:value!) = field;
   return RangeLabels(
-    field.value!.start.toStringAsFixed(0),
-    field.value!.end.toStringAsFixed(0),
+    value.start.toStringAsFixed(0),
+    value.end.toStringAsFixed(0),
   );
 }
 
+/// The default [FastRangeSlider.prefixBuilder].
+///
+/// Returns a [SizedBox] that contains a centered [Text] widget that shows
+/// [RangeValues.start] of the current [FastRangeSliderState.value] converted to
+/// a [String].
 Widget rangeSliderPrefixBuilder(FastRangeSliderState field) {
   return SizedBox(
     width: 48.0,
@@ -82,6 +89,11 @@ Widget rangeSliderPrefixBuilder(FastRangeSliderState field) {
   );
 }
 
+/// The default [FastRangeSlider.suffixBuilder].
+///
+/// Returns a [SizedBox] that contains a centered [Text] widget that shows
+/// [RangeValues.end] of the current [FastRangeSliderState.value] converted to
+/// a [String].
 Widget rangeSliderSuffixBuilder(FastRangeSliderState field) {
   return SizedBox(
     width: 48.0,
@@ -96,11 +108,16 @@ Widget rangeSliderSuffixBuilder(FastRangeSliderState field) {
   );
 }
 
+/// The default [FastRangeSlider.builder].
+///
+/// Returns an [InputDecorator] that contains a [RangeSlider] on any
+/// [TargetPlatform].
 Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
-  final widget = (field as FastRangeSliderState).widget;
+  field as FastRangeSliderState;
+  final FastRangeSliderState(:decoration, :didChange, :value!, :widget) = field;
 
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -114,12 +131,12 @@ Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
             max: widget.max,
             min: widget.min,
             mouseCursor: widget.mouseCursor,
-            onChanged: widget.enabled ? field.didChange : null,
+            onChanged: widget.enabled ? didChange : null,
             onChangeEnd: widget.onChangeEnd,
             onChangeStart: widget.onChangeStart,
             overlayColor: widget.overlayColor,
             semanticFormatterCallback: widget.semanticFormatterCallback,
-            values: field.value!,
+            values: value,
           ),
         ),
         if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
