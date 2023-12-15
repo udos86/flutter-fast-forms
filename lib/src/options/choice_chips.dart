@@ -103,6 +103,9 @@ class FastChoiceChip
   bool get isEnabled => enabled;
 }
 
+typedef FastChoiceChipBuilder = Widget Function(
+    FastChoiceChip chip, FastChoiceChipsState field);
+
 @immutable
 class FastChoiceChips extends FastFormField<List<String>> {
   FastChoiceChips({
@@ -143,8 +146,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
         );
 
   final WrapAlignment alignment;
-  final Widget Function(FastChoiceChip chip, FastChoiceChipsState field)
-      chipBuilder;
+  final FastChoiceChipBuilder chipBuilder;
   final EdgeInsetsGeometry? chipPadding;
   final List<FastChoiceChip> chips;
   final Clip clipBehavior;

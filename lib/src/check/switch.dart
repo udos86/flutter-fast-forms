@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+typedef FastSwitchTitleBuilder = Widget? Function(FastSwitchState field);
+
 /// A [FastFormField] that contains either a [SwitchListTile.adaptive] or a
 /// [CupertinoSwitch].
 @immutable
@@ -104,7 +106,7 @@ class FastSwitch extends FastFormField<bool> {
   final String? titleText;
   final MaterialStateProperty<Color?>? trackColor;
   final MaterialStateProperty<Color?>? trackOutlineColor;
-  final Widget? Function(FastSwitchState field) titleBuilder;
+  final FastSwitchTitleBuilder titleBuilder;
   final VisualDensity? visualDensity;
 
   @override
@@ -117,7 +119,7 @@ class FastSwitchState extends FastFormFieldState<bool> {
   FastSwitch get widget => super.widget as FastSwitch;
 }
 
-/// The default [FastSwitch.titleBuilder].
+/// A [FastSwitchTitleBuilder] that is the default [FastSwitch.titleBuilder].
 ///
 /// Returns a [Text] widget when [FastSwitch.titleText] is a [String]
 /// otherwise null.
@@ -220,7 +222,7 @@ Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
   );
 }
 
-/// The default [FastSwitch.builder].
+/// A [FormFieldBuilder] that is the default [FastSwitch.builder].
 ///
 /// Uses [materialSwitchBuilder] by default on any [TargetPlatform].
 ///

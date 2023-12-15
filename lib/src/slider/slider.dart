@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+typedef FastSliderLabelBuilder = String Function(FastSliderState field);
+
+typedef FastSliderPrefixBuilder = Widget Function(FastSliderState field);
+
+typedef FastSliderSuffixBuilder = Widget Function(FastSliderState field);
+
 /// A [FastFormField] that contains either a [Slider.adaptive] or a
 /// [CupertinoSlider].
 @immutable
@@ -54,18 +60,18 @@ class FastSlider extends FastFormField<double> {
   final FastErrorBuilder<double>? errorBuilder;
   final FastHelperBuilder<double>? helperBuilder;
   final Color? inactiveColor;
-  final String Function(FastSliderState field)? labelBuilder;
+  final FastSliderLabelBuilder? labelBuilder;
   final double max;
   final double min;
   final MouseCursor? mouseCursor;
   final ValueChanged<double>? onChangeEnd;
   final ValueChanged<double>? onChangeStart;
   final MaterialStateProperty<Color?>? overlayColor;
-  final Widget Function(FastSliderState field)? prefixBuilder;
+  final FastSliderPrefixBuilder? prefixBuilder;
   final Color? secondaryActiveColor;
   final double? secondaryTrackValue;
   final SemanticFormatterCallback? semanticFormatterCallback;
-  final Widget Function(FastSliderState field)? suffixBuilder;
+  final FastSliderSuffixBuilder? suffixBuilder;
   final Color? thumbColor;
 
   @override
@@ -78,14 +84,14 @@ class FastSliderState extends FastFormFieldState<double> {
   FastSlider get widget => super.widget as FastSlider;
 }
 
-/// The default [FastSlider.labelBuilder].
+/// A [FastSliderLabelBuilder] that is the default [FastSlider.labelBuilder].
 ///
 /// Returns the current [FastSliderState.value] converted to a [String].
 String sliderLabelBuilder(FastSliderState field) {
   return field.value!.toStringAsFixed(0);
 }
 
-/// The default [FastSlider.suffixBuilder].
+/// A [FastSliderLabelBuilder].
 ///
 /// Returns a [SizedBox] that contains a [Text] widget that shows
 /// the current [FastSliderState.value] converted to a [String].
@@ -180,7 +186,7 @@ Widget cupertinoSliderBuilder(FormFieldState<double> field) {
   );
 }
 
-/// The default [FastSlider.builder].
+/// A [FormFieldBuilder] that is the default [FastSlider.builder].
 ///
 /// Uses [materialSliderBuilder] by default on any [TargetPlatform].
 ///

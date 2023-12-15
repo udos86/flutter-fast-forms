@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+typedef FastRangeSliderLabelsBuilder = RangeLabels Function(
+    FastRangeSliderState field);
+
+typedef FastRangeSliderPrefixBuilder = Widget Function(
+    FastRangeSliderState field);
+
+typedef FastRangeSliderSuffixBuilder = Widget Function(
+    FastRangeSliderState field);
+
 /// A [FastFormField] that contains a [RangeSlider].
 @immutable
 class FastRangeSlider extends FastFormField<RangeValues> {
@@ -39,16 +48,16 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   final Color? activeColor;
   final int? divisions;
   final Color? inactiveColor;
-  final RangeLabels Function(FastRangeSliderState field)? labelsBuilder;
+  final FastRangeSliderLabelsBuilder? labelsBuilder;
   final double max;
   final double min;
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
   final void Function(RangeValues)? onChangeEnd;
   final void Function(RangeValues)? onChangeStart;
   final MaterialStateProperty<Color?>? overlayColor;
-  final Widget Function(FastRangeSliderState field)? prefixBuilder;
+  final FastRangeSliderPrefixBuilder? prefixBuilder;
   final String Function(double)? semanticFormatterCallback;
-  final Widget Function(FastRangeSliderState field)? suffixBuilder;
+  final FastRangeSliderSuffixBuilder? suffixBuilder;
 
   @override
   FastRangeSliderState createState() => FastRangeSliderState();
@@ -60,7 +69,8 @@ class FastRangeSliderState extends FastFormFieldState<RangeValues> {
   FastRangeSlider get widget => super.widget as FastRangeSlider;
 }
 
-/// The default [FastRangeSlider.labelsBuilder].
+/// A [FastRangeSliderLabelsBuilder] that is used as the default
+/// [FastRangeSlider.labelsBuilder].
 ///
 /// Returns [RangeLabels] by converting [RangeValues.start] and
 /// [RangeValues.end] of the current [FastRangeSliderState.value] to a [String].
@@ -72,7 +82,8 @@ RangeLabels rangeSliderLabelsBuilder(FastRangeSliderState field) {
   );
 }
 
-/// The default [FastRangeSlider.prefixBuilder].
+/// A [FastRangeSliderPrefixBuilder] that is used as the default
+/// [FastRangeSlider.prefixBuilder].
 ///
 /// Returns a [SizedBox] that contains a centered [Text] widget that shows
 /// [RangeValues.start] of the current [FastRangeSliderState.value] converted to
@@ -89,7 +100,8 @@ Widget rangeSliderPrefixBuilder(FastRangeSliderState field) {
   );
 }
 
-/// The default [FastRangeSlider.suffixBuilder].
+/// A [FastRangeSliderSuffixBuilder] that is used as the default
+/// [FastRangeSlider.suffixBuilder].
 ///
 /// Returns a [SizedBox] that contains a centered [Text] widget that shows
 /// [RangeValues.end] of the current [FastRangeSliderState.value] converted to
@@ -108,7 +120,7 @@ Widget rangeSliderSuffixBuilder(FastRangeSliderState field) {
   );
 }
 
-/// The default [FastRangeSlider.builder].
+/// A [FormFieldBuilder] that is used as the default [FastRangeSlider.builder].
 ///
 /// Returns an [InputDecorator] that contains a [RangeSlider] on any
 /// [TargetPlatform].

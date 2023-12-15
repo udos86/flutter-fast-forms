@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+typedef FastAutocompleteFieldViewBuilder<O extends Object>
+    = AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> field);
+
+typedef FastAutocompleteWillDisplayOption<O extends Object> = bool Function(
+    TextEditingValue textEditingValue, O option);
+
+/// A [FastFormField] that contains an [Autocomplete].
 @immutable
 class FastAutocomplete<O extends Object> extends FastFormField<String> {
   FastAutocomplete({
-    TextEditingValue? initialValue,
     FormFieldBuilder<String>? builder,
+    FastAutocompleteFieldViewBuilder? fieldViewBuilder,
+    TextEditingValue? initialValue,
+    FastAutocompleteWillDisplayOption? willDisplayOption,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
@@ -21,61 +30,64 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     super.restorationId,
     super.validator,
     this.displayStringForOption = RawAutocomplete.defaultStringForOption,
-    this.fieldViewBuilder,
     this.onSelected,
     this.options,
     this.optionsBuilder,
     this.optionsMaxHeight = 200.00,
     this.optionsViewBuilder,
     this.optionsViewOpenDirection = OptionsViewOpenDirection.down,
-    this.willDisplayOption,
   })  : assert(options != null || optionsBuilder != null),
         _initialValue = initialValue,
+        fieldViewBuilder = fieldViewBuilder ?? _fieldViewBuilder,
+        willDisplayOption = willDisplayOption ?? _willDisplayOption,
         super(
-          builder: builder ?? autocompleteBuilder<O>,
+          builder: builder ?? autocompleteBuilder,
           initialValue: initialValue?.text ?? '',
         );
 
   final TextEditingValue? _initialValue;
   final AutocompleteOptionToString<O> displayStringForOption;
-  final AutocompleteFieldViewBuilder Function(FastAutocompleteState<O> field)?
-      fieldViewBuilder;
+  final FastAutocompleteFieldViewBuilder<O> fieldViewBuilder;
   final AutocompleteOnSelected<O>? onSelected;
   final Iterable<O>? options;
   final AutocompleteOptionsBuilder<O>? optionsBuilder;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<O>? optionsViewBuilder;
   final OptionsViewOpenDirection optionsViewOpenDirection;
-  final bool Function(TextEditingValue textEditingValue, O option)?
-      willDisplayOption;
+  final FastAutocompleteWillDisplayOption<O> willDisplayOption;
 
   @override
   FastAutocompleteState<O> createState() => FastAutocompleteState<O>();
 }
 
+/// State associated with a [FastAutocomplete] widget.
 class FastAutocompleteState<O extends Object>
     extends FastFormFieldState<String> {
   @override
   FastAutocomplete<O> get widget => super.widget as FastAutocomplete<O>;
 }
 
+/// A [FastAutocompleteWillDisplayOption] that is the default
+/// [FastAutocomplete.willDisplayOption].
 bool _willDisplayOption<O extends Object>(TextEditingValue value, O option) {
   return option.toString().toLowerCase().contains(value.text.toLowerCase());
 }
 
+/// Returns an [AutocompleteOptionsBuilder] that is the default
+/// [Autocomplete.optionsBuilder].
 AutocompleteOptionsBuilder<O> _optionsBuilder<O extends Object>(
     Iterable<O> options, FastAutocompleteState<O> field) {
-  final FastAutocompleteState<O>(:widget) = field;
-
   return (TextEditingValue value) {
+    final FastAutocompleteState<O>(:widget) = field;
     if (value.text.isEmpty) {
       return const Iterable.empty();
     }
-    final willDisplayOption = widget.willDisplayOption ?? _willDisplayOption;
-    return options.where((O option) => willDisplayOption(value, option));
+    return options.where((O option) => widget.willDisplayOption(value, option));
   };
 }
 
+/// A [FastAutocompleteFieldViewBuilder] that is the default
+/// [FastAutocomplete.fieldViewBuilder].
 AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
     FastAutocompleteState<O> field) {
   return (BuildContext context, TextEditingController textEditingController,
@@ -94,12 +106,15 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
   };
 }
 
+/// A [FormFieldBuilder] that is the default [FastAutocomplete.builder].
+///
+/// Returns an [Autocomplete] on any [TargetPlatform].
 Widget autocompleteBuilder<O extends Object>(FormFieldState<String> field) {
   final FastAutocompleteState<O>(:widget) = field as FastAutocompleteState<O>;
 
-  return Autocomplete<O>(
+  return Autocomplete(
     displayStringForOption: widget.displayStringForOption,
-    fieldViewBuilder: (widget.fieldViewBuilder ?? _fieldViewBuilder)(field),
+    fieldViewBuilder: widget.fieldViewBuilder(field),
     initialValue: widget._initialValue,
     onSelected: widget.onSelected,
     optionsBuilder:

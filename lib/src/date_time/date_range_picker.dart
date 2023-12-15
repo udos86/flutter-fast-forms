@@ -3,8 +3,14 @@ import 'package:intl/intl.dart' as intl;
 
 import '../form.dart';
 
+typedef FastDateRangePickerTextBuilder = Text Function(
+    FastDateRangePickerState field);
+
 typedef ShowFastDateRangePicker = Future<DateTimeRange?> Function(
     DatePickerEntryMode entryMode);
+
+typedef FastDateRangePickerIconButtonBuilder = IconButton Function(
+    FastDateRangePickerState field, ShowFastDateRangePicker show);
 
 /// A [FastFormField] that shows a Material Design date range picker.
 @immutable
@@ -78,9 +84,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final DateTime firstDate;
   final String? helpText;
   final Icon? icon;
-  final IconButton Function(
-          FastDateRangePickerState field, ShowFastDateRangePicker show)
-      iconButtonBuilder;
+  final FastDateRangePickerIconButtonBuilder iconButtonBuilder;
   final DatePickerEntryMode initialEntryMode;
   final TextInputType keyboardType;
   final DateTime lastDate;
@@ -89,7 +93,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final String? saveText;
   final Icon? switchToCalendarEntryModeIcon;
   final Icon? switchToInputEntryModeIcon;
-  final Text Function(FastDateRangePickerState field) textBuilder;
+  final FastDateRangePickerTextBuilder textBuilder;
   final TextDirection? textDirection;
   final TextStyle? textStyle;
   final bool useRootNavigator;
@@ -104,7 +108,8 @@ class FastDateRangePickerState extends FastFormFieldState<DateTimeRange> {
   FastDateRangePicker get widget => super.widget as FastDateRangePicker;
 }
 
-/// The default [FastDateRangePicker.textBuilder]
+/// Á [FastDateRangePickerTextBuilder] that is the default
+/// [FastDateRangePicker.textBuilder].
 ///
 /// Returns a [Text] widget that shows the current
 /// [FastDateRangePickerState.value] formatted according to
@@ -122,7 +127,8 @@ Text dateRangPickerTextBuilder(FastDateRangePickerState field) {
   );
 }
 
-/// The default [FastDateRangePicker.iconButtonBuilder].
+/// A [FastDateRangePickerIconButtonBuilder] that is the default
+/// [FastDateRangePicker.iconButtonBuilder].
 ///
 /// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton dateRangePickerIconButtonBuilder(
@@ -136,7 +142,7 @@ IconButton dateRangePickerIconButtonBuilder(
   );
 }
 
-/// The default [FastDateRangePicker.builder].
+/// A [FormFieldBuilder] that is the default [FastDateRangePicker.builder].
 ///
 /// Returns an [InkWell] that shows a Material Design date range picker when
 /// tapped.

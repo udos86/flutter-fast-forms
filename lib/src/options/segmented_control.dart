@@ -50,7 +50,7 @@ class FastSegmentedControlState<T> extends FastFormFieldState<T> {
   FastSegmentedControl<T> get widget => super.widget as FastSegmentedControl<T>;
 }
 
-/// The default [FastSegmentedControl.builder].
+/// A [FormFieldBuilder] that is the default [FastSegmentedControl.builder].
 ///
 /// Returns a [CupertinoFormRow] that contains a
 /// [CupertinoSlidingSegmentedControl] on any [TargetPlatform].

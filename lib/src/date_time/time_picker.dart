@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+typedef FastTimePickerTextBuilder = Text Function(FastTimePickerState field);
+
 typedef ShowFastTimePicker = Future<TimeOfDay?> Function(
     TimePickerEntryMode entryMode);
+
+typedef FastTimePickerIconButtonBuilder = IconButton Function(
+    FastTimePickerState field, ShowFastTimePicker show);
 
 /// A [FastFormField] that shows a Material Design date picker via
 /// [showTimePicker].
@@ -58,14 +63,13 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   final String? helpText;
   final String? hourLabelText;
   final Icon? icon;
-  final IconButton Function(FastTimePickerState field, ShowFastTimePicker show)
-      iconButtonBuilder;
+  final FastTimePickerIconButtonBuilder iconButtonBuilder;
   final TimePickerEntryMode initialEntryMode;
   final String? minuteLabelText;
   final EntryModeChangeCallback? onEntryModeChanged;
   final Orientation? orientation;
   final RouteSettings? routeSettings;
-  final Text Function(FastTimePickerState field) textBuilder;
+  final FastTimePickerTextBuilder textBuilder;
   final TextStyle? textStyle;
   final bool useRootNavigator;
 
@@ -79,7 +83,8 @@ class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
   FastTimePicker get widget => super.widget as FastTimePicker;
 }
 
-/// The default [FastTimePicker.iconButtonBuilder].
+/// A [FastTimePickerIconButtonBuilder] that is the default
+/// [FastTimePicker.iconButtonBuilder].
 ///
 /// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton timePickerIconButtonBuilder(
@@ -93,7 +98,8 @@ IconButton timePickerIconButtonBuilder(
   );
 }
 
-/// The default [FastTimePicker.textBuilder].
+/// A [FastTimePickerTextBuilder] that is the default
+/// [FastTimePicker.textBuilder].
 ///
 /// Returns a [Text] widget that shows the localized representation of the
 /// current [FastTimePickerState.value].
@@ -109,7 +115,7 @@ Text timePickerTextBuilder(FastTimePickerState field) {
   );
 }
 
-/// The default [FastTimePicker.builder].
+/// A [FormFieldBuilder] that is the default [FastTimePicker.builder].
 ///
 /// Returns an [InputDecorator] inside an [InkWell] that contains an
 /// [IconButton] to trigger the Material Design time picker on any

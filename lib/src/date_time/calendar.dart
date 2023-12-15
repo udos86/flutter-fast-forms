@@ -45,7 +45,7 @@ class FastCalendarState extends FastFormFieldState<DateTime> {
   FastCalendar get widget => super.widget as FastCalendar;
 }
 
-/// The default [FastCalendar.builder].
+/// A [FormFieldBuilder] that is the default [FastCalendar.builder].
 ///
 /// Returns an [InputDecorator] that contains a [CalendarDatePicker] on any
 /// [TargetPlatform].

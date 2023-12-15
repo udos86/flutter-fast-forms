@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+typedef FastCheckboxTitleBuilder = Widget? Function(FastCheckboxState field);
+
 /// A [FastFormField] that contains either a [CheckboxListTile.adaptive] or a
 /// [CupertinoCheckbox].
 @immutable
@@ -90,7 +92,7 @@ class FastCheckbox extends FastFormField<bool> {
   final Widget? subtitle;
   final Color? tileColor;
   final String? titleText;
-  final Widget? Function(FastCheckboxState field) titleBuilder;
+  final FastCheckboxTitleBuilder titleBuilder;
   final bool tristate;
   final VisualDensity? visualDensity;
 
@@ -104,7 +106,8 @@ class FastCheckboxState extends FastFormFieldState<bool> {
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
-/// The default [FastCheckbox.titleBuilder].
+/// A [FastCheckboxTitleBuilder] that is the default
+/// [FastCheckbox.titleBuilder].
 ///
 /// Returns a [Text] widget when [FastCheckbox.titleText] is a [String]
 /// otherwise null.
@@ -197,7 +200,7 @@ Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
   );
 }
 
-/// The default [FastCheckbox.builder].
+/// A [FormFieldBuilder] that is the default [FastCheckbox.builder].
 ///
 /// Uses [materialCheckboxBuilder] by default on any [TargetPlatform].
 ///

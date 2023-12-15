@@ -19,6 +19,23 @@ abstract class Zwsp {
   }
 }
 
+typedef FastChipsInputChipBuilder = Widget Function(
+    String chipValue, int chipIndex, FastChipsInputState field);
+
+typedef FastChipsInputFieldViewBuilder = AutocompleteFieldViewBuilder Function(
+    FastChipsInputState field);
+
+typedef FastChipsInputTextFieldViewBuilder = Widget Function(
+    FastChipsInputState field,
+    double freeSpace,
+    void Function(String) onFieldSubmitted);
+
+typedef FastChipsInputWillDisplayOption = bool Function(
+    String text, String option, FastChipsInputState field);
+
+typedef FastChipsInputWillAddChip = bool Function(
+    String value, FastChipsInputState field);
+
 @immutable
 class FastChipsInput extends FastFormField<List<String>> {
   const FastChipsInput({
@@ -62,13 +79,11 @@ class FastChipsInput extends FastFormField<List<String>> {
   });
 
   final WrapAlignment alignment;
-  final Widget Function(
-      String chipValue, int chipIndex, FastChipsInputState field)? chipBuilder;
+  final FastChipsInputChipBuilder? chipBuilder;
   final Clip clipBehavior;
   final WrapCrossAlignment crossAxisAlignment;
   final AutocompleteOptionToString<String> displayStringForOption;
-  final AutocompleteFieldViewBuilder Function(FastChipsInputState field)?
-      fieldViewBuilder;
+  final FastChipsInputFieldViewBuilder? fieldViewBuilder;
   final AutocompleteOnSelected<String>? onSelected;
   final Iterable<String> options;
   final AutocompleteOptionsBuilder<String>? optionsBuilder;
@@ -78,14 +93,12 @@ class FastChipsInput extends FastFormField<List<String>> {
   final double runSpacing;
   final double spacing;
   final TextDirection? textDirection;
-  final Widget Function(FastChipsInputState field, double freeSpace,
-      void Function(String) onFieldSubmitted)? textFieldViewBuilder;
+  final FastChipsInputTextFieldViewBuilder? textFieldViewBuilder;
   final FormFieldValidator<String>? textFieldViewValidator;
   final double textFieldViewMinWidth;
   final VerticalDirection verticalDirection;
-  final bool Function(String value, FastChipsInputState field)? willAddChip;
-  final bool Function(String text, String option, FastChipsInputState field)?
-      willDisplayOption;
+  final FastChipsInputWillAddChip? willAddChip;
+  final FastChipsInputWillDisplayOption? willDisplayOption;
   final bool wrap;
 
   @override

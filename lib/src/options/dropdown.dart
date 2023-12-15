@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
+    List<T> items, FastDropdownState<T> field);
+
+/// A [FastFormField] that contains a [DropdownButtonFormField].
 @immutable
 class FastDropdown<T> extends FastFormField<T> {
   const FastDropdown({
@@ -63,8 +67,7 @@ class FastDropdown<T> extends FastFormField<T> {
   final bool isExpanded;
   final double? itemHeight;
   final List<T> items;
-  final List<DropdownMenuItem<T>> Function(
-      List<T> items, FastDropdownState<T> field)? itemsBuilder;
+  final FastDropdownMenuItemsBuilder<T>? itemsBuilder;
   final double? menuMaxHeight;
   final VoidCallback? onTap;
   final DropdownButtonBuilder? selectedItemBuilder;
@@ -74,11 +77,14 @@ class FastDropdown<T> extends FastFormField<T> {
   FastDropdownState<T> createState() => FastDropdownState<T>();
 }
 
+/// State associated with a [FastDropdown] widget.
 class FastDropdownState<T> extends FastFormFieldState<T> {
   @override
   FastDropdown<T> get widget => super.widget as FastDropdown<T>;
 }
 
+/// A [FastDropdownMenuItemsBuilder] that is the default
+/// [FastDropdown.itemsBuilder].
 List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
     List<T> items, FastDropdownState<T> field) {
   return items
@@ -87,6 +93,9 @@ List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
       .toList();
 }
 
+/// A [FormFieldBuilder] that is the default [FastDropdown.builder].
+///
+/// Returns a [DropdownButtonFormField] on any [TargetPlatform].
 Widget dropdownBuilder<T>(FormFieldState<T> field) {
   final FastDropdownState<T>(:decoration, :didChange, :value, :widget) =
       field as FastDropdownState<T>;
@@ -96,7 +105,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     if (value != field.value) didChange(value);
   }
 
-  return DropdownButtonFormField<T>(
+  return DropdownButtonFormField(
     alignment: widget.alignment,
     autofocus: widget.autofocus,
     autovalidateMode: widget.autovalidateMode,

@@ -5,8 +5,16 @@ import 'package:intl/intl.dart' as intl;
 
 import '../form.dart';
 
+typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState field);
+
+typedef FastDatePickerModalPopupBuilder = Widget Function(
+    BuildContext context, FastDatePickerState field);
+
 typedef ShowFastDatePicker = Future<DateTime?> Function(
     DatePickerEntryMode entryMode);
+
+typedef FastDatePickerIconButtonBuilder = IconButton Function(
+    FastDatePickerState field, ShowFastDatePicker show);
 
 /// A [FastFormField] that shows either a Material Design date picker via
 /// [showDatePicker] or a [CupertinoDatePicker] via [showCupertinoModalPopup].
@@ -97,8 +105,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final FastHelperBuilder<DateTime>? helperBuilder;
   final String? helpText;
   final Icon? icon;
-  final IconButton Function(FastDatePickerState field, ShowFastDatePicker show)
-      iconButtonBuilder;
+  final FastDatePickerIconButtonBuilder iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final TextInputType? keyboardType;
@@ -117,7 +124,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final bool showModalPopup;
   final Icon? switchToCalendarEntryModeIcon;
   final Icon? switchToInputEntryModeIcon;
-  final Text Function(FastDatePickerState field) textBuilder;
+  final FastDatePickerTextBuilder textBuilder;
   final TextDirection? textDirection;
   final TextStyle? textStyle;
   final bool use24hFormat;
@@ -153,7 +160,8 @@ intl.DateFormat _datePickerFormat(FastDatePickerState field) {
   }
 }
 
-/// The default [FastDatePicker.textBuilder]
+/// A [FastDatePickerTextBuilder] that is the default
+/// [FastDatePicker.textBuilder].
 ///
 /// Returns a [Text] widget that shows the current [FastDatePickerState.value]
 /// formatted according either to [FastDatePicker.dateFormat] or
@@ -171,7 +179,8 @@ Text datePickerTextBuilder(FastDatePickerState field) {
   );
 }
 
-/// The default [FastDatePicker.iconButtonBuilder].
+/// A [FastDatePickerIconButtonBuilder] that is the default
+/// [FastDatePicker.iconButtonBuilder].
 ///
 /// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton datePickerIconButtonBuilder(
@@ -185,7 +194,8 @@ IconButton datePickerIconButtonBuilder(
   );
 }
 
-/// Returns a modal popup that contains a [CupertinoDatePicker];
+/// A [FastDatePickerModalPopupBuilder] that returns a modal popup that contains
+/// a [CupertinoDatePicker];
 ///
 /// Used when [FastDatePicker.showModalPopup] is true to show a
 /// [CupertinoDatePicker] in a modal popup via [showCupertinoModalPopup] .
@@ -387,7 +397,7 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
   );
 }
 
-/// The default [FastDatePicker.builder].
+/// A [FormFieldBuilder] that is the default [FastDatePicker.builder].
 ///
 /// Uses [materialDatePickerBuilder] by default on any [TargetPlatform].
 ///
