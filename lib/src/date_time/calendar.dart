@@ -50,8 +50,8 @@ class FastCalendarState extends FastFormFieldState<DateTime> {
 /// Returns an [InputDecorator] that contains a [CalendarDatePicker] on any
 /// [TargetPlatform].
 Widget calendarBuilder(FormFieldState<DateTime> field) {
-  field as FastCalendarState;
-  final FastCalendarState(:decoration, :didChange, :value, :widget) = field;
+  final FastCalendarState(:decoration, :didChange, :value, :widget) =
+      field as FastCalendarState;
 
   return InputDecorator(
     decoration: decoration,

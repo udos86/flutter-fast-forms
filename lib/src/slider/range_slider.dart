@@ -113,8 +113,8 @@ Widget rangeSliderSuffixBuilder(FastRangeSliderState field) {
 /// Returns an [InputDecorator] that contains a [RangeSlider] on any
 /// [TargetPlatform].
 Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
-  field as FastRangeSliderState;
-  final FastRangeSliderState(:decoration, :didChange, :value!, :widget) = field;
+  final FastRangeSliderState(:decoration, :didChange, :value!, :widget) =
+      field as FastRangeSliderState;
 
   return InputDecorator(
     decoration: decoration,

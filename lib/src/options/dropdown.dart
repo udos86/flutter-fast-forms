@@ -5,7 +5,7 @@ import '../form.dart';
 @immutable
 class FastDropdown<T> extends FastFormField<T> {
   const FastDropdown({
-    FormFieldBuilder<T>? builder,
+    FormFieldBuilder? builder,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
@@ -88,8 +88,8 @@ List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
 }
 
 Widget dropdownBuilder<T>(FormFieldState<T> field) {
-  field as FastDropdownState<T>;
-  final FastDropdownState<T>(:decoration, :didChange, :value, :widget) = field;
+  final FastDropdownState<T>(:decoration, :didChange, :value, :widget) =
+      field as FastDropdownState<T>;
   final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
   void onChanged(T? value) {

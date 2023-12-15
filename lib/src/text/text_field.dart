@@ -187,9 +187,8 @@ Text inputCounterWidgetBuilder(
 }
 
 Widget materialTextFieldBuilder(FormFieldState<String> field) {
-  field as FastTextFieldState;
   final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
-      field;
+      field as FastTextFieldState;
   final InputDecoration decoration = field.decoration.copyWith(
     hintText: widget.placeholder,
     prefix:
@@ -267,9 +266,8 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
 }
 
 Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
-  field as FastTextFieldState;
   final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
-      field;
+      field as FastTextFieldState;
   final prefix = widget.prefix ??
       (widget.labelText is String ? Text(widget.labelText!) : null);
 

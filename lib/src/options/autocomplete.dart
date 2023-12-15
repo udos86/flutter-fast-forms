@@ -95,25 +95,15 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
 }
 
 Widget autocompleteBuilder<O extends Object>(FormFieldState<String> field) {
-  field as FastAutocompleteState<O>;
-  final FastAutocompleteState<O>(:widget) = field;
-  final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
-  final AutocompleteOptionsBuilder<O> optionsBuilder;
-
-  if (widget.optionsBuilder != null) {
-    optionsBuilder = widget.optionsBuilder!;
-  } else if (widget.options != null) {
-    optionsBuilder = _optionsBuilder(widget.options!, field);
-  } else {
-    throw 'Either optionsBuilder or options must not be null';
-  }
+  final FastAutocompleteState<O>(:widget) = field as FastAutocompleteState<O>;
 
   return Autocomplete<O>(
     displayStringForOption: widget.displayStringForOption,
-    fieldViewBuilder: fieldViewBuilder(field),
+    fieldViewBuilder: (widget.fieldViewBuilder ?? _fieldViewBuilder)(field),
     initialValue: widget._initialValue,
     onSelected: widget.onSelected,
-    optionsBuilder: optionsBuilder,
+    optionsBuilder:
+        widget.optionsBuilder ?? _optionsBuilder(widget.options!, field),
     optionsMaxHeight: widget.optionsMaxHeight,
     optionsViewBuilder: widget.optionsViewBuilder,
     optionsViewOpenDirection: widget.optionsViewOpenDirection,

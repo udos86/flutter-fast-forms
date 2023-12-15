@@ -122,7 +122,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
     super.restorationId,
     super.validator,
     this.alignment = WrapAlignment.start,
-    this.chipBuilder,
+    this.chipBuilder = choiceChipBuilder,
     this.chipPadding,
     required this.chips,
     this.clipBehavior = Clip.none,
@@ -143,7 +143,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
         );
 
   final WrapAlignment alignment;
-  final Widget Function(FastChoiceChip chip, FastChoiceChipsState field)?
+  final Widget Function(FastChoiceChip chip, FastChoiceChipsState field)
       chipBuilder;
   final EdgeInsetsGeometry? chipPadding;
   final List<FastChoiceChip> chips;
@@ -212,9 +212,8 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
 }
 
 Widget choiceChipsBuilder(FormFieldState field) {
-  field as FastChoiceChipsState;
-  final FastChoiceChipsState(:decoration, :widget) = field;
-  final chipBuilder = widget.chipBuilder ?? choiceChipBuilder;
+  final FastChoiceChipsState(:decoration, :widget) =
+      field as FastChoiceChipsState;
 
   return InputDecorator(
     decoration: decoration,
@@ -229,7 +228,7 @@ Widget choiceChipsBuilder(FormFieldState field) {
       textDirection: widget.textDirection,
       verticalDirection: widget.verticalDirection,
       children: [
-        for (final chip in widget.chips) chipBuilder(chip, field),
+        for (final chip in widget.chips) widget.chipBuilder(chip, field),
       ],
     ),
   );

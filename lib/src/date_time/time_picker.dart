@@ -5,6 +5,8 @@ import '../form.dart';
 typedef ShowFastTimePicker = Future<TimeOfDay?> Function(
     TimePickerEntryMode entryMode);
 
+/// A [FastFormField] that shows a Material Design date picker via
+/// [showTimePicker].
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
   const FastTimePicker({
@@ -34,13 +36,13 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     this.helpText,
     this.hourLabelText,
     this.icon,
-    this.iconButtonBuilder,
+    this.iconButtonBuilder = timePickerIconButtonBuilder,
     this.initialEntryMode = TimePickerEntryMode.dial,
     this.minuteLabelText,
     this.onEntryModeChanged,
     this.orientation,
     this.routeSettings,
-    this.textBuilder,
+    this.textBuilder = timePickerTextBuilder,
     this.textStyle,
     this.useRootNavigator = true,
   });
@@ -56,14 +58,14 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   final String? helpText;
   final String? hourLabelText;
   final Icon? icon;
-  final IconButton Function(FastTimePickerState field, ShowFastTimePicker show)?
+  final IconButton Function(FastTimePickerState field, ShowFastTimePicker show)
       iconButtonBuilder;
   final TimePickerEntryMode initialEntryMode;
   final String? minuteLabelText;
   final EntryModeChangeCallback? onEntryModeChanged;
   final Orientation? orientation;
   final RouteSettings? routeSettings;
-  final Text Function(FastTimePickerState field)? textBuilder;
+  final Text Function(FastTimePickerState field) textBuilder;
   final TextStyle? textStyle;
   final bool useRootNavigator;
 
@@ -71,11 +73,30 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePickerState createState() => FastTimePickerState();
 }
 
+/// State associated with a [FastTimePicker] widget.
 class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
   @override
   FastTimePicker get widget => super.widget as FastTimePicker;
 }
 
+/// The default [FastTimePicker.iconButtonBuilder].
+///
+/// Returns an [IconButton] that triggers the [show] function when pressed.
+IconButton timePickerIconButtonBuilder(
+    FastTimePickerState field, ShowFastTimePicker show) {
+  final FastTimePickerState(:widget) = field;
+
+  return IconButton(
+    alignment: Alignment.center,
+    icon: widget.icon ?? const Icon(Icons.schedule),
+    onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
+  );
+}
+
+/// The default [FastTimePicker.textBuilder].
+///
+/// Returns a [Text] widget that shows the localized representation of the
+/// current [FastTimePickerState.value].
 Text timePickerTextBuilder(FastTimePickerState field) {
   final FastTimePickerState(:context, :enabled, :value, :widget) = field;
   final theme = Theme.of(context);
@@ -88,29 +109,19 @@ Text timePickerTextBuilder(FastTimePickerState field) {
   );
 }
 
-IconButton timePickerIconButtonBuilder(
-    FastTimePickerState field, ShowFastTimePicker show) {
-  final FastTimePickerState(:widget) = field;
-
-  return IconButton(
-    alignment: Alignment.center,
-    icon: widget.icon ?? const Icon(Icons.schedule),
-    onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
-  );
-}
-
+/// The default [FastTimePicker.builder].
+///
+/// Returns an [InputDecorator] inside an [InkWell] that contains an
+/// [IconButton] to trigger the Material Design time picker on any
+/// [TargetPlatform].
 Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
-  field as FastTimePickerState;
   final FastTimePickerState(
     :context,
     :decoration,
     :didChange,
     :value,
     :widget
-  ) = field;
-  final textBuilder = widget.textBuilder ?? timePickerTextBuilder;
-  final iconButtonBuilder =
-      widget.iconButtonBuilder ?? timePickerIconButtonBuilder;
+  ) = field as FastTimePickerState;
 
   Future<TimeOfDay?> show(TimePickerEntryMode entryMode) {
     return showTimePicker(
@@ -146,9 +157,9 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
-            child: textBuilder(field),
+            child: widget.textBuilder(field),
           ),
-          iconButtonBuilder(field, show),
+          widget.iconButtonBuilder(field, show),
         ],
       ),
     ),

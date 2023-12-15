@@ -106,8 +106,8 @@ Widget sliderSuffixBuilder(FastSliderState field) {
 /// Returns an [InputDecorator] that contains an expanded [Slider.adaptive]
 /// as the only child of a [Row].
 Widget materialSliderBuilder(FormFieldState<double> field) {
-  field as FastSliderState;
-  final FastSliderState(:decoration, :didChange, :value!, :widget) = field;
+  final FastSliderState(:decoration, :didChange, :value!, :widget) =
+      field as FastSliderState;
 
   return InputDecorator(
     decoration: decoration,
@@ -149,8 +149,8 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
 /// Returns a [CupertinoFormRow] that contains an expanded [CupertinoSlider]
 /// as the only child of a [Row].
 Widget cupertinoSliderBuilder(FormFieldState<double> field) {
-  field as FastSliderState;
-  final FastSliderState(:didChange, :value!, :widget) = field;
+  final FastSliderState(:didChange, :value!, :widget) =
+      field as FastSliderState;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,

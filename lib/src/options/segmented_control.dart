@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 
 import '../form.dart';
 
+/// A [FastFormField] that contains a [CupertinoSlidingSegmentedControl].
 @immutable
 class FastSegmentedControl<T> extends FastFormField<T> {
   FastSegmentedControl({
-    FormFieldBuilder<T>? builder,
+    FormFieldBuilder? builder,
     T? initialValue,
     super.autovalidateMode,
     super.contentPadding,
@@ -28,7 +29,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     this.thumbColor,
   })  : assert(children.length >= 2),
         super(
-          builder: builder ?? segmentedControlBuilder<T>,
+          builder: builder ?? segmentedControlBuilder,
           initialValue: initialValue ?? children.keys.first,
         );
 
@@ -43,14 +44,19 @@ class FastSegmentedControl<T> extends FastFormField<T> {
   FastSegmentedControlState<T> createState() => FastSegmentedControlState<T>();
 }
 
+/// State associated with a [FastSegmentedControl] widget.
 class FastSegmentedControlState<T> extends FastFormFieldState<T> {
   @override
   FastSegmentedControl<T> get widget => super.widget as FastSegmentedControl<T>;
 }
 
+/// The default [FastSegmentedControl.builder].
+///
+/// Returns a [CupertinoFormRow] that contains a
+/// [CupertinoSlidingSegmentedControl] on any [TargetPlatform].
 Widget segmentedControlBuilder<T>(FormFieldState<T> field) {
-  field as FastSegmentedControlState<T>;
-  final FastSegmentedControlState<T>(:didChange, :value, :widget) = field;
+  final FastSegmentedControlState<T>(:didChange, :value, :widget) =
+      field as FastSegmentedControlState<T>;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,

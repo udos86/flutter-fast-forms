@@ -61,7 +61,7 @@ class FastSwitch extends FastFormField<bool> {
     this.thumbIcon,
     this.tileColor,
     this.titleText,
-    this.titleBuilder,
+    this.titleBuilder = switchTitleBuilder,
     this.trackColor,
     this.trackOutlineColor,
     this.visualDensity,
@@ -104,7 +104,7 @@ class FastSwitch extends FastFormField<bool> {
   final String? titleText;
   final MaterialStateProperty<Color?>? trackColor;
   final MaterialStateProperty<Color?>? trackOutlineColor;
-  final Widget? Function(FastSwitchState field)? titleBuilder;
+  final Widget? Function(FastSwitchState field) titleBuilder;
   final VisualDensity? visualDensity;
 
   @override
@@ -140,12 +140,10 @@ Widget? switchTitleBuilder(FastSwitchState field) {
 ///
 /// Returns an [InputDecorator] that contains a [SwitchListTile.adaptive].
 Widget materialSwitchBuilder(FormFieldState<bool> field) {
-  field as FastSwitchState;
-  final FastSwitchState(:decoration, :didChange, :value!, :widget) = field;
+  final FastSwitchState(:decoration, :didChange, :value!, :widget) =
+      field as FastSwitchState;
   assert(widget.thumbColor == null ||
       widget.thumbColor is MaterialStateProperty<Color?>);
-
-  final titleBuilder = widget.titleBuilder ?? switchTitleBuilder;
 
   return InputDecorator(
     decoration: decoration,
@@ -182,7 +180,7 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
       thumbColor: widget.thumbColor,
       thumbIcon: widget.thumbIcon,
       tileColor: widget.tileColor,
-      title: titleBuilder(field),
+      title: widget.titleBuilder(field),
       trackColor: widget.trackColor,
       trackOutlineColor: widget.trackOutlineColor,
       value: value,
@@ -195,8 +193,8 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
 ///
 /// Returns a [CupertinoFormRow] that contains a [CupertinoSwitch].
 Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
-  field as FastSwitchState;
-  final FastSwitchState(:didChange, :value!, :widget) = field;
+  final FastSwitchState(:didChange, :value!, :widget) =
+      field as FastSwitchState;
   assert(widget.thumbColor == null || widget.thumbColor is Color);
 
   return CupertinoFormRow(

@@ -55,7 +55,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.subtitle,
     this.tileColor,
     this.titleText,
-    this.titleBuilder,
+    this.titleBuilder = checkboxTitleBuilder,
     this.tristate = false,
     this.visualDensity,
   });
@@ -90,7 +90,7 @@ class FastCheckbox extends FastFormField<bool> {
   final Widget? subtitle;
   final Color? tileColor;
   final String? titleText;
-  final Widget? Function(FastCheckboxState field)? titleBuilder;
+  final Widget? Function(FastCheckboxState field) titleBuilder;
   final bool tristate;
   final VisualDensity? visualDensity;
 
@@ -127,9 +127,8 @@ Widget? checkboxTitleBuilder(FastCheckboxState field) {
 ///
 /// Returns an [InputDecorator] that contains a [CheckboxListTile.adaptive].
 Widget materialCheckboxBuilder(FormFieldState<bool> field) {
-  field as FastCheckboxState;
-  final FastCheckboxState(:decoration, :didChange, :value, :widget) = field;
-  final titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
+  final FastCheckboxState(:decoration, :didChange, :value, :widget) =
+      field as FastCheckboxState;
 
   return InputDecorator(
     decoration: decoration,
@@ -162,7 +161,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
       splashRadius: widget.splashRadius,
       subtitle: widget.subtitle,
       tileColor: widget.tileColor,
-      title: titleBuilder(field),
+      title: widget.titleBuilder(field),
       tristate: widget.tristate,
       value: value,
       visualDensity: widget.visualDensity,
@@ -174,8 +173,8 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
 ///
 /// Returns a [CupertinoFormRow] that contains a [CupertinoCheckbox].
 Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
-  field as FastCheckboxState;
-  final FastCheckboxState(:didChange, :value, :widget) = field;
+  final FastCheckboxState(:didChange, :value, :widget) =
+      field as FastCheckboxState;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
