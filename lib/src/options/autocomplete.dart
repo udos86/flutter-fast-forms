@@ -13,9 +13,9 @@ typedef FastAutocompleteWillDisplayOption<O extends Object> = bool Function(
 class FastAutocomplete<O extends Object> extends FastFormField<String> {
   FastAutocomplete({
     FormFieldBuilder<String>? builder,
-    FastAutocompleteFieldViewBuilder? fieldViewBuilder,
+    FastAutocompleteFieldViewBuilder<O>? fieldViewBuilder,
     TextEditingValue? initialValue,
-    FastAutocompleteWillDisplayOption? willDisplayOption,
+    FastAutocompleteWillDisplayOption<O>? willDisplayOption,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
@@ -38,10 +38,10 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     this.optionsViewOpenDirection = OptionsViewOpenDirection.down,
   })  : assert(options != null || optionsBuilder != null),
         _initialValue = initialValue,
-        fieldViewBuilder = fieldViewBuilder ?? _fieldViewBuilder,
+        fieldViewBuilder = fieldViewBuilder ?? _fieldViewBuilder<O>,
         willDisplayOption = willDisplayOption ?? _willDisplayOption,
         super(
-          builder: builder ?? autocompleteBuilder,
+          builder: builder ?? autocompleteBuilder<O>,
           initialValue: initialValue?.text ?? '',
         );
 
@@ -112,7 +112,7 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
 Widget autocompleteBuilder<O extends Object>(FormFieldState<String> field) {
   final FastAutocompleteState<O>(:widget) = field as FastAutocompleteState<O>;
 
-  return Autocomplete(
+  return Autocomplete<O>(
     displayStringForOption: widget.displayStringForOption,
     fieldViewBuilder: widget.fieldViewBuilder(field),
     initialValue: widget._initialValue,
