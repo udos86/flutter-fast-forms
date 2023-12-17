@@ -143,16 +143,14 @@ class FastDatePickerState extends FastFormFieldState<DateTime> {
 /// Returns the default [intl.DateFormat] to be used in [datePickerTextBuilder]
 /// depending on [FastDatePicker.mode] and [FastDatePicker.use24hFormat].
 intl.DateFormat _datePickerFormat(FastDatePickerState field) {
-  final FastDatePickerState(:widget) = field;
-  final locale = widget.locale;
+  final FastDatePicker(:locale, :mode, :use24hFormat) = field.widget;
 
-  switch (widget.mode) {
+  switch (mode) {
     case CupertinoDatePickerMode.dateAndTime:
       final format = intl.DateFormat.yMMMMEEEEd(locale);
-      return widget.use24hFormat ? format.add_Hm() : format.add_jm();
+      return use24hFormat ? format.add_Hm() : format.add_jm();
     case CupertinoDatePickerMode.time:
-      final format =
-          widget.use24hFormat ? intl.DateFormat.Hm : intl.DateFormat.jm;
+      final format = use24hFormat ? intl.DateFormat.Hm : intl.DateFormat.jm;
       return format(locale);
     case CupertinoDatePickerMode.date:
     default:

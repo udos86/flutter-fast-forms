@@ -36,6 +36,7 @@ typedef FastChipsInputWillDisplayOption = bool Function(
 typedef FastChipsInputWillAddChip = bool Function(
     String value, FastChipsInputState field);
 
+/// A [FastFormField] that contains a Material chips input.
 @immutable
 class FastChipsInput extends FastFormField<List<String>> {
   const FastChipsInput({
@@ -105,6 +106,7 @@ class FastChipsInput extends FastFormField<List<String>> {
   FastChipsInputState createState() => FastChipsInputState();
 }
 
+/// State associated with a [FastChipsInput] widget.
 class FastChipsInputState extends FastFormFieldState<List<String>> {
   final scrollController = ScrollController();
   final textFieldController = TextEditingController(text: Zwsp.raw);
@@ -112,10 +114,11 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   final textFieldKeyboardFocusNode = FocusNode();
   final hiddenTextFieldFocusNode = FocusNode();
 
-  /// indicates that backspace was pressed on an already via backspace selected chip
+  /// Indicates that backspace was pressed on an already via backspace selected
+  /// chip.
   bool backspaceRemove = false;
 
-  /// stores the index of the via backspace selected chip
+  /// Stores the index of the via backspace selected chip.
   int? selectedChipIndex;
 
   @override
@@ -158,9 +161,8 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
   }
 
   void _onTextFieldChanged() {
-    /// whenever backspace was pressed removing the zwsp character
-    /// and chips input contains at least one chip
-    /// select the chip next to the text field
+    /// Whenever backspace was pressed removing the zwsp character and the chips
+    /// input contains at least one chip select the chip next to the text field.
     if (value!.isNotEmpty && text.isEmpty) {
       textFieldFocusNode.unfocus();
       hiddenTextFieldFocusNode.requestFocus();
@@ -174,8 +176,8 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
       });
     }
 
-    /// whenever new text is entered again after a chip was removed via backspace
-    /// add zwsp in front of it
+    /// Whenever new text is entered again after a chip was removed via
+    /// backspace add zwsp in front of it.
     if (text.length == 1 && text != Zwsp.raw) {
       final textWithZwsp = Zwsp.raw + text;
       final selection = TextSelection.collapsed(offset: textWithZwsp.length);
@@ -234,8 +236,8 @@ Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
       onKeyEvent: onKeyPressed,
       child: Stack(
         children: [
-          /// hidden text field is needed to keep keyboard open
-          /// whenever a chip is selected for removal via backspace
+          /// A hidden text field is needed to keep the keyboard open whenever a
+          /// chip is selected for removal via backspace.
           SizedBox(
             height: 0,
             width: 0,

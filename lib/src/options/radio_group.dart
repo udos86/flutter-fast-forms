@@ -3,6 +3,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form.dart';
 
+/// A single [FastRadioGroup] option.
 @immutable
 class FastRadioOption<T> {
   const FastRadioOption({
@@ -32,6 +33,7 @@ typedef FastRadioOptionsBuilder<T> = Widget Function(
 
 enum FastRadioGroupOrientation { horizontal, vertical }
 
+/// A [FastFormField] that contains a list of [RadioListTile].
 @immutable
 class FastRadioGroup<T> extends FastFormField<T> {
   FastRadioGroup({
@@ -93,17 +95,31 @@ class FastRadioGroup<T> extends FastFormField<T> {
   FastRadioGroupState<T> createState() => FastRadioGroupState<T>();
 }
 
+/// State associated with a [FastRadioGroup] widget.
 class FastRadioGroupState<T> extends FastFormFieldState<T> {
   @override
   FastRadioGroup<T> get widget => super.widget as FastRadioGroup<T>;
 }
 
-T? _getInitialValue<T>(List<FastRadioOption<T>> options) {
+/// Returns the initially selected [FastRadioOption.value] when no
+/// [FastRadioGroup.initialValue] is set.
+///
+/// When no [FastRadioOption.selected] is `true`, returns the value of the first
+/// element of [FastRadioGroup.options].
+T _getInitialValue<T>(List<FastRadioOption<T>> options) {
   return options
       .lastWhere((option) => option.selected, orElse: () => options.first)
       .value;
 }
 
+/// A [FastRadioOptionBuilder] that is the default
+/// [FastRadioGroup.optionBuilder].
+///
+/// Returns a [RadioListTile] when [FastRadioGroup.orientation] is
+/// [FastRadioGroupOrientation.vertical].
+///
+/// Returns an [Expanded] widget that contains a [RadioListTile] when
+/// [FastRadioGroup.orientation] is [FastRadioGroupOrientation.horizontal].
 Widget radioOptionBuilder<T>(
     FastRadioOption<T> option, FastRadioGroupState<T> field) {
   final FastRadioGroupState<T>(:didChange, :value, :widget) = field;
@@ -135,6 +151,17 @@ Widget radioOptionBuilder<T>(
   return vertical ? tile : Expanded(child: tile);
 }
 
+/// A [FastRadioOptionsBuilder] that is the default
+/// [FastRadioGroup.optionsBuilder];
+///
+/// Returns a [Column] that contains all [FastRadioGroup.options] when
+/// [FastRadioGroup.orientation] is [FastRadioGroupOrientation.vertical].
+///
+/// Returns a [Row] that contains all [FastRadioGroup.options] when
+/// [FastRadioGroup.orientation] is [FastRadioGroupOrientation.horizontal].
+///
+/// Uses [FastRadioGroup.optionBuilder] to build a widget for every
+/// [FastRadioOption] in [FastRadioGroup.options].
 Widget radioOptionsBuilder<T>(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> field) {
   final FastRadioGroupState<T>(:widget) = field;
@@ -149,6 +176,10 @@ Widget radioOptionsBuilder<T>(
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastRadioGroup.builder].
+///
+/// Returns an [InputDecorator] that contains the widget returned by
+/// [FastRadioGroup.optionsBuilder] on any [TargetPlatform].
 Widget radioGroupBuilder<T>(FormFieldState<T> field) {
   final FastRadioGroupState<T>(:decoration, :widget) =
       field as FastRadioGroupState<T>;

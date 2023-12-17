@@ -69,6 +69,8 @@ class FastAutocompleteState<O extends Object>
 
 /// A [FastAutocompleteWillDisplayOption] that is the default
 /// [FastAutocomplete.willDisplayOption].
+///
+/// Returns whether an option is shown in the list of options.
 bool _willDisplayOption<O extends Object>(TextEditingValue value, O option) {
   return option.toString().toLowerCase().contains(value.text.toLowerCase());
 }

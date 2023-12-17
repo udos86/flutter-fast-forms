@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+/// A single [FastChoiceChips] chip.
 @immutable
 class FastChoiceChip
     implements
@@ -106,6 +107,7 @@ class FastChoiceChip
 typedef FastChoiceChipBuilder = Widget Function(
     FastChoiceChip chip, FastChoiceChipsState field);
 
+/// A [FastFormField] that contains a list of [ChoiceChip].
 @immutable
 class FastChoiceChips extends FastFormField<List<String>> {
   FastChoiceChips({
@@ -137,13 +139,7 @@ class FastChoiceChips extends FastFormField<List<String>> {
     this.showCheckmark,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
-  }) : super(
-          initialValue: initialValue ??
-              chips
-                  .where((chip) => chip.selected)
-                  .map((chip) => chip.value)
-                  .toList(),
-        );
+  }) : super(initialValue: initialValue ?? _getInitialValue(chips));
 
   final WrapAlignment alignment;
   final FastChoiceChipBuilder chipBuilder;
@@ -163,22 +159,35 @@ class FastChoiceChips extends FastFormField<List<String>> {
   FastChoiceChipsState createState() => FastChoiceChipsState();
 }
 
+/// State associated with a [FastChoiceChips] widget.
 class FastChoiceChipsState extends FastFormFieldState<List<String>> {
   @override
   FastChoiceChips get widget => super.widget as FastChoiceChips;
 }
 
+/// Returns the default [FastChoiceChips.initialValue].
+///
+/// Maps all [FastChoiceChips.chips] where [FastChoiceChip.selected] is `true`
+/// to a [List] of [FastChoiceChip.value].
+List<String> _getInitialValue<T>(List<FastChoiceChip> chips) {
+  return chips
+      .where((chip) => chip.selected)
+      .map((chip) => chip.value)
+      .toList();
+}
+
+/// A [FastChoiceChipBuilder] that is the default [FastChoiceChips.chipBuilder].
+///
+/// Returns a [ChoiceChip] that updates the [FastChoiceChipsState.value] in
+/// [ChoiceChip.onSelected].
 ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
   final FastChoiceChipsState(:didChange, :enabled, :value!, :widget) = field;
 
   void onSelected(selected) {
-    if (chip.onSelected != null) {
-      chip.onSelected!(selected);
-    }
+    chip.onSelected?.call(selected);
 
-    final newValue =
-        selected ? ([...value, chip.value]) : ([...value]..remove(chip.value));
-    didChange(newValue);
+    didChange(selected ? [...value, chip.value] : [...value]
+      ..remove(chip.value));
   }
 
   return ChoiceChip(
@@ -213,6 +222,13 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastChoiceChips.builder].
+///
+/// Uses [FastChoiceChips.chipBuilder] to build a [ChoiceChip] for every
+/// [FastChoiceChip] in [FastChoiceChips.chips].
+///
+/// Returns an [InputDecorator] that wraps a [List] of [ChoiceChip] on any
+/// [TargetPlatform].
 Widget choiceChipsBuilder(FormFieldState field) {
   final FastChoiceChipsState(:decoration, :widget) =
       field as FastChoiceChipsState;

@@ -113,7 +113,7 @@ class FastCheckboxState extends FastFormFieldState<bool> {
 /// otherwise null.
 Widget? checkboxTitleBuilder(FastCheckboxState field) {
   final FastCheckboxState(:value!, :widget) = field;
-  final text = widget.titleText;
+  final FastCheckbox(titleText: text) = widget;
 
   return text is String
       ? Text(

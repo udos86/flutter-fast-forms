@@ -125,7 +125,7 @@ class FastSwitchState extends FastFormFieldState<bool> {
 /// otherwise null.
 Widget? switchTitleBuilder(FastSwitchState field) {
   final FastSwitchState(:value!, :widget) = field;
-  final text = widget.titleText;
+  final FastSwitch(titleText: text) = widget;
 
   return text is String
       ? Text(
