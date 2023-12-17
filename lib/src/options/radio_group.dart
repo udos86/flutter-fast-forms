@@ -106,7 +106,7 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
 ///
 /// When no [FastRadioOption.selected] is `true`, returns the value of the first
 /// element of [FastRadioGroup.options].
-T _getInitialValue<T>(List<FastRadioOption<T>> options) {
+T? _getInitialValue<T>(List<FastRadioOption<T>> options) {
   return options
       .lastWhere((option) => option.selected, orElse: () => options.first)
       .value;
