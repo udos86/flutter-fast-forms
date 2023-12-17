@@ -76,20 +76,23 @@ class FastCustomFieldState extends FastFormFieldState<Map<String, bool>> {
 }
 
 Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
+  final FastCustomFieldState(:activeValue, :didChange, :enabled, :widget) =
+      field;
+
   return Column(
     children: [
       const Divider(
         height: 4.0,
         color: Colors.black,
       ),
-      for (final option in field.widget.options)
+      for (final option in widget.options)
         CheckboxListTile(
           title: Text(option.label),
-          value: field.activeValue[option.name],
-          onChanged: field.enabled
+          value: activeValue[option.name],
+          onChanged: enabled
               ? (checked) {
-                  field.didChange({
-                    ...field.activeValue,
+                  didChange({
+                    ...activeValue,
                     option.name: checked ?? false,
                   });
                 }
@@ -100,24 +103,31 @@ Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
 }
 
 Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
-  final widget = (field as FastCustomFieldState).widget;
+  final FastCustomFieldState(
+    :active,
+    :activeValue,
+    :decoration,
+    :didChange,
+    :enabled,
+    :widget
+  ) = field as FastCustomFieldState;
 
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: Column(
       children: [
         SwitchListTile(
           contentPadding: const EdgeInsets.all(0),
           title: widget.title,
-          value: field.active,
-          onChanged: field.enabled
+          value: active,
+          onChanged: enabled
               ? (active) {
-                  field.didChange(active ? field.activeValue : null);
-                  field.active = active;
+                  didChange(active ? activeValue : null);
+                  active = active;
                 }
               : null,
         ),
-        if (field.active) _customFormFieldActiveBuilder(field),
+        if (active) _customFormFieldActiveBuilder(field),
       ],
     ),
   );
