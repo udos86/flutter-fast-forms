@@ -186,8 +186,14 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
   void onSelected(selected) {
     chip.onSelected?.call(selected);
 
-    didChange(selected ? [...value, chip.value] : [...value]
-      ..remove(chip.value));
+    List<String> updatedValue;
+    if (selected) {
+      updatedValue = [...value, chip.value];
+    } else {
+      updatedValue = [...value]..remove(chip.value);
+    }
+
+    didChange(updatedValue);
   }
 
   return ChoiceChip(
