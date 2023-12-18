@@ -10,6 +10,8 @@ typedef ShowFastTimePicker = Future<TimeOfDay?> Function(
 typedef FastTimePickerIconButtonBuilder = IconButton Function(
     FastTimePickerState field, ShowFastTimePicker show);
 
+/// A [FastFormField] that shows a Material Design date picker via
+/// [showTimePicker].
 @immutable
 class FastTimePicker extends FastFormField<TimeOfDay> {
   const FastTimePicker({
@@ -39,13 +41,13 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     this.helpText,
     this.hourLabelText,
     this.icon,
-    this.iconButtonBuilder,
+    this.iconButtonBuilder = timePickerIconButtonBuilder,
     this.initialEntryMode = TimePickerEntryMode.dial,
     this.minuteLabelText,
     this.onEntryModeChanged,
     this.orientation,
     this.routeSettings,
-    this.textBuilder,
+    this.textBuilder = timePickerTextBuilder,
     this.textStyle,
     this.useRootNavigator = true,
   });
@@ -61,13 +63,13 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   final String? helpText;
   final String? hourLabelText;
   final Icon? icon;
-  final FastTimePickerIconButtonBuilder? iconButtonBuilder;
+  final FastTimePickerIconButtonBuilder iconButtonBuilder;
   final TimePickerEntryMode initialEntryMode;
   final String? minuteLabelText;
   final EntryModeChangeCallback? onEntryModeChanged;
   final Orientation? orientation;
   final RouteSettings? routeSettings;
-  final FastTimePickerTextBuilder? textBuilder;
+  final FastTimePickerTextBuilder textBuilder;
   final TextStyle? textStyle;
   final bool useRootNavigator;
 
@@ -75,25 +77,19 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   FastTimePickerState createState() => FastTimePickerState();
 }
 
+/// State associated with a [FastTimePicker] widget.
 class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
   @override
   FastTimePicker get widget => super.widget as FastTimePicker;
 }
 
-Text timePickerTextBuilder(FastTimePickerState field) {
-  final theme = Theme.of(field.context);
-  final style = field.widget.textStyle ?? theme.textTheme.titleMedium;
-
-  return Text(
-    field.value?.format(field.context) ?? '',
-    style: field.enabled ? style : style?.copyWith(color: theme.disabledColor),
-    textAlign: TextAlign.left,
-  );
-}
-
+/// A [FastTimePickerIconButtonBuilder] that is the default
+/// [FastTimePicker.iconButtonBuilder].
+///
+/// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton timePickerIconButtonBuilder(
     FastTimePickerState field, ShowFastTimePicker show) {
-  final widget = field.widget;
+  final FastTimePickerState(:widget) = field;
 
   return IconButton(
     alignment: Alignment.center,
@@ -102,11 +98,36 @@ IconButton timePickerIconButtonBuilder(
   );
 }
 
+/// A [FastTimePickerTextBuilder] that is the default
+/// [FastTimePicker.textBuilder].
+///
+/// Returns a [Text] widget that shows the localized representation of the
+/// current [FastTimePickerState.value].
+Text timePickerTextBuilder(FastTimePickerState field) {
+  final FastTimePickerState(:context, :enabled, :value, :widget) = field;
+  final theme = Theme.of(context);
+  final style = widget.textStyle ?? theme.textTheme.titleMedium;
+
+  return Text(
+    value?.format(context) ?? '',
+    style: enabled ? style : style?.copyWith(color: theme.disabledColor),
+    textAlign: TextAlign.left,
+  );
+}
+
+/// A [FormFieldBuilder] that is the default [FastTimePicker.builder].
+///
+/// Returns an [InputDecorator] inside an [InkWell] that contains an
+/// [IconButton] to trigger the Material Design time picker on any
+/// [TargetPlatform].
 Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
-  final widget = (field as FastTimePickerState).widget;
-  final textBuilder = widget.textBuilder ?? timePickerTextBuilder;
-  final iconButtonBuilder =
-      widget.iconButtonBuilder ?? timePickerIconButtonBuilder;
+  final FastTimePickerState(
+    :context,
+    :decoration,
+    :didChange,
+    :value,
+    :widget
+  ) = field as FastTimePickerState;
 
   Future<TimeOfDay?> show(TimePickerEntryMode entryMode) {
     return showTimePicker(
@@ -117,19 +138,19 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
-      context: field.context,
+      context: context,
       errorInvalidText: widget.errorInvalidText,
       helpText: widget.helpText,
       hourLabelText: widget.hourLabelText,
       initialEntryMode: widget.initialEntryMode,
-      initialTime: field.value ?? TimeOfDay.now(),
+      initialTime: value ?? TimeOfDay.now(),
       minuteLabelText: widget.minuteLabelText,
       onEntryModeChanged: widget.onEntryModeChanged,
       orientation: widget.orientation,
       routeSettings: widget.routeSettings,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
-      if (value != null) field.didChange(value);
+      if (value != null) didChange(value);
       return value;
     });
   }
@@ -137,14 +158,14 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
   return InkWell(
     onTap: widget.enabled ? () => show(widget.initialEntryMode) : null,
     child: InputDecorator(
-      decoration: field.decoration,
+      decoration: decoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
-            child: textBuilder(field),
+            child: widget.textBuilder(field),
           ),
-          iconButtonBuilder(field, show),
+          widget.iconButtonBuilder(field, show),
         ],
       ),
     ),

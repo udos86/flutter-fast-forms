@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastSwitchTitleBuilder = Widget Function(FastSwitchState field);
+typedef FastSwitchTitleBuilder = Widget? Function(FastSwitchState field);
 
+/// A [FastFormField] that contains either a [SwitchListTile.adaptive] or a
+/// [CupertinoSwitch].
 @immutable
 class FastSwitch extends FastFormField<bool> {
   const FastSwitch({
@@ -61,7 +63,7 @@ class FastSwitch extends FastFormField<bool> {
     this.thumbIcon,
     this.tileColor,
     this.titleText,
-    this.titleBuilder,
+    this.titleBuilder = switchTitleBuilder,
     this.trackColor,
     this.trackOutlineColor,
     this.visualDensity,
@@ -104,37 +106,49 @@ class FastSwitch extends FastFormField<bool> {
   final String? titleText;
   final MaterialStateProperty<Color?>? trackColor;
   final MaterialStateProperty<Color?>? trackOutlineColor;
-  final FastSwitchTitleBuilder? titleBuilder;
+  final FastSwitchTitleBuilder titleBuilder;
   final VisualDensity? visualDensity;
 
   @override
   FastSwitchState createState() => FastSwitchState();
 }
 
+/// State associated with a [FastSwitch] widget.
 class FastSwitchState extends FastFormFieldState<bool> {
   @override
   FastSwitch get widget => super.widget as FastSwitch;
 }
 
-Widget switchTitleBuilder(FastSwitchState field) {
-  return Text(
-    field.widget.titleText!,
-    style: TextStyle(
-      fontSize: 14.0,
-      color: field.value! ? Colors.black : Colors.grey,
-    ),
-  );
+/// A [FastSwitchTitleBuilder] that is the default [FastSwitch.titleBuilder].
+///
+/// Returns a [Text] widget when [FastSwitch.titleText] is a [String]
+/// otherwise null.
+Widget? switchTitleBuilder(FastSwitchState field) {
+  final FastSwitchState(:value!, :widget) = field;
+  final FastSwitch(titleText: text) = widget;
+
+  return text is String
+      ? Text(
+          text,
+          style: TextStyle(
+            fontSize: 14.0,
+            color: value ? Colors.black : Colors.grey,
+          ),
+        )
+      : null;
 }
 
+/// The default [FastSwitch] Material [FormFieldBuilder].
+///
+/// Returns an [InputDecorator] that contains a [SwitchListTile.adaptive].
 Widget materialSwitchBuilder(FormFieldState<bool> field) {
-  final widget = (field as FastSwitchState).widget;
+  final FastSwitchState(:decoration, :didChange, :value!, :widget) =
+      field as FastSwitchState;
   assert(widget.thumbColor == null ||
       widget.thumbColor is MaterialStateProperty<Color?>);
 
-  final titleBuilder = widget.titleBuilder ?? switchTitleBuilder;
-
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: SwitchListTile.adaptive(
       activeColor: widget.activeColor,
       activeThumbImage: widget.activeThumbImage,
@@ -155,12 +169,12 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
       materialTapTargetSize: widget.materialTapTargetSize,
       mouseCursor: widget.mouseCursor,
       onActiveThumbImageError: widget.onActiveThumbImageError,
-      onChanged: widget.enabled ? field.didChange : null,
+      onChanged: widget.enabled ? didChange : null,
       onFocusChange: widget.onFocusChange,
       onInactiveThumbImageError: widget.onInactiveThumbImageError,
       overlayColor: widget.overlayColor,
       secondary: widget.secondary,
-      selected: field.value!,
+      selected: value,
       selectedTileColor: widget.selectedTileColor,
       shape: widget.shapeBorder,
       splashRadius: widget.splashRadius,
@@ -168,17 +182,21 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
       thumbColor: widget.thumbColor,
       thumbIcon: widget.thumbIcon,
       tileColor: widget.tileColor,
-      title: widget.titleText is String ? titleBuilder(field) : null,
+      title: widget.titleBuilder(field),
       trackColor: widget.trackColor,
       trackOutlineColor: widget.trackOutlineColor,
-      value: field.value!,
+      value: value,
       visualDensity: widget.visualDensity,
     ),
   );
 }
 
+/// The default [FastSwitch] Cupertino [FormFieldBuilder].
+///
+/// Returns a [CupertinoFormRow] that contains a [CupertinoSwitch].
 Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
-  final widget = (field as FastSwitchState).widget;
+  final FastSwitchState(:didChange, :value!, :widget) =
+      field as FastSwitchState;
   assert(widget.thumbColor == null || widget.thumbColor is Color);
 
   return CupertinoFormRow(
@@ -195,33 +213,28 @@ Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
       dragStartBehavior: widget.dragStartBehavior,
       focusColor: widget.focusColor,
       focusNode: widget.focusNode,
-      onChanged: widget.enabled ? field.didChange : null,
+      onChanged: widget.enabled ? didChange : null,
       onFocusChange: widget.onFocusChange,
       thumbColor: widget.thumbColor,
       trackColor: widget.activeTrackColor,
-      value: field.value!,
+      value: value,
     ),
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastSwitch.builder].
+///
+/// Uses [materialSwitchBuilder] by default on any [TargetPlatform].
+///
+/// Uses [cupertinoSwitchBuilder] on [TargetPlatform.iOS] when
+/// [FastSwitchState.adaptive] is true.
 Widget switchBuilder(FormFieldState<bool> field) {
-  var builder = materialSwitchBuilder;
+  field as FastSwitchState;
 
-  if ((field as FastSwitchState).adaptive) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        builder = cupertinoSwitchBuilder;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-      default:
-        builder = materialSwitchBuilder;
-        break;
-    }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS when field.adaptive:
+      return cupertinoSwitchBuilder(field);
+    default:
+      return materialSwitchBuilder(field);
   }
-
-  return builder(field);
 }

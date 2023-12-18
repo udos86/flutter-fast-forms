@@ -6,6 +6,8 @@ import '../form.dart';
 
 typedef FastCheckboxTitleBuilder = Widget? Function(FastCheckboxState field);
 
+/// A [FastFormField] that contains either a [CheckboxListTile.adaptive] or a
+/// [CupertinoCheckbox].
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   const FastCheckbox({
@@ -55,7 +57,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.subtitle,
     this.tileColor,
     this.titleText,
-    this.titleBuilder,
+    this.titleBuilder = checkboxTitleBuilder,
     this.tristate = false,
     this.visualDensity,
   });
@@ -90,7 +92,7 @@ class FastCheckbox extends FastFormField<bool> {
   final Widget? subtitle;
   final Color? tileColor;
   final String? titleText;
-  final FastCheckboxTitleBuilder? titleBuilder;
+  final FastCheckboxTitleBuilder titleBuilder;
   final bool tristate;
   final VisualDensity? visualDensity;
 
@@ -98,29 +100,41 @@ class FastCheckbox extends FastFormField<bool> {
   FastCheckboxState createState() => FastCheckboxState();
 }
 
+/// State associated with a [FastCheckbox] widget.
 class FastCheckboxState extends FastFormFieldState<bool> {
   @override
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
+/// A [FastCheckboxTitleBuilder] that is the default
+/// [FastCheckbox.titleBuilder].
+///
+/// Returns a [Text] widget when [FastCheckbox.titleText] is a [String]
+/// otherwise null.
 Widget? checkboxTitleBuilder(FastCheckboxState field) {
-  return field.widget.titleText is String
+  final FastCheckboxState(:value!, :widget) = field;
+  final FastCheckbox(titleText: text) = widget;
+
+  return text is String
       ? Text(
-          field.widget.titleText!,
+          text,
           style: TextStyle(
             fontSize: 14.0,
-            color: field.value! ? Colors.black : Colors.grey,
+            color: value ? Colors.black : Colors.grey,
           ),
         )
       : null;
 }
 
+/// The default [FastCheckbox] Material [FormFieldBuilder].
+///
+/// Returns an [InputDecorator] that contains a [CheckboxListTile.adaptive].
 Widget materialCheckboxBuilder(FormFieldState<bool> field) {
-  final widget = (field as FastCheckboxState).widget;
-  final titleBuilder = widget.titleBuilder ?? checkboxTitleBuilder;
+  final FastCheckboxState(:decoration, :didChange, :value, :widget) =
+      field as FastCheckboxState;
 
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: CheckboxListTile.adaptive(
       activeColor: widget.activeColor,
       autofocus: widget.autofocus,
@@ -139,27 +153,31 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
       isThreeLine: widget.isThreeLine,
       materialTapTargetSize: widget.materialTapTargetSize,
       mouseCursor: widget.mouseCursor,
-      onChanged: widget.enabled ? field.didChange : null,
+      onChanged: widget.enabled ? didChange : null,
       onFocusChange: widget.onFocusChange,
       overlayColor: widget.overlayColor,
       secondary: widget.secondary,
-      selected: field.value ?? false,
+      selected: value ?? false,
       selectedTileColor: widget.selectedTileColor,
       shape: widget.shapeBorder,
       side: widget.side,
       splashRadius: widget.splashRadius,
       subtitle: widget.subtitle,
       tileColor: widget.tileColor,
-      title: titleBuilder(field),
+      title: widget.titleBuilder(field),
       tristate: widget.tristate,
-      value: field.value,
+      value: value,
       visualDensity: widget.visualDensity,
     ),
   );
 }
 
+/// The default [FastCheckbox] Cupertino [FormFieldBuilder].
+///
+/// Returns a [CupertinoFormRow] that contains a [CupertinoCheckbox].
 Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
-  final widget = (field as FastCheckboxState).widget;
+  final FastCheckboxState(:didChange, :value, :widget) =
+      field as FastCheckboxState;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
@@ -173,33 +191,28 @@ Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
       focusColor: widget.focusColor,
       focusNode: widget.focusNode,
       inactiveColor: widget.inactiveColor,
-      onChanged: widget.enabled ? field.didChange : null,
+      onChanged: widget.enabled ? didChange : null,
       shape: widget.shape,
       side: widget.side,
       tristate: widget.tristate,
-      value: field.value!,
+      value: value,
     ),
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastCheckbox.builder].
+///
+/// Uses [materialCheckboxBuilder] by default on any [TargetPlatform].
+///
+/// Uses [cupertinoCheckboxBuilder] on [TargetPlatform.iOS] when
+/// [FastCheckboxState.adaptive] is true.
 Widget checkboxBuilder(FormFieldState<bool> field) {
-  var builder = materialCheckboxBuilder;
+  field as FastCheckboxState;
 
-  if ((field as FastCheckboxState).adaptive) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        builder = cupertinoCheckboxBuilder;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-      default:
-        builder = materialCheckboxBuilder;
-        break;
-    }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS when field.adaptive:
+      return cupertinoCheckboxBuilder(field);
+    default:
+      return materialCheckboxBuilder(field);
   }
-
-  return builder(field);
 }

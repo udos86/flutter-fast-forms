@@ -3,6 +3,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form.dart';
 
+/// A single [FastRadioGroup] option.
 @immutable
 class FastRadioOption<T> {
   const FastRadioOption({
@@ -32,11 +33,14 @@ typedef FastRadioOptionsBuilder<T> = Widget Function(
 
 enum FastRadioGroupOrientation { horizontal, vertical }
 
+/// A [FastFormField] that contains a list of [RadioListTile].
 @immutable
 class FastRadioGroup<T> extends FastFormField<T> {
   FastRadioGroup({
     FormFieldBuilder<T>? builder,
     T? initialValue,
+    FastRadioOptionBuilder<T>? optionBuilder,
+    FastRadioOptionsBuilder<T>? optionsBuilder,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
@@ -58,24 +62,18 @@ class FastRadioGroup<T> extends FastFormField<T> {
     this.mouseCursor,
     this.orientation = FastRadioGroupOrientation.vertical,
     required this.options,
-    this.optionBuilder,
-    this.optionsBuilder,
     this.overlayColor,
     this.selectedTileColor,
     this.shapeBorder,
     this.splashRadius,
     this.tileColor,
     this.toggleable = false,
-  }) : super(
-            builder: builder ?? radioGroupBuilder<T>,
-            initialValue: initialValue ??
-                options
-                    .lastWhere(
-                      (option) => option.selected,
-                      orElse: () => options.first,
-                    )
-                    .value);
-
+  })  : optionBuilder = optionBuilder ?? radioOptionBuilder,
+        optionsBuilder = optionsBuilder ?? radioOptionsBuilder,
+        super(
+          builder: builder ?? radioGroupBuilder,
+          initialValue: initialValue ?? _getInitialValue(options),
+        );
   final Color? activeColor;
   final ListTileControlAffinity controlAffinity;
   final MaterialStateProperty<Color?>? fillColor;
@@ -83,8 +81,8 @@ class FastRadioGroup<T> extends FastFormField<T> {
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
   final List<FastRadioOption<T>> options;
-  final FastRadioOptionBuilder<T>? optionBuilder;
-  final FastRadioOptionsBuilder<T>? optionsBuilder;
+  final FastRadioOptionBuilder<T> optionBuilder;
+  final FastRadioOptionsBuilder<T> optionsBuilder;
   final FastRadioGroupOrientation orientation;
   final MaterialStateProperty<Color?>? overlayColor;
   final Color? selectedTileColor;
@@ -97,25 +95,44 @@ class FastRadioGroup<T> extends FastFormField<T> {
   FastRadioGroupState<T> createState() => FastRadioGroupState<T>();
 }
 
+/// State associated with a [FastRadioGroup] widget.
 class FastRadioGroupState<T> extends FastFormFieldState<T> {
   @override
   FastRadioGroup<T> get widget => super.widget as FastRadioGroup<T>;
 }
 
+/// Fallback for setting the default [FastRadioGroup.initialValue].
+///
+/// Returns the last [FastRadioOption.value] in [FastRadioGroup.options] where
+/// [FastRadioOption.selected] is `true`. Otherwise returns the
+/// [FastRadioOption.value] of the first element of [FastRadioGroup.options].
+T? _getInitialValue<T>(List<FastRadioOption<T>> options) {
+  return options
+      .lastWhere((option) => option.selected, orElse: () => options.first)
+      .value;
+}
+
+/// A [FastRadioOptionBuilder] that is the default
+/// [FastRadioGroup.optionBuilder].
+///
+/// Returns a [RadioListTile] when [FastRadioGroup.orientation] is
+/// [FastRadioGroupOrientation.vertical].
+///
+/// Returns an [Expanded] widget that contains a [RadioListTile] when
+/// [FastRadioGroup.orientation] is [FastRadioGroupOrientation.horizontal].
 Widget radioOptionBuilder<T>(
     FastRadioOption<T> option, FastRadioGroupState<T> field) {
-  final widget = field.widget;
-  final vertical = widget.orientation == FastRadioGroupOrientation.vertical;
+  final FastRadioGroupState<T>(:didChange, :value, :widget) = field;
   final tile = RadioListTile<T>(
     activeColor: widget.activeColor,
     controlAffinity: widget.controlAffinity,
     fillColor: widget.fillColor,
     hoverColor: widget.hoverColor,
-    groupValue: field.value,
+    groupValue: value,
     isThreeLine: option.isThreeLine,
     materialTapTargetSize: widget.materialTapTargetSize,
     mouseCursor: widget.mouseCursor,
-    onChanged: field.widget.enabled ? field.didChange : null,
+    onChanged: widget.enabled ? didChange : null,
     overlayColor: widget.overlayColor,
     secondary: option.secondary,
     selected: option.selected,
@@ -130,27 +147,46 @@ Widget radioOptionBuilder<T>(
     visualDensity: option.visualDensity,
   );
 
-  return vertical ? tile : Expanded(child: tile);
+  return widget.orientation == FastRadioGroupOrientation.vertical
+      ? tile
+      : Expanded(child: tile);
 }
 
+/// A [FastRadioOptionsBuilder] that is the default
+/// [FastRadioGroup.optionsBuilder];
+///
+/// Returns a [Column] that contains all [FastRadioGroup.options] when
+/// [FastRadioGroup.orientation] is [FastRadioGroupOrientation.vertical].
+///
+/// Returns a [Row] that contains all [FastRadioGroup.options] when
+/// [FastRadioGroup.orientation] is [FastRadioGroupOrientation.horizontal].
+///
+/// Uses [FastRadioGroup.optionBuilder] to build a widget for every
+/// [FastRadioOption] in [FastRadioGroup.options].
 Widget radioOptionsBuilder<T>(
     List<FastRadioOption<T>> options, FastRadioGroupState<T> field) {
-  final optionBuilder = field.widget.optionBuilder ?? radioOptionBuilder;
-  final wrapper = field.widget.orientation == FastRadioGroupOrientation.vertical
+  final FastRadioGroupState<T>(:widget) = field;
+  final wrapper = widget.orientation == FastRadioGroupOrientation.vertical
       ? Column.new
       : Row.new;
 
   return wrapper(
-    children: [for (final option in options) optionBuilder(option, field)],
+    children: [
+      for (final option in options) widget.optionBuilder(option, field)
+    ],
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastRadioGroup.builder].
+///
+/// Returns an [InputDecorator] that contains the widget returned by
+/// [FastRadioGroup.optionsBuilder] on any [TargetPlatform].
 Widget radioGroupBuilder<T>(FormFieldState<T> field) {
-  final widget = (field as FastRadioGroupState<T>).widget;
-  final optionsBuilder = widget.optionsBuilder ?? radioOptionsBuilder;
+  final FastRadioGroupState<T>(:decoration, :widget) =
+      field as FastRadioGroupState<T>;
 
   return InputDecorator(
-    decoration: field.decoration,
-    child: optionsBuilder(widget.options, field),
+    decoration: decoration,
+    child: widget.optionsBuilder(widget.options, field),
   );
 }

@@ -16,6 +16,8 @@ typedef ShowFastDatePicker = Future<DateTime?> Function(
 typedef FastDatePickerIconButtonBuilder = IconButton Function(
     FastDatePickerState field, ShowFastDatePicker show);
 
+/// A [FastFormField] that shows either a Material Design date picker via
+/// [showDatePicker] or a [CupertinoDatePicker] via [showCupertinoModalPopup].
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
@@ -56,7 +58,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.height = 216.0,
     this.helpText,
     this.icon,
-    this.iconButtonBuilder,
+    this.iconButtonBuilder = datePickerIconButtonBuilder,
     this.initialDatePickerMode = DatePickerMode.day,
     this.initialEntryMode = DatePickerEntryMode.calendar,
     this.keyboardType,
@@ -75,7 +77,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.showModalPopup = false,
     this.switchToCalendarEntryModeIcon,
     this.switchToInputEntryModeIcon,
-    this.textBuilder,
+    this.textBuilder = datePickerTextBuilder,
     this.textDirection,
     this.textStyle,
     this.use24hFormat = false,
@@ -103,7 +105,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final FastHelperBuilder<DateTime>? helperBuilder;
   final String? helpText;
   final Icon? icon;
-  final FastDatePickerIconButtonBuilder? iconButtonBuilder;
+  final FastDatePickerIconButtonBuilder iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
   final DatePickerEntryMode initialEntryMode;
   final TextInputType? keyboardType;
@@ -122,7 +124,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final bool showModalPopup;
   final Icon? switchToCalendarEntryModeIcon;
   final Icon? switchToInputEntryModeIcon;
-  final FastDatePickerTextBuilder? textBuilder;
+  final FastDatePickerTextBuilder textBuilder;
   final TextDirection? textDirection;
   final TextStyle? textStyle;
   final bool use24hFormat;
@@ -132,17 +134,23 @@ class FastDatePicker extends FastFormField<DateTime> {
   FastDatePickerState createState() => FastDatePickerState();
 }
 
-intl.DateFormat _datePickerFormat(FastDatePickerState field) {
-  final widget = field.widget;
-  final locale = widget.locale;
+/// State associated with a [FastDatePicker] widget.
+class FastDatePickerState extends FastFormFieldState<DateTime> {
+  @override
+  FastDatePicker get widget => super.widget as FastDatePicker;
+}
 
-  switch (widget.mode) {
+/// Returns the default [intl.DateFormat] to be used in [datePickerTextBuilder]
+/// depending on [FastDatePicker.mode] and [FastDatePicker.use24hFormat].
+intl.DateFormat _datePickerFormat(FastDatePickerState field) {
+  final FastDatePicker(:locale, :mode, :use24hFormat) = field.widget;
+
+  switch (mode) {
     case CupertinoDatePickerMode.dateAndTime:
       final format = intl.DateFormat.yMMMMEEEEd(locale);
-      return widget.use24hFormat ? format.add_Hm() : format.add_jm();
+      return use24hFormat ? format.add_Hm() : format.add_jm();
     case CupertinoDatePickerMode.time:
-      final format =
-          widget.use24hFormat ? intl.DateFormat.Hm : intl.DateFormat.jm;
+      final format = use24hFormat ? intl.DateFormat.Hm : intl.DateFormat.jm;
       return format(locale);
     case CupertinoDatePickerMode.date:
     default:
@@ -150,28 +158,32 @@ intl.DateFormat _datePickerFormat(FastDatePickerState field) {
   }
 }
 
-class FastDatePickerState extends FastFormFieldState<DateTime> {
-  @override
-  FastDatePicker get widget => super.widget as FastDatePicker;
-}
-
+/// A [FastDatePickerTextBuilder] that is the default
+/// [FastDatePicker.textBuilder].
+///
+/// Returns a [Text] widget that shows the current [FastDatePickerState.value]
+/// formatted according either to [FastDatePicker.dateFormat] or
+/// [_datePickerFormat].
 Text datePickerTextBuilder(FastDatePickerState field) {
-  final theme = Theme.of(field.context);
-  final format =
-      field.widget.dateFormat?.format ?? _datePickerFormat(field).format;
-  final value = field.value;
-  final style = field.widget.textStyle ?? theme.textTheme.titleMedium;
+  final FastDatePickerState(:context, :enabled, :value, :widget) = field;
+  final theme = Theme.of(context);
+  final format = widget.dateFormat?.format ?? _datePickerFormat(field).format;
+  final style = widget.textStyle ?? theme.textTheme.titleMedium;
 
   return Text(
-    value != null ? format(field.value!) : '',
-    style: field.enabled ? style : style?.copyWith(color: theme.disabledColor),
+    value != null ? format(value) : '',
+    style: enabled ? style : style?.copyWith(color: theme.disabledColor),
     textAlign: TextAlign.left,
   );
 }
 
+/// A [FastDatePickerIconButtonBuilder] that is the default
+/// [FastDatePicker.iconButtonBuilder].
+///
+/// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton datePickerIconButtonBuilder(
     FastDatePickerState field, ShowFastDatePicker show) {
-  final widget = field.widget;
+  final FastDatePickerState(:widget) = field;
 
   return IconButton(
     alignment: Alignment.center,
@@ -180,10 +192,15 @@ IconButton datePickerIconButtonBuilder(
   );
 }
 
+/// A [FastDatePickerModalPopupBuilder] that returns a modal popup that contains
+/// a [CupertinoDatePicker];
+///
+/// Used when [FastDatePicker.showModalPopup] is true to show a
+/// [CupertinoDatePicker] in a modal popup via [showCupertinoModalPopup] .
 Container cupertinoDatePickerModalPopupBuilder(
     BuildContext context, FastDatePickerState field) {
-  final widget = field.widget;
-  DateTime? modalValue = field.value;
+  final FastDatePickerState(:value, :widget) = field;
+  DateTime? modalValue = value;
 
   return Container(
     color: CupertinoColors.systemBackground,
@@ -222,7 +239,7 @@ Container cupertinoDatePickerModalPopupBuilder(
           child: CupertinoDatePicker(
             backgroundColor: widget.backgroundColor,
             dateOrder: widget.dateOrder,
-            initialDateTime: field.value,
+            initialDateTime: value,
             maximumDate: widget.lastDate,
             maximumYear: widget.maximumYear,
             minimumDate: widget.firstDate,
@@ -239,8 +256,15 @@ Container cupertinoDatePickerModalPopupBuilder(
   );
 }
 
+/// The default [FastDatePicker] Material [FormFieldBuilder].
+///
+/// Returns an [InkWell] that shows a Material Design date picker when tapped.
+/// Also contains a [Text] widget that presents the current
+/// [FastDatePickerState.value] and an [IconButton] that shows the date picker
+/// as well when pressed.
 Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
-  final widget = (field as FastDatePickerState).widget;
+  final FastDatePickerState(:context, :didChange, :widget) =
+      field as FastDatePickerState;
 
   Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
@@ -251,7 +275,7 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
-      context: field.context,
+      context: context,
       currentDate: widget.currentDate,
       errorFormatText: widget.errorFormatText,
       errorInvalidText: widget.errorInvalidText,
@@ -273,14 +297,10 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
       textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
-      if (value != null) field.didChange(value);
+      if (value != null) didChange(value);
       return value;
     });
   }
-
-  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
-  final iconButtonBuilder =
-      widget.iconButtonBuilder ?? datePickerIconButtonBuilder;
 
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
@@ -290,26 +310,31 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
-            child: textBuilder(field),
+            child: widget.textBuilder(field),
           ),
-          iconButtonBuilder(field, show),
+          widget.iconButtonBuilder(field, show),
         ],
       ),
     ),
   );
 }
 
+/// The default [FastDatePicker] Cupertino [FormFieldBuilder].
+///
+/// Returns a [CupertinoFormRow] that contains either a [CupertinoDatePicker]
+/// or a [CupertinoButton] that shows a [CupertinoDatePicker] inside a modal
+/// popup when pressed.
 Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
-  final widget = (field as FastDatePickerState).widget;
+  final FastDatePickerState(:context, :didChange, :widget) =
+      field as FastDatePickerState;
   final CupertinoThemeData themeData = CupertinoTheme.of(field.context);
   final TextStyle textStyle = themeData.textTheme.textStyle;
-  final textBuilder = widget.textBuilder ?? datePickerTextBuilder;
 
   final text = Align(
     alignment: AlignmentDirectional.centerEnd,
     child: Padding(
       padding: const EdgeInsets.all(6.0),
-      child: textBuilder(field),
+      child: widget.textBuilder(field),
     ),
   );
 
@@ -334,12 +359,12 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
                       child: text,
                       onPressed: () {
                         showCupertinoModalPopup<DateTime>(
-                          context: field.context,
+                          context: context,
                           builder: (BuildContext context) =>
                               cupertinoDatePickerModalPopupBuilder(
                                   context, field),
                         ).then((DateTime? value) {
-                          if (value != null) field.didChange(value);
+                          if (value != null) didChange(value);
                         });
                       },
                     )
@@ -360,7 +385,7 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
               minimumYear: widget.minimumYear,
               minuteInterval: widget.minuteInterval,
               mode: widget.mode,
-              onDateTimeChanged: field.didChange,
+              onDateTimeChanged: didChange,
               showDayOfWeek: widget.showDayOfWeek,
               use24hFormat: widget.use24hFormat,
             ),
@@ -370,24 +395,19 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastDatePicker.builder].
+///
+/// Uses [materialDatePickerBuilder] by default on any [TargetPlatform].
+///
+/// Uses [cupertinoDatePickerBuilder] on [TargetPlatform.iOS] when
+/// [FastSwitchState.adaptive] is true.
 Widget datePickerBuilder(FormFieldState<DateTime> field) {
-  var builder = materialDatePickerBuilder;
+  field as FastDatePickerState;
 
-  if ((field as FastDatePickerState).adaptive) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        builder = cupertinoDatePickerBuilder;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-      default:
-        builder = materialDatePickerBuilder;
-        break;
-    }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS when field.adaptive:
+      return cupertinoDatePickerBuilder(field);
+    default:
+      return materialDatePickerBuilder(field);
   }
-
-  return builder(field);
 }

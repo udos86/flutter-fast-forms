@@ -12,6 +12,7 @@ typedef ShowFastDateRangePicker = Future<DateTimeRange?> Function(
 typedef FastDateRangePickerIconButtonBuilder = IconButton Function(
     FastDateRangePickerState field, ShowFastDateRangePicker show);
 
+/// A [FastFormField] that shows a Material Design date range picker.
 @immutable
 class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePicker({
@@ -49,7 +50,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     required this.firstDate,
     this.helpText,
     this.icon,
-    this.iconButtonBuilder,
+    this.iconButtonBuilder = dateRangePickerIconButtonBuilder,
     this.initialEntryMode = DatePickerEntryMode.calendar,
     this.keyboardType = TextInputType.datetime,
     this.locale,
@@ -58,7 +59,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     this.saveText,
     this.switchToCalendarEntryModeIcon,
     this.switchToInputEntryModeIcon,
-    this.textBuilder,
+    this.textBuilder = dateRangPickerTextBuilder,
     this.textDirection,
     this.textStyle,
     this.useRootNavigator = true,
@@ -83,7 +84,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final DateTime firstDate;
   final String? helpText;
   final Icon? icon;
-  final FastDateRangePickerIconButtonBuilder? iconButtonBuilder;
+  final FastDateRangePickerIconButtonBuilder iconButtonBuilder;
   final DatePickerEntryMode initialEntryMode;
   final TextInputType keyboardType;
   final DateTime lastDate;
@@ -92,7 +93,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final String? saveText;
   final Icon? switchToCalendarEntryModeIcon;
   final Icon? switchToInputEntryModeIcon;
-  final FastDateRangePickerTextBuilder? textBuilder;
+  final FastDateRangePickerTextBuilder textBuilder;
   final TextDirection? textDirection;
   final TextStyle? textStyle;
   final bool useRootNavigator;
@@ -101,27 +102,38 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   FastDateRangePickerState createState() => FastDateRangePickerState();
 }
 
+/// State associated with a [FastDateRangePicker] widget.
 class FastDateRangePickerState extends FastFormFieldState<DateTimeRange> {
   @override
   FastDateRangePicker get widget => super.widget as FastDateRangePicker;
 }
 
+/// Á [FastDateRangePickerTextBuilder] that is the default
+/// [FastDateRangePicker.textBuilder].
+///
+/// Returns a [Text] widget that shows the current
+/// [FastDateRangePickerState.value] formatted according to
+/// [FastDateRangePicker.dateFormat]
 Text dateRangPickerTextBuilder(FastDateRangePickerState field) {
-  final theme = Theme.of(field.context);
-  final format = field.widget.dateFormat.format;
-  final value = field.value;
-  final style = field.widget.textStyle ?? theme.textTheme.titleMedium;
+  final FastDateRangePickerState(:context, :enabled, :value, :widget) = field;
+  final theme = Theme.of(context);
+  final format = widget.dateFormat.format;
+  final style = widget.textStyle ?? theme.textTheme.titleMedium;
 
   return Text(
     value != null ? '${format(value.start)} - ${format(value.end)}' : '',
-    style: field.enabled ? style : style?.copyWith(color: theme.disabledColor),
+    style: enabled ? style : style?.copyWith(color: theme.disabledColor),
     textAlign: TextAlign.left,
   );
 }
 
+/// A [FastDateRangePickerIconButtonBuilder] that is the default
+/// [FastDateRangePicker.iconButtonBuilder].
+///
+/// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton dateRangePickerIconButtonBuilder(
     FastDateRangePickerState field, ShowFastDateRangePicker show) {
-  final widget = field.widget;
+  final FastDateRangePickerState(:widget) = field;
 
   return IconButton(
     alignment: Alignment.center,
@@ -130,8 +142,21 @@ IconButton dateRangePickerIconButtonBuilder(
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastDateRangePicker.builder].
+///
+/// Returns an [InkWell] that shows a Material Design date range picker when
+/// tapped.
+/// Also contains a [Text] widget that presents the current
+/// [FastDateRangePickerState.value] and an [IconButton] that shows the date
+/// range picker as well when pressed.
 Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
-  final widget = (field as FastDateRangePickerState).widget;
+  final FastDateRangePickerState(
+    :context,
+    :decoration,
+    :didChange,
+    :value,
+    :widget
+  ) = field as FastDateRangePickerState;
 
   Future<DateTimeRange?> show(DatePickerEntryMode entryMode) {
     return showDateRangePicker(
@@ -142,7 +167,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
       builder: widget.dialogBuilder,
       cancelText: widget.cancelText,
       confirmText: widget.confirmText,
-      context: field.context,
+      context: context,
       currentDate: widget.currentDate,
       errorFormatText: widget.errorFormatText,
       errorInvalidRangeText: widget.errorInvalidRangeText,
@@ -154,7 +179,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
       firstDate: widget.firstDate,
       helpText: widget.helpText,
       initialEntryMode: entryMode,
-      initialDateRange: field.value,
+      initialDateRange: value,
       keyboardType: widget.keyboardType,
       lastDate: widget.lastDate,
       locale: widget.locale,
@@ -165,26 +190,22 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
       textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
-      if (value != null) field.didChange(value);
+      if (value != null) didChange(value);
       return value;
     });
   }
 
-  final textBuilder = widget.textBuilder ?? dateRangPickerTextBuilder;
-  final iconButtonBuilder =
-      widget.iconButtonBuilder ?? dateRangePickerIconButtonBuilder;
-
   return InkWell(
     onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
-      decoration: field.decoration,
+      decoration: decoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Expanded(
-            child: textBuilder(field),
+            child: widget.textBuilder(field),
           ),
-          iconButtonBuilder(field, show),
+          widget.iconButtonBuilder(field, show),
         ],
       ),
     ),

@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 
 import '../form.dart';
 
+/// A [FastFormField] that contains either a [TextFormField] or a
+/// [CupertinoTextFormFieldRow].
 @immutable
 class FastTextField extends FastFormField<String> {
   const FastTextField({
@@ -30,6 +32,7 @@ class FastTextField extends FastFormField<String> {
     this.autocorrect = true,
     this.autofillHints,
     this.autofocus = false,
+    this.autovalidateOnTouched = true,
     this.buildCounter,
     this.canRequestFocus = true,
     this.clipBehavior = Clip.hardEdge,
@@ -94,6 +97,14 @@ class FastTextField extends FastFormField<String> {
   final bool autocorrect;
   final Iterable<String>? autofillHints;
   final bool autofocus;
+
+  /// Whether validation should take place when the field is
+  /// marked as touched, even though the [initialValue] did not change.
+  ///
+  /// Used in [FastTextFieldState.autovalidateMode] getter.
+  ///
+  /// When `false` [FastTextField.autovalidateMode] is applied.
+  final bool autovalidateOnTouched;
   final InputCounterWidgetBuilder? buildCounter;
   final bool canRequestFocus;
   final Clip clipBehavior;
@@ -158,6 +169,7 @@ class FastTextField extends FastFormField<String> {
   FastTextFieldState createState() => FastTextFieldState();
 }
 
+/// State associated with a [FastTextField] widget.
 class FastTextFieldState extends FastFormFieldState<String> {
   @override
   FastTextField get widget => super.widget as FastTextField;
@@ -169,11 +181,30 @@ class FastTextFieldState extends FastFormFieldState<String> {
     form?.onChanged();
   }
 
+  /// Returns [AutovalidateMode.always] when
+  /// [FastTextField.autovalidateOnTouched] is true and the [FastTextField] is
+  /// [touched].
+  ///
+  /// Returns [AutovalidateMode.disabled] when
+  /// [FastTextField.autovalidateOnTouched] is true and the [FastTextField] is
+  /// has not been [touched] yet.
+  ///
+  /// Returns [FastTextField.autovalidateMode] when
+  /// [FastTextField.autovalidateOnTouched] is false.
   AutovalidateMode get autovalidateMode {
-    return touched ? AutovalidateMode.always : AutovalidateMode.disabled;
+    if (widget.autovalidateOnTouched) {
+      return touched ? AutovalidateMode.always : AutovalidateMode.disabled;
+    }
+    return widget.autovalidateMode;
   }
 }
 
+/// A basic [InputCounterWidgetBuilder].
+///
+/// Returns a [Text] widget that displays the current character count in
+/// relation to the [FastTextField.maxLength].
+///
+/// Typically used as [FastTextField.buildCounter].
 Text inputCounterWidgetBuilder(
   BuildContext context, {
   required int currentLength,
@@ -186,23 +217,26 @@ Text inputCounterWidgetBuilder(
   );
 }
 
+/// The default [FastTextField] Material [FormFieldBuilder].
+///
+/// Returns a [TextFormField].
 Widget materialTextFieldBuilder(FormFieldState<String> field) {
-  final widget = (field as FastTextFieldState).widget;
+  final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
+      field as FastTextFieldState;
+  final FastTextField(:prefix, :suffix) = widget;
   final InputDecoration decoration = field.decoration.copyWith(
     hintText: widget.placeholder,
-    prefix:
-        widget.prefix != null && widget.prefix is! Icon ? widget.prefix : null,
-    prefixIcon: widget.prefix is Icon ? widget.prefix : null,
-    suffix:
-        widget.suffix != null && widget.suffix is! Icon ? widget.suffix : null,
-    suffixIcon: widget.suffix is Icon ? widget.suffix : null,
+    prefix: prefix != null && prefix is! Icon ? prefix : null,
+    prefixIcon: prefix is Icon ? prefix : null,
+    suffix: suffix != null && suffix is! Icon ? suffix : null,
+    suffixIcon: suffix is Icon ? suffix : null,
   );
 
   return TextFormField(
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
-    autovalidateMode: field.autovalidateMode,
+    autovalidateMode: autovalidateMode,
     buildCounter: widget.buildCounter,
     canRequestFocus: widget.canRequestFocus,
     clipBehavior: widget.clipBehavior,
@@ -220,7 +254,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
-    focusNode: widget.focusNode ?? field.focusNode,
+    focusNode: widget.focusNode ?? focusNode,
     keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
     initialValue: widget.initialValue,
@@ -234,7 +268,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
     onAppPrivateCommand: widget.onAppPrivateCommand,
-    onChanged: widget.enabled ? field.didChange : null,
+    onChanged: widget.enabled ? didChange : null,
     onEditingComplete: widget.onEditingComplete,
     onFieldSubmitted: widget.onFieldSubmitted,
     onSaved: widget.onSaved,
@@ -264,8 +298,12 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
   );
 }
 
+/// The default [FastTextField] Cupertino [FormFieldBuilder].
+///
+/// Returns a [CupertinoTextFormFieldRow].
 Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
-  final widget = (field as FastTextFieldState).widget;
+  final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
+      field as FastTextFieldState;
   final prefix = widget.prefix ??
       (widget.labelText is String ? Text(widget.labelText!) : null);
 
@@ -273,7 +311,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     autocorrect: widget.autocorrect,
     autofillHints: widget.autofillHints,
     autofocus: widget.autofocus,
-    autovalidateMode: field.autovalidateMode,
+    autovalidateMode: autovalidateMode,
     contextMenuBuilder: widget.contextMenuBuilder,
     cursorColor: widget.cursorColor,
     cursorHeight: widget.cursorHeight,
@@ -282,7 +320,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
-    focusNode: widget.focusNode ?? field.focusNode,
+    focusNode: widget.focusNode ?? focusNode,
     keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
     initialValue: widget.initialValue,
@@ -292,7 +330,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     minLines: widget.minLines,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
-    onChanged: widget.enabled ? field.didChange : null,
+    onChanged: widget.enabled ? didChange : null,
     onFieldSubmitted: widget.onFieldSubmitted,
     onEditingComplete: widget.onEditingComplete,
     onSaved: widget.onSaved,
@@ -319,24 +357,19 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
   );
 }
 
+/// A [FormFieldBuilder] that is the default [FastTextField.builder].
+///
+/// Uses [materialTextFieldBuilder] by default on any [TargetPlatform].
+///
+/// Uses [cupertinoTextFieldBuilder] on [TargetPlatform.iOS] when
+/// [FastTextFieldState.adaptive] is true.
 Widget textFieldBuilder(FormFieldState<String> field) {
-  var builder = materialTextFieldBuilder;
+  field as FastTextFieldState;
 
-  if ((field as FastTextFieldState).adaptive) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        builder = cupertinoTextFieldBuilder;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-      default:
-        builder = materialTextFieldBuilder;
-        break;
-    }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS when field.adaptive:
+      return cupertinoTextFieldBuilder(field);
+    default:
+      return materialTextFieldBuilder(field);
   }
-
-  return builder(field);
 }

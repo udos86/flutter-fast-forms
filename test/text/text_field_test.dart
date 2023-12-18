@@ -68,6 +68,30 @@ void main() {
     expect(state.value, text);
   });
 
+  testWidgets('validates FastTextField on touched',
+      (WidgetTester tester) async {
+    const errorText = 'Field is required';
+
+    await tester.pumpWidget(buildMaterialTestApp(
+      FastTextField(
+        name: 'text_field',
+        validator: (value) => value == null || value.isEmpty ? errorText : null,
+      ),
+    ));
+
+    final errorTextFinder = find.text(errorText);
+    expect(errorTextFinder, findsNothing);
+
+    final textFieldFinder = find.byType(FastTextField);
+    final state = tester.state(textFieldFinder) as FastTextFieldState;
+
+    await tester.tap(textFieldFinder);
+    state.focusNode.unfocus();
+    await tester.pumpAndSettle();
+
+    expect(errorTextFinder, findsOneWidget);
+  });
+
   testWidgets('validates FastTextField', (WidgetTester tester) async {
     const invalidText = 'This is an invalid text';
     const errorText = 'Invalid input text';
@@ -75,17 +99,14 @@ void main() {
     await tester.pumpWidget(buildMaterialTestApp(
       FastTextField(
         name: 'text_field',
+        autovalidateOnTouched: false,
         validator: (value) => value == invalidText ? errorText : null,
       ),
     ));
 
-    final state =
-        tester.state(find.byType(FastTextField)) as FastTextFieldState;
-
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    state.touched = true;
     await tester.enterText(find.byType(TextFormField), invalidText);
     await tester.pumpAndSettle();
 

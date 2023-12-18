@@ -35,7 +35,8 @@ class FastFormArrayItemState extends State<FastFormArrayItem> {
 
   @override
   Widget build(BuildContext context) {
-    final enabled = widget.field.enabled;
+    final FastFormArrayItem(:field, :index) = widget;
+    final FastFormArrayState(:enabled, :insert, :remove) = field;
 
     return Row(
       children: [
@@ -47,12 +48,11 @@ class FastFormArrayItemState extends State<FastFormArrayItem> {
         ),
         IconButton(
           icon: const Icon(Icons.add),
-          onPressed:
-              enabled ? () => widget.field.insert(widget.index + 1, '') : null,
+          onPressed: enabled ? () => insert(index + 1, '') : null,
         ),
         IconButton(
           icon: const Icon(Icons.delete),
-          onPressed: enabled ? () => widget.field.remove(widget.index) : null,
+          onPressed: enabled ? () => remove(index) : null,
         ),
         IconButton(
           icon: const Icon(Icons.drag_handle),
