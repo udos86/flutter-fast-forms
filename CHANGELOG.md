@@ -1,4 +1,14 @@
+## [14.1.0] - 12/18/2023
+
+* upgrades to Flutter `3.16.4`
+* adds dartdoc comments
+* adds Dart Patterns code refactoring
+* adds `autovalidateOnTouched` property to `FastTextField`
+* fix: `autovalidateMode` now works on `FastTextField`
+* fix: `optionsBuilder` now works on `FastChipsInput`
+
 ## [14.0.0] - 12/12/2023
+
 * upgrades to Flutter `3.16.3`
 * upgrades to intl `0.19.0.`
 * adds internal `Validators` refactoring
