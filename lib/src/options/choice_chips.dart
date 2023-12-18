@@ -165,10 +165,10 @@ class FastChoiceChipsState extends FastFormFieldState<List<String>> {
   FastChoiceChips get widget => super.widget as FastChoiceChips;
 }
 
-/// Returns the default [FastChoiceChips.initialValue].
+/// Fallback for setting the default [FastChoiceChips.initialValue].
 ///
-/// Maps all [FastChoiceChips.chips] where [FastChoiceChip.selected] is `true`
-/// to a [List] of [FastChoiceChip.value].
+/// Returns a [List] that contains every [FastChoiceChip.value] in
+/// [FastChoiceChips.chips] where [FastChoiceChip.selected] is `true`.
 List<String> _getInitialValue<T>(List<FastChoiceChip> chips) {
   return chips
       .where((chip) => chip.selected)

@@ -101,11 +101,11 @@ class FastRadioGroupState<T> extends FastFormFieldState<T> {
   FastRadioGroup<T> get widget => super.widget as FastRadioGroup<T>;
 }
 
-/// Returns the initially selected [FastRadioOption.value] when no
-/// [FastRadioGroup.initialValue] is set.
+/// Fallback for setting the default [FastRadioGroup.initialValue].
 ///
-/// When no [FastRadioOption.selected] is `true`, returns the value of the first
-/// element of [FastRadioGroup.options].
+/// Returns the last [FastRadioOption.value] in [FastRadioGroup.options] where
+/// [FastRadioOption.selected] is `true`. Otherwise returns the
+/// [FastRadioOption.value] of the first element of [FastRadioGroup.options].
 T? _getInitialValue<T>(List<FastRadioOption<T>> options) {
   return options
       .lastWhere((option) => option.selected, orElse: () => options.first)
@@ -123,7 +123,6 @@ T? _getInitialValue<T>(List<FastRadioOption<T>> options) {
 Widget radioOptionBuilder<T>(
     FastRadioOption<T> option, FastRadioGroupState<T> field) {
   final FastRadioGroupState<T>(:didChange, :value, :widget) = field;
-  final vertical = widget.orientation == FastRadioGroupOrientation.vertical;
   final tile = RadioListTile<T>(
     activeColor: widget.activeColor,
     controlAffinity: widget.controlAffinity,
@@ -148,7 +147,9 @@ Widget radioOptionBuilder<T>(
     visualDensity: option.visualDensity,
   );
 
-  return vertical ? tile : Expanded(child: tile);
+  return widget.orientation == FastRadioGroupOrientation.vertical
+      ? tile
+      : Expanded(child: tile);
 }
 
 /// A [FastRadioOptionsBuilder] that is the default
