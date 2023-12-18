@@ -97,6 +97,7 @@ class FastTextField extends FastFormField<String> {
   final bool autocorrect;
   final Iterable<String>? autofillHints;
   final bool autofocus;
+
   /// Whether validation should take place when the field is
   /// marked as touched, even though the [initialValue] did not change.
   ///
