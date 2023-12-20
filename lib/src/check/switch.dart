@@ -57,6 +57,7 @@ class FastSwitch extends FastFormField<bool> {
     this.secondary,
     this.selectedTileColor,
     this.shapeBorder,
+    this.showInputDecoration = true,
     this.splashRadius,
     this.subtitle,
     this.thumbColor,
@@ -98,6 +99,7 @@ class FastSwitch extends FastFormField<bool> {
   final Widget? secondary;
   final Color? selectedTileColor;
   final ShapeBorder? shapeBorder;
+  final bool showInputDecoration;
   final double? splashRadius;
   final Widget? subtitle;
   final dynamic thumbColor;
@@ -131,7 +133,6 @@ Widget? switchTitleBuilder(FastSwitchState field) {
       ? Text(
           text,
           style: TextStyle(
-            fontSize: 14.0,
             color: value ? Colors.black : Colors.grey,
           ),
         )
@@ -142,53 +143,59 @@ Widget? switchTitleBuilder(FastSwitchState field) {
 ///
 /// Returns an [InputDecorator] that contains a [SwitchListTile.adaptive].
 Widget materialSwitchBuilder(FormFieldState<bool> field) {
-  final FastSwitchState(:decoration, :didChange, :value!, :widget) =
+  final FastSwitchState(:didChange, :value!, :widget) =
       field as FastSwitchState;
   assert(widget.thumbColor == null ||
       widget.thumbColor is MaterialStateProperty<Color?>);
 
-  return InputDecorator(
-    decoration: decoration,
-    child: SwitchListTile.adaptive(
-      activeColor: widget.activeColor,
-      activeThumbImage: widget.activeThumbImage,
-      activeTrackColor: widget.activeTrackColor,
-      applyCupertinoTheme: widget.applyTheme,
-      autofocus: widget.autofocus,
-      contentPadding: widget.contentPadding,
-      controlAffinity: widget.controlAffinity,
-      dense: widget.dense,
-      dragStartBehavior: widget.dragStartBehavior,
-      enableFeedback: widget.enableFeedback,
-      focusNode: widget.focusNode,
-      hoverColor: widget.hoverColor,
-      inactiveThumbColor: widget.inactiveThumbColor,
-      inactiveThumbImage: widget.inactiveThumbImage,
-      inactiveTrackColor: widget.inactiveTrackColor,
-      isThreeLine: widget.isThreeLine,
-      materialTapTargetSize: widget.materialTapTargetSize,
-      mouseCursor: widget.mouseCursor,
-      onActiveThumbImageError: widget.onActiveThumbImageError,
-      onChanged: widget.enabled ? didChange : null,
-      onFocusChange: widget.onFocusChange,
-      onInactiveThumbImageError: widget.onInactiveThumbImageError,
-      overlayColor: widget.overlayColor,
-      secondary: widget.secondary,
-      selected: value,
-      selectedTileColor: widget.selectedTileColor,
-      shape: widget.shapeBorder,
-      splashRadius: widget.splashRadius,
-      subtitle: widget.subtitle,
-      thumbColor: widget.thumbColor,
-      thumbIcon: widget.thumbIcon,
-      tileColor: widget.tileColor,
-      title: widget.titleBuilder(field),
-      trackColor: widget.trackColor,
-      trackOutlineColor: widget.trackOutlineColor,
-      value: value,
-      visualDensity: widget.visualDensity,
-    ),
+  final switchListTile = SwitchListTile.adaptive(
+    activeColor: widget.activeColor,
+    activeThumbImage: widget.activeThumbImage,
+    activeTrackColor: widget.activeTrackColor,
+    applyCupertinoTheme: widget.applyTheme,
+    autofocus: widget.autofocus,
+    contentPadding: widget.contentPadding,
+    controlAffinity: widget.controlAffinity,
+    dense: widget.dense,
+    dragStartBehavior: widget.dragStartBehavior,
+    enableFeedback: widget.enableFeedback,
+    focusNode: widget.focusNode,
+    hoverColor: widget.hoverColor,
+    inactiveThumbColor: widget.inactiveThumbColor,
+    inactiveThumbImage: widget.inactiveThumbImage,
+    inactiveTrackColor: widget.inactiveTrackColor,
+    isThreeLine: widget.isThreeLine,
+    materialTapTargetSize: widget.materialTapTargetSize,
+    mouseCursor: widget.mouseCursor,
+    onActiveThumbImageError: widget.onActiveThumbImageError,
+    onChanged: widget.enabled ? didChange : null,
+    onFocusChange: widget.onFocusChange,
+    onInactiveThumbImageError: widget.onInactiveThumbImageError,
+    overlayColor: widget.overlayColor,
+    secondary: widget.secondary,
+    selected: value,
+    selectedTileColor: widget.selectedTileColor,
+    shape: widget.shapeBorder,
+    splashRadius: widget.splashRadius,
+    subtitle: widget.subtitle,
+    thumbColor: widget.thumbColor,
+    thumbIcon: widget.thumbIcon,
+    tileColor: widget.tileColor,
+    title: widget.titleBuilder(field),
+    trackColor: widget.trackColor,
+    trackOutlineColor: widget.trackOutlineColor,
+    value: value,
+    visualDensity: widget.visualDensity,
   );
+
+  if (widget.showInputDecoration) {
+    return InputDecorator(
+      decoration: field.decoration,
+      child: switchListTile,
+    );
+  }
+
+  return switchListTile;
 }
 
 /// The default [FastSwitch] Cupertino [FormFieldBuilder].
