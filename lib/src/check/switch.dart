@@ -143,8 +143,8 @@ Widget? switchTitleBuilder(FastSwitchState field) {
 ///
 /// Returns an [InputDecorator] that contains a [SwitchListTile.adaptive].
 Widget materialSwitchBuilder(FormFieldState<bool> field) {
-  final FastSwitchState(:didChange, :value!, :widget) =
-      field as FastSwitchState;
+  field as FastSwitchState;
+  final FastSwitchState(:decoration, :didChange, :value!, :widget) = field;
   assert(widget.thumbColor == null ||
       widget.thumbColor is MaterialStateProperty<Color?>);
 
@@ -190,7 +190,7 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
 
   if (widget.showInputDecoration) {
     return InputDecorator(
-      decoration: field.decoration,
+      decoration: decoration,
       child: switchListTile,
     );
   }
@@ -202,8 +202,8 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
 ///
 /// Returns a [CupertinoFormRow] that contains a [CupertinoSwitch].
 Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
-  final FastSwitchState(:didChange, :value!, :widget) =
-      field as FastSwitchState;
+  field as FastSwitchState;
+  final FastSwitchState(:didChange, :value!, :widget) = field;
   assert(widget.thumbColor == null || widget.thumbColor is Color);
 
   return CupertinoFormRow(

@@ -54,14 +54,14 @@ class FastSegmentedButtonState<T> extends FastFormFieldState<Set<T>> {
   FastSegmentedButton<T> get widget => super.widget as FastSegmentedButton<T>;
 }
 
-/// Fallback for setting the default [FastRadioGroup.initialValue].
+/// Fallback for setting the default [FastSegmentedButton.initialValue].
 ///
-/// Returns the last [FastRadioOption.value] in [FastRadioGroup.options] where
-/// [FastRadioOption.selected] is `true`. Otherwise returns the
-/// [FastRadioOption.value] of the first element of [FastRadioGroup.options].
+/// Returns an empty [Set] when [FastSegmentedButton.emptySelectionAllowed].
+/// Otherwise returns the [ButtonSegment.value] of the first element of
+/// [FastSegmentedButton.segments].
 Set<T> _getInitialValue<T>(
     List<ButtonSegment<T>> segments, bool emptySelectionAllowed) {
-  return emptySelectionAllowed ? const {} : {segments.first.value};
+  return emptySelectionAllowed ? <T>{} : {segments.first.value};
 }
 
 /// A [FormFieldBuilder] that is the default [FastSegmentedButton.builder].
@@ -69,26 +69,26 @@ Set<T> _getInitialValue<T>(
 /// Returns a [SegmentedButton] that contains the [FastSegmentedButton.segments]
 /// on any [TargetPlatform].
 Widget segmentedButtonBuilder<T>(FormFieldState<Set<T>> field) {
-  final FastSegmentedButtonState<T>(:didChange, :value!, :widget) =
-      field as FastSegmentedButtonState<T>;
+  field as FastSegmentedButtonState<T>;
+  final FastSegmentedButtonState<T>(:didChange, :value!, :widget) = field;
 
-  final button = SegmentedButton<T>(
+  final segmentedButton = SegmentedButton<T>(
     emptySelectionAllowed: widget.emptySelectionAllowed,
     multiSelectionEnabled: widget.multiSelectionEnabled,
+    segments: widget.segments,
     selectedIcon: widget.selectedIcon,
+    selected: value,
     showSelectedIcon: widget.showSelectedIcon,
     style: widget.style,
-    segments: widget.segments,
-    selected: value,
     onSelectionChanged: (newSelection) => didChange(newSelection),
   );
 
   if (widget.showInputDecoration) {
     return InputDecorator(
       decoration: field.decoration,
-      child: button,
+      child: segmentedButton,
     );
   }
 
-  return button;
+  return segmentedButton;
 }

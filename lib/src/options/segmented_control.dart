@@ -55,8 +55,8 @@ class FastSegmentedControlState<T> extends FastFormFieldState<T> {
 /// Returns a [CupertinoFormRow] that contains a
 /// [CupertinoSlidingSegmentedControl] on any [TargetPlatform].
 Widget segmentedControlBuilder<T>(FormFieldState<T> field) {
-  final FastSegmentedControlState<T>(:didChange, :value, :widget) =
-      field as FastSegmentedControlState<T>;
+  field as FastSegmentedControlState<T>;
+  final FastSegmentedControlState<T>(:didChange, :value, :widget) = field;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,

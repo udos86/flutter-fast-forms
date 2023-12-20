@@ -131,10 +131,10 @@ Widget? checkboxTitleBuilder(FastCheckboxState field) {
 ///
 /// Returns an [InputDecorator] that contains a [CheckboxListTile.adaptive].
 Widget materialCheckboxBuilder(FormFieldState<bool> field) {
-  final FastCheckboxState(:didChange, :value, :widget) =
-      field as FastCheckboxState;
+  field as FastCheckboxState;
+  final FastCheckboxState(:decoration, :didChange, :value, :widget) = field;
 
-  final checkbox = CheckboxListTile.adaptive(
+  final checkboxListTile = CheckboxListTile.adaptive(
     activeColor: widget.activeColor,
     autofocus: widget.autofocus,
     checkColor: widget.checkColor,
@@ -171,20 +171,20 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
 
   if (widget.showInputDecoration) {
     return InputDecorator(
-      decoration: field.decoration,
-      child: checkbox,
+      decoration: decoration,
+      child: checkboxListTile,
     );
   }
 
-  return checkbox;
+  return checkboxListTile;
 }
 
 /// The default [FastCheckbox] Cupertino [FormFieldBuilder].
 ///
 /// Returns a [CupertinoFormRow] that contains a [CupertinoCheckbox].
 Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
-  final FastCheckboxState(:didChange, :value, :widget) =
-      field as FastCheckboxState;
+  field as FastCheckboxState;
+  final FastCheckboxState(:didChange, :value, :widget) = field;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
