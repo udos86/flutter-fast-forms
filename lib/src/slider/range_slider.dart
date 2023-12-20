@@ -42,6 +42,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     this.overlayColor,
     this.prefixBuilder,
     this.semanticFormatterCallback,
+    this.showInputDecoration = true,
     this.suffixBuilder,
   }) : super(initialValue: initialValue ?? RangeValues(min, max));
 
@@ -57,6 +58,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   final MaterialStateProperty<Color?>? overlayColor;
   final FastRangeSliderPrefixBuilder? prefixBuilder;
   final String Function(double)? semanticFormatterCallback;
+  final bool showInputDecoration;
   final FastRangeSliderSuffixBuilder? suffixBuilder;
 
   @override
@@ -125,34 +127,40 @@ Widget rangeSliderSuffixBuilder(FastRangeSliderState field) {
 /// Returns an [InputDecorator] that contains a [RangeSlider] on any
 /// [TargetPlatform].
 Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
-  final FastRangeSliderState(:decoration, :didChange, :value!, :widget) =
-      field as FastRangeSliderState;
+  field as FastRangeSliderState;
+  final FastRangeSliderState(:decoration, :didChange, :value!, :widget) = field;
 
-  return InputDecorator(
-    decoration: decoration,
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
-        Expanded(
-          child: RangeSlider(
-            activeColor: widget.activeColor,
-            divisions: widget.divisions,
-            inactiveColor: widget.inactiveColor,
-            labels: widget.labelsBuilder?.call(field),
-            max: widget.max,
-            min: widget.min,
-            mouseCursor: widget.mouseCursor,
-            onChanged: widget.enabled ? didChange : null,
-            onChangeEnd: widget.onChangeEnd,
-            onChangeStart: widget.onChangeStart,
-            overlayColor: widget.overlayColor,
-            semanticFormatterCallback: widget.semanticFormatterCallback,
-            values: value,
-          ),
+  final rangeSlider = Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: <Widget>[
+      if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
+      Expanded(
+        child: RangeSlider(
+          activeColor: widget.activeColor,
+          divisions: widget.divisions,
+          inactiveColor: widget.inactiveColor,
+          labels: widget.labelsBuilder?.call(field),
+          max: widget.max,
+          min: widget.min,
+          mouseCursor: widget.mouseCursor,
+          onChanged: widget.enabled ? didChange : null,
+          onChangeEnd: widget.onChangeEnd,
+          onChangeStart: widget.onChangeStart,
+          overlayColor: widget.overlayColor,
+          semanticFormatterCallback: widget.semanticFormatterCallback,
+          values: value,
         ),
-        if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
-      ],
-    ),
+      ),
+      if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
+    ],
   );
+
+  if (widget.showInputDecoration) {
+    return InputDecorator(
+      decoration: decoration,
+      child: rangeSlider,
+    );
+  }
+
+  return rangeSlider;
 }

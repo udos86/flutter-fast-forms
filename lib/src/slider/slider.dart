@@ -49,6 +49,7 @@ class FastSlider extends FastFormField<double> {
     this.semanticFormatterCallback,
     this.secondaryActiveColor,
     this.secondaryTrackValue,
+    this.showInputDecoration = true,
     this.suffixBuilder,
     this.thumbColor,
   }) : super(initialValue: initialValue ?? min);
@@ -71,6 +72,7 @@ class FastSlider extends FastFormField<double> {
   final Color? secondaryActiveColor;
   final double? secondaryTrackValue;
   final SemanticFormatterCallback? semanticFormatterCallback;
+  final bool showInputDecoration;
   final FastSliderSuffixBuilder? suffixBuilder;
   final Color? thumbColor;
 
@@ -112,42 +114,48 @@ Widget sliderSuffixBuilder(FastSliderState field) {
 /// Returns an [InputDecorator] that contains an expanded [Slider.adaptive]
 /// as the only child of a [Row].
 Widget materialSliderBuilder(FormFieldState<double> field) {
-  final FastSliderState(:decoration, :didChange, :value!, :widget) =
-      field as FastSliderState;
+  field as FastSliderState;
+  final FastSliderState(:decoration, :didChange, :value!, :widget) = field;
 
-  return InputDecorator(
-    decoration: decoration,
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
-        Expanded(
-          child: Slider.adaptive(
-            activeColor: widget.activeColor,
-            allowedInteraction: widget.allowedInteraction,
-            autofocus: widget.autofocus,
-            divisions: widget.divisions,
-            focusNode: field.focusNode,
-            inactiveColor: widget.inactiveColor,
-            label: widget.labelBuilder?.call(field),
-            max: widget.max,
-            min: widget.min,
-            mouseCursor: widget.mouseCursor,
-            onChangeEnd: widget.onChangeEnd,
-            onChanged: widget.enabled ? didChange : null,
-            onChangeStart: widget.onChangeStart,
-            overlayColor: widget.overlayColor,
-            secondaryActiveColor: widget.secondaryActiveColor,
-            secondaryTrackValue: widget.secondaryTrackValue,
-            semanticFormatterCallback: widget.semanticFormatterCallback,
-            thumbColor: widget.thumbColor,
-            value: value,
-          ),
+  final slider = Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: <Widget>[
+      if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
+      Expanded(
+        child: Slider.adaptive(
+          activeColor: widget.activeColor,
+          allowedInteraction: widget.allowedInteraction,
+          autofocus: widget.autofocus,
+          divisions: widget.divisions,
+          focusNode: field.focusNode,
+          inactiveColor: widget.inactiveColor,
+          label: widget.labelBuilder?.call(field),
+          max: widget.max,
+          min: widget.min,
+          mouseCursor: widget.mouseCursor,
+          onChangeEnd: widget.onChangeEnd,
+          onChanged: widget.enabled ? didChange : null,
+          onChangeStart: widget.onChangeStart,
+          overlayColor: widget.overlayColor,
+          secondaryActiveColor: widget.secondaryActiveColor,
+          secondaryTrackValue: widget.secondaryTrackValue,
+          semanticFormatterCallback: widget.semanticFormatterCallback,
+          thumbColor: widget.thumbColor,
+          value: value,
         ),
-        if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
-      ],
-    ),
+      ),
+      if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
+    ],
   );
+
+  if (widget.showInputDecoration) {
+    return InputDecorator(
+      decoration: decoration,
+      child: slider,
+    );
+  }
+
+  return slider;
 }
 
 /// The default [FastSlider] Cupertino [FormFieldBuilder].
@@ -155,8 +163,8 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
 /// Returns a [CupertinoFormRow] that contains an expanded [CupertinoSlider]
 /// as the only child of a [Row].
 Widget cupertinoSliderBuilder(FormFieldState<double> field) {
-  final FastSliderState(:didChange, :value!, :widget) =
-      field as FastSliderState;
+  field as FastSliderState;
+  final FastSliderState(:didChange, :value!, :widget) = field;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
