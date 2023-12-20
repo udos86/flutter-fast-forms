@@ -9,6 +9,7 @@ export 'src/options/chips_input.dart';
 export 'src/options/choice_chips.dart';
 export 'src/options/dropdown.dart';
 export 'src/options/radio_group.dart';
+export 'src/options/segmented_button.dart';
 export 'src/options/segmented_control.dart';
 export 'src/slider/range_slider.dart';
 export 'src/slider/slider.dart';
