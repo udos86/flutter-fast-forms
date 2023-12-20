@@ -28,12 +28,10 @@ class ExampleApp extends StatelessWidget {
           title: title,
           themeMode: ThemeMode.light,
           theme: ThemeData(
-            useMaterial3: true,
             brightness: Brightness.light,
             colorSchemeSeed: Colors.green[700],
           ),
           darkTheme: ThemeData(
-            useMaterial3: true,
             brightness: Brightness.dark,
             colorSchemeSeed: Colors.green[700],
           ),
@@ -185,6 +183,32 @@ class FormPage extends StatelessWidget {
               'Dart',
               'TypeScript',
               'Angular',
+            ],
+          ),
+          FastSegmentedButton<String>(
+            name: 'segmentedButton',
+            labelText: 'Segmented Button',
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 24.0,
+              horizontal: 12.0,
+            ),
+            emptySelectionAllowed: true,
+            segments: const [
+              ButtonSegment(
+                value: 'iOS',
+                label: Text('iOS'),
+              ),
+              ButtonSegment(
+                  value: 'android',
+                  label: Text('Android'),
+                  icon: Icon(Icons.android_sharp)),
+              ButtonSegment(
+                  value: 'chrome-os',
+                  label: Text(
+                    'Chrome OS',
+                    textAlign: TextAlign.center,
+                  ),
+                  icon: Icon(Icons.laptop_chromebook)),
             ],
           ),
           FastChoiceChips(

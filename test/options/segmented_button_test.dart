@@ -4,14 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
 
-_findFastSegmentedButton() => find.byType(typeOf<FastSegmentedButton<String>>());
+findFastSegmentedButton() => find.byType(typeOf<FastSegmentedButton<String>>());
 
-_findInputDecorator() => find.byType(InputDecorator);
+findInputDecorator() => find.byType(InputDecorator);
 
-_findSegmentedButton() => find.byType(typeOf<SegmentedButton<String>>());
+findSegmentedButton() => find.byType(typeOf<SegmentedButton<String>>());
 
-_findButtonSegments() => find.descendant(
-      of: _findSegmentedButton(),
+findButtonSegments() => find.descendant(
+      of: findSegmentedButton(),
       matching: find.byType(Text),
     );
 
@@ -32,10 +32,10 @@ void main() {
       segments: segments,
     )));
 
-    expect(_findFastSegmentedButton(), findsOneWidget);
-    expect(_findInputDecorator(), findsOneWidget);
-    expect(_findSegmentedButton(), findsOneWidget);
-    expect(_findButtonSegments(), findsNWidgets(segments.length));
+    expect(findFastSegmentedButton(), findsOneWidget);
+    expect(findInputDecorator(), findsOneWidget);
+    expect(findSegmentedButton(), findsOneWidget);
+    expect(findButtonSegments(), findsNWidgets(segments.length));
   });
 
   testWidgets('renders without InputDecoration', (tester) async {
@@ -45,10 +45,10 @@ void main() {
       showInputDecoration: false,
     )));
 
-    expect(_findFastSegmentedButton(), findsOneWidget);
-    expect(_findInputDecorator(), findsNothing);
-    expect(_findSegmentedButton(), findsOneWidget);
-    expect(_findButtonSegments(), findsNWidgets(segments.length));
+    expect(findFastSegmentedButton(), findsOneWidget);
+    expect(findInputDecorator(), findsNothing);
+    expect(findSegmentedButton(), findsOneWidget);
+    expect(findButtonSegments(), findsNWidgets(segments.length));
   });
 
   testWidgets('updates FastSegmentedButton', (tester) async {
@@ -62,18 +62,17 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state(_findFastSegmentedButton())
-        as FastSegmentedButtonState<String>;
+    final state = tester.state(findFastSegmentedButton());
+    state as FastSegmentedButtonState<String>;
     expect(state.value, initialValue);
 
-    final buttonSegmentsFinder = _findButtonSegments();
-    await tester.tap(buttonSegmentsFinder.last);
+    await tester.tap(findButtonSegments().last);
     await tester.pumpAndSettle();
 
-    final testValue = {segments.last.value};
+    final updatedValue = {segments.last.value};
 
-    expect(spy.calledWith, testValue);
-    expect(state.value, testValue);
+    expect(spy.calledWith, updatedValue);
+    expect(state.value, updatedValue);
   });
 
   testWidgets('allows empty and multiple selections', (tester) async {
@@ -84,11 +83,11 @@ void main() {
       segments: segments,
     )));
 
-    final state = tester.state(_findFastSegmentedButton())
-        as FastSegmentedButtonState<String>;
+    final state = tester.state(findFastSegmentedButton());
+    state as FastSegmentedButtonState<String>;
     expect(state.value, <String>{});
 
-    final buttonSegmentsFinder = _findButtonSegments();
+    final buttonSegmentsFinder = findButtonSegments();
     await tester.tap(buttonSegmentsFinder.first);
     await tester.pumpAndSettle();
     await tester.tap(buttonSegmentsFinder.last);
