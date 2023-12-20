@@ -38,7 +38,7 @@ class TestItemState extends State<TestItem> {
 }
 
 void main() {
-  testWidgets('renders FastFormArray', (WidgetTester tester) async {
+  testWidgets('renders FastFormArray', (tester) async {
     const initialValue = [0, 10, 100];
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -53,7 +53,7 @@ void main() {
     expect(find.byType(TestItem), findsNWidgets(initialValue.length));
   });
 
-  testWidgets('renders empty FastFormArray', (WidgetTester tester) async {
+  testWidgets('renders empty FastFormArray', (tester) async {
     const emptyText = 'Form array is empty';
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -68,7 +68,7 @@ void main() {
     expect(tester.widget<Text>(find.byType(Text)).data, emptyText);
   });
 
-  testWidgets('updates FastFormArray value', (WidgetTester tester) async {
+  testWidgets('updates FastFormArray value', (tester) async {
     const initialValue = [0];
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -92,7 +92,7 @@ void main() {
     expect(state.value, [testValue]);
   });
 
-  testWidgets('adds FastFormArray item', (WidgetTester tester) async {
+  testWidgets('adds FastFormArray item', (tester) async {
     const initialValue = [0];
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -114,7 +114,7 @@ void main() {
     expect(find.byType(TestItem), findsNWidgets(initialValue.length + 1));
   });
 
-  testWidgets('inserts FastFormArray item', (WidgetTester tester) async {
+  testWidgets('inserts FastFormArray item', (tester) async {
     const initialValue = [0];
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -136,7 +136,7 @@ void main() {
     expect(find.byType(TestItem), findsNWidgets(initialValue.length + 1));
   });
 
-  testWidgets('removes FastFormArray item', (WidgetTester tester) async {
+  testWidgets('removes FastFormArray item', (tester) async {
     const initialValue = [0, 42];
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -158,7 +158,7 @@ void main() {
     expect(find.byType(TestItem), findsNWidgets(initialValue.length - 1));
   });
 
-  testWidgets('moves FastFormArray item', (WidgetTester tester) async {
+  testWidgets('moves FastFormArray item', (tester) async {
     const initialValue = [0, 42, 99];
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -192,7 +192,7 @@ void main() {
     expect(itemState.counter, testValue);
   });
 
-  testWidgets('resets FastFormArray', (WidgetTester tester) async {
+  testWidgets('resets FastFormArray', (tester) async {
     final formKey = GlobalKey<FormState>();
     const initialValue = [0, 42, 99];
 

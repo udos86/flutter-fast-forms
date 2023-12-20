@@ -12,7 +12,7 @@ void main() {
     options = const ['Alabama', 'Montana', 'Nebraska', 'Wyoming'];
   });
 
-  testWidgets('renders FastChipsInput as Wrap', (WidgetTester tester) async {
+  testWidgets('renders FastChipsInput as Wrap', (tester) async {
     const helperText = 'helper';
     const labelText = 'label';
 
@@ -32,8 +32,7 @@ void main() {
     expect(find.text(labelText), findsOneWidget);
   });
 
-  testWidgets('renders FastChipsInput as ListView',
-      (WidgetTester tester) async {
+  testWidgets('renders FastChipsInput as ListView', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       const FastChipsInput(name: 'input_chips', wrap: false),
     ));
@@ -43,7 +42,7 @@ void main() {
     expect(find.byType(TextFormField), findsNWidgets(2));
   });
 
-  testWidgets('shows InputChip', (WidgetTester tester) async {
+  testWidgets('shows InputChip', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastChipsInput(name: 'input_chips', options: options),
     ));
@@ -57,8 +56,7 @@ void main() {
     expect(find.byType(InputChip), findsOneWidget);
   });
 
-  testWidgets('updates FastChipsInput by text input',
-      (WidgetTester tester) async {
+  testWidgets('updates FastChipsInput by text input', (tester) async {
     final spy = OnChangedSpy<List<String>>();
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -82,8 +80,7 @@ void main() {
     expect(state.value, testValue);
   });
 
-  testWidgets('updates FastChipsInput by selecting option',
-      (WidgetTester tester) async {
+  testWidgets('updates FastChipsInput by selecting option', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastChipsInput(name: 'input_chips', options: options),
     ));
@@ -108,7 +105,7 @@ void main() {
     expect(state.value, {text});
   });
 
-  testWidgets('removes InputChip via backspace', (WidgetTester tester) async {
+  testWidgets('removes InputChip via backspace', (tester) async {
     const initialValue = ['Test1', 'Test2', 'Test3'];
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -133,8 +130,7 @@ void main() {
     expect(state.value, ['Test1', 'Test2']);
   });
 
-  testWidgets('adds zwsp character on new text input',
-      (WidgetTester tester) async {
+  testWidgets('adds zwsp character on new text input', (tester) async {
     const testInput = 't';
 
     await tester.pumpWidget(buildMaterialTestApp(

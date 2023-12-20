@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastRadioGroup widget', (WidgetTester tester) async {
+  testWidgets('renders FastRadioGroup widget', (tester) async {
     const options = [
       FastRadioOption(title: Text('Option 1'), value: 'option-1'),
       FastRadioOption(title: Text('Option 2'), value: 'option-2'),
@@ -26,8 +26,7 @@ void main() {
         findsNWidgets(options.length));
   });
 
-  testWidgets('renders FastRadioGroup widget horizontally',
-      (WidgetTester tester) async {
+  testWidgets('renders FastRadioGroup widget horizontally', (tester) async {
     const options = [
       FastRadioOption(title: Text('Option 1'), value: 'option-1'),
       FastRadioOption(title: Text('Option 2'), value: 'option-2'),
@@ -46,7 +45,7 @@ void main() {
         findsNWidgets(options.length));
   });
 
-  testWidgets('updates FastRadioGroup value', (WidgetTester tester) async {
+  testWidgets('updates FastRadioGroup value', (tester) async {
     const options = [
       FastRadioOption(title: Text('Option 1'), value: 'option-1'),
       FastRadioOption(title: Text('Option 2'), value: 'option-2'),
@@ -74,7 +73,7 @@ void main() {
     expect(state.value, testValue);
   });
 
-  testWidgets('validates FastRadioGroup', (WidgetTester tester) async {
+  testWidgets('validates FastRadioGroup', (tester) async {
     const errorText = 'Do not touch this';
     const invalidOption =
         FastRadioOption(title: Text('Invalid Option'), value: 'invalid-option');

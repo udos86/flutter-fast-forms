@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastDatePicker', (WidgetTester tester) async {
+  testWidgets('renders FastDatePicker', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
         name: 'date_picker',
@@ -22,7 +22,7 @@ void main() {
   });
 
   testWidgets('shows CalendarDatePicker on GestureDetector tap',
-      (WidgetTester tester) async {
+      (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
         name: 'date_picker',
@@ -37,7 +37,7 @@ void main() {
     expect(find.byType(InputDatePickerFormField), findsOneWidget);
   });
 
-  testWidgets('updates FastDatePicker', (WidgetTester tester) async {
+  testWidgets('updates FastDatePicker', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDatePicker(
         name: 'date_picker',
@@ -61,7 +61,7 @@ void main() {
     expect(find.text(datePickerText.data!), findsOneWidget);
   });
 
-  testWidgets('validates FastDatePicker', (WidgetTester tester) async {
+  testWidgets('validates FastDatePicker', (tester) async {
     const errorText = 'invalid date';
     final invalidDate = DateTime(1974);
 
@@ -87,7 +87,7 @@ void main() {
     expect(errorTextFinder, findsOneWidget);
   });
 
-  testWidgets('adapts FastDatePicker to Android', (WidgetTester tester) async {
+  testWidgets('adapts FastDatePicker to Android', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -104,7 +104,7 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets('adapts FastDatePicker to iOS', (WidgetTester tester) async {
+  testWidgets('adapts FastDatePicker to iOS', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildCupertinoTestApp(
@@ -123,7 +123,7 @@ void main() {
   });
 
   testWidgets('shows CupertinoDatePicker in CupertinoModalPopup',
-      (WidgetTester tester) async {
+      (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildCupertinoTestApp(

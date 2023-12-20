@@ -19,7 +19,7 @@ void main() {
     );
   });
 
-  testWidgets('renders FastSegmentedControl', (WidgetTester tester) async {
+  testWidgets('renders FastSegmentedControl', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(widget));
 
     final fastSegmentedControlFinder =
@@ -36,7 +36,7 @@ void main() {
     expect(segmentedButtonFinder, findsNWidgets(values.length));
   });
 
-  testWidgets('updates FastSegmentedControl', (WidgetTester tester) async {
+  testWidgets('updates FastSegmentedControl', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(widget));
 
     final state =

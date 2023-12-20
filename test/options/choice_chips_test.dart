@@ -15,7 +15,7 @@ void main() {
     ];
   });
 
-  testWidgets('renders FastChoiceChips', (WidgetTester tester) async {
+  testWidgets('renders FastChoiceChips', (tester) async {
     const helperText = 'helper';
     const labelText = 'label';
 
@@ -35,7 +35,7 @@ void main() {
     expect(find.text(labelText), findsOneWidget);
   });
 
-  testWidgets('updates FastChoiceChips', (WidgetTester tester) async {
+  testWidgets('updates FastChoiceChips', (tester) async {
     final spy = OnChangedSpy<List<String>>();
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -56,7 +56,7 @@ void main() {
     expect(state.value, testValue);
   });
 
-  testWidgets('validates FastChoiceChips', (WidgetTester tester) async {
+  testWidgets('validates FastChoiceChips', (tester) async {
     const errorText = 'At least one chip must be selected';
 
     await tester.pumpWidget(buildMaterialTestApp(

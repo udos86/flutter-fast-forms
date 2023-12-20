@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastCalendar', (WidgetTester tester) async {
+  testWidgets('renders FastCalendar', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastCalendar(
         name: 'calendar',
@@ -18,7 +18,7 @@ void main() {
     expect(find.byType(CalendarDatePicker), findsOneWidget);
   });
 
-  testWidgets('updates FastCalendar', (WidgetTester tester) async {
+  testWidgets('updates FastCalendar', (tester) async {
     final spy = OnChangedSpy<DateTime>();
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -42,7 +42,7 @@ void main() {
     expect(state.value?.day, day);
   });
 
-  testWidgets('validates FastCalendar', (WidgetTester tester) async {
+  testWidgets('validates FastCalendar', (tester) async {
     const invalidValue = 21;
     const errorText = 'Invalid day';
 

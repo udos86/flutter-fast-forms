@@ -3,7 +3,7 @@ import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('renders FastForm', (WidgetTester tester) async {
+  testWidgets('renders FastForm', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     await tester.pumpWidget(
@@ -22,7 +22,7 @@ void main() {
     expect(find.byType(FastTextField), findsOneWidget);
   });
 
-  testWidgets('registers form fields', (WidgetTester tester) async {
+  testWidgets('registers form fields', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     await tester.pumpWidget(
@@ -44,7 +44,7 @@ void main() {
     expect(formState?.values.containsValue(fieldState.value), true);
   });
 
-  testWidgets('updates form fields', (WidgetTester tester) async {
+  testWidgets('updates form fields', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     await tester.pumpWidget(
@@ -71,7 +71,7 @@ void main() {
     expect(formState?.values.containsValue(fieldState.value), true);
   });
 
-  testWidgets('calls callback on change', (WidgetTester tester) async {
+  testWidgets('calls callback on change', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     var onChangedCalled = false;
@@ -103,7 +103,7 @@ void main() {
     expect(onChangedValues.containsValue(text), true);
   });
 
-  testWidgets('resets FastForm', (WidgetTester tester) async {
+  testWidgets('resets FastForm', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     await tester.pumpWidget(
@@ -137,7 +137,7 @@ void main() {
     expect(state.value, state.widget.initialValue);
   });
 
-  testWidgets('saves FastForm', (WidgetTester tester) async {
+  testWidgets('saves FastForm', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     var onSavedCalled = false;

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastRangeSlider', (WidgetTester tester) async {
+  testWidgets('renders FastRangeSlider', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastRangeSlider(
         name: 'range_slider',
@@ -33,7 +33,7 @@ void main() {
     expect(suffixFinder, findsOneWidget);
   });
 
-  testWidgets('updates FastRangeSlider', (WidgetTester tester) async {
+  testWidgets('updates FastRangeSlider', (tester) async {
     final spy = OnChangedSpy<RangeValues>();
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -59,7 +59,7 @@ void main() {
     expect(find.text(testValues.end.toStringAsFixed(0)), findsOneWidget);
   });
 
-  testWidgets('validates FastRangeSlider', (WidgetTester tester) async {
+  testWidgets('validates FastRangeSlider', (tester) async {
     const errorText = 'Range is too narrow';
 
     await tester.pumpWidget(buildMaterialTestApp(

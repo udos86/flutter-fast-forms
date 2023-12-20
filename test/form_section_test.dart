@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_utils.dart';
 
 void main() {
-  testWidgets('renders FastFormSection', (WidgetTester tester) async {
+  testWidgets('renders FastFormSection', (tester) async {
     const header = Text('Test Form Section');
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -23,8 +23,7 @@ void main() {
     expect(find.byType(FastTextField), findsOneWidget);
   });
 
-  testWidgets('renders FastFormSection horizontally',
-      (WidgetTester tester) async {
+  testWidgets('renders FastFormSection horizontally', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       const FastFormSection(
         orientation: FastFormSectionOrientation.horizontal,
@@ -40,7 +39,7 @@ void main() {
     expect(find.byType(FastTextField), findsOneWidget);
   });
 
-  testWidgets('renders CupertinoFormSection', (WidgetTester tester) async {
+  testWidgets('renders CupertinoFormSection', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     const header = Text('Test Form Section');
@@ -62,8 +61,7 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets('renders CupertinoFormSection.insetGrouped',
-      (WidgetTester tester) async {
+  testWidgets('renders CupertinoFormSection.insetGrouped', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildMaterialTestApp(

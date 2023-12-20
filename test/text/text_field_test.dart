@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastTextField', (WidgetTester tester) async {
+  testWidgets('renders FastTextField', (tester) async {
     const prefix = Text('prefix');
     const suffix = Text('suffix');
 
@@ -21,7 +21,7 @@ void main() {
     expect(find.byWidget(suffix), findsOneWidget);
   });
 
-  testWidgets('builds input counter', (WidgetTester tester) async {
+  testWidgets('builds input counter', (tester) async {
     const maxLength = 7;
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -48,7 +48,7 @@ void main() {
     expect(inputCounterTextFinder, findsOneWidget);
   });
 
-  testWidgets('updates FastTextField', (WidgetTester tester) async {
+  testWidgets('updates FastTextField', (tester) async {
     final spy = OnChangedSpy<String>();
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -68,8 +68,7 @@ void main() {
     expect(state.value, text);
   });
 
-  testWidgets('validates FastTextField on touched',
-      (WidgetTester tester) async {
+  testWidgets('validates FastTextField on touched', (tester) async {
     const errorText = 'Field is required';
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -92,7 +91,7 @@ void main() {
     expect(errorTextFinder, findsOneWidget);
   });
 
-  testWidgets('validates FastTextField', (WidgetTester tester) async {
+  testWidgets('validates FastTextField', (tester) async {
     const invalidText = 'This is an invalid text';
     const errorText = 'Invalid input text';
 
@@ -113,7 +112,7 @@ void main() {
     expect(errorTextFinder, findsOneWidget);
   });
 
-  testWidgets('adapts FastTextField to Android', (WidgetTester tester) async {
+  testWidgets('adapts FastTextField to Android', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -125,7 +124,7 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets('adapts FastTextField to iOS', (WidgetTester tester) async {
+  testWidgets('adapts FastTextField to iOS', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildMaterialTestApp(

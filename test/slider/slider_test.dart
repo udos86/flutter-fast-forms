@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders Material FastSlider', (WidgetTester tester) async {
+  testWidgets('renders Material FastSlider', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
         name: 'slider',
@@ -32,7 +32,7 @@ void main() {
     expect(suffixFinder, findsOneWidget);
   });
 
-  testWidgets('renders Cupertino FastSlider', (WidgetTester tester) async {
+  testWidgets('renders Cupertino FastSlider', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastSlider(
         name: 'slider',
@@ -58,7 +58,7 @@ void main() {
     expect(suffixFinder, findsOneWidget);
   });
 
-  testWidgets('updates FastSlider', (WidgetTester tester) async {
+  testWidgets('updates FastSlider', (tester) async {
     final spy = OnChangedSpy<double>();
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -79,7 +79,7 @@ void main() {
     expect(find.text(testValue.toStringAsFixed(0)), findsOneWidget);
   });
 
-  testWidgets('validates FastSlider', (WidgetTester tester) async {
+  testWidgets('validates FastSlider', (tester) async {
     const errorText = 'Value is too high';
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -100,7 +100,7 @@ void main() {
     expect(errorTextFinder, findsOneWidget);
   });
 
-  testWidgets('adapts FastSlider to Android', (WidgetTester tester) async {
+  testWidgets('adapts FastSlider to Android', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(buildMaterialTestApp(
@@ -112,7 +112,7 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets('adapts FastSlider to iOS', (WidgetTester tester) async {
+  testWidgets('adapts FastSlider to iOS', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
     await tester.pumpWidget(buildMaterialTestApp(

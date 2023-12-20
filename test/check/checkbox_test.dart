@@ -6,72 +6,88 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
 
+findFastCheckbox() => find.byType(FastCheckbox);
+
+findCheckboxListTile() => find.byType(CheckboxListTile);
+
 void main() {
-  testWidgets('renders FastCheckbox', (WidgetTester tester) async {
+  testWidgets('renders FastCheckbox', (tester) async {
     const widget = FastCheckbox(
       name: 'checkbox',
       helperText: 'helper',
       labelText: 'label',
       titleText: 'title',
     );
-
     await tester.pumpWidget(buildMaterialTestApp(widget));
 
-    expect(find.byType(FastCheckbox), findsOneWidget);
-    expect(find.byType(CheckboxListTile), findsOneWidget);
+    expect(findFastCheckbox(), findsOneWidget);
+    expect(findInputDecorator(), findsOneWidget);
+    expect(findCheckboxListTile(), findsOneWidget);
+
     expect(find.text(widget.helperText!), findsOneWidget);
     expect(find.text(widget.labelText!), findsOneWidget);
     expect(find.text(widget.titleText!), findsOneWidget);
   });
 
-  testWidgets('updates FastCheckbox', (WidgetTester tester) async {
+  testWidgets('renders FastCheckbox without InputDecorator', (tester) async {
+    await tester.pumpWidget(buildMaterialTestApp(const FastCheckbox(
+      name: 'checkbox',
+      showInputDecoration: false,
+    )));
+
+    expect(findFastCheckbox(), findsOneWidget);
+    expect(findInputDecorator(), findsNothing);
+    expect(findCheckboxListTile(), findsOneWidget);
+  });
+
+  testWidgets('updates FastCheckbox', (tester) async {
     final spy = OnChangedSpy<bool>();
+    await tester.pumpWidget(buildMaterialTestApp(FastCheckbox(
+      name: 'checkbox',
+      titleText: 'Title',
+      onChanged: spy.fn,
+    )));
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastCheckbox(name: 'checkbox', titleText: 'title', onChanged: spy.fn),
-    ));
-
-    final state = tester.state(find.byType(FastCheckbox)) as FastCheckboxState;
+    final state = tester.state(findFastCheckbox()) as FastCheckboxState;
     expect(state.value, state.widget.initialValue);
 
     final testValue = !state.widget.initialValue!;
 
-    await tester.tap(find.byType(CheckboxListTile));
+    await tester.tap(findCheckboxListTile());
     await tester.pumpAndSettle();
 
     expect(spy.calledWith, testValue);
     expect(state.value, testValue);
   });
 
-  testWidgets('validates FastCheckbox', (WidgetTester tester) async {
+  testWidgets('validates FastCheckbox', (tester) async {
     const errorText = 'Must be checked';
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastCheckbox(
-        name: 'checkbox',
-        titleText: 'title',
-        initialValue: true,
-        validator: (value) => value! ? null : errorText,
-      ),
-    ));
-
-    final state = tester.state(find.byType(FastCheckbox)) as FastCheckboxState;
+    await tester.pumpWidget(buildMaterialTestApp(FastCheckbox(
+      name: 'checkbox',
+      titleText: 'title',
+      initialValue: true,
+      validator: (value) => value! ? null : errorText,
+    )));
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
+    final state = tester.state(findFastCheckbox()) as FastCheckboxState;
     state.didChange(false);
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);
   });
 
-  testWidgets('adapts FastCheckbox to iOS', (WidgetTester tester) async {
+  testWidgets('adapts FastCheckbox to iOS', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(buildCupertinoTestApp(
-      const FastCheckbox(name: 'switch', adaptive: true, titleText: 'title'),
-    ));
+    await tester.pumpWidget(buildCupertinoTestApp(const FastCheckbox(
+      name: 'switch',
+      adaptive: true,
+      titleText: 'title',
+    )));
 
     expect(find.byType(CupertinoFormRow), findsOneWidget);
     expect(find.byType(CupertinoCheckbox), findsOneWidget);

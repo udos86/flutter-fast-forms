@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 typedef GenericTypeOf = Type Function<T>();
 
 Type typeOf<T>() => T;
+
+findInputDecorator() => find.byType(InputDecorator);
 
 MaterialApp buildMaterialTestApp(Widget testWidget,
     {GlobalKey<FormState>? formKey}) {

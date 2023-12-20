@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastDateRangerPicker', (WidgetTester tester) async {
+  testWidgets('renders FastDateRangerPicker', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDateRangePicker(
         name: 'date_range_picker',
@@ -24,7 +24,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('updates FastDateRangerPicker', (WidgetTester tester) async {
+  testWidgets('updates FastDateRangerPicker', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       FastDateRangePicker(
         name: 'date_range_picker',

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  testWidgets('renders FastDropdown', (WidgetTester tester) async {
+  testWidgets('renders FastDropdown', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(
       const FastDropdown<String>(name: 'dropdown', items: []),
     ));
@@ -16,7 +16,7 @@ void main() {
     expect(find.byType(typeOf<DropdownButton<String>>()), findsOneWidget);
   });
 
-  testWidgets('updates FastDropdown', (WidgetTester tester) async {
+  testWidgets('updates FastDropdown', (tester) async {
     const testIndex = 2;
     const itemsLength = 3;
     final items = List.generate(itemsLength, (int index) => 'item $index');
@@ -45,7 +45,7 @@ void main() {
     expect(state.value, testValue);
   });
 
-  testWidgets('validates FastDropdown', (WidgetTester tester) async {
+  testWidgets('validates FastDropdown', (tester) async {
     const invalidItem = 'invalid item';
     const errorText = 'Do not touch this';
 
