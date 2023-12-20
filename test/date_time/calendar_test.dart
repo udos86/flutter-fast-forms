@@ -4,33 +4,31 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
 
+findFastCalendar() => find.byType(FastCalendar);
+
 void main() {
   testWidgets('renders FastCalendar', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastCalendar(
-        name: 'calendar',
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastCalendar(
+      name: 'calendar',
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    )));
 
-    expect(find.byType(FastCalendar), findsOneWidget);
+    expect(findFastCalendar(), findsOneWidget);
     expect(find.byType(CalendarDatePicker), findsOneWidget);
   });
 
   testWidgets('updates FastCalendar', (tester) async {
     final spy = OnChangedSpy<DateTime>();
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastCalendar(
-        name: 'calendar',
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-        onChanged: spy.fn,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastCalendar(
+      name: 'calendar',
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      onChanged: spy.fn,
+    )));
 
-    final state = tester.state(find.byType(FastCalendar)) as FastCalendarState;
+    final state = tester.state(findFastCalendar()) as FastCalendarState;
     expect(state.value, state.widget.initialValue);
 
     const day = 21;
@@ -46,20 +44,17 @@ void main() {
     const invalidValue = 21;
     const errorText = 'Invalid day';
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastCalendar(
-        name: 'calendar',
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-        validator: (value) => value?.day == invalidValue ? errorText : null,
-      ),
-    ));
-
-    final state = tester.state(find.byType(FastCalendar)) as FastCalendarState;
+    await tester.pumpWidget(buildMaterialTestApp(FastCalendar(
+      name: 'calendar',
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      validator: (value) => value?.day == invalidValue ? errorText : null,
+    )));
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
+    final state = tester.state(findFastCalendar()) as FastCalendarState;
     state.didChange(DateTime(2020, 12, invalidValue));
     await tester.pumpAndSettle();
 
