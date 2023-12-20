@@ -141,9 +141,8 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T?>> {
 /// Renders a [ReorderableListView] when [reorderable] is set to `true` which
 /// allows moving single items around via drag & drop.
 Widget formArrayBuilder<T>(FormFieldState<List<T?>> field) {
-  field as FastFormArrayState<T>;
-  final FastFormArrayState<T>(:decoration, :_keys, :value, :widget) = field;
-
+  final FastFormArrayState<T>(:decoration, :_keys, :value, :widget) =
+      field as FastFormArrayState<T>;
   final hasItems = value is List<T?> && value.isNotEmpty;
   final children = <Widget>[
     if (hasItems)
@@ -158,9 +157,13 @@ Widget formArrayBuilder<T>(FormFieldState<List<T?>> field) {
         ? ReorderableListView(
             shrinkWrap: true,
             onReorder: (int oldIndex, int newIndex) {
-              final trueNewIndex =
-                  oldIndex > newIndex ? newIndex : newIndex - 1;
-              field.move(oldIndex, trueNewIndex);
+              /// see https://github.com/flutter/flutter/issues/24786
+              /// see https://github.com/flutter/flutter/pull/93146
+              if (newIndex > oldIndex) newIndex = newIndex - 1;
+
+              /// when index does not change, do not trigger a field update.
+              if (oldIndex == newIndex) return;
+              field.move(oldIndex, newIndex);
             },
             children: children,
           )
