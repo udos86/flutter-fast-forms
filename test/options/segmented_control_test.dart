@@ -22,33 +22,19 @@ void main() {
   testWidgets('renders FastSegmentedControl', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(widget));
 
-    final fastSegmentedControlFinder =
-        find.byType(typeOf<FastSegmentedControl<String>>());
-    final segmentedControlFinder =
-        find.byType(typeOf<CupertinoSlidingSegmentedControl<String>>());
-    final segmentedButtonFinder = find.descendant(
-      of: segmentedControlFinder,
-      matching: find.byType(Text),
-    );
-
-    expect(fastSegmentedControlFinder, findsOneWidget);
-    expect(segmentedControlFinder, findsOneWidget);
-    expect(segmentedButtonFinder, findsNWidgets(values.length));
+    expect(findFastSegmentedControl<String>(), findsOneWidget);
+    expect(findSegmentedControl<String>(), findsOneWidget);
+    expect(findSegmentedControlButton<String>(), findsNWidgets(values.length));
   });
 
   testWidgets('updates FastSegmentedControl', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(widget));
 
-    final state =
-        tester.state(find.byType(typeOf<FastSegmentedControl<String>>()))
-            as FastSegmentedControlState<String>;
+    final state = tester.state<FastSegmentedControlState<String>>(
+        findFastSegmentedControl<String>());
     expect(state.value, widget.initialValue);
 
-    final segmentedButtonFinder = find.descendant(
-      of: find.byType(typeOf<CupertinoSlidingSegmentedControl<String>>()),
-      matching: find.byType(Text),
-    );
-    await tester.tap(segmentedButtonFinder.last);
+    await tester.tap(findSegmentedControlButton<String>().last);
     await tester.pumpAndSettle();
 
     final testValue = values.last;

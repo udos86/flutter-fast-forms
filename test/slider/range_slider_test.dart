@@ -4,10 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
 
-findFastRangeSlider() => find.byType(FastRangeSlider);
-
-findRangeSlider() => find.byType(RangeSlider);
-
 void main() {
   testWidgets('renders FastRangeSlider', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp(FastRangeSlider(
@@ -25,7 +21,7 @@ void main() {
     expect(findInputDecorator(), findsOneWidget);
     expect(findRangeSlider(), findsOneWidget);
 
-    final widget = tester.widget(fastRangeSliderFinder) as FastRangeSlider;
+    final widget = tester.widget<FastRangeSlider>(fastRangeSliderFinder);
 
     final prefixFinder =
         find.text(widget.initialValue!.start.toStringAsFixed(0));
@@ -60,7 +56,7 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state(findFastRangeSlider()) as FastRangeSliderState;
+    final state = tester.state<FastRangeSliderState>(findFastRangeSlider());
     const updatedValues = RangeValues(5, 7);
 
     state.didChange(updatedValues);
@@ -84,7 +80,7 @@ void main() {
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    final state = tester.state(findFastRangeSlider()) as FastRangeSliderState;
+    final state = tester.state<FastRangeSliderState>(findFastRangeSlider());
 
     state.didChange(const RangeValues(8, 9));
     await tester.pumpAndSettle();

@@ -1,16 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
-
-findFastSwitch() => find.byType(FastSwitch);
-
-findSwitchListTile() => find.byType(SwitchListTile);
-
-findSwitch() => find.byType(Switch);
 
 void main() {
   testWidgets('renders FastSwitch', (tester) async {
@@ -46,7 +38,7 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state(findFastSwitch()) as FastSwitchState;
+    final state = tester.state<FastSwitchState>(findFastSwitch());
     expect(state.value, state.widget.initialValue);
 
     final testValue = !state.widget.initialValue!;
@@ -68,7 +60,7 @@ void main() {
       validator: (value) => value! ? null : errorText,
     )));
 
-    final state = tester.state(findFastSwitch()) as FastSwitchState;
+    final state = tester.state<FastSwitchState>(findFastSwitch());
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
@@ -102,8 +94,8 @@ void main() {
       titleText: 'title',
     )));
 
-    expect(find.byType(CupertinoFormRow), findsOneWidget);
-    expect(find.byType(CupertinoSwitch), findsOneWidget);
+    expect(findCupertinoFormRow(), findsOneWidget);
+    expect(findCupertinoSwitch(), findsOneWidget);
 
     debugDefaultTargetPlatformOverride = null;
   });

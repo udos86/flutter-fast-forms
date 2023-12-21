@@ -16,30 +16,29 @@ void main() {
     const helperText = 'helper';
     const labelText = 'label';
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastChipsInput(
-        name: 'input_chips',
-        helperText: helperText,
-        labelText: labelText,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
+      name: 'input_chips',
+      helperText: helperText,
+      labelText: labelText,
+    )));
 
-    expect(find.byType(FastChipsInput), findsOneWidget);
-    expect(find.byType(Wrap), findsOneWidget);
-    expect(find.byType(TextFormField), findsNWidgets(2));
+    expect(findFastChipsInput(), findsOneWidget);
+    expect(findWrap(), findsOneWidget);
+    expect(findTextFormField(), findsNWidgets(2));
 
     expect(find.text(helperText), findsOneWidget);
     expect(find.text(labelText), findsOneWidget);
   });
 
   testWidgets('renders FastChipsInput as ListView', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastChipsInput(name: 'input_chips', wrap: false),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
+      name: 'input_chips',
+      wrap: false,
+    )));
 
-    expect(find.byType(FastChipsInput), findsOneWidget);
-    expect(find.byType(ListView), findsOneWidget);
-    expect(find.byType(TextFormField), findsNWidgets(2));
+    expect(findFastChipsInput(), findsOneWidget);
+    expect(findListView(), findsOneWidget);
+    expect(findTextFormField(), findsNWidgets(2));
   });
 
   testWidgets('shows InputChip', (tester) async {
@@ -49,28 +48,28 @@ void main() {
 
     const text = 'Test';
 
-    await tester.enterText(find.byType(TextFormField).last, text);
+    await tester.enterText(findTextFormField().last, text);
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
-    expect(find.byType(InputChip), findsOneWidget);
+    expect(findInputChip(), findsOneWidget);
   });
 
   testWidgets('updates FastChipsInput by text input', (tester) async {
     final spy = OnChangedSpy<List<String>>();
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastChipsInput(name: 'input_chips', options: options, onChanged: spy.fn),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastChipsInput(
+      name: 'input_chips',
+      options: options,
+      onChanged: spy.fn,
+    )));
 
-    final state =
-        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
-
+    final state = tester.state<FastChipsInputState>(findFastChipsInput());
     expect(state.value, state.widget.initialValue);
 
     const text = 'Test';
 
-    await tester.enterText(find.byType(TextFormField).last, text);
+    await tester.enterText(findTextFormField().last, text);
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
@@ -81,15 +80,15 @@ void main() {
   });
 
   testWidgets('updates FastChipsInput by selecting option', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastChipsInput(name: 'input_chips', options: options),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastChipsInput(
+      name: 'input_chips',
+      options: options,
+    )));
 
-    final state =
-        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
+    final state = tester.state<FastChipsInputState>(findFastChipsInput());
     final text = options.last;
 
-    await tester.enterText(find.byType(TextFormField).last, text);
+    await tester.enterText(findTextFormField().last, text);
     await tester.pumpAndSettle();
 
     final optionFinder = find.descendant(
@@ -108,14 +107,14 @@ void main() {
   testWidgets('removes InputChip via backspace', (tester) async {
     const initialValue = ['Test1', 'Test2', 'Test3'];
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastChipsInput(name: 'input_chips', initialValue: initialValue),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
+      name: 'input_chips',
+      initialValue: initialValue,
+    )));
 
-    final state =
-        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
+    final state = tester.state<FastChipsInputState>(findFastChipsInput());
 
-    await tester.showKeyboard(find.byType(TextFormField).last);
+    await tester.showKeyboard(findTextFormField().last);
     await tester.pumpAndSettle();
 
     await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
@@ -133,14 +132,13 @@ void main() {
   testWidgets('adds zwsp character on new text input', (tester) async {
     const testInput = 't';
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastChipsInput(name: 'input_chips'),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
+      name: 'input_chips',
+    )));
 
-    final state =
-        tester.state(find.byType(FastChipsInput)) as FastChipsInputState;
+    final state = tester.state<FastChipsInputState>(findFastChipsInput());
 
-    await tester.enterText(find.byType(TextFormField).last, testInput);
+    await tester.enterText(findTextFormField().last, testInput);
     await tester.pumpAndSettle();
 
     expect(state.text, Zwsp.raw + testInput);

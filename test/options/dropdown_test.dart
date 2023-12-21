@@ -6,14 +6,14 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastDropdown', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastDropdown<String>(name: 'dropdown', items: []),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastDropdown<String>(
+      name: 'dropdown',
+      items: [],
+    )));
 
-    expect(find.byType(typeOf<FastDropdown<String>>()), findsOneWidget);
-    expect(
-        find.byType(typeOf<DropdownButtonFormField<String>>()), findsOneWidget);
-    expect(find.byType(typeOf<DropdownButton<String>>()), findsOneWidget);
+    expect(findFastDropdown<String>(), findsOneWidget);
+    expect(findDropdownButtonFormField<String>(), findsOneWidget);
+    expect(findDropdown<String>(), findsOneWidget);
   });
 
   testWidgets('updates FastDropdown', (tester) async {
@@ -22,18 +22,19 @@ void main() {
     final items = List.generate(itemsLength, (int index) => 'item $index');
     final spy = OnChangedSpy<String>();
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastDropdown<String>(name: 'dropdown', items: items, onChanged: spy.fn),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastDropdown<String>(
+      name: 'dropdown',
+      items: items,
+      onChanged: spy.fn,
+    )));
 
-    final state = tester.state(find.byType(typeOf<FastDropdown<String>>()))
-        as FastDropdownState<String>;
+    final state =
+        tester.state<FastDropdownState<String>>(findFastDropdown<String>());
 
-    final itemsFinder = find.byType(typeOf<DropdownMenuItem<String>>());
-
-    await tester.tap(find.byType(typeOf<DropdownButton<String>>()));
+    await tester.tap(findDropdownButton<String>());
     await tester.pumpAndSettle();
 
+    final itemsFinder = findDropdownMenuItem<String>();
     expect(itemsFinder, findsNWidgets(itemsLength));
 
     await tester.tap(itemsFinder.at(testIndex), warnIfMissed: false);
@@ -49,17 +50,14 @@ void main() {
     const invalidItem = 'invalid item';
     const errorText = 'Do not touch this';
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastDropdown<String>(
-        name: 'dropdown',
-        items: const ['item', invalidItem],
-        validator: (value) => value == invalidItem ? errorText : null,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastDropdown<String>(
+      name: 'dropdown',
+      items: const ['item', invalidItem],
+      validator: (value) => value == invalidItem ? errorText : null,
+    )));
 
-    final state =
-        tester.state(find.byType(typeOf<DropdownButtonFormField<String>>()))
-            as FormFieldState<String>;
+    final state = tester
+        .state<FormFieldState<String>>(findDropdownButtonFormField<String>());
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);

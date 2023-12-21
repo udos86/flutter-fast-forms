@@ -4,17 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
 
-findFastSegmentedButton() => find.byType(typeOf<FastSegmentedButton<String>>());
-
-findInputDecorator() => find.byType(InputDecorator);
-
-findSegmentedButton() => find.byType(typeOf<SegmentedButton<String>>());
-
-findButtonSegments() => find.descendant(
-      of: findSegmentedButton(),
-      matching: find.byType(Text),
-    );
-
 void main() {
   late List<ButtonSegment<String>> segments;
 
@@ -32,10 +21,10 @@ void main() {
       segments: segments,
     )));
 
-    expect(findFastSegmentedButton(), findsOneWidget);
+    expect(findFastSegmentedButton<String>(), findsOneWidget);
     expect(findInputDecorator(), findsOneWidget);
-    expect(findSegmentedButton(), findsOneWidget);
-    expect(findButtonSegments(), findsNWidgets(segments.length));
+    expect(findSegmentedButton<String>(), findsOneWidget);
+    expect(findButtonSegments<String>(), findsNWidgets(segments.length));
   });
 
   testWidgets('renders without InputDecoration', (tester) async {
@@ -45,10 +34,10 @@ void main() {
       showInputDecoration: false,
     )));
 
-    expect(findFastSegmentedButton(), findsOneWidget);
+    expect(findFastSegmentedButton<String>(), findsOneWidget);
     expect(findInputDecorator(), findsNothing);
-    expect(findSegmentedButton(), findsOneWidget);
-    expect(findButtonSegments(), findsNWidgets(segments.length));
+    expect(findSegmentedButton<String>(), findsOneWidget);
+    expect(findButtonSegments<String>(), findsNWidgets(segments.length));
   });
 
   testWidgets('updates FastSegmentedButton', (tester) async {
@@ -62,11 +51,11 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state(findFastSegmentedButton());
-    state as FastSegmentedButtonState<String>;
+    final state = tester.state<FastSegmentedButtonState<String>>(
+        findFastSegmentedButton<String>());
     expect(state.value, initialValue);
 
-    await tester.tap(findButtonSegments().last);
+    await tester.tap(findButtonSegments<String>().last);
     await tester.pumpAndSettle();
 
     final updatedValue = {segments.last.value};
@@ -83,11 +72,11 @@ void main() {
       segments: segments,
     )));
 
-    final state = tester.state(findFastSegmentedButton());
-    state as FastSegmentedButtonState<String>;
+    final state = tester.state<FastSegmentedButtonState<String>>(
+        findFastSegmentedButton<String>());
     expect(state.value, <String>{});
 
-    final buttonSegmentsFinder = findButtonSegments();
+    final buttonSegmentsFinder = findButtonSegments<String>();
     await tester.tap(buttonSegmentsFinder.first);
     await tester.pumpAndSettle();
     await tester.tap(buttonSegmentsFinder.last);

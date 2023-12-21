@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
-
-findFastCalendar() => find.byType(FastCalendar);
 
 void main() {
   testWidgets('renders FastCalendar', (tester) async {
@@ -15,7 +12,7 @@ void main() {
     )));
 
     expect(findFastCalendar(), findsOneWidget);
-    expect(find.byType(CalendarDatePicker), findsOneWidget);
+    expect(findCalendarDatePicker(), findsOneWidget);
   });
 
   testWidgets('updates FastCalendar', (tester) async {
@@ -28,7 +25,7 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state(findFastCalendar()) as FastCalendarState;
+    final state = tester.state<FastCalendarState>(findFastCalendar());
     expect(state.value, state.widget.initialValue);
 
     const day = 21;
@@ -54,7 +51,7 @@ void main() {
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    final state = tester.state(findFastCalendar()) as FastCalendarState;
+    final state = tester.state<FastCalendarState>(findFastCalendar());
     state.didChange(DateTime(2020, 12, invalidValue));
     await tester.pumpAndSettle();
 

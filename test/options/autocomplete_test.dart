@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -27,21 +26,22 @@ void main() {
 
     await tester.pumpWidget(buildMaterialTestApp(widget));
 
-    expect(find.byType(typeOf<FastAutocomplete<String>>()), findsOneWidget);
-    expect(find.byType(TextFormField), findsOneWidget);
+    expect(findFastAutocomplete<String>(), findsOneWidget);
+    expect(findTextFormField(), findsOneWidget);
 
     expect(find.text(widget.helperText!), findsOneWidget);
     expect(find.text(widget.labelText!), findsOneWidget);
   });
 
   testWidgets('shows FastAutocomplete options', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(name: 'autocomplete', options: options),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastAutocomplete<String>(
+      name: 'autocomplete',
+      options: options,
+    )));
 
     final text = options.last;
 
-    await tester.enterText(find.byType(TextFormField), text);
+    await tester.enterText(findTextFormField(), text);
     await tester.pumpAndSettle();
 
     expect(find.text(text), findsNWidgets(2));
@@ -50,21 +50,19 @@ void main() {
   testWidgets('updates FastAutocomplete', (tester) async {
     final spy = OnChangedSpy<String>();
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastAutocomplete<String>(
-        name: 'autocomplete',
-        options: options,
-        onChanged: spy.fn,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastAutocomplete<String>(
+      name: 'autocomplete',
+      options: options,
+      onChanged: spy.fn,
+    )));
 
-    final state = tester.state(find.byType(typeOf<FastAutocomplete<String>>()))
-        as FastAutocompleteState<String>;
+    final state = tester
+        .state<FastAutocompleteState<String>>(findFastAutocomplete<String>());
     expect(state.value, state.widget.initialValue);
 
     final testValue = options.first;
 
-    await tester.enterText(find.byType(TextFormField), testValue);
+    await tester.enterText(findTextFormField(), testValue);
     await tester.pumpAndSettle();
 
     expect(spy.calledWith, testValue);

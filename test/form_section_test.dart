@@ -9,34 +9,30 @@ void main() {
   testWidgets('renders FastFormSection', (tester) async {
     const header = Text('Test Form Section');
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastFormSection(
-        header: header,
-        children: [
-          FastTextField(name: 'text_field'),
-        ],
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastFormSection(
+      header: header,
+      children: [
+        FastTextField(name: 'text_field'),
+      ],
+    )));
 
-    expect(find.byType(FastFormSection), findsOneWidget);
+    expect(findFastFormSection(), findsOneWidget);
     expect(find.byWidget(header), findsOneWidget);
-    expect(find.byType(FastTextField), findsOneWidget);
+    expect(findFastTextField(), findsOneWidget);
   });
 
   testWidgets('renders FastFormSection horizontally', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastFormSection(
-        orientation: FastFormSectionOrientation.horizontal,
-        children: [
-          FastTextField(name: 'text_field'),
-        ],
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastFormSection(
+      orientation: FastFormSectionOrientation.horizontal,
+      children: [
+        FastTextField(name: 'text_field'),
+      ],
+    )));
 
-    expect(find.byType(FastFormSection), findsOneWidget);
-    expect(find.byType(Row), findsOneWidget);
-    expect(find.byType(Expanded), findsOneWidget);
-    expect(find.byType(FastTextField), findsOneWidget);
+    expect(findFastFormSection(), findsOneWidget);
+    expect(findRow(), findsOneWidget);
+    expect(findExpanded(), findsOneWidget);
+    expect(findFastTextField(), findsOneWidget);
   });
 
   testWidgets('renders CupertinoFormSection', (tester) async {
@@ -44,19 +40,17 @@ void main() {
 
     const header = Text('Test Form Section');
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastFormSection(
-        adaptive: true,
-        header: header,
-        children: [
-          FastTextField(name: 'text_field'),
-        ],
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastFormSection(
+      adaptive: true,
+      header: header,
+      children: [
+        FastTextField(name: 'text_field'),
+      ],
+    )));
 
-    expect(find.byType(CupertinoFormSection), findsOneWidget);
+    expect(findCupertinoFormSection(), findsOneWidget);
     expect(find.byWidget(header), findsOneWidget);
-    expect(find.byType(FastTextField), findsOneWidget);
+    expect(findFastTextField(), findsOneWidget);
 
     debugDefaultTargetPlatformOverride = null;
   });
@@ -64,18 +58,16 @@ void main() {
   testWidgets('renders CupertinoFormSection.insetGrouped', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastFormSection(
-        adaptive: true,
-        insetGrouped: true,
-        children: [
-          FastTextField(name: 'text_field'),
-        ],
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastFormSection(
+      adaptive: true,
+      insetGrouped: true,
+      children: [
+        FastTextField(name: 'text_field'),
+      ],
+    )));
 
-    expect(find.byType(CupertinoFormSection), findsOneWidget);
-    expect(find.byType(FastTextField), findsOneWidget);
+    expect(findCupertinoFormSection(), findsOneWidget);
+    expect(findFastTextField(), findsOneWidget);
 
     debugDefaultTargetPlatformOverride = null;
   });

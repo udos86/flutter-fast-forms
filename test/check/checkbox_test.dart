@@ -1,14 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
-
-findFastCheckbox() => find.byType(FastCheckbox);
-
-findCheckboxListTile() => find.byType(CheckboxListTile);
 
 void main() {
   testWidgets('renders FastCheckbox', (tester) async {
@@ -48,7 +42,7 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state(findFastCheckbox()) as FastCheckboxState;
+    final state = tester.state<FastCheckboxState>(findFastCheckbox());
     expect(state.value, state.widget.initialValue);
 
     final testValue = !state.widget.initialValue!;
@@ -73,7 +67,7 @@ void main() {
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    final state = tester.state(findFastCheckbox()) as FastCheckboxState;
+    final state = tester.state<FastCheckboxState>(findFastCheckbox());
     state.didChange(false);
     await tester.pumpAndSettle();
 
@@ -89,8 +83,8 @@ void main() {
       titleText: 'title',
     )));
 
-    expect(find.byType(CupertinoFormRow), findsOneWidget);
-    expect(find.byType(CupertinoCheckbox), findsOneWidget);
+    expect(findCupertinoFormRow(), findsOneWidget);
+    expect(findCupertinoCheckbox(), findsOneWidget);
 
     debugDefaultTargetPlatformOverride = null;
   });

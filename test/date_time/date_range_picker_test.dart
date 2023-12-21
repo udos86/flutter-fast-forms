@@ -6,18 +6,16 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastDateRangerPicker', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastDateRangePicker(
-        name: 'date_range_picker',
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastDateRangePicker(
+      name: 'date_range_picker',
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    )));
 
-    expect(find.byType(FastDateRangePicker), findsOneWidget);
-    expect(find.byType(IconButton), findsOneWidget);
+    expect(findFastDateRangePicker(), findsOneWidget);
+    expect(findIconButton(), findsOneWidget);
 
-    final inkWellFinder = find.byType(InkWell);
+    final inkWellFinder = findInkWell();
     expect(inkWellFinder.first, findsOneWidget);
 
     await tester.tap(inkWellFinder.first);
@@ -25,16 +23,14 @@ void main() {
   });
 
   testWidgets('updates FastDateRangerPicker', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastDateRangePicker(
-        name: 'date_range_picker',
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastDateRangePicker(
+      name: 'date_range_picker',
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    )));
 
-    final state = tester.state(find.byType(FastDateRangePicker))
-        as FastDateRangePickerState;
+    final state =
+        tester.state<FastDateRangePickerState>(findFastDateRangePicker());
     expect(state.value, state.widget.initialValue);
 
     state.didChange(DateTimeRange(

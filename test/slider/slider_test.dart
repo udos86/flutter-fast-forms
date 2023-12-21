@@ -1,14 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../test_utils.dart';
-
-findFastSlider() => find.byType(FastSlider);
-
-findSlider() => find.byType(Slider);
 
 void main() {
   testWidgets('renders FastSlider', (tester) async {
@@ -25,7 +20,7 @@ void main() {
     expect(findInputDecorator(), findsOneWidget);
     expect(findSlider(), findsOneWidget);
 
-    final widget = tester.widget(fastSliderFinder) as FastSlider;
+    final widget = tester.widget<FastSlider>(fastSliderFinder);
 
     final prefixFinder = find.byIcon(Icons.volume_up);
     final suffixFinder = find.text(widget.initialValue!.toStringAsFixed(0));
@@ -55,12 +50,12 @@ void main() {
     )));
 
     final fastSliderFinder = findFastSlider();
-    final sliderFinder = find.byType(CupertinoSlider);
+    final sliderFinder = findCupertinoSlider();
 
     expect(fastSliderFinder, findsOneWidget);
     expect(sliderFinder, findsOneWidget);
 
-    final widget = tester.widget(fastSliderFinder) as FastSlider;
+    final widget = tester.widget<FastSlider>(fastSliderFinder);
 
     final prefixFinder = find.byIcon(Icons.volume_up);
     final suffixFinder = find.text(widget.initialValue!.toStringAsFixed(0));
@@ -78,7 +73,7 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state(findFastSlider()) as FastSliderState;
+    final state = tester.state<FastSliderState>(findFastSlider());
     final testValue = state.widget.max;
 
     state.didChange(testValue);
@@ -96,7 +91,7 @@ void main() {
       validator: (value) => value! > 0 ? errorText : null,
     )));
 
-    final state = tester.state(findFastSlider()) as FastSliderState;
+    final state = tester.state<FastSliderState>(findFastSlider());
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
@@ -128,8 +123,8 @@ void main() {
       adaptive: true,
     )));
 
-    expect(find.byType(CupertinoFormRow), findsOneWidget);
-    expect(find.byType(CupertinoSlider), findsOneWidget);
+    expect(findCupertinoFormRow(), findsOneWidget);
+    expect(findCupertinoSlider(), findsOneWidget);
 
     debugDefaultTargetPlatformOverride = null;
   });

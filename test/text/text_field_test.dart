@@ -11,12 +11,15 @@ void main() {
     const prefix = Text('prefix');
     const suffix = Text('suffix');
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(name: 'text_field', prefix: prefix, suffix: suffix),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastTextField(
+      name: 'text_field',
+      prefix: prefix,
+      suffix: suffix,
+    )));
 
-    expect(find.byType(FastTextField), findsOneWidget);
-    expect(find.byType(TextFormField), findsOneWidget);
+    expect(findFastTextField(), findsOneWidget);
+    expect(findTextFormField(), findsOneWidget);
+
     expect(find.byWidget(prefix), findsOneWidget);
     expect(find.byWidget(suffix), findsOneWidget);
   });
@@ -24,16 +27,13 @@ void main() {
   testWidgets('builds input counter', (tester) async {
     const maxLength = 7;
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(
-        name: 'text_field',
-        maxLength: maxLength,
-        buildCounter: inputCounterWidgetBuilder,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastTextField(
+      name: 'text_field',
+      maxLength: maxLength,
+      buildCounter: inputCounterWidgetBuilder,
+    )));
 
-    final state =
-        tester.state(find.byType(FastTextField)) as FastTextFieldState;
+    final state = tester.state<FastTextFieldState>(findFastTextField());
 
     final inputCounterText = inputCounterWidgetBuilder(
       state.context,
@@ -51,17 +51,17 @@ void main() {
   testWidgets('updates FastTextField', (tester) async {
     final spy = OnChangedSpy<String>();
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastTextField(name: 'text_field', onChanged: spy.fn),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastTextField(
+      name: 'text_field',
+      onChanged: spy.fn,
+    )));
 
-    final state =
-        tester.state(find.byType(FastTextField)) as FastTextFieldState;
+    final state = tester.state<FastTextFieldState>(findFastTextField());
     expect(state.value, state.widget.initialValue);
 
     const text = 'This is a test';
 
-    await tester.enterText(find.byType(TextFormField), text);
+    await tester.enterText(findTextFormField(), text);
     await tester.pumpAndSettle();
 
     expect(spy.calledWith, text);
@@ -71,18 +71,16 @@ void main() {
   testWidgets('validates FastTextField on touched', (tester) async {
     const errorText = 'Field is required';
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastTextField(
-        name: 'text_field',
-        validator: (value) => value == null || value.isEmpty ? errorText : null,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastTextField(
+      name: 'text_field',
+      validator: (value) => value == null || value.isEmpty ? errorText : null,
+    )));
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    final textFieldFinder = find.byType(FastTextField);
-    final state = tester.state(textFieldFinder) as FastTextFieldState;
+    final textFieldFinder = findFastTextField();
+    final state = tester.state<FastTextFieldState>(textFieldFinder);
 
     await tester.tap(textFieldFinder);
     state.focusNode.unfocus();
@@ -95,18 +93,16 @@ void main() {
     const invalidText = 'This is an invalid text';
     const errorText = 'Invalid input text';
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      FastTextField(
-        name: 'text_field',
-        autovalidateOnTouched: false,
-        validator: (value) => value == invalidText ? errorText : null,
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(FastTextField(
+      name: 'text_field',
+      autovalidateOnTouched: false,
+      validator: (value) => value == invalidText ? errorText : null,
+    )));
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
 
-    await tester.enterText(find.byType(TextFormField), invalidText);
+    await tester.enterText(findTextFormField(), invalidText);
     await tester.pumpAndSettle();
 
     expect(errorTextFinder, findsOneWidget);
@@ -115,11 +111,12 @@ void main() {
   testWidgets('adapts FastTextField to Android', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(name: 'text_field', adaptive: true),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastTextField(
+      name: 'text_field',
+      adaptive: true,
+    )));
 
-    expect(find.byType(TextFormField), findsOneWidget);
+    expect(findTextFormField(), findsOneWidget);
 
     debugDefaultTargetPlatformOverride = null;
   });
@@ -127,12 +124,13 @@ void main() {
   testWidgets('adapts FastTextField to iOS', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(buildMaterialTestApp(
-      const FastTextField(name: 'text_field', adaptive: true),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp(const FastTextField(
+      name: 'text_field',
+      adaptive: true,
+    )));
 
-    expect(find.byType(CupertinoTextFormFieldRow), findsOneWidget);
-    expect(find.byType(CupertinoTextField), findsOneWidget);
+    expect(findCupertinoTextFormFieldRow(), findsOneWidget);
+    expect(findCupertinoTextField(), findsOneWidget);
 
     debugDefaultTargetPlatformOverride = null;
   });
