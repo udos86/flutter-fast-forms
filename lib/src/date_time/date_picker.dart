@@ -7,6 +7,9 @@ import '../form.dart';
 
 typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState field);
 
+typedef FastDatePickerWidgetBuilder = Widget? Function(
+    FastDatePickerState field);
+
 typedef FastDatePickerModalPopupBuilder = Widget Function(
     BuildContext context, FastDatePickerState field);
 
@@ -21,6 +24,13 @@ typedef FastDatePickerIconButtonBuilder = IconButton Function(
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
+    @Deprecated('Use cupertinoErrorBuilder instead.')
+    FastDatePickerWidgetBuilder? errorBuilder,
+    @Deprecated('Use cupertinoHelperBuilder instead.')
+    FastDatePickerWidgetBuilder? helperBuilder,
+    FastDatePickerWidgetBuilder cupertinoErrorBuilder = datePickerErrorBuilder,
+    FastDatePickerWidgetBuilder cupertinoHelperBuilder =
+        datePickerHelperBuilder,
     DateTime? initialValue,
     super.adaptive,
     super.autovalidateMode,
@@ -44,17 +54,16 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.barrierLabel,
     this.cancelText,
     this.confirmText,
+    this.cupertinoPrefixBuilder = datePickerPrefixBuilder,
     this.currentDate,
     this.dateFormat,
     this.dateOrder,
     this.dialogBuilder,
-    this.errorBuilder,
     this.errorFormatText,
     this.errorInvalidText,
     this.fieldHintText,
     this.fieldLabelText,
     required this.firstDate,
-    this.helperBuilder,
     this.height = 216.0,
     this.helpText,
     this.icon,
@@ -82,7 +91,9 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.textStyle,
     this.use24hFormat = false,
     this.useRootNavigator = true,
-  }) : super(initialValue: initialValue ?? DateTime.now());
+  })  : cupertinoErrorBuilder = helperBuilder ?? cupertinoErrorBuilder,
+        cupertinoHelperBuilder = helperBuilder ?? cupertinoHelperBuilder,
+        super(initialValue: initialValue ?? DateTime.now());
 
   final Offset? anchorPoint;
   final Color? backgroundColor;
@@ -91,18 +102,19 @@ class FastDatePicker extends FastFormField<DateTime> {
   final String? barrierLabel;
   final String? cancelText;
   final String? confirmText;
+  final FastDatePickerWidgetBuilder cupertinoErrorBuilder;
+  final FastDatePickerWidgetBuilder cupertinoHelperBuilder;
+  final FastDatePickerWidgetBuilder cupertinoPrefixBuilder;
   final DateTime? currentDate;
   final intl.DateFormat? dateFormat;
   final DatePickerDateOrder? dateOrder;
   final TransitionBuilder? dialogBuilder;
-  final FastErrorBuilder<DateTime>? errorBuilder;
   final String? errorFormatText;
   final String? errorInvalidText;
   final String? fieldHintText;
   final String? fieldLabelText;
   final DateTime firstDate;
   final double height;
-  final FastHelperBuilder<DateTime>? helperBuilder;
   final String? helpText;
   final Icon? icon;
   final FastDatePickerIconButtonBuilder iconButtonBuilder;
@@ -138,6 +150,27 @@ class FastDatePicker extends FastFormField<DateTime> {
 class FastDatePickerState extends FastFormFieldState<DateTime> {
   @override
   FastDatePicker get widget => super.widget as FastDatePicker;
+}
+
+/// A function that is the default [FastDatePicker.cupertinoErrorBuilder].
+///
+/// Uses [cupertinoErrorBuilder].
+Widget? datePickerErrorBuilder(FastDatePickerState field) {
+  return cupertinoErrorBuilder(field);
+}
+
+/// A function that is the default [FastDatePicker.cupertinoHelperBuilder].
+///
+/// Uses [cupertinoHelperBuilder].
+Widget? datePickerHelperBuilder(FastDatePickerState field) {
+  return cupertinoHelperBuilder(field);
+}
+
+/// A function that is the default [FastDatePicker.cupertinoPrefixBuilder].
+///
+/// Uses [cupertinoPrefixBuilder].
+Widget? datePickerPrefixBuilder(FastDatePickerState field) {
+  return cupertinoPrefixBuilder(field);
 }
 
 /// Returns the default [intl.DateFormat] to be used in [datePickerTextBuilder]
@@ -340,8 +373,9 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    helper: (widget.helperBuilder ?? helperBuilder)(field),
-    error: (widget.errorBuilder ?? errorBuilder)(field),
+    prefix: widget.cupertinoPrefixBuilder(field),
+    helper: widget.cupertinoHelperBuilder(field),
+    error: widget.cupertinoErrorBuilder(field),
     child: Column(
       children: [
         Row(

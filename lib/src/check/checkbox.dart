@@ -4,13 +4,19 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastCheckboxTitleBuilder = Widget? Function(FastCheckboxState field);
+typedef FastCheckboxWidgetBuilder = Widget? Function(FastCheckboxState field);
 
 /// A [FastFormField] that contains either a [CheckboxListTile.adaptive] or a
 /// [CupertinoCheckbox].
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   const FastCheckbox({
+    @Deprecated('Use cupertinoErrorBuilder instead.')
+    FastCheckboxWidgetBuilder? errorBuilder,
+    @Deprecated('Use cupertinoHelperBuilder instead.')
+    FastCheckboxWidgetBuilder? helperBuilder,
+    FastCheckboxWidgetBuilder cupertinoErrorBuilder = checkboxErrorBuilder,
+    FastCheckboxWidgetBuilder cupertinoHelperBuilder = checkboxHelperBuilder,
     super.adaptive,
     super.autovalidateMode,
     super.builder = checkboxBuilder,
@@ -33,13 +39,12 @@ class FastCheckbox extends FastFormField<bool> {
     this.checkboxShape,
     this.checkColor,
     this.controlAffinity = ListTileControlAffinity.platform,
+    this.cupertinoPrefixBuilder = checkboxPrefixBuilder,
     this.dense,
     this.enableFeedback,
-    this.errorBuilder,
     this.fillColor,
     this.focusColor,
     this.focusNode,
-    this.helperBuilder,
     this.hoverColor,
     this.inactiveColor,
     this.isError = false,
@@ -61,7 +66,8 @@ class FastCheckbox extends FastFormField<bool> {
     this.titleBuilder = checkboxTitleBuilder,
     this.tristate = false,
     this.visualDensity,
-  });
+  })  : cupertinoErrorBuilder = helperBuilder ?? cupertinoErrorBuilder,
+        cupertinoHelperBuilder = helperBuilder ?? cupertinoHelperBuilder;
 
   final bool autofocus;
   final Color? activeColor;
@@ -69,13 +75,14 @@ class FastCheckbox extends FastFormField<bool> {
   final OutlinedBorder? checkboxShape;
   final Color? checkColor;
   final ListTileControlAffinity controlAffinity;
+  final FastCheckboxWidgetBuilder cupertinoErrorBuilder;
+  final FastCheckboxWidgetBuilder cupertinoHelperBuilder;
+  final FastCheckboxWidgetBuilder cupertinoPrefixBuilder;
   final bool? dense;
   final bool? enableFeedback;
-  final FastErrorBuilder<bool>? errorBuilder;
   final MaterialStateProperty<Color?>? fillColor;
   final Color? focusColor;
   final FocusNode? focusNode;
-  final FastHelperBuilder<bool>? helperBuilder;
   final Color? hoverColor;
   final Color? inactiveColor;
   final bool isError;
@@ -94,7 +101,7 @@ class FastCheckbox extends FastFormField<bool> {
   final Widget? subtitle;
   final Color? tileColor;
   final String? titleText;
-  final FastCheckboxTitleBuilder titleBuilder;
+  final FastCheckboxWidgetBuilder titleBuilder;
   final bool tristate;
   final VisualDensity? visualDensity;
 
@@ -108,23 +115,46 @@ class FastCheckboxState extends FastFormFieldState<bool> {
   FastCheckbox get widget => super.widget as FastCheckbox;
 }
 
-/// A [FastCheckboxTitleBuilder] that is the default
+/// A function that is the default [FastCheckbox.cupertinoErrorBuilder].
+///
+/// Uses [cupertinoErrorBuilder].
+Widget? checkboxErrorBuilder(FastCheckboxState field) {
+  return cupertinoErrorBuilder(field);
+}
+
+/// A function that is the default [FastCheckbox.cupertinoHelperBuilder].
+///
+/// Uses [cupertinoHelperBuilder].
+Widget? checkboxHelperBuilder(FastCheckboxState field) {
+  return cupertinoHelperBuilder(field);
+}
+
+/// A function that is the default [FastCheckbox.cupertinoPrefixBuilder].
+///
+/// Uses [cupertinoPrefixBuilder].
+Widget? checkboxPrefixBuilder(FastCheckboxState field) {
+  return cupertinoPrefixBuilder(field);
+}
+
+/// A [FastCheckboxWidgetBuilder] that is the default
 /// [FastCheckbox.titleBuilder].
 ///
 /// Returns a [Text] widget when [FastCheckbox.titleText] is a [String]
-/// otherwise null.
+/// otherwise `null`.
 Widget? checkboxTitleBuilder(FastCheckboxState field) {
-  final FastCheckboxState(:value!, :widget) = field;
-  final FastCheckbox(titleText: text) = widget;
+  final FastCheckboxState(:value!) = field;
+  final FastCheckbox(:titleText) = field.widget;
 
-  return text is String
-      ? Text(
-          text,
-          style: TextStyle(
-            color: value ? Colors.black : Colors.grey,
-          ),
-        )
-      : null;
+  if (titleText is String) {
+    return Text(
+      titleText,
+      style: TextStyle(
+        color: value ? Colors.black : Colors.grey,
+      ),
+    );
+  }
+
+  return null;
 }
 
 /// The default [FastCheckbox] Material [FormFieldBuilder].
@@ -188,9 +218,9 @@ Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    prefix: widget.labelText is String ? Text(widget.labelText!) : null,
-    helper: (widget.helperBuilder ?? helperBuilder)(field),
-    error: (widget.errorBuilder ?? errorBuilder)(field),
+    prefix: widget.cupertinoPrefixBuilder(field),
+    helper: widget.cupertinoHelperBuilder(field),
+    error: widget.cupertinoErrorBuilder(field),
     child: CupertinoCheckbox(
       activeColor: widget.activeColor,
       autofocus: widget.autofocus,

@@ -5,13 +5,19 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastSwitchTitleBuilder = Widget? Function(FastSwitchState field);
+typedef FastSwitchWidgetBuilder = Widget? Function(FastSwitchState field);
 
 /// A [FastFormField] that contains either a [SwitchListTile.adaptive] or a
 /// [CupertinoSwitch].
 @immutable
 class FastSwitch extends FastFormField<bool> {
   const FastSwitch({
+    @Deprecated('Use cupertinoErrorBuilder instead.')
+    FastSwitchWidgetBuilder? errorBuilder,
+    @Deprecated('Use cupertinoHelperBuilder instead.')
+    FastSwitchWidgetBuilder? helperBuilder,
+    FastSwitchWidgetBuilder cupertinoErrorBuilder = switchErrorBuilder,
+    FastSwitchWidgetBuilder cupertinoHelperBuilder = switchHelperBuilder,
     super.adaptive,
     super.autovalidateMode,
     super.builder = switchBuilder,
@@ -34,13 +40,12 @@ class FastSwitch extends FastFormField<bool> {
     this.applyTheme,
     this.autofocus = false,
     this.controlAffinity = ListTileControlAffinity.platform,
+    this.cupertinoPrefixBuilder = switchPrefixBuilder,
     this.dragStartBehavior = DragStartBehavior.start,
     this.dense,
     this.enableFeedback,
-    this.errorBuilder,
     this.focusColor,
     this.focusNode,
-    this.helperBuilder,
     this.hoverColor,
     this.inactiveThumbColor,
     this.inactiveThumbImage,
@@ -68,7 +73,8 @@ class FastSwitch extends FastFormField<bool> {
     this.trackColor,
     this.trackOutlineColor,
     this.visualDensity,
-  });
+  })  : cupertinoErrorBuilder = helperBuilder ?? cupertinoErrorBuilder,
+        cupertinoHelperBuilder = helperBuilder ?? cupertinoHelperBuilder;
 
   final Color? activeColor;
   final ImageProvider<Object>? activeThumbImage;
@@ -76,13 +82,14 @@ class FastSwitch extends FastFormField<bool> {
   final bool? applyTheme;
   final bool autofocus;
   final ListTileControlAffinity controlAffinity;
+  final FastSwitchWidgetBuilder cupertinoErrorBuilder;
+  final FastSwitchWidgetBuilder cupertinoHelperBuilder;
+  final FastSwitchWidgetBuilder cupertinoPrefixBuilder;
   final bool? dense;
   final DragStartBehavior dragStartBehavior;
   final bool? enableFeedback;
-  final FastErrorBuilder<bool>? errorBuilder;
   final Color? focusColor;
   final FocusNode? focusNode;
-  final FastHelperBuilder<bool>? helperBuilder;
   final Color? hoverColor;
   final Color? inactiveThumbColor;
   final ImageProvider<Object>? inactiveThumbImage;
@@ -108,7 +115,7 @@ class FastSwitch extends FastFormField<bool> {
   final String? titleText;
   final MaterialStateProperty<Color?>? trackColor;
   final MaterialStateProperty<Color?>? trackOutlineColor;
-  final FastSwitchTitleBuilder titleBuilder;
+  final FastSwitchWidgetBuilder titleBuilder;
   final VisualDensity? visualDensity;
 
   @override
@@ -121,22 +128,45 @@ class FastSwitchState extends FastFormFieldState<bool> {
   FastSwitch get widget => super.widget as FastSwitch;
 }
 
+/// A function that is the default [FastSwitch.cupertinoErrorBuilder].
+///
+/// Uses [cupertinoErrorBuilder].
+Widget? switchErrorBuilder(FastSwitchState field) {
+  return cupertinoErrorBuilder(field);
+}
+
+/// A function that is the default [FastSwitch.cupertinoHelperBuilder].
+///
+/// Uses [cupertinoHelperBuilder].
+Widget? switchHelperBuilder(FastSwitchState field) {
+  return cupertinoHelperBuilder(field);
+}
+
+/// A function that is the default [FastSwitch.cupertinoPrefixBuilder].
+///
+/// Uses [cupertinoPrefixBuilder].
+Widget? switchPrefixBuilder(FastSwitchState field) {
+  return cupertinoPrefixBuilder(field);
+}
+
 /// A [FastSwitchTitleBuilder] that is the default [FastSwitch.titleBuilder].
 ///
 /// Returns a [Text] widget when [FastSwitch.titleText] is a [String]
 /// otherwise null.
 Widget? switchTitleBuilder(FastSwitchState field) {
   final FastSwitchState(:value!, :widget) = field;
-  final FastSwitch(titleText: text) = widget;
+  final FastSwitch(:titleText) = widget;
 
-  return text is String
-      ? Text(
-          text,
-          style: TextStyle(
-            color: value ? Colors.black : Colors.grey,
-          ),
-        )
-      : null;
+  if (titleText is String) {
+    return Text(
+      titleText,
+      style: TextStyle(
+        color: value ? Colors.black : Colors.grey,
+      ),
+    );
+  }
+
+  return null;
 }
 
 /// The default [FastSwitch] Material [FormFieldBuilder].
@@ -208,9 +238,9 @@ Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
-    prefix: widget.labelText is String ? Text(widget.labelText!) : null,
-    helper: (widget.helperBuilder ?? helperBuilder)(field),
-    error: (widget.errorBuilder ?? errorBuilder)(field),
+    prefix: widget.cupertinoPrefixBuilder(field),
+    helper: widget.cupertinoHelperBuilder(field),
+    error: widget.cupertinoErrorBuilder(field),
     child: CupertinoSwitch(
       offLabelColor: widget.offLabelColor,
       onLabelColor: widget.onLabelColor,

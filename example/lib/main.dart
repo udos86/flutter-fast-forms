@@ -395,7 +395,7 @@ class FormPage extends StatelessWidget {
                 child: const Icon(CupertinoIcons.volume_up),
               );
             },
-            helperBuilder: (FormFieldState<double> field) {
+            cupertinoHelperBuilder: (FormFieldState<double> field) {
               return const DefaultTextStyle(
                 style: TextStyle(
                   color: CupertinoColors.black,

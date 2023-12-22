@@ -5,10 +5,7 @@ import '../form.dart';
 typedef FastRangeSliderLabelsBuilder = RangeLabels Function(
     FastRangeSliderState field);
 
-typedef FastRangeSliderPrefixBuilder = Widget Function(
-    FastRangeSliderState field);
-
-typedef FastRangeSliderSuffixBuilder = Widget Function(
+typedef FastRangeSliderWidgetBuilder = Widget? Function(
     FastRangeSliderState field);
 
 /// A [FastFormField] that contains a [RangeSlider].
@@ -56,10 +53,10 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   final void Function(RangeValues)? onChangeEnd;
   final void Function(RangeValues)? onChangeStart;
   final MaterialStateProperty<Color?>? overlayColor;
-  final FastRangeSliderPrefixBuilder? prefixBuilder;
+  final FastRangeSliderWidgetBuilder? prefixBuilder;
   final String Function(double)? semanticFormatterCallback;
   final bool showInputDecoration;
-  final FastRangeSliderSuffixBuilder? suffixBuilder;
+  final FastRangeSliderWidgetBuilder? suffixBuilder;
 
   @override
   FastRangeSliderState createState() => FastRangeSliderState();
@@ -130,10 +127,13 @@ Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
   field as FastRangeSliderState;
   final FastRangeSliderState(:decoration, :didChange, :value!, :widget) = field;
 
+  final prefix = widget.prefixBuilder?.call(field);
+  final suffix = widget.suffixBuilder?.call(field);
+
   final rangeSlider = Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
-      if (widget.prefixBuilder != null) widget.prefixBuilder!(field),
+      if (prefix is Widget) prefix,
       Expanded(
         child: RangeSlider(
           activeColor: widget.activeColor,
@@ -151,7 +151,7 @@ Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
           values: value,
         ),
       ),
-      if (widget.suffixBuilder != null) widget.suffixBuilder!(field),
+      if (suffix is Widget) suffix,
     ],
   );
 

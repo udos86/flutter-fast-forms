@@ -21,19 +21,23 @@ class FastForm extends StatefulWidget {
   const FastForm({
     super.key,
     this.adaptive = false,
+    this.canPop,
     required this.children,
     required this.formKey,
     this.inputDecorationBuilder,
     this.inputDecorationTheme,
     this.onChanged,
+    this.onPopInvoked,
   });
 
   final bool adaptive;
+  final bool? canPop;
   final List<Widget> children;
   final GlobalKey<FormState> formKey;
   final FastInputDecorationBuilder? inputDecorationBuilder;
   final InputDecorationTheme? inputDecorationTheme;
   final FastFormChanged? onChanged;
+  final void Function(bool)? onPopInvoked;
 
   /// Returns the [FastFormState] instance for this [FastForm] widget via
   /// [_FastFormScope] inherited widget.
@@ -76,6 +80,9 @@ class FastFormState extends State<FastForm> {
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey,
+      // autovalidateMode: AutovalidateMode.onUserInteraction,
+      canPop: widget.canPop,
+      onPopInvoked: widget.onPopInvoked,
       child: _FastFormScope(
         formState: this,
         child: Column(
@@ -273,14 +280,29 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   }
 }
 
-/// The default function for building a [CupertinoFormRow.error] text
-Text? errorBuilder<T>(FastFormFieldState<T> field) {
-  final text = field.errorText;
-  return text is String ? Text(text) : null;
+/// A function typically used for building a [CupertinoFormRow] error widget.
+///
+/// Returns a [Text] widget when [FastFormFieldState.errorText] is a [String]
+/// otherwise `null`.
+Text? cupertinoErrorBuilder<T>(FastFormFieldState<T> field) {
+  final FastFormFieldState<T>(:errorText) = field;
+  return errorText is String ? Text(errorText) : null;
 }
 
-/// The default function for building a [CupertinoFormRow.helper] text
-Text? helperBuilder<T>(FastFormFieldState<T> field) {
-  final text = field.widget.helperText;
-  return text is String ? Text(text) : null;
+/// A function typically used for building a [CupertinoFormRow] helper widget.
+///
+/// Returns a [Text] widget when [FastFormField.helperText] is a [String]
+/// otherwise `null`.
+Text? cupertinoHelperBuilder<T>(FastFormFieldState<T> field) {
+  final FastFormField<T>(:helperText) = field.widget;
+  return helperText is String ? Text(helperText) : null;
+}
+
+/// A function typically used for building a [CupertinoFormRow] error widget.
+///
+/// Returns a [Text] widget when [FastFormField.labelText] is a [String]
+/// otherwise `null`.
+Text? cupertinoPrefixBuilder<T>(FastFormFieldState<T> field) {
+  final FastFormField<T>(:labelText) = field.widget;
+  return labelText is String ? Text(labelText) : null;
 }
