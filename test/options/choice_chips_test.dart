@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  late List<FastChoiceChip> chips;
+  late List<FastChoiceChip<String>> chips;
 
   setUp(() {
     chips = [
@@ -25,7 +25,7 @@ void main() {
       chips: chips,
     )));
 
-    expect(findFastChoiceChips(), findsOneWidget);
+    expect(findFastChoiceChips<String>(), findsOneWidget);
     expect(findChoiceChip(), findsNWidgets(chips.length));
 
     expect(find.text(helperText), findsOneWidget);
@@ -33,7 +33,7 @@ void main() {
   });
 
   testWidgets('updates FastChoiceChips', (tester) async {
-    final spy = OnChangedSpy<List<String>>();
+    final spy = OnChangedSpy<Set<String>>();
 
     await tester.pumpWidget(buildMaterialTestApp(FastChoiceChips(
       name: 'choice_chips',
@@ -41,7 +41,8 @@ void main() {
       onChanged: spy.fn,
     )));
 
-    final state = tester.state<FastChoiceChipsState>(findFastChoiceChips());
+    final state = tester
+        .state<FastChoiceChipsState<String>>(findFastChoiceChips<String>());
     expect(state.value, state.widget.initialValue);
     expect(state.value, <String>{});
 

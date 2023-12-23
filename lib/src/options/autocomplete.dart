@@ -38,7 +38,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     this.optionsViewOpenDirection = OptionsViewOpenDirection.down,
   })  : assert(options != null || optionsBuilder != null),
         _initialValue = initialValue,
-        fieldViewBuilder = fieldViewBuilder ?? _fieldViewBuilder<O>,
+        fieldViewBuilder = fieldViewBuilder ?? _fieldViewBuilder,
         willDisplayOption = willDisplayOption ?? _willDisplayOption,
         super(
           builder: builder ?? autocompleteBuilder<O>,

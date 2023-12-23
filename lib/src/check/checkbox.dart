@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastCheckboxWidgetBuilder = Widget? Function(FastCheckboxState field);
+typedef FastCheckboxWidgetBuilder = FastWidgetBuilder<FastCheckboxState>;
 
 /// A [FastFormField] that contains either a [CheckboxListTile.adaptive] or a
 /// [CupertinoCheckbox].

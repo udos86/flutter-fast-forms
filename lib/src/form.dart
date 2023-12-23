@@ -72,15 +72,12 @@ class FastFormState extends State<FastForm> {
 
   void unregister(FastFormFieldState field) => _fields.remove(field);
 
-  void onChanged() {
-    widget.onChanged?.call(values);
-  }
+  void onChanged() => widget.onChanged?.call(values);
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey,
-      // autovalidateMode: AutovalidateMode.onUserInteraction,
       canPop: widget.canPop,
       onPopInvoked: widget.onPopInvoked,
       child: _FastFormScope(
@@ -110,10 +107,6 @@ class _FastFormScope extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 }
-
-typedef FastErrorBuilder<T> = Widget? Function(FastFormFieldState<T> field);
-
-typedef FastHelperBuilder<T> = Widget? Function(FastFormFieldState<T> field);
 
 /// A single fast form field.
 ///
@@ -279,6 +272,9 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     });
   }
 }
+
+typedef FastWidgetBuilder<State extends FastFormFieldState> = Widget? Function(
+    State field);
 
 /// A function typically used for building a [CupertinoFormRow] error widget.
 ///

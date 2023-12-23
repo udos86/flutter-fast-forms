@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
-typedef FastSwitchWidgetBuilder = Widget? Function(FastSwitchState field);
+typedef FastSwitchWidgetBuilder = FastWidgetBuilder<FastSwitchState>;
 
 /// A [FastFormField] that contains either a [SwitchListTile.adaptive] or a
 /// [CupertinoSwitch].

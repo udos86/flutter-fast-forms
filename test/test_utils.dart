@@ -52,7 +52,7 @@ findFastCheckbox() => find.byType(FastCheckbox);
 
 findFastChipsInput() => find.byType(FastChipsInput);
 
-findFastChoiceChips() => find.byType(FastChoiceChips);
+findFastChoiceChips<T>() => find.byType(typeOf<FastChoiceChips<T>>());
 
 findFastDatePicker() => find.byType(FastDatePicker);
 

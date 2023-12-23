@@ -259,13 +259,13 @@ class FormPage extends StatelessWidget {
                       'Field must contain at least $minLength characters')
             ]),
           ),
-          const FastDropdown<String>(
+          const FastDropdown(
             name: 'dropdown',
             labelText: 'Dropdown Field',
             items: ['Norway', 'Sweden', 'Finland', 'Denmark', 'Iceland'],
             initialValue: 'Finland',
           ),
-          FastRadioGroup<String>(
+          FastRadioGroup(
             name: 'radio_group',
             labelText: 'Radio Group Model',
             options: const [
@@ -364,7 +364,7 @@ class FormPage extends StatelessWidget {
             labelText: 'Datepicker',
             showModalPopup: true,
           ),
-          FastSegmentedControl<String>(
+          FastSegmentedControl(
             name: 'segmented_control',
             labelText: 'Class',
             children: const {

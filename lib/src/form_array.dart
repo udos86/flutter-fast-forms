@@ -141,8 +141,8 @@ class FastFormArrayState<T> extends FastFormFieldState<List<T?>> {
 /// Renders a [ReorderableListView] when [reorderable] is set to `true` which
 /// allows moving single items around via drag & drop.
 Widget formArrayBuilder<T>(FormFieldState<List<T?>> field) {
-  final FastFormArrayState<T>(:decoration, :_keys, :value, :widget) =
-      field as FastFormArrayState<T>;
+  field as FastFormArrayState<T>;
+  final FastFormArrayState<T>(:decoration, :_keys, :value, :widget) = field;
   final hasItems = value is List<T?> && value.isNotEmpty;
   final children = <Widget>[
     if (hasItems)

@@ -6,7 +6,7 @@ import '../form.dart';
 
 typedef FastSliderLabelBuilder = String Function(FastSliderState field);
 
-typedef FastSliderWidgetBuilder = Widget? Function(FastSliderState field);
+typedef FastSliderWidgetBuilder = FastWidgetBuilder<FastSliderState>;
 
 /// A [FastFormField] that contains either a [Slider.adaptive] or a
 /// [CupertinoSlider].

@@ -5,8 +5,7 @@ import '../form.dart';
 typedef FastRangeSliderLabelsBuilder = RangeLabels Function(
     FastRangeSliderState field);
 
-typedef FastRangeSliderWidgetBuilder = Widget? Function(
-    FastRangeSliderState field);
+typedef FastRangeSliderWidgetBuilder = FastWidgetBuilder<FastRangeSliderState>;
 
 /// A [FastFormField] that contains a [RangeSlider].
 @immutable

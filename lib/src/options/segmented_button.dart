@@ -7,7 +7,7 @@ import '../form.dart';
 @immutable
 class FastSegmentedButton<T> extends FastFormField<Set<T>> {
   FastSegmentedButton({
-    FormFieldBuilder? builder,
+    FormFieldBuilder<Set<T>>? builder,
     Set<T>? initialValue,
     super.autovalidateMode,
     super.contentPadding,

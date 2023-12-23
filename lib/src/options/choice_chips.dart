@@ -4,7 +4,7 @@ import '../form.dart';
 
 /// A single [FastChoiceChips] chip.
 @immutable
-class FastChoiceChip
+class FastChoiceChip<T>
     implements
         ChipAttributes,
         SelectableChipAttributes,
@@ -40,7 +40,7 @@ class FastChoiceChip
     this.tooltip,
     required this.value,
     this.visualDensity,
-  }) : label = label is Widget ? label : Text(value);
+  }) : label = label is Widget ? label : Text(value.toString());
 
   @override
   final bool autofocus;
@@ -98,22 +98,23 @@ class FastChoiceChip
   final bool enabled;
   final Color? checkmarkColor;
   final bool? showCheckmark;
-  final String value;
+  final T value;
 
   @override
   bool get isEnabled => enabled;
 }
 
-typedef FastChoiceChipBuilder = Widget Function(
-    FastChoiceChip chip, FastChoiceChipsState field);
+typedef FastChoiceChipBuilder<T> = Widget Function(
+    FastChoiceChip<T> chip, FastChoiceChipsState<T> field);
 
 /// A [FastFormField] that contains a list of [ChoiceChip].
 @immutable
-class FastChoiceChips extends FastFormField<List<String>> {
+class FastChoiceChips<T> extends FastFormField<Set<T>> {
   FastChoiceChips({
-    List<String>? initialValue,
+    FormFieldBuilder<Set<T>>? builder,
+    FastChoiceChipBuilder<T>? chipBuilder,
+    Set<T>? initialValue,
     super.autovalidateMode,
-    super.builder = choiceChipsBuilder,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -127,7 +128,6 @@ class FastChoiceChips extends FastFormField<List<String>> {
     super.restorationId,
     super.validator,
     this.alignment = WrapAlignment.start,
-    this.chipBuilder = choiceChipBuilder,
     this.chipPadding,
     required this.chips,
     this.clipBehavior = Clip.none,
@@ -139,12 +139,16 @@ class FastChoiceChips extends FastFormField<List<String>> {
     this.showCheckmark,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
-  }) : super(initialValue: initialValue ?? _getInitialValue(chips));
+  })  : chipBuilder = chipBuilder ?? choiceChipBuilder,
+        super(
+          builder: builder ?? choiceChipsBuilder,
+          initialValue: initialValue ?? _getInitialValue(chips),
+        );
 
   final WrapAlignment alignment;
-  final FastChoiceChipBuilder chipBuilder;
+  final FastChoiceChipBuilder<T> chipBuilder;
   final EdgeInsetsGeometry? chipPadding;
-  final List<FastChoiceChip> chips;
+  final List<FastChoiceChip<T>> chips;
   final Clip clipBehavior;
   final WrapCrossAlignment crossAlignment;
   final Axis direction;
@@ -156,41 +160,41 @@ class FastChoiceChips extends FastFormField<List<String>> {
   final VerticalDirection verticalDirection;
 
   @override
-  FastChoiceChipsState createState() => FastChoiceChipsState();
+  FastChoiceChipsState<T> createState() => FastChoiceChipsState<T>();
 }
 
 /// State associated with a [FastChoiceChips] widget.
-class FastChoiceChipsState extends FastFormFieldState<List<String>> {
+class FastChoiceChipsState<T> extends FastFormFieldState<Set<T>> {
   @override
-  FastChoiceChips get widget => super.widget as FastChoiceChips;
+  FastChoiceChips<T> get widget => super.widget as FastChoiceChips<T>;
 }
 
 /// Fallback for setting the default [FastChoiceChips.initialValue].
 ///
 /// Returns a [List] that contains every [FastChoiceChip.value] in
 /// [FastChoiceChips.chips] where [FastChoiceChip.selected] is `true`.
-List<String> _getInitialValue<T>(List<FastChoiceChip> chips) {
-  return chips
-      .where((chip) => chip.selected)
-      .map((chip) => chip.value)
-      .toList();
+Set<T> _getInitialValue<T>(List<FastChoiceChip<T>> chips) {
+  return chips.where((chip) => chip.selected).map((chip) => chip.value).toSet();
 }
 
 /// A [FastChoiceChipBuilder] that is the default [FastChoiceChips.chipBuilder].
 ///
 /// Returns a [ChoiceChip] that updates the [FastChoiceChipsState.value] in
 /// [ChoiceChip.onSelected].
-ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
-  final FastChoiceChipsState(:didChange, :enabled, :value!, :widget) = field;
+ChoiceChip choiceChipBuilder<T>(
+    FastChoiceChip<T> chip, FastChoiceChipsState<T> field) {
+  final FastChoiceChipsState<T>(:didChange, :enabled, :value!, :widget) = field;
 
   void onSelected(selected) {
     chip.onSelected?.call(selected);
 
-    List<String> updatedValue;
+    Set<T> updatedValue;
     if (selected) {
-      updatedValue = [...value, chip.value];
+      updatedValue = {...value, chip.value};
     } else {
-      updatedValue = [...value]..remove(chip.value);
+      updatedValue = {
+        ...[...value]..remove(chip.value)
+      };
     }
 
     didChange(updatedValue);
@@ -235,9 +239,9 @@ ChoiceChip choiceChipBuilder(FastChoiceChip chip, FastChoiceChipsState field) {
 ///
 /// Returns an [InputDecorator] that wraps a [List] of [ChoiceChip] on any
 /// [TargetPlatform].
-Widget choiceChipsBuilder(FormFieldState field) {
-  final FastChoiceChipsState(:decoration, :widget) =
-      field as FastChoiceChipsState;
+Widget choiceChipsBuilder<T>(FormFieldState<Set<T>> field) {
+  field as FastChoiceChipsState<T>;
+  final FastChoiceChipsState<T>(:decoration, :widget) = field;
 
   return InputDecorator(
     decoration: decoration,

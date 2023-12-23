@@ -5,10 +5,9 @@ import 'package:intl/intl.dart' as intl;
 
 import '../form.dart';
 
-typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState field);
+typedef FastDatePickerWidgetBuilder = FastWidgetBuilder<FastDatePickerState>;
 
-typedef FastDatePickerWidgetBuilder = Widget? Function(
-    FastDatePickerState field);
+typedef FastDatePickerTextBuilder = Text Function(FastDatePickerState field);
 
 typedef FastDatePickerModalPopupBuilder = Widget Function(
     BuildContext context, FastDatePickerState field);

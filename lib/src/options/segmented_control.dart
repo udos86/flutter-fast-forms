@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 
 import '../form.dart';
 
-typedef FastSegmentedControlWidgetBuilder<T> = Widget? Function(
-    FastSegmentedControlState<T> field);
+typedef FastSegmentedControlWidgetBuilder<T>
+    = FastWidgetBuilder<FastSegmentedControlState<T>>;
 
 /// A [FastFormField] that contains a [CupertinoSlidingSegmentedControl].
 @immutable
 class FastSegmentedControl<T> extends FastFormField<T> {
   FastSegmentedControl({
-    FormFieldBuilder? builder,
+    FormFieldBuilder<T>? builder,
     @Deprecated('Use cupertinoErrorBuilder instead.')
     FastSegmentedControlWidgetBuilder<T>? errorBuilder,
     @Deprecated('Use cupertinoHelperBuilder instead.')

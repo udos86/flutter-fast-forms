@@ -9,7 +9,7 @@ typedef FastDropdownMenuItemsBuilder<T> = List<DropdownMenuItem<T>> Function(
 @immutable
 class FastDropdown<T> extends FastFormField<T> {
   const FastDropdown({
-    FormFieldBuilder? builder,
+    FormFieldBuilder<T>? builder,
     super.autovalidateMode,
     super.contentPadding,
     super.decoration,
@@ -47,7 +47,7 @@ class FastDropdown<T> extends FastFormField<T> {
     this.onTap,
     this.selectedItemBuilder,
     this.style,
-  }) : super(builder: builder ?? dropdownBuilder<T>);
+  }) : super(builder: builder ?? dropdownBuilder);
 
   final AlignmentGeometry alignment;
   final bool autofocus;
