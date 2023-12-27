@@ -26,10 +26,25 @@ void main() {
     )));
 
     expect(findFastChoiceChips<String>(), findsOneWidget);
+    expect(findInputDecorator(), findsOneWidget);
+    expect(findWrap(), findsOneWidget);
     expect(findChoiceChip(), findsNWidgets(chips.length));
 
     expect(find.text(helperText), findsOneWidget);
     expect(find.text(labelText), findsOneWidget);
+  });
+
+  testWidgets('renders FastChoiceChips', (tester) async {
+    await tester.pumpWidget(buildMaterialTestApp(FastChoiceChips(
+      name: 'choice_chips',
+      chips: chips,
+      showInputDecoration: false,
+    )));
+
+    expect(findFastChoiceChips<String>(), findsOneWidget);
+    expect(findInputDecorator(), findsNothing);
+    expect(findWrap(), findsOneWidget);
+    expect(findChoiceChip(), findsNWidgets(chips.length));
   });
 
   testWidgets('updates FastChoiceChips', (tester) async {

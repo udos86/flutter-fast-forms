@@ -137,6 +137,7 @@ class FastChoiceChips<T> extends FastFormField<Set<T>> {
     this.runAlignment = WrapAlignment.start,
     this.runSpacing = 0.0,
     this.showCheckmark,
+    this.showInputDecoration = true,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
   })  : chipBuilder = chipBuilder ?? choiceChipBuilder,
@@ -155,6 +156,7 @@ class FastChoiceChips<T> extends FastFormField<Set<T>> {
   final WrapAlignment runAlignment;
   final double runSpacing;
   final bool? showCheckmark;
+  final bool showInputDecoration;
   final double spacing;
   final TextDirection? textDirection;
   final VerticalDirection verticalDirection;
@@ -241,23 +243,29 @@ ChoiceChip choiceChipBuilder<T>(
 /// [TargetPlatform].
 Widget choiceChipsBuilder<T>(FormFieldState<Set<T>> field) {
   field as FastChoiceChipsState<T>;
-  final FastChoiceChipsState<T>(:decoration, :widget) = field;
+  final FastChoiceChipsState<T>(:widget) = field;
 
-  return InputDecorator(
-    decoration: decoration,
-    child: Wrap(
-      alignment: widget.alignment,
-      crossAxisAlignment: widget.crossAlignment,
-      clipBehavior: widget.clipBehavior,
-      direction: widget.direction,
-      runAlignment: widget.runAlignment,
-      runSpacing: widget.runSpacing,
-      spacing: widget.spacing,
-      textDirection: widget.textDirection,
-      verticalDirection: widget.verticalDirection,
-      children: [
-        for (final chip in widget.chips) widget.chipBuilder(chip, field),
-      ],
-    ),
+  final wrap = Wrap(
+    alignment: widget.alignment,
+    crossAxisAlignment: widget.crossAlignment,
+    clipBehavior: widget.clipBehavior,
+    direction: widget.direction,
+    runAlignment: widget.runAlignment,
+    runSpacing: widget.runSpacing,
+    spacing: widget.spacing,
+    textDirection: widget.textDirection,
+    verticalDirection: widget.verticalDirection,
+    children: [
+      for (final chip in widget.chips) widget.chipBuilder(chip, field),
+    ],
   );
+
+  if (widget.showInputDecoration) {
+    return InputDecorator(
+      decoration: field.decoration,
+      child: wrap,
+    );
+  }
+
+  return wrap;
 }
