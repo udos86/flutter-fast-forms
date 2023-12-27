@@ -1,3 +1,22 @@
+## [15.0.0] - 12/xx/2023
+
+* upgrades to Flutter `3.16.5`
+* adds new `FastSegmentendButton` that wraps Material [`SegmentedButton`](https://api.flutter.dev/flutter/material/SegmentedButton-class.html?gclid=CjwKCAiAs6-sBhBmEiwA1Nl8s5c8wRhB056CtAeuZP1-m_XUYi-jYGrVMh1lMnkwRmvKwlTelErtixoCAS4QAvD_BwE&gclsrc=aw.ds)
+* adds `showInputDecoration` property to `FastCheckbox`, `FastSwitch`, `FastChoiceChips`, `FastRangeSlider` and `FastSlider`
+* adds `canPop` and `onPopInvoked` properties to `FastForm`
+* adds `cupertinoErrorBuilder`, `cupertinoHelperBuilder` and `cupertinoPrefixBuilder` properties to `FastCheckbox`, `FastSwitch`, `FastDatePicker`, `FastSegmentendControl` and `FastSlider`
+* deprecates `errorBuilder` and `helperBuilder` on `FastCheckbox`, `FastSwitch`, `FastDatePicker`, `FastSegmentendControl` and `FastSlider`
+* changes value type of `FastChoiceChips` from `List<T>` to `Set<T>`
+* removes `errorBuilder` and `helperBuilder` default functions
+* adds `cupertinoErrorBuilder`, `cupertinoHelperBuilder` and `cupertinoPrefixBuilder` default functions
+* adds generic `FastWidgetBuilder` typedef 
+* replaces `FastCheckboxTitleBuilder` with `FastCheckboxWidgetBuilder` typedef
+* replaces `FastSwitchTitleBuilder` with `FastCheckboxWidgetBuilder` typedef
+* replaces `FastRangeSliderPrefixBuilder` and `FastRangeSliderSuffixBuilder` with `FastRangeSliderWidgetBuilder` typedef
+* replaces `FastSliderPrefixBuilder` and `FastSliderSuffixBuilder` with `FastSliderWidgetBuilder` typedef
+* adds `FastDatePickerWidgetBuilder` typedef
+* fixes generic typing in `FastChoiceChips` and `FastSegmentedControl`
+
 ## [14.1.0] - 12/18/2023
 
 * upgrades to Flutter `3.16.4`
