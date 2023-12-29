@@ -14,6 +14,7 @@ class FastRangeSlider extends FastFormField<RangeValues> {
     RangeValues? initialValue,
     super.autovalidateMode,
     super.builder = rangeSliderBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -124,7 +125,13 @@ Widget rangeSliderSuffixBuilder(FastRangeSliderState field) {
 /// [TargetPlatform].
 Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
   field as FastRangeSliderState;
-  final FastRangeSliderState(:decoration, :didChange, :value!, :widget) = field;
+  final FastRangeSliderState(
+    :decoration,
+    :didChange,
+    :enabled,
+    :value!,
+    :widget
+  ) = field;
 
   final prefix = widget.prefixBuilder?.call(field);
   final suffix = widget.suffixBuilder?.call(field);
@@ -142,7 +149,7 @@ Widget rangeSliderBuilder(FormFieldState<RangeValues> field) {
           max: widget.max,
           min: widget.min,
           mouseCursor: widget.mouseCursor,
-          onChanged: widget.enabled ? didChange : null,
+          onChanged: enabled ? didChange : null,
           onChangeEnd: widget.onChangeEnd,
           onChangeStart: widget.onChangeStart,
           overlayColor: widget.overlayColor,

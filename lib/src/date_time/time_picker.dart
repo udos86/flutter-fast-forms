@@ -17,6 +17,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
   const FastTimePicker({
     super.autovalidateMode,
     super.builder = timePickerBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -89,12 +90,12 @@ class FastTimePickerState extends FastFormFieldState<TimeOfDay> {
 /// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton timePickerIconButtonBuilder(
     FastTimePickerState field, ShowFastTimePicker show) {
-  final FastTimePickerState(:widget) = field;
+  final FastTimePickerState(:enabled, :widget) = field;
 
   return IconButton(
     alignment: Alignment.center,
     icon: widget.icon ?? const Icon(Icons.schedule),
-    onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
+    onPressed: enabled ? () => show(widget.initialEntryMode) : null,
   );
 }
 
@@ -125,6 +126,7 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
     :context,
     :decoration,
     :didChange,
+    :enabled,
     :value,
     :widget
   ) = field as FastTimePickerState;
@@ -156,7 +158,7 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
   }
 
   return InkWell(
-    onTap: widget.enabled ? () => show(widget.initialEntryMode) : null,
+    onTap: enabled ? () => show(widget.initialEntryMode) : null,
     child: InputDecorator(
       decoration: decoration,
       child: Row(

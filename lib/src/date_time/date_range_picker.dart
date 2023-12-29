@@ -19,6 +19,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     intl.DateFormat? format,
     super.autovalidateMode,
     super.builder = dateRangePickerBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -133,12 +134,12 @@ Text dateRangPickerTextBuilder(FastDateRangePickerState field) {
 /// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton dateRangePickerIconButtonBuilder(
     FastDateRangePickerState field, ShowFastDateRangePicker show) {
-  final FastDateRangePickerState(:widget) = field;
+  final FastDateRangePickerState(:enabled, :widget) = field;
 
   return IconButton(
     alignment: Alignment.center,
     icon: const Icon(Icons.today),
-    onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
+    onPressed: enabled ? () => show(widget.initialEntryMode) : null,
   );
 }
 
@@ -154,6 +155,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
     :context,
     :decoration,
     :didChange,
+    :enabled,
     :value,
     :widget
   ) = field as FastDateRangePickerState;
@@ -196,7 +198,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
   }
 
   return InkWell(
-    onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
+    onTap: enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
       decoration: decoration,
       child: Row(

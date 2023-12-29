@@ -23,6 +23,7 @@ class FastSlider extends FastFormField<double> {
     super.adaptive,
     super.autovalidateMode,
     super.builder = sliderBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -142,7 +143,8 @@ Widget sliderSuffixBuilder(FastSliderState field) {
 /// as the only child of a [Row].
 Widget materialSliderBuilder(FormFieldState<double> field) {
   field as FastSliderState;
-  final FastSliderState(:decoration, :didChange, :value!, :widget) = field;
+  final FastSliderState(:decoration, :didChange, :enabled, :value!, :widget) =
+      field;
 
   final prefix = widget.prefixBuilder?.call(field);
   final suffix = widget.suffixBuilder?.call(field);
@@ -164,7 +166,7 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
           min: widget.min,
           mouseCursor: widget.mouseCursor,
           onChangeEnd: widget.onChangeEnd,
-          onChanged: widget.enabled ? didChange : null,
+          onChanged: enabled ? didChange : null,
           onChangeStart: widget.onChangeStart,
           overlayColor: widget.overlayColor,
           secondaryActiveColor: widget.secondaryActiveColor,
@@ -194,7 +196,7 @@ Widget materialSliderBuilder(FormFieldState<double> field) {
 /// as the only child of a [Row].
 Widget cupertinoSliderBuilder(FormFieldState<double> field) {
   field as FastSliderState;
-  final FastSliderState(:didChange, :value!, :widget) = field;
+  final FastSliderState(:didChange, :enabled, :value!, :widget) = field;
 
   final prefix = widget.prefixBuilder?.call(field);
   final suffix = widget.suffixBuilder?.call(field);
@@ -215,7 +217,7 @@ Widget cupertinoSliderBuilder(FormFieldState<double> field) {
             max: widget.max,
             min: widget.min,
             thumbColor: widget.thumbColor ?? CupertinoColors.white,
-            onChanged: widget.enabled ? didChange : null,
+            onChanged: enabled ? didChange : null,
             onChangeEnd: widget.onChangeEnd,
             onChangeStart: widget.onChangeStart,
             value: value,

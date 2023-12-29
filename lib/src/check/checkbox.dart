@@ -20,6 +20,7 @@ class FastCheckbox extends FastFormField<bool> {
     super.adaptive,
     super.autovalidateMode,
     super.builder = checkboxBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -162,7 +163,8 @@ Widget? checkboxTitleBuilder(FastCheckboxState field) {
 /// Returns an [InputDecorator] that contains a [CheckboxListTile.adaptive].
 Widget materialCheckboxBuilder(FormFieldState<bool> field) {
   field as FastCheckboxState;
-  final FastCheckboxState(:decoration, :didChange, :value, :widget) = field;
+  final FastCheckboxState(:decoration, :didChange, :enabled, :value, :widget) =
+      field;
 
   final checkboxListTile = CheckboxListTile.adaptive(
     activeColor: widget.activeColor,
@@ -173,7 +175,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
     contentPadding: widget.contentPadding,
     controlAffinity: widget.controlAffinity,
     dense: widget.dense,
-    enabled: widget.enabled,
+    enabled: enabled,
     enableFeedback: widget.enableFeedback,
     fillColor: widget.fillColor,
     focusNode: widget.focusNode,
@@ -182,7 +184,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
     isThreeLine: widget.isThreeLine,
     materialTapTargetSize: widget.materialTapTargetSize,
     mouseCursor: widget.mouseCursor,
-    onChanged: widget.enabled ? didChange : null,
+    onChanged: enabled ? didChange : null,
     onFocusChange: widget.onFocusChange,
     overlayColor: widget.overlayColor,
     secondary: widget.secondary,
@@ -214,7 +216,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
 /// Returns a [CupertinoFormRow] that contains a [CupertinoCheckbox].
 Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
   field as FastCheckboxState;
-  final FastCheckboxState(:didChange, :value, :widget) = field;
+  final FastCheckboxState(:didChange, :enabled, :value, :widget) = field;
 
   return CupertinoFormRow(
     padding: widget.contentPadding,
@@ -228,7 +230,7 @@ Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
       focusColor: widget.focusColor,
       focusNode: widget.focusNode,
       inactiveColor: widget.inactiveColor,
-      onChanged: widget.enabled ? didChange : null,
+      onChanged: enabled ? didChange : null,
       shape: widget.shape,
       side: widget.side,
       tristate: widget.tristate,

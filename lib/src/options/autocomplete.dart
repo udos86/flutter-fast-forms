@@ -17,6 +17,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     TextEditingValue? initialValue,
     FastAutocompleteWillDisplayOption<O>? willDisplayOption,
     super.autovalidateMode,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -94,14 +95,15 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
     FastAutocompleteState<O> field) {
   return (BuildContext context, TextEditingController textEditingController,
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
-    final FastAutocompleteState<O>(:decoration, :didChange, :widget) = field;
+    final FastAutocompleteState<O>(:decoration, :didChange, :enabled, :widget) =
+        field;
 
     return TextFormField(
       controller: textEditingController,
       decoration: decoration,
-      enabled: widget.enabled,
+      enabled: enabled,
       focusNode: focusNode,
-      onChanged: widget.enabled ? didChange : null,
+      onChanged: enabled ? didChange : null,
       onFieldSubmitted: (value) => onFieldSubmitted(),
       validator: widget.validator,
     );

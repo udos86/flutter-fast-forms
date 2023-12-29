@@ -34,6 +34,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     super.adaptive,
     super.autovalidateMode,
     super.builder = datePickerBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -215,12 +216,12 @@ Text datePickerTextBuilder(FastDatePickerState field) {
 /// Returns an [IconButton] that triggers the [show] function when pressed.
 IconButton datePickerIconButtonBuilder(
     FastDatePickerState field, ShowFastDatePicker show) {
-  final FastDatePickerState(:widget) = field;
+  final FastDatePickerState(:enabled, :widget) = field;
 
   return IconButton(
     alignment: Alignment.center,
     icon: widget.icon ?? const Icon(Icons.today),
-    onPressed: widget.enabled ? () => show(widget.initialEntryMode) : null,
+    onPressed: enabled ? () => show(widget.initialEntryMode) : null,
   );
 }
 
@@ -295,8 +296,14 @@ Container cupertinoDatePickerModalPopupBuilder(
 /// [FastDatePickerState.value] and an [IconButton] that shows the date picker
 /// as well when pressed.
 Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
-  final FastDatePickerState(:context, :didChange, :widget) =
-      field as FastDatePickerState;
+  field as FastDatePickerState;
+  final FastDatePickerState(
+    :context,
+    :decoration,
+    :enabled,
+    :didChange,
+    :widget
+  ) = field;
 
   Future<DateTime?> show(DatePickerEntryMode entryMode) {
     return showDatePicker(
@@ -335,9 +342,9 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
   }
 
   return InkWell(
-    onTap: widget.enabled ? () => show(DatePickerEntryMode.input) : null,
+    onTap: enabled ? () => show(DatePickerEntryMode.input) : null,
     child: InputDecorator(
-      decoration: field.decoration,
+      decoration: decoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[

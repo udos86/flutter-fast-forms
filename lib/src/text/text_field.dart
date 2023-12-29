@@ -16,6 +16,7 @@ class FastTextField extends FastFormField<String> {
     super.adaptive = true,
     super.autovalidateMode,
     super.builder = textFieldBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -221,8 +222,13 @@ Text inputCounterWidgetBuilder(
 ///
 /// Returns a [TextFormField].
 Widget materialTextFieldBuilder(FormFieldState<String> field) {
-  final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
-      field as FastTextFieldState;
+  final FastTextFieldState(
+    :autovalidateMode,
+    :didChange,
+    :enabled,
+    :focusNode,
+    :widget
+  ) = field as FastTextFieldState;
   final FastTextField(:prefix, :suffix) = widget;
   final InputDecoration decoration = field.decoration.copyWith(
     hintText: widget.placeholder,
@@ -248,7 +254,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     cursorRadius: widget.cursorRadius,
     cursorWidth: widget.cursorWidth,
     decoration: decoration,
-    enabled: widget.enabled,
+    enabled: enabled,
     dragStartBehavior: widget.dragStartBehavior,
     enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
     enableInteractiveSelection: widget.enableInteractiveSelection,
@@ -268,7 +274,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
     onAppPrivateCommand: widget.onAppPrivateCommand,
-    onChanged: widget.enabled ? didChange : null,
+    onChanged: enabled ? didChange : null,
     onEditingComplete: widget.onEditingComplete,
     onFieldSubmitted: widget.onFieldSubmitted,
     onSaved: widget.onSaved,
@@ -302,8 +308,13 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
 ///
 /// Returns a [CupertinoTextFormFieldRow].
 Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
-  final FastTextFieldState(:autovalidateMode, :didChange, :focusNode, :widget) =
-      field as FastTextFieldState;
+  final FastTextFieldState(
+    :autovalidateMode,
+    :didChange,
+    :enabled,
+    :focusNode,
+    :widget
+  ) = field as FastTextFieldState;
   final prefix = widget.prefix ??
       (widget.labelText is String ? Text(widget.labelText!) : null);
 
@@ -316,7 +327,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     cursorColor: widget.cursorColor,
     cursorHeight: widget.cursorHeight,
     cursorWidth: widget.cursorWidth,
-    enabled: widget.enabled,
+    enabled: enabled,
     enableInteractiveSelection: widget.enableInteractiveSelection,
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
@@ -330,7 +341,7 @@ Widget cupertinoTextFieldBuilder(FormFieldState<String> field) {
     minLines: widget.minLines,
     obscureText: widget.obscureText,
     obscuringCharacter: widget.obscuringCharacter,
-    onChanged: widget.enabled ? didChange : null,
+    onChanged: enabled ? didChange : null,
     onFieldSubmitted: widget.onFieldSubmitted,
     onEditingComplete: widget.onEditingComplete,
     onSaved: widget.onSaved,

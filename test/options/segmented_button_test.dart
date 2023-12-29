@@ -5,13 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 import '../test_utils.dart';
 
 void main() {
-  late List<ButtonSegment<String>> segments;
+  late List<FastButtonSegment<String>> segments;
 
   setUp(() {
-    segments = const <ButtonSegment<String>>[
-      ButtonSegment<String>(value: 'test1', label: Text('Test 1')),
-      ButtonSegment<String>(value: 'test2', label: Text('Test 2')),
-      ButtonSegment<String>(value: 'test3', label: Text('Test 3')),
+    segments = const <FastButtonSegment<String>>[
+      FastButtonSegment<String>(value: 'test1', label: Text('Test 1')),
+      FastButtonSegment<String>(value: 'test2', label: Text('Test 2')),
+      FastButtonSegment<String>(value: 'test3', label: Text('Test 3')),
     ];
   });
 

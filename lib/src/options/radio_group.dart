@@ -42,6 +42,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
     FastRadioOptionBuilder<T>? optionBuilder,
     FastRadioOptionsBuilder<T>? optionsBuilder,
     super.autovalidateMode,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -122,7 +123,7 @@ T? _getInitialValue<T>(List<FastRadioOption<T>> options) {
 /// [FastRadioGroup.orientation] is [FastRadioGroupOrientation.horizontal].
 Widget radioOptionBuilder<T>(
     FastRadioOption<T> option, FastRadioGroupState<T> field) {
-  final FastRadioGroupState<T>(:didChange, :value, :widget) = field;
+  final FastRadioGroupState<T>(:didChange, :enabled, :value, :widget) = field;
   final tile = RadioListTile<T>(
     activeColor: widget.activeColor,
     controlAffinity: widget.controlAffinity,
@@ -132,7 +133,7 @@ Widget radioOptionBuilder<T>(
     isThreeLine: option.isThreeLine,
     materialTapTargetSize: widget.materialTapTargetSize,
     mouseCursor: widget.mouseCursor,
-    onChanged: widget.enabled ? didChange : null,
+    onChanged: enabled ? didChange : null,
     overlayColor: widget.overlayColor,
     secondary: option.secondary,
     selected: option.selected,

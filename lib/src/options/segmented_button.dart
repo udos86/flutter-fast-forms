@@ -3,13 +3,44 @@ import 'package:flutter/material.dart';
 
 import '../form.dart';
 
+/// A non-widget configuration class for a [ButtonSegment].
+///
+/// This wrapper is needed primarily to be able to set [ButtonSegment.enabled]
+/// according to [FastFormFieldState.enabled].
+@immutable
+class FastButtonSegment<T> implements ButtonSegment<T> {
+  const FastButtonSegment({
+    required this.value,
+    this.icon,
+    this.label,
+    this.tooltip,
+    this.enabled = true,
+  }) : assert(icon != null || label != null);
+
+  @override
+  final T value;
+  @override
+  final Widget? icon;
+  @override
+  final Widget? label;
+  @override
+  final String? tooltip;
+  @override
+  final bool enabled;
+}
+
+typedef FastSegmentedButtonSegmentsBuilder<T> = List<ButtonSegment<T>> Function(
+    List<FastButtonSegment<T>> options, FastSegmentedButtonState<T> field);
+
 /// A [FastFormField] that contains a [CupertinoSlidingSegmentedControl].
 @immutable
 class FastSegmentedButton<T> extends FastFormField<Set<T>> {
   FastSegmentedButton({
     FormFieldBuilder<Set<T>>? builder,
     Set<T>? initialValue,
+    FastSegmentedButtonSegmentsBuilder<T>? segmentsBuilder,
     super.autovalidateMode,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -30,6 +61,7 @@ class FastSegmentedButton<T> extends FastFormField<Set<T>> {
     this.showSelectedIcon = true,
     this.style,
   })  : assert(segments.isNotEmpty),
+        segmentsBuilder = segmentsBuilder ?? buttonSegmentBuilder,
         super(
           builder: builder ?? segmentedButtonBuilder,
           initialValue:
@@ -38,7 +70,8 @@ class FastSegmentedButton<T> extends FastFormField<Set<T>> {
 
   final bool emptySelectionAllowed;
   final bool multiSelectionEnabled;
-  final List<ButtonSegment<T>> segments;
+  final FastSegmentedButtonSegmentsBuilder<T> segmentsBuilder;
+  final List<FastButtonSegment<T>> segments;
   final Icon? selectedIcon;
   final bool showInputDecoration;
   final bool showSelectedIcon;
@@ -64,6 +97,23 @@ Set<T> _getInitialValue<T>(
   return emptySelectionAllowed ? <T>{} : {segments.first.value};
 }
 
+List<ButtonSegment<T>> buttonSegmentBuilder<T>(
+    List<FastButtonSegment<T>> segments, FastSegmentedButtonState<T> field) {
+  return segments.fold(<ButtonSegment<T>>[], (list, segment) {
+    final FastButtonSegment<T>(:enabled, :icon, :label, :tooltip, :value) =
+        segment;
+    final FastSegmentedButtonState<T>(enabled: fieldEnabled) = field;
+    return list
+      ..add(ButtonSegment(
+        enabled: fieldEnabled && enabled,
+        label: label,
+        icon: icon,
+        tooltip: tooltip,
+        value: value,
+      ));
+  });
+}
+
 /// A [FormFieldBuilder] that is the default [FastSegmentedButton.builder].
 ///
 /// Returns a [SegmentedButton] that contains the [FastSegmentedButton.segments]
@@ -75,7 +125,7 @@ Widget segmentedButtonBuilder<T>(FormFieldState<Set<T>> field) {
   final segmentedButton = SegmentedButton<T>(
     emptySelectionAllowed: widget.emptySelectionAllowed,
     multiSelectionEnabled: widget.multiSelectionEnabled,
-    segments: widget.segments,
+    segments: widget.segmentsBuilder(widget.segments, field),
     selectedIcon: widget.selectedIcon,
     selected: value,
     showSelectedIcon: widget.showSelectedIcon,

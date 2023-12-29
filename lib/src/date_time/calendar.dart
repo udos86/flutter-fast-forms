@@ -8,6 +8,7 @@ class FastCalendar extends FastFormField<DateTime> {
   const FastCalendar({
     super.autovalidateMode,
     super.builder = calendarBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.helperText,

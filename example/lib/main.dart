@@ -186,7 +186,7 @@ class FormPage extends StatelessWidget {
             ],
           ),
           FastSegmentedButton<String>(
-            name: 'segmentedButton',
+            name: 'segmented_button',
             labelText: 'Segmented Button',
             contentPadding: const EdgeInsets.symmetric(
               vertical: 24.0,
@@ -194,15 +194,15 @@ class FormPage extends StatelessWidget {
             ),
             emptySelectionAllowed: true,
             segments: const [
-              ButtonSegment(
+              FastButtonSegment(
                 value: 'iOS',
                 label: Text('iOS'),
               ),
-              ButtonSegment(
+              FastButtonSegment(
                   value: 'android',
                   label: Text('Android'),
                   icon: Icon(Icons.android_sharp)),
-              ButtonSegment(
+              FastButtonSegment(
                   value: 'chrome-os',
                   label: Text(
                     'Chrome OS',
@@ -232,6 +232,15 @@ class FormPage extends StatelessWidget {
                 value: 'Chrome OS',
               ),
             ],
+            conditions: {
+              FastCondition.disabled: [
+                FastCondition(
+                    fieldName: 'segmented_button',
+                    condition: (value, field) {
+                      return value is Set<String> && value.isNotEmpty;
+                    }),
+              ]
+            },
             validator: (value) => value == null || value.isEmpty
                 ? 'Please select at least one chip'
                 : null,

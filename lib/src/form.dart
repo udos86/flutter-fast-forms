@@ -61,18 +61,25 @@ class FastForm extends StatefulWidget {
 ///
 /// Typically obtained via [FastForm.of].
 class FastFormState extends State<FastForm> {
-  final Set<FastFormFieldState<dynamic>> _fields = {};
+  final Map<String, FastFormFieldState<dynamic>> _fields = {};
 
   UnmodifiableMapView<String, dynamic> get values {
-    final map = {for (final field in _fields) field.widget.name: field.value};
+    final map = _fields.map((name, field) => MapEntry(name, field.value));
     return UnmodifiableMapView(map);
   }
 
-  void register(FastFormFieldState field) => _fields.add(field);
+  void register(FastFormFieldState field) => _fields[field.name] = field;
 
-  void unregister(FastFormFieldState field) => _fields.remove(field);
+  void unregister(FastFormFieldState field) => _fields.remove(field.name);
 
-  void onChanged() => widget.onChanged?.call(values);
+  FastFormFieldState? getFieldByName(String name) => _fields[name];
+
+  void onChanged() {
+    widget.onChanged?.call(values);
+    for (final field in _fields.values) {
+      field.condition();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +115,30 @@ class _FastFormScope extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 }
 
+typedef FastConditionHandler = void Function(
+    bool isMet, FastFormFieldState field);
+
+@immutable
+class FastCondition {
+  const FastCondition({
+    required this.fieldName,
+    this.required = false,
+    required this.condition,
+  });
+
+  final String fieldName;
+  final bool required;
+  final bool Function(dynamic value, FastFormFieldState field) condition;
+
+  static void disabled(bool isMet, FastFormFieldState field) {
+    field.enabled = !isMet;
+  }
+
+  static void enabled(bool isMet, FastFormFieldState field) {
+    field.enabled = isMet;
+  }
+}
+
 /// A single fast form field.
 ///
 /// Works identical to built-in [FormField].
@@ -126,6 +157,7 @@ abstract class FastFormField<T> extends FormField<T> {
     super.restorationId,
     super.validator,
     this.adaptive,
+    this.conditions,
     this.contentPadding,
     this.decoration,
     this.helperText,
@@ -137,6 +169,7 @@ abstract class FastFormField<T> extends FormField<T> {
 
   /// null represents a non-adaptive form field widget
   final bool? adaptive;
+  final Map<FastConditionHandler, List<FastCondition>>? conditions;
   final EdgeInsetsGeometry? contentPadding;
   final InputDecoration? decoration;
   final String? helperText;
@@ -164,8 +197,10 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
 
   late FocusNode focusNode;
 
+  bool? _enabled;
+
   /// Returns the [FastFormField] widget for this [FastFormFieldState] instance.
-  /// Must be overriden in the concrete child class.
+  /// Must be overridden in the concrete child class.
   @override
   @protected
   FastFormField<T> get widget;
@@ -174,7 +209,13 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   /// [TargetPlatform] provided that the [FastFormField] type does support it
   bool get adaptive => widget.adaptive ?? form?.widget.adaptive ?? false;
 
-  bool get enabled => widget.enabled;
+  set enabled(bool value) {
+    setState(() => _enabled = value);
+  }
+
+  bool get enabled => _enabled ?? widget.enabled;
+
+  String get name => widget.name;
 
   /// Returns the [FastFormState] of the parent [FastForm]
   FastFormState? get form => FastForm.of(context);
@@ -204,6 +245,7 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   @override
   void initState() {
     super.initState();
+    _enabled = widget.enabled;
     focusNode = FocusNode()..addListener(_onFocusChanged);
     setValue(widget.initialValue);
   }
@@ -253,12 +295,46 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
 
   void onReset() {
     setState(() {
+      _enabled = null;
       focused = false;
       touched = false;
       setValue(widget.initialValue);
       widget.onChanged?.call(widget.initialValue);
       form?.onChanged();
     });
+  }
+
+  void condition() {
+    final FastFormField<T>(:conditions) = widget;
+    if (conditions == null || conditions.isEmpty) return;
+
+    final Map<FastConditionHandler, bool> map = {};
+
+    for (final MapEntry(key: handler, :value) in conditions.entries) {
+      map[handler] = false;
+
+      for (final FastCondition(:condition, :fieldName, :required) in value) {
+        final field = form?.getFieldByName(fieldName);
+        if (field == null) continue;
+
+        final isMet = condition(field.value, field);
+
+        if (isMet && required) {
+          map.update(handler, (value) => true);
+        } else if (isMet && !required) {
+          map.update(handler, (value) => true);
+        } else if (!isMet && required) {
+          map.update(handler, (value) => false);
+          break;
+        } else if (!isMet && !required) {
+          map.update(handler, (value) => value || false);
+        }
+      }
+    }
+
+    for (final MapEntry(key: handler, value: isMet) in map.entries) {
+      handler(isMet, this);
+    }
   }
 
   void _onFocusChanged() {

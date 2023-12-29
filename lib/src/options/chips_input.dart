@@ -43,6 +43,7 @@ class FastChipsInput extends FastFormField<List<String>> {
   const FastChipsInput({
     super.autovalidateMode,
     super.builder = chipsInputBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -209,11 +210,11 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
 /// Returns an [InputChip].
 Widget _chipBuilder(
     String chipValue, int chipIndex, FastChipsInputState field) {
-  final FastChipsInputState(:selectedChipIndex, :value!, :widget) = field;
+  final FastChipsInputState(:enabled, :selectedChipIndex, :value!) = field;
 
   return InputChip(
     label: Text(chipValue),
-    isEnabled: widget.enabled,
+    isEnabled: enabled,
     onDeleted: () => field.didChange([...value]..remove(chipValue)),
     selected: chipIndex == selectedChipIndex,
     showCheckmark: false,
@@ -228,6 +229,7 @@ Widget _chipBuilder(
 Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
     void Function(String) onFieldSubmitted) {
   final FastChipsInputState(
+    :enabled,
     :hiddenTextFieldFocusNode,
     :onKeyPressed,
     :textFieldController,
@@ -261,7 +263,7 @@ Widget _textFieldViewBuilder(FastChipsInputState field, double freeSpace,
           TextFormField(
             controller: textFieldController,
             decoration: const InputDecoration(border: InputBorder.none),
-            enabled: widget.enabled,
+            enabled: enabled,
             focusNode: textFieldFocusNode,
             maxLines: 1,
             onFieldSubmitted: onFieldSubmitted,
@@ -587,6 +589,7 @@ Widget chipsInputBuilder(FormFieldState<List<String>> field) {
   field as FastChipsInputState;
   final FastChipsInputState(
     :decoration,
+    :enabled,
     :textFieldController,
     :textFieldFocusNode,
     :widget
@@ -594,7 +597,7 @@ Widget chipsInputBuilder(FormFieldState<List<String>> field) {
   final fieldViewBuilder = widget.fieldViewBuilder ?? _fieldViewBuilder;
 
   return GestureDetector(
-    onTap: widget.enabled ? () => textFieldFocusNode.requestFocus() : null,
+    onTap: enabled ? () => textFieldFocusNode.requestFocus() : null,
     child: InputDecorator(
       decoration: decoration,
       child: RawAutocomplete<String>(

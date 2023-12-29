@@ -103,6 +103,7 @@ Widget _customFormFieldActiveBuilder(FastCustomFieldState field) {
 }
 
 Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
+  field as FastCustomFieldState;
   final FastCustomFieldState(
     :active,
     :activeValue,
@@ -110,7 +111,7 @@ Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
     :didChange,
     :enabled,
     :widget
-  ) = field as FastCustomFieldState;
+  ) = field;
 
   return InputDecorator(
     decoration: decoration,
@@ -121,9 +122,9 @@ Widget customFormFieldBuilder(FormFieldState<Map<String, bool>> field) {
           title: widget.title,
           value: active,
           onChanged: enabled
-              ? (active) {
-                  didChange(active ? activeValue : null);
-                  active = active;
+              ? (selected) {
+                  didChange(selected ? activeValue : null);
+                  field.active = selected;
                 }
               : null,
         ),

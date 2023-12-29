@@ -19,6 +19,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     FastSegmentedControlWidgetBuilder<T>? cupertinoPrefixBuilder,
     T? initialValue,
     super.autovalidateMode,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,

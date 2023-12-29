@@ -11,6 +11,7 @@ class FastDropdown<T> extends FastFormField<T> {
   const FastDropdown({
     FormFieldBuilder<T>? builder,
     super.autovalidateMode,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -97,8 +98,13 @@ List<DropdownMenuItem<T>> dropdownMenuItemsBuilder<T>(
 ///
 /// Returns a [DropdownButtonFormField] on any [TargetPlatform].
 Widget dropdownBuilder<T>(FormFieldState<T> field) {
-  final FastDropdownState<T>(:decoration, :didChange, :value, :widget) =
-      field as FastDropdownState<T>;
+  final FastDropdownState<T>(
+    :decoration,
+    :didChange,
+    :enabled,
+    :value,
+    :widget
+  ) = field as FastDropdownState<T>;
   final itemsBuilder = widget.itemsBuilder ?? dropdownMenuItemsBuilder;
 
   void onChanged(T? value) {
@@ -127,7 +133,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     itemHeight: widget.itemHeight,
     items: itemsBuilder(widget.items, field),
     menuMaxHeight: widget.menuMaxHeight,
-    onChanged: widget.enabled ? onChanged : null,
+    onChanged: enabled ? onChanged : null,
     onSaved: widget.onSaved,
     onTap: widget.onTap,
     selectedItemBuilder: widget.selectedItemBuilder,

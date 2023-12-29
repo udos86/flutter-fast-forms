@@ -115,6 +115,7 @@ class FastChoiceChips<T> extends FastFormField<Set<T>> {
     FastChoiceChipBuilder<T>? chipBuilder,
     Set<T>? initialValue,
     super.autovalidateMode,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,

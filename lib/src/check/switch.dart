@@ -21,6 +21,7 @@ class FastSwitch extends FastFormField<bool> {
     super.adaptive,
     super.autovalidateMode,
     super.builder = switchBuilder,
+    super.conditions,
     super.contentPadding,
     super.decoration,
     super.enabled,
@@ -174,7 +175,8 @@ Widget? switchTitleBuilder(FastSwitchState field) {
 /// Returns an [InputDecorator] that contains a [SwitchListTile.adaptive].
 Widget materialSwitchBuilder(FormFieldState<bool> field) {
   field as FastSwitchState;
-  final FastSwitchState(:decoration, :didChange, :value!, :widget) = field;
+  final FastSwitchState(:decoration, :didChange, :enabled, :value!, :widget) =
+      field;
   assert(widget.thumbColor == null ||
       widget.thumbColor is MaterialStateProperty<Color?>);
 
@@ -198,7 +200,7 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
     materialTapTargetSize: widget.materialTapTargetSize,
     mouseCursor: widget.mouseCursor,
     onActiveThumbImageError: widget.onActiveThumbImageError,
-    onChanged: widget.enabled ? didChange : null,
+    onChanged: enabled ? didChange : null,
     onFocusChange: widget.onFocusChange,
     onInactiveThumbImageError: widget.onInactiveThumbImageError,
     overlayColor: widget.overlayColor,
@@ -233,7 +235,7 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
 /// Returns a [CupertinoFormRow] that contains a [CupertinoSwitch].
 Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
   field as FastSwitchState;
-  final FastSwitchState(:didChange, :value!, :widget) = field;
+  final FastSwitchState(:didChange, :enabled, :value!, :widget) = field;
   assert(widget.thumbColor == null || widget.thumbColor is Color);
 
   return CupertinoFormRow(
@@ -250,7 +252,7 @@ Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
       dragStartBehavior: widget.dragStartBehavior,
       focusColor: widget.focusColor,
       focusNode: widget.focusNode,
-      onChanged: widget.enabled ? didChange : null,
+      onChanged: enabled ? didChange : null,
       onFocusChange: widget.onFocusChange,
       thumbColor: widget.thumbColor,
       trackColor: widget.activeTrackColor,
