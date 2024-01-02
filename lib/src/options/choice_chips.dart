@@ -7,6 +7,7 @@ import '../form.dart';
 class FastChoiceChip<T>
     implements
         ChipAttributes,
+        CheckmarkableChipAttributes,
         SelectableChipAttributes,
         DisabledChipAttributes {
   FastChoiceChip({
@@ -51,6 +52,8 @@ class FastChoiceChip<T>
   @override
   final Color? backgroundColor;
   @override
+  final Color? checkmarkColor;
+  @override
   final Clip clipBehavior;
   @override
   final MaterialStateProperty<Color?>? color;
@@ -87,6 +90,8 @@ class FastChoiceChip<T>
   @override
   final OutlinedBorder? shape;
   @override
+  final bool? showCheckmark;
+  @override
   final BorderSide? side;
   @override
   final Color? surfaceTintColor;
@@ -96,8 +101,6 @@ class FastChoiceChip<T>
   final VisualDensity? visualDensity;
 
   final bool enabled;
-  final Color? checkmarkColor;
-  final bool? showCheckmark;
   final T value;
 
   @override
