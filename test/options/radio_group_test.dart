@@ -6,15 +6,13 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastRadioGroup widget', (tester) async {
-    const options = [
-      FastRadioOption(title: Text('Option 1'), value: 'option-1'),
-      FastRadioOption(title: Text('Option 2'), value: 'option-2'),
-    ];
-
     await tester.pumpWidget(buildMaterialTestApp([
       FastRadioGroup<String>(
         name: 'radio_group',
-        options: options,
+        options: const [
+          FastRadioOption(title: Text('Option 1'), value: 'option-1'),
+          FastRadioOption(title: Text('Option 2'), value: 'option-2'),
+        ],
       ),
     ]));
 
@@ -22,27 +20,48 @@ void main() {
     final widget = tester.widget<FastRadioGroup<String>>(fastRadioGroupFinder);
 
     expect(fastRadioGroupFinder, findsOneWidget);
-
-    expect(options.length, widget.options.length);
-    expect(findRadioListTile<String>(), findsNWidgets(options.length));
+    expect(findInputDecorator(), findsOneWidget);
+    expect(findRadioListTile<String>(), findsNWidgets(widget.options.length));
   });
 
-  testWidgets('renders FastRadioGroup widget horizontally', (tester) async {
-    const options = [
-      FastRadioOption(title: Text('Option 1'), value: 'option-1'),
-      FastRadioOption(title: Text('Option 2'), value: 'option-2'),
-    ];
-
+  testWidgets('renders FastRadioGroup widget without InputDecorator',
+      (tester) async {
     await tester.pumpWidget(buildMaterialTestApp([
       FastRadioGroup<String>(
         name: 'radio_group',
-        options: options,
+        options: const [
+          FastRadioOption(title: Text('Option 1'), value: 'option-1'),
+          FastRadioOption(title: Text('Option 2'), value: 'option-2'),
+        ],
+        showInputDecoration: false,
+      ),
+    ]));
+
+    final fastRadioGroupFinder = findFastRadioGroup<String>();
+    final widget = tester.widget<FastRadioGroup<String>>(fastRadioGroupFinder);
+
+    expect(fastRadioGroupFinder, findsOneWidget);
+    expect(findInputDecorator(), findsNothing);
+    expect(findRadioListTile<String>(), findsNWidgets(widget.options.length));
+  });
+
+  testWidgets('renders FastRadioGroup widget horizontally', (tester) async {
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRadioGroup<String>(
+        name: 'radio_group',
+        options: const [
+          FastRadioOption(title: Text('Option 1'), value: 'option-1'),
+          FastRadioOption(title: Text('Option 2'), value: 'option-2'),
+        ],
         orientation: FastRadioGroupOrientation.horizontal,
       ),
     ]));
 
-    expect(findExpanded(), findsNWidgets(options.length));
-    expect(findRadioListTile<String>(), findsNWidgets(options.length));
+    final widget =
+        tester.widget<FastRadioGroup<String>>(findFastRadioGroup<String>());
+
+    expect(findExpanded(), findsNWidgets(widget.options.length));
+    expect(findRadioListTile<String>(), findsNWidgets(widget.options.length));
   });
 
   testWidgets('updates FastRadioGroup value', (tester) async {
@@ -79,15 +98,14 @@ void main() {
       title: Text('Invalid Option'),
       value: 'invalid-option',
     );
-    final options = [
-      const FastRadioOption(title: Text('Option 1'), value: 'option-1'),
-      invalidOption,
-    ];
 
     await tester.pumpWidget(buildMaterialTestApp([
       FastRadioGroup<String>(
         name: 'radio_group',
-        options: options,
+        options: const [
+          FastRadioOption(title: Text('Option 1'), value: 'option-1'),
+          invalidOption,
+        ],
         validator: (value) => value == invalidOption.value ? errorText : null,
       ),
     ]));

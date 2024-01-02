@@ -66,6 +66,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
     this.overlayColor,
     this.selectedTileColor,
     this.shapeBorder,
+    this.showInputDecoration = true,
     this.splashRadius,
     this.tileColor,
     this.toggleable = false,
@@ -88,6 +89,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
   final MaterialStateProperty<Color?>? overlayColor;
   final Color? selectedTileColor;
   final ShapeBorder? shapeBorder;
+  final bool showInputDecoration;
   final double? splashRadius;
   final Color? tileColor;
   final bool toggleable;
@@ -183,11 +185,17 @@ Widget radioOptionsBuilder<T>(
 /// Returns an [InputDecorator] that contains the widget returned by
 /// [FastRadioGroup.optionsBuilder] on any [TargetPlatform].
 Widget radioGroupBuilder<T>(FormFieldState<T> field) {
-  final FastRadioGroupState<T>(:decoration, :widget) =
-      field as FastRadioGroupState<T>;
+  field as FastRadioGroupState<T>;
+  final FastRadioGroupState<T>(:decoration, :widget) = field;
 
-  return InputDecorator(
-    decoration: decoration,
-    child: widget.optionsBuilder(widget.options, field),
-  );
+  final options = widget.optionsBuilder(widget.options, field);
+
+  if (widget.showInputDecoration) {
+    return InputDecorator(
+      decoration: decoration,
+      child: widget.optionsBuilder(widget.options, field),
+    );
+  }
+
+  return options;
 }

@@ -5,7 +5,7 @@
   * adds `conditions` property to `FastFormField`
   * adds `FastCondition` class
 * adds new `FastSegmentendButton` that wraps Material [`SegmentedButton`](https://api.flutter.dev/flutter/material/SegmentedButton-class.html?gclid=CjwKCAiAs6-sBhBmEiwA1Nl8s5c8wRhB056CtAeuZP1-m_XUYi-jYGrVMh1lMnkwRmvKwlTelErtixoCAS4QAvD_BwE&gclsrc=aw.ds)
-* adds `showInputDecoration` property to `FastCheckbox`, `FastSwitch`, `FastChoiceChips`, `FastRangeSlider` and `FastSlider`
+* adds `showInputDecoration` property to `FastCheckbox`, `FastSwitch`, `FastCalendar`, `FastChoiceChips`, `FastRadioGroup`, `FastRangeSlider` and `FastSlider`
 * adds `canPop` and `onPopInvoked` properties to `FastForm`
 * adds `cupertinoErrorBuilder`, `cupertinoHelperBuilder` and `cupertinoPrefixBuilder` properties to `FastCheckbox`, `FastSwitch`, `FastDatePicker`, `FastSegmentendControl` and `FastSlider`
 * deprecates `errorBuilder` and `helperBuilder` on `FastCheckbox`, `FastSwitch`, `FastDatePicker`, `FastSegmentendControl` and `FastSlider`

@@ -14,6 +14,22 @@ void main() {
     ]));
 
     expect(findFastCalendar(), findsOneWidget);
+    expect(findInputDecorator(), findsOneWidget);
+    expect(findCalendarDatePicker(), findsOneWidget);
+  });
+
+  testWidgets('renders FastCalendar without InputDecorator', (tester) async {
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastCalendar(
+        name: 'calendar',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
+        showInputDecoration: false,
+      )
+    ]));
+
+    expect(findFastCalendar(), findsOneWidget);
+    expect(findInputDecorator(), findsNothing);
     expect(findCalendarDatePicker(), findsOneWidget);
   });
 

@@ -27,6 +27,7 @@ class FastCalendar extends FastFormField<DateTime> {
     required this.lastDate,
     this.onDisplayedMonthChanged,
     this.selectableDayPredicate,
+    this.showInputDecoration = true,
   }) : super(enabled: true);
 
   final DateTime? currentDate;
@@ -35,6 +36,7 @@ class FastCalendar extends FastFormField<DateTime> {
   final DateTime lastDate;
   final ValueChanged<DateTime>? onDisplayedMonthChanged;
   final SelectableDayPredicate? selectableDayPredicate;
+  final bool showInputDecoration;
 
   @override
   FastCalendarState createState() => FastCalendarState();
@@ -51,20 +53,26 @@ class FastCalendarState extends FastFormFieldState<DateTime> {
 /// Returns an [InputDecorator] that contains a [CalendarDatePicker] on any
 /// [TargetPlatform].
 Widget calendarBuilder(FormFieldState<DateTime> field) {
-  final FastCalendarState(:decoration, :didChange, :value, :widget) =
-      field as FastCalendarState;
+  field as FastCalendarState;
+  final FastCalendarState(:decoration, :didChange, :value, :widget) = field;
 
-  return InputDecorator(
-    decoration: decoration,
-    child: CalendarDatePicker(
-      currentDate: widget.currentDate,
-      firstDate: widget.firstDate,
-      initialCalendarMode: widget.initialCalendarMode,
-      initialDate: value ?? DateTime.now(),
-      lastDate: widget.lastDate,
-      onDateChanged: didChange,
-      onDisplayedMonthChanged: widget.onDisplayedMonthChanged,
-      selectableDayPredicate: widget.selectableDayPredicate,
-    ),
+  final calendar = CalendarDatePicker(
+    currentDate: widget.currentDate,
+    firstDate: widget.firstDate,
+    initialCalendarMode: widget.initialCalendarMode,
+    initialDate: value ?? DateTime.now(),
+    lastDate: widget.lastDate,
+    onDateChanged: didChange,
+    onDisplayedMonthChanged: widget.onDisplayedMonthChanged,
+    selectableDayPredicate: widget.selectableDayPredicate,
   );
+
+  if (widget.showInputDecoration) {
+    return InputDecorator(
+      decoration: decoration,
+      child: calendar,
+    );
+  }
+
+  return calendar;
 }
