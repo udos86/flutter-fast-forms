@@ -6,16 +6,9 @@ import 'test_utils.dart';
 
 void main() {
   testWidgets('renders FastForm', (tester) async {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: FastForm(
-          formKey: formKey,
-          children: const [FastTextField(name: 'text_field')],
-        ),
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastTextField(name: 'text_field'),
+    ]));
 
     expect(findFastForm(), findsOneWidget);
     expect(findForm(), findsOneWidget);
@@ -23,16 +16,9 @@ void main() {
   });
 
   testWidgets('registers form fields', (tester) async {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: FastForm(
-          formKey: formKey,
-          children: const [FastTextField(name: 'text_field')],
-        ),
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastTextField(name: 'text_field'),
+    ]));
 
     final fieldState = tester.state<FastTextFieldState>(findFastTextField());
     final formState = FastForm.of(fieldState.context);
@@ -42,18 +28,9 @@ void main() {
   });
 
   testWidgets('updates form fields', (tester) async {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: FastForm(
-          formKey: formKey,
-          children: const [
-            FastTextField(name: 'text_field'),
-          ],
-        ),
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastTextField(name: 'text_field'),
+    ]));
 
     final fieldState = tester.state<FastTextFieldState>(findFastTextField());
     final formState = FastForm.of(fieldState.context);
@@ -102,21 +79,12 @@ void main() {
   testWidgets('resets FastForm', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: FastForm(
-            formKey: formKey,
-            children: const [
-              FastTextField(
-                name: 'text_field',
-                initialValue: 'Hello Test',
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastTextField(
+        name: 'text_field',
+        initialValue: 'Hello Test',
+      )
+    ], formKey: formKey));
 
     final state = tester.state<FastTextFieldState>(findFastTextField());
     const text = 'Update Test';
@@ -138,23 +106,16 @@ void main() {
     var onSavedCalled = false;
     String? onSavedValue;
 
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: FastForm(
-          formKey: formKey,
-          children: <Widget>[
-            FastTextField(
-              name: 'text_field',
-              initialValue: 'Hello Test',
-              onSaved: (String? value) {
-                onSavedCalled = true;
-                onSavedValue = value;
-              },
-            )
-          ],
-        ),
-      ),
-    ));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastTextField(
+        name: 'text_field',
+        initialValue: 'Hello Test',
+        onSaved: (String? value) {
+          onSavedCalled = true;
+          onSavedValue = value;
+        },
+      )
+    ], formKey: formKey));
 
     const text = 'Update Test';
 

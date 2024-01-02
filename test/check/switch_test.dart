@@ -7,7 +7,7 @@ import '../test_utils.dart';
 void main() {
   testWidgets('renders FastSwitch', (tester) async {
     const widget = FastSwitch(name: 'switch', titleText: 'title');
-    await tester.pumpWidget(buildMaterialTestApp(widget));
+    await tester.pumpWidget(buildMaterialTestApp([widget]));
 
     expect(findFastSwitch(), findsOneWidget);
     expect(findInputDecorator(), findsOneWidget);
@@ -18,10 +18,12 @@ void main() {
   });
 
   testWidgets('renders FastSwitch without InputDecorator', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(const FastSwitch(
-      name: 'switch',
-      showInputDecoration: false,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastSwitch(
+        name: 'switch',
+        showInputDecoration: false,
+      ),
+    ]));
 
     expect(findFastSwitch(), findsOneWidget);
     expect(findInputDecorator(), findsNothing);
@@ -32,11 +34,13 @@ void main() {
   testWidgets('updates FastSwitch', (tester) async {
     final spy = OnChangedSpy<bool>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastSwitch(
-      name: 'switch',
-      titleText: 'title',
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSwitch(
+        name: 'switch',
+        titleText: 'title',
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester.state<FastSwitchState>(findFastSwitch());
     expect(state.value, state.widget.initialValue);
@@ -53,12 +57,14 @@ void main() {
   testWidgets('validates FastSwitch', (tester) async {
     const errorText = 'Must be switched on';
 
-    await tester.pumpWidget(buildMaterialTestApp(FastSwitch(
-      name: 'switch',
-      titleText: 'title',
-      initialValue: true,
-      validator: (value) => value! ? null : errorText,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSwitch(
+        name: 'switch',
+        titleText: 'title',
+        initialValue: true,
+        validator: (value) => value! ? null : errorText,
+      ),
+    ]));
 
     final state = tester.state<FastSwitchState>(findFastSwitch());
 
@@ -74,11 +80,13 @@ void main() {
   testWidgets('adapts FastSwitch to Android', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-    await tester.pumpWidget(buildMaterialTestApp(const FastSwitch(
-      name: 'switch',
-      titleText: 'title',
-      adaptive: true,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastSwitch(
+        name: 'switch',
+        titleText: 'title',
+        adaptive: true,
+      ),
+    ]));
 
     expect(findSwitchListTile(), findsOneWidget);
 
@@ -88,11 +96,13 @@ void main() {
   testWidgets('adapts FastSwitch to iOS', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(buildCupertinoTestApp(const FastSwitch(
-      name: 'switch',
-      adaptive: true,
-      titleText: 'title',
-    )));
+    await tester.pumpWidget(buildCupertinoTestApp([
+      const FastSwitch(
+        name: 'switch',
+        adaptive: true,
+        titleText: 'title',
+      ),
+    ]));
 
     expect(findCupertinoFormRow(), findsOneWidget);
     expect(findCupertinoSwitch(), findsOneWidget);

@@ -7,12 +7,14 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastSlider', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastSlider(
-      name: 'slider',
-      labelBuilder: sliderLabelBuilder,
-      prefixBuilder: (state) => const Icon(Icons.volume_up),
-      suffixBuilder: sliderSuffixBuilder,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSlider(
+        name: 'slider',
+        labelBuilder: sliderLabelBuilder,
+        prefixBuilder: (state) => const Icon(Icons.volume_up),
+        suffixBuilder: sliderSuffixBuilder,
+      ),
+    ]));
 
     final fastSliderFinder = findFastSlider();
 
@@ -30,10 +32,12 @@ void main() {
   });
 
   testWidgets('renders FastSlider without InputDecoration', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(const FastSlider(
-      name: 'slider',
-      showInputDecoration: false,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastSlider(
+        name: 'slider',
+        showInputDecoration: false,
+      ),
+    ]));
 
     expect(findFastSlider(), findsOneWidget);
     expect(findInputDecorator(), findsNothing);
@@ -41,13 +45,15 @@ void main() {
   });
 
   testWidgets('renders Cupertino FastSlider', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastSlider(
-      name: 'slider',
-      builder: cupertinoSliderBuilder,
-      labelBuilder: sliderLabelBuilder,
-      prefixBuilder: (state) => const Icon(Icons.volume_up),
-      suffixBuilder: sliderSuffixBuilder,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSlider(
+        name: 'slider',
+        builder: cupertinoSliderBuilder,
+        labelBuilder: sliderLabelBuilder,
+        prefixBuilder: (state) => const Icon(Icons.volume_up),
+        suffixBuilder: sliderSuffixBuilder,
+      ),
+    ]));
 
     final fastSliderFinder = findFastSlider();
     final sliderFinder = findCupertinoSlider();
@@ -67,11 +73,13 @@ void main() {
   testWidgets('updates FastSlider', (tester) async {
     final spy = OnChangedSpy<double>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastSlider(
-      name: 'slider',
-      suffixBuilder: sliderSuffixBuilder,
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSlider(
+        name: 'slider',
+        suffixBuilder: sliderSuffixBuilder,
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester.state<FastSliderState>(findFastSlider());
     final testValue = state.widget.max;
@@ -86,10 +94,12 @@ void main() {
   testWidgets('validates FastSlider', (tester) async {
     const errorText = 'Value is too high';
 
-    await tester.pumpWidget(buildMaterialTestApp(FastSlider(
-      name: 'slider',
-      validator: (value) => value! > 0 ? errorText : null,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSlider(
+        name: 'slider',
+        validator: (value) => value! > 0 ? errorText : null,
+      ),
+    ]));
 
     final state = tester.state<FastSliderState>(findFastSlider());
 
@@ -105,10 +115,12 @@ void main() {
   testWidgets('adapts FastSlider to Android', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-    await tester.pumpWidget(buildMaterialTestApp(const FastSlider(
-      name: 'slider',
-      adaptive: true,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastSlider(
+        name: 'slider',
+        adaptive: true,
+      ),
+    ]));
 
     expect(findSlider(), findsOneWidget);
 
@@ -118,10 +130,12 @@ void main() {
   testWidgets('adapts FastSlider to iOS', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
-    await tester.pumpWidget(buildMaterialTestApp(const FastSlider(
-      name: 'slider',
-      adaptive: true,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastSlider(
+        name: 'slider',
+        adaptive: true,
+      ),
+    ]));
 
     expect(findCupertinoFormRow(), findsOneWidget);
     expect(findCupertinoSlider(), findsOneWidget);

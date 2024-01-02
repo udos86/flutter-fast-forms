@@ -24,7 +24,7 @@ void main() {
       options: options,
     );
 
-    await tester.pumpWidget(buildMaterialTestApp(widget));
+    await tester.pumpWidget(buildMaterialTestApp([widget]));
 
     expect(findFastAutocomplete<String>(), findsOneWidget);
     expect(findTextFormField(), findsOneWidget);
@@ -34,10 +34,12 @@ void main() {
   });
 
   testWidgets('shows FastAutocomplete options', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastAutocomplete<String>(
-      name: 'autocomplete',
-      options: options,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastAutocomplete<String>(
+        name: 'autocomplete',
+        options: options,
+      ),
+    ]));
 
     final text = options.last;
 
@@ -50,11 +52,13 @@ void main() {
   testWidgets('updates FastAutocomplete', (tester) async {
     final spy = OnChangedSpy<String>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastAutocomplete<String>(
-      name: 'autocomplete',
-      options: options,
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastAutocomplete<String>(
+        name: 'autocomplete',
+        options: options,
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester
         .state<FastAutocompleteState<String>>(findFastAutocomplete<String>());

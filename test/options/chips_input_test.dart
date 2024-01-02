@@ -16,11 +16,13 @@ void main() {
     const helperText = 'helper';
     const labelText = 'label';
 
-    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
-      name: 'input_chips',
-      helperText: helperText,
-      labelText: labelText,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastChipsInput(
+        name: 'input_chips',
+        helperText: helperText,
+        labelText: labelText,
+      ),
+    ]));
 
     expect(findFastChipsInput(), findsOneWidget);
     expect(findWrap(), findsOneWidget);
@@ -31,10 +33,12 @@ void main() {
   });
 
   testWidgets('renders FastChipsInput as ListView', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
-      name: 'input_chips',
-      wrap: false,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastChipsInput(
+        name: 'input_chips',
+        wrap: false,
+      ),
+    ]));
 
     expect(findFastChipsInput(), findsOneWidget);
     expect(findListView(), findsOneWidget);
@@ -42,9 +46,9 @@ void main() {
   });
 
   testWidgets('shows InputChip', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(
+    await tester.pumpWidget(buildMaterialTestApp([
       FastChipsInput(name: 'input_chips', options: options),
-    ));
+    ]));
 
     const text = 'Test';
 
@@ -58,11 +62,13 @@ void main() {
   testWidgets('updates FastChipsInput by text input', (tester) async {
     final spy = OnChangedSpy<List<String>>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastChipsInput(
-      name: 'input_chips',
-      options: options,
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastChipsInput(
+        name: 'input_chips',
+        options: options,
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester.state<FastChipsInputState>(findFastChipsInput());
     expect(state.value, state.widget.initialValue);
@@ -80,10 +86,12 @@ void main() {
   });
 
   testWidgets('updates FastChipsInput by selecting option', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastChipsInput(
-      name: 'input_chips',
-      options: options,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastChipsInput(
+        name: 'input_chips',
+        options: options,
+      ),
+    ]));
 
     final state = tester.state<FastChipsInputState>(findFastChipsInput());
     final text = options.last;
@@ -107,10 +115,12 @@ void main() {
   testWidgets('removes InputChip via backspace', (tester) async {
     const initialValue = ['Test1', 'Test2', 'Test3'];
 
-    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
-      name: 'input_chips',
-      initialValue: initialValue,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastChipsInput(
+        name: 'input_chips',
+        initialValue: initialValue,
+      ),
+    ]));
 
     final state = tester.state<FastChipsInputState>(findFastChipsInput());
 
@@ -132,9 +142,11 @@ void main() {
   testWidgets('adds zwsp character on new text input', (tester) async {
     const testInput = 't';
 
-    await tester.pumpWidget(buildMaterialTestApp(const FastChipsInput(
-      name: 'input_chips',
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastChipsInput(
+        name: 'input_chips',
+      ),
+    ]));
 
     final state = tester.state<FastChipsInputState>(findFastChipsInput());
 

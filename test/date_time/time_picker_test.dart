@@ -5,9 +5,9 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastTimePicker', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(const FastTimePicker(
-      name: 'time_picker',
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastTimePicker(name: 'time_picker'),
+    ]));
 
     expect(findFastTimePicker(), findsOneWidget);
     expect(findIconButton(), findsOneWidget);
@@ -20,9 +20,9 @@ void main() {
   });
 
   testWidgets('updates FastTimePicker', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(const FastTimePicker(
-      name: 'time_picker',
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      const FastTimePicker(name: 'time_picker'),
+    ]));
 
     final state = tester.state<FastTimePickerState>(findFastTimePicker());
     expect(state.value, state.widget.initialValue);

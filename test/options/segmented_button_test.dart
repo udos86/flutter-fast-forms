@@ -16,10 +16,12 @@ void main() {
   });
 
   testWidgets('renders FastSegmentedButton', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastSegmentedButton<String>(
-      name: 'segmented_button',
-      segments: segments,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSegmentedButton<String>(
+        name: 'segmented_button',
+        segments: segments,
+      ),
+    ]));
 
     expect(findFastSegmentedButton<String>(), findsOneWidget);
     expect(findInputDecorator(), findsOneWidget);
@@ -28,11 +30,13 @@ void main() {
   });
 
   testWidgets('renders without InputDecoration', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastSegmentedButton<String>(
-      name: 'segmented_button',
-      segments: segments,
-      showInputDecoration: false,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSegmentedButton<String>(
+        name: 'segmented_button',
+        segments: segments,
+        showInputDecoration: false,
+      ),
+    ]));
 
     expect(findFastSegmentedButton<String>(), findsOneWidget);
     expect(findInputDecorator(), findsNothing);
@@ -44,12 +48,14 @@ void main() {
     final initialValue = {segments.first.value};
     final spy = OnChangedSpy<Set<String>>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastSegmentedButton<String>(
-      name: 'segmented_button',
-      initialValue: initialValue,
-      segments: segments,
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSegmentedButton<String>(
+        name: 'segmented_button',
+        initialValue: initialValue,
+        segments: segments,
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester.state<FastSegmentedButtonState<String>>(
         findFastSegmentedButton<String>());
@@ -65,12 +71,14 @@ void main() {
   });
 
   testWidgets('allows empty and multiple selections', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastSegmentedButton<String>(
-      name: 'segmented_button',
-      emptySelectionAllowed: true,
-      multiSelectionEnabled: true,
-      segments: segments,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastSegmentedButton<String>(
+        name: 'segmented_button',
+        emptySelectionAllowed: true,
+        multiSelectionEnabled: true,
+        segments: segments,
+      ),
+    ]));
 
     final state = tester.state<FastSegmentedButtonState<String>>(
         findFastSegmentedButton<String>());

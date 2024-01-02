@@ -43,11 +43,13 @@ void main() {
   testWidgets('renders FastFormArray', (tester) async {
     const initialValue = [0, 10, 100];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastFormArray<int>(
-      name: 'form_array',
-      initialValue: initialValue,
-      itemBuilder: (key, index, field) => TestItem(key, index, field),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastFormArray<int>(
+        name: 'form_array',
+        initialValue: initialValue,
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+      ),
+    ]));
 
     expect(findFastFormArray<int>(), findsOneWidget);
     expect(_findTestItem(), findsNWidgets(initialValue.length));
@@ -56,11 +58,13 @@ void main() {
   testWidgets('renders empty FastFormArray', (tester) async {
     const emptyText = 'Form array is empty';
 
-    await tester.pumpWidget(buildMaterialTestApp(FastFormArray<int>(
-      name: 'form_array',
-      itemBuilder: (key, index, field) => TestItem(key, index, field),
-      emptyBuilder: (field) => const Text(emptyText),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastFormArray<int>(
+        name: 'form_array',
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+        emptyBuilder: (field) => const Text(emptyText),
+      ),
+    ]));
 
     expect(_findTestItem(), findsNothing);
     expect(tester.widget<Text>(find.byType(Text)).data, emptyText);
@@ -69,11 +73,13 @@ void main() {
   testWidgets('updates FastFormArray value', (tester) async {
     const initialValue = [0];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastFormArray<int>(
-      name: 'form_array',
-      initialValue: initialValue,
-      itemBuilder: (key, index, field) => TestItem(key, index, field),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastFormArray<int>(
+        name: 'form_array',
+        initialValue: initialValue,
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+      ),
+    ]));
 
     final state =
         tester.state<FastFormArrayState<int>>(findFastFormArray<int>());
@@ -91,11 +97,13 @@ void main() {
   testWidgets('adds FastFormArray item', (tester) async {
     const initialValue = [0];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastFormArray<int>(
-      name: 'form_array',
-      initialValue: initialValue,
-      itemBuilder: (key, index, field) => TestItem(key, index, field),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastFormArray<int>(
+        name: 'form_array',
+        initialValue: initialValue,
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+      ),
+    ]));
 
     final state =
         tester.state<FastFormArrayState<int>>(findFastFormArray<int>());
@@ -111,11 +119,13 @@ void main() {
   testWidgets('inserts FastFormArray item', (tester) async {
     const initialValue = [0];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastFormArray<int>(
-      name: 'form_array',
-      initialValue: initialValue,
-      itemBuilder: (key, index, field) => TestItem(key, index, field),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastFormArray<int>(
+        name: 'form_array',
+        initialValue: initialValue,
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+      ),
+    ]));
 
     final state =
         tester.state<FastFormArrayState<int>>(findFastFormArray<int>());
@@ -131,11 +141,13 @@ void main() {
   testWidgets('removes FastFormArray item', (tester) async {
     const initialValue = [0, 42];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastFormArray<int>(
-      name: 'form_array',
-      initialValue: initialValue,
-      itemBuilder: (key, index, field) => TestItem(key, index, field),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastFormArray<int>(
+        name: 'form_array',
+        initialValue: initialValue,
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+      ),
+    ]));
 
     final state =
         tester.state<FastFormArrayState<int>>(findFastFormArray<int>());
@@ -151,12 +163,14 @@ void main() {
   testWidgets('moves FastFormArray item', (tester) async {
     const initialValue = [0, 42, 99];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastFormArray<int>(
-      name: 'form_array',
-      reorderable: true,
-      initialValue: initialValue,
-      itemBuilder: (key, index, field) => TestItem(key, index, field),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastFormArray<int>(
+        name: 'form_array',
+        reorderable: true,
+        initialValue: initialValue,
+        itemBuilder: (key, index, field) => TestItem(key, index, field),
+      ),
+    ]));
 
     final state =
         tester.state<FastFormArrayState<int>>(findFastFormArray<int>());
@@ -184,11 +198,13 @@ void main() {
     const initialValue = [0, 42, 99];
 
     await tester.pumpWidget(buildMaterialTestApp(
-      FastFormArray<int>(
-        name: 'form_array',
-        initialValue: initialValue,
-        itemBuilder: (key, index, field) => TestItem(key, index, field),
-      ),
+      [
+        FastFormArray<int>(
+          name: 'form_array',
+          initialValue: initialValue,
+          itemBuilder: (key, index, field) => TestItem(key, index, field),
+        ),
+      ],
       formKey: formKey,
     ));
 

@@ -6,14 +6,16 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastRangeSlider', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastRangeSlider(
-      name: 'range_slider',
-      max: 10,
-      min: 0,
-      labelsBuilder: rangeSliderLabelsBuilder,
-      prefixBuilder: rangeSliderPrefixBuilder,
-      suffixBuilder: rangeSliderSuffixBuilder,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRangeSlider(
+        name: 'range_slider',
+        max: 10,
+        min: 0,
+        labelsBuilder: rangeSliderLabelsBuilder,
+        prefixBuilder: rangeSliderPrefixBuilder,
+        suffixBuilder: rangeSliderSuffixBuilder,
+      ),
+    ]));
 
     final fastRangeSliderFinder = findFastRangeSlider();
 
@@ -32,10 +34,12 @@ void main() {
   });
 
   testWidgets('renders FastRangeSlider without InputDecorator', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastRangeSlider(
-      name: 'range_slider',
-      showInputDecoration: false,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRangeSlider(
+        name: 'range_slider',
+        showInputDecoration: false,
+      ),
+    ]));
 
     final fastRangeSliderFinder = findFastRangeSlider();
 
@@ -47,14 +51,16 @@ void main() {
   testWidgets('updates FastRangeSlider', (tester) async {
     final spy = OnChangedSpy<RangeValues>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastRangeSlider(
-      name: 'range_slider',
-      max: 10,
-      min: 0,
-      prefixBuilder: rangeSliderPrefixBuilder,
-      suffixBuilder: rangeSliderSuffixBuilder,
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRangeSlider(
+        name: 'range_slider',
+        max: 10,
+        min: 0,
+        prefixBuilder: rangeSliderPrefixBuilder,
+        suffixBuilder: rangeSliderSuffixBuilder,
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester.state<FastRangeSliderState>(findFastRangeSlider());
     const updatedValues = RangeValues(5, 7);
@@ -70,12 +76,15 @@ void main() {
   testWidgets('validates FastRangeSlider', (tester) async {
     const errorText = 'Range is too narrow';
 
-    await tester.pumpWidget(buildMaterialTestApp(FastRangeSlider(
-      name: 'range_slider',
-      max: 10,
-      min: 0,
-      validator: (values) => values!.end - values.start <= 1 ? errorText : null,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRangeSlider(
+        name: 'range_slider',
+        max: 10,
+        min: 0,
+        validator: (values) =>
+            values!.end - values.start <= 1 ? errorText : null,
+      ),
+    ]));
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);

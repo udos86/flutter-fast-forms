@@ -20,7 +20,7 @@ void main() {
   });
 
   testWidgets('renders FastSegmentedControl', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(widget));
+    await tester.pumpWidget(buildMaterialTestApp([widget]));
 
     expect(findFastSegmentedControl<String>(), findsOneWidget);
     expect(findSegmentedControl<String>(), findsOneWidget);
@@ -28,7 +28,7 @@ void main() {
   });
 
   testWidgets('updates FastSegmentedControl', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(widget));
+    await tester.pumpWidget(buildMaterialTestApp([widget]));
 
     final state = tester.state<FastSegmentedControlState<String>>(
         findFastSegmentedControl<String>());

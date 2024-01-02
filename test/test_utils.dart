@@ -7,138 +7,141 @@ typedef GenericTypeOf = Type Function<T>();
 
 Type typeOf<T>() => T;
 
-findButtonSegments<T>() =>
+Finder findButtonSegments<T>() =>
     find.descendant(of: findSegmentedButton<T>(), matching: find.byType(Text));
 
-findCalendarDatePicker() => find.byType(CalendarDatePicker);
+Finder findCalendarDatePicker() => find.byType(CalendarDatePicker);
 
-findCupertinoCheckbox() => find.byType(CupertinoCheckbox);
+Finder findCupertinoCheckbox() => find.byType(CupertinoCheckbox);
 
-findCupertinoDatePicker() => find.byType(CupertinoDatePicker);
+Finder findCupertinoDatePicker() => find.byType(CupertinoDatePicker);
 
-findCupertinoFormRow() => find.byType(CupertinoFormRow);
+Finder findCupertinoFormRow() => find.byType(CupertinoFormRow);
 
-findCupertinoFormSection() => find.byType(CupertinoFormSection);
+Finder findCupertinoFormSection() => find.byType(CupertinoFormSection);
 
-findCupertinoSlider() => find.byType(CupertinoSlider);
+Finder findCupertinoSlider() => find.byType(CupertinoSlider);
 
-findCupertinoSwitch() => find.byType(CupertinoSwitch);
+Finder findCupertinoSwitch() => find.byType(CupertinoSwitch);
 
-findCupertinoTextField() => find.byType(CupertinoTextField);
+Finder findCupertinoTextField() => find.byType(CupertinoTextField);
 
-findCupertinoTextFormFieldRow() => find.byType(CupertinoTextFormFieldRow);
+Finder findCupertinoTextFormFieldRow() =>
+    find.byType(CupertinoTextFormFieldRow);
 
-findCheckboxListTile() => find.byType(CheckboxListTile);
+Finder findCheckboxListTile() => find.byType(CheckboxListTile);
 
-findChoiceChip() => find.byType(ChoiceChip);
+Finder findChoiceChip() => find.byType(ChoiceChip);
 
-findDropdown<T>() => find.byType(typeOf<DropdownButton<T>>());
+Finder findDropdown<T>() => find.byType(typeOf<DropdownButton<T>>());
 
-findDropdownButton<T>() => find.byType(typeOf<DropdownButton<T>>());
+Finder findDropdownButton<T>() => find.byType(typeOf<DropdownButton<T>>());
 
-findDropdownButtonFormField<T>() =>
+Finder findDropdownButtonFormField<T>() =>
     find.byType(typeOf<DropdownButtonFormField<T>>());
 
-findDropdownMenuItem<T>() => find.byType(typeOf<DropdownMenuItem<T>>());
+Finder findDropdownMenuItem<T>() => find.byType(typeOf<DropdownMenuItem<T>>());
 
-findExpanded() => find.byType(Expanded);
+Finder findExpanded() => find.byType(Expanded);
 
-findFastAutocomplete<O extends Object>() =>
+Finder findFastAutocomplete<O extends Object>() =>
     find.byType(typeOf<FastAutocomplete<O>>());
 
-findFastCalendar() => find.byType(FastCalendar);
+Finder findFastCalendar() => find.byType(FastCalendar);
 
-findFastCheckbox() => find.byType(FastCheckbox);
+Finder findFastCheckbox() => find.byType(FastCheckbox);
 
-findFastChipsInput() => find.byType(FastChipsInput);
+Finder findFastChipsInput() => find.byType(FastChipsInput);
 
-findFastChoiceChips<T>() => find.byType(typeOf<FastChoiceChips<T>>());
+Finder findFastChoiceChips<T>() => find.byType(typeOf<FastChoiceChips<T>>());
 
-findFastDatePicker() => find.byType(FastDatePicker);
+Finder findFastDatePicker() => find.byType(FastDatePicker);
 
-findFastDateRangePicker() => find.byType(FastDateRangePicker);
+Finder findFastDateRangePicker() => find.byType(FastDateRangePicker);
 
-findFastDropdown<T>() => find.byType(typeOf<FastDropdown<T>>());
+Finder findFastDropdown<T>() => find.byType(typeOf<FastDropdown<T>>());
 
-findFastForm() => find.byType(FastForm);
+Finder findFastForm() => find.byType(FastForm);
 
-findFastFormArray<T>() => find.byType(typeOf<FastFormArray<T>>());
+Finder findFastFormArray<T>() => find.byType(typeOf<FastFormArray<T>>());
 
-findFastFormSection() => find.byType(FastFormSection);
+Finder findFastFormSection() => find.byType(FastFormSection);
 
-findFastRadioGroup<T>() => find.byType(typeOf<FastRadioGroup<T>>());
+Finder findFastRadioGroup<T>() => find.byType(typeOf<FastRadioGroup<T>>());
 
-findFastRangeSlider() => find.byType(FastRangeSlider);
+Finder findFastRangeSlider() => find.byType(FastRangeSlider);
 
-findFastSegmentedButton<T>() => find.byType(typeOf<FastSegmentedButton<T>>());
+Finder findFastSegmentedButton<T>() =>
+    find.byType(typeOf<FastSegmentedButton<T>>());
 
-findFastSegmentedControl<T>() => find.byType(typeOf<FastSegmentedControl<T>>());
+Finder findFastSegmentedControl<T>() =>
+    find.byType(typeOf<FastSegmentedControl<T>>());
 
-findFastSlider() => find.byType(FastSlider);
+Finder findFastSlider() => find.byType(FastSlider);
 
-findFastSwitch() => find.byType(FastSwitch);
+Finder findFastSwitch() => find.byType(FastSwitch);
 
-findFastTextField() => find.byType(FastTextField);
+Finder findFastTextField() => find.byType(FastTextField);
 
-findFastTimePicker() => find.byType(FastTimePicker);
+Finder findFastTimePicker() => find.byType(FastTimePicker);
 
-findForm() => find.byType(Form);
+Finder findForm() => find.byType(Form);
 
-findIconButton() => find.byType(IconButton);
+Finder findIconButton() => find.byType(IconButton);
 
-findInkWell() => find.byType(InkWell);
+Finder findInkWell() => find.byType(InkWell);
 
-findInputChip() => find.byType(InputChip);
+Finder findInputChip() => find.byType(InputChip);
 
-findInputDecorator() => find.byType(InputDecorator);
+Finder findInputDecorator() => find.byType(InputDecorator);
 
-findListView() => find.byType(ListView);
+Finder findListView() => find.byType(ListView);
 
-findRadioListTile<T>() => find.byType(typeOf<RadioListTile<T>>());
+Finder findRadioListTile<T>() => find.byType(typeOf<RadioListTile<T>>());
 
-findRangeSlider() => find.byType(RangeSlider);
+Finder findRangeSlider() => find.byType(RangeSlider);
 
-findRow() => find.byType(Row);
+Finder findRow() => find.byType(Row);
 
-findSegmentedButton<T>() => find.byType(typeOf<SegmentedButton<T>>());
+Finder findSegmentedButton<T>() => find.byType(typeOf<SegmentedButton<T>>());
 
-findSegmentedControlButton<T>() =>
+Finder findSegmentedControlButton<T>() =>
     find.descendant(of: findSegmentedControl<T>(), matching: find.byType(Text));
 
-findSegmentedControl<T>() =>
+Finder findSegmentedControl<T>() =>
     find.byType(typeOf<CupertinoSlidingSegmentedControl<T>>());
 
-findSlider() => find.byType(Slider);
+Finder findSlider() => find.byType(Slider);
 
-findSwitch() => find.byType(Switch);
+Finder findSwitch() => find.byType(Switch);
 
-findSwitchListTile() => find.byType(SwitchListTile);
+Finder findSwitchListTile() => find.byType(SwitchListTile);
 
-findTextButton() => find.byType(TextButton);
+Finder findTextButton() => find.byType(TextButton);
 
-findTextFormField() => find.byType(TextFormField);
+Finder findTextFormField() => find.byType(TextFormField);
 
-findWrap() => find.byType(Wrap);
+Finder findWrap() => find.byType(Wrap);
 
-MaterialApp buildMaterialTestApp(Widget testWidget,
+MaterialApp buildMaterialTestApp(List<Widget> testWidgets,
     {GlobalKey<FormState>? formKey}) {
   return MaterialApp(
     home: Scaffold(
       body: FastForm(
         formKey: formKey ?? GlobalKey<FormState>(),
-        children: [testWidget],
+        children: testWidgets,
       ),
     ),
   );
 }
 
-CupertinoApp buildCupertinoTestApp(Widget testWidget,
+CupertinoApp buildCupertinoTestApp(List<Widget> testWidgets,
     {GlobalKey<FormState>? formKey}) {
   return CupertinoApp(
     home: CupertinoPageScaffold(
       child: FastForm(
         formKey: formKey ?? GlobalKey<FormState>(),
-        children: [testWidget],
+        children: testWidgets,
       ),
     ),
   );

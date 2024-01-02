@@ -5,11 +5,13 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastCalendar', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastCalendar(
-      name: 'calendar',
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastCalendar(
+        name: 'calendar',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
+      )
+    ]));
 
     expect(findFastCalendar(), findsOneWidget);
     expect(findCalendarDatePicker(), findsOneWidget);
@@ -18,12 +20,14 @@ void main() {
   testWidgets('updates FastCalendar', (tester) async {
     final spy = OnChangedSpy<DateTime>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastCalendar(
-      name: 'calendar',
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastCalendar(
+        name: 'calendar',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester.state<FastCalendarState>(findFastCalendar());
     expect(state.value, state.widget.initialValue);
@@ -41,12 +45,14 @@ void main() {
     const invalidValue = 21;
     const errorText = 'Invalid day';
 
-    await tester.pumpWidget(buildMaterialTestApp(FastCalendar(
-      name: 'calendar',
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-      validator: (value) => value?.day == invalidValue ? errorText : null,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastCalendar(
+        name: 'calendar',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
+        validator: (value) => value?.day == invalidValue ? errorText : null,
+      ),
+    ]));
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);

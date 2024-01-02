@@ -11,10 +11,12 @@ void main() {
       FastRadioOption(title: Text('Option 2'), value: 'option-2'),
     ];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastRadioGroup<String>(
-      name: 'radio_group',
-      options: options,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRadioGroup<String>(
+        name: 'radio_group',
+        options: options,
+      ),
+    ]));
 
     final fastRadioGroupFinder = findFastRadioGroup<String>();
     final widget = tester.widget<FastRadioGroup<String>>(fastRadioGroupFinder);
@@ -31,13 +33,13 @@ void main() {
       FastRadioOption(title: Text('Option 2'), value: 'option-2'),
     ];
 
-    await tester.pumpWidget(buildMaterialTestApp(
+    await tester.pumpWidget(buildMaterialTestApp([
       FastRadioGroup<String>(
         name: 'radio_group',
         options: options,
         orientation: FastRadioGroupOrientation.horizontal,
       ),
-    ));
+    ]));
 
     expect(findExpanded(), findsNWidgets(options.length));
     expect(findRadioListTile<String>(), findsNWidgets(options.length));
@@ -50,11 +52,13 @@ void main() {
     ];
     final spy = OnChangedSpy<String>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastRadioGroup<String>(
-      name: 'radio_group',
-      options: options,
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRadioGroup<String>(
+        name: 'radio_group',
+        options: options,
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state =
         tester.state<FastRadioGroupState<String>>(findFastRadioGroup<String>());
@@ -80,11 +84,13 @@ void main() {
       invalidOption,
     ];
 
-    await tester.pumpWidget(buildMaterialTestApp(FastRadioGroup<String>(
-      name: 'radio_group',
-      options: options,
-      validator: (value) => value == invalidOption.value ? errorText : null,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastRadioGroup<String>(
+        name: 'radio_group',
+        options: options,
+        validator: (value) => value == invalidOption.value ? errorText : null,
+      ),
+    ]));
 
     final state =
         tester.state<FastRadioGroupState<String>>(findFastRadioGroup<String>());

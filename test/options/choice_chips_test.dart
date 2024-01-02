@@ -18,12 +18,14 @@ void main() {
     const helperText = 'helper';
     const labelText = 'label';
 
-    await tester.pumpWidget(buildMaterialTestApp(FastChoiceChips(
-      name: 'choice_chips',
-      helperText: helperText,
-      labelText: labelText,
-      chips: chips,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastChoiceChips(
+        name: 'choice_chips',
+        helperText: helperText,
+        labelText: labelText,
+        chips: chips,
+      ),
+    ]));
 
     expect(findFastChoiceChips<String>(), findsOneWidget);
     expect(findInputDecorator(), findsOneWidget);
@@ -35,11 +37,13 @@ void main() {
   });
 
   testWidgets('renders FastChoiceChips', (tester) async {
-    await tester.pumpWidget(buildMaterialTestApp(FastChoiceChips(
-      name: 'choice_chips',
-      chips: chips,
-      showInputDecoration: false,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastChoiceChips(
+        name: 'choice_chips',
+        chips: chips,
+        showInputDecoration: false,
+      ),
+    ]));
 
     expect(findFastChoiceChips<String>(), findsOneWidget);
     expect(findInputDecorator(), findsNothing);
@@ -50,11 +54,13 @@ void main() {
   testWidgets('updates FastChoiceChips', (tester) async {
     final spy = OnChangedSpy<Set<String>>();
 
-    await tester.pumpWidget(buildMaterialTestApp(FastChoiceChips(
-      name: 'choice_chips',
-      chips: chips,
-      onChanged: spy.fn,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastChoiceChips(
+        name: 'choice_chips',
+        chips: chips,
+        onChanged: spy.fn,
+      ),
+    ]));
 
     final state = tester
         .state<FastChoiceChipsState<String>>(findFastChoiceChips<String>());
@@ -73,12 +79,14 @@ void main() {
   testWidgets('validates FastChoiceChips', (tester) async {
     const errorText = 'At least one chip must be selected';
 
-    await tester.pumpWidget(buildMaterialTestApp(FastChoiceChips(
-      name: 'choice_chips',
-      chips: chips,
-      validator: (selected) =>
-          selected == null || selected.isEmpty ? errorText : null,
-    )));
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastChoiceChips(
+        name: 'choice_chips',
+        chips: chips,
+        validator: (selected) =>
+            selected == null || selected.isEmpty ? errorText : null,
+      ),
+    ]));
 
     final errorTextFinder = find.text(errorText);
     expect(errorTextFinder, findsNothing);
