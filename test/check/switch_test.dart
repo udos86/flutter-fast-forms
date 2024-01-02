@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,7 +7,11 @@ import '../test_utils.dart';
 
 void main() {
   testWidgets('renders FastSwitch', (tester) async {
-    const widget = FastSwitch(name: 'switch', titleText: 'title');
+    final widget = FastSwitch(
+      name: 'switch',
+      titleText: 'title',
+      thumbColor: MaterialStateProperty.resolveWith((states) => Colors.green),
+    );
     await tester.pumpWidget(buildMaterialTestApp([widget]));
 
     expect(findFastSwitch(), findsOneWidget);
