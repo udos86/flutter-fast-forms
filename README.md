@@ -59,10 +59,10 @@ class MyFormPage extends StatelessWidget {
 
 **2.** Add `FastFormControl<T>` children to build up your form:
 ```dart
-child: FastForm(
+FastForm(
   formKey: formKey,
   children: [
-    FastTextField(
+    const FastTextField(
       name: 'field_destination',
       labelText: 'Destination',
       placeholder: 'Where are you going?',
@@ -73,7 +73,7 @@ child: FastForm(
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     ),
-    FastCheckbox(
+    const FastCheckbox(
       name: 'field_travel_purpose',
       labelText: 'Travel purpose',
       titleText: 'I am travelling for work',
@@ -84,14 +84,14 @@ child: FastForm(
 
 **3.** Wrap children with `FastFormSection` for grouping and consistent padding:
 ```dart
-child: FastForm(
+FastForm(
   formKey: formKey,
   children: [
     FastFormSection(
       header: const Text('My Form'),
       padding: EdgeInsets.all(16.0),
       children: [
-        FastTextField(
+        const FastTextField(
           name: 'field_destination',
           labelText: 'Destination',
           placeholder: 'Where are you going?',
@@ -125,17 +125,24 @@ child: FastForm(
 |         `FastTextField`          |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |
 |         `FastTimePicker`         |            `showTimePicker`             | no / use `FastDatePicker`<br>with <br>`CupertinoDatePickerMode.time` |
 
+## Adaptive Form Fields
+
 ## Conditional Form Fields
-
-
 
 ## Custom Form Fields
 
+There are use cases where the widget catalog does not fully satisfy your individual requirements. 
+
+As a consequence you have to add non-standard controls to your form.
+
 With Flutter Fast Forms you're free to wrap any custom widget into a form field.
+<hr>
 
-Let's assume a simple sample widget that provides a random integer whenever a button is pressed.
+📓 **Example**: A simple widget that provides a random integer whenever a button is pressed.
 
-1. Create a new widget class extending `FastFormField<T>` with a corresponding `FastFormFieldState<T>`:
+<hr>
+
+1. Create a stateful widget class extending `FastFormField<T>` with a corresponding `FastFormFieldState<T>`:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
@@ -153,30 +160,39 @@ class MyCustomFieldState extends FastFormFieldState<int> {
   MyCustomField get widget => super.widget as MyCustomField;
 }
 ```
+> [!NOTE]
+> * `builder` and `name` are required constructor parameters of `FastFormField`.
+> * `builder` is a standard Flutter `FormFieldBuilder<T>`.
 
-2. Implement a `FormFieldBuilder<T>` returning your custom widget and calling `field.didChange()`:
+2. Implement the `FormFieldBuilder<T>` returning your custom widget:
 ```dart
 Widget myCustomFormFieldBuilder(FormFieldState<int> field) {
+  field as MyCustomFieldState;
+  final MyCustomFieldState(:decoration, :didChange, :value) = field;
+
   return InputDecorator(
-    decoration: field.decoration,
+    decoration: decoration,
     child: Row(
       children: [
         ElevatedButton(
           child: const Text('Create random number'),
-          onPressed: () => field.didChange(Random().nextInt(1 << 32)),
+          onPressed: () => didChange(Random().nextInt(1 << 32)),
         ),
-        if (field.value is int)
+        if (value is int)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Text(field.value!.toString()),
+            child: Text(value.toString()),
           )
       ],
     ),
   );
 }
 ```
+> [!NOTE]
+> * Casting `field` is mandatory to access `FastFormField` properties and functions.
+> * Always call `field.didChange()` to update the value of the form field.
 
-3. Add all super-initializer `FastFormField` parameters that the form field should support:
+3. Add all super-initializer parameters that the form field should support:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
