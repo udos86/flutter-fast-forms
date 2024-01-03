@@ -129,6 +129,18 @@ FastForm(
 
 ## Conditional Form Fields
 
+Not all controls in a form are autonomous and act independant of each other. 
+
+The state of a form field might be directly related to the state of some other form field as well.
+
+Flutter Fast Forms allows you to define such conditions declaratively. 
+
+<hr>
+
+📓 **Example**: A `FastTextField` should be disabled when a `FastSwitch` is selected.
+
+<hr>
+
 ## Custom Form Fields
 
 There are use cases where the widget catalog does not fully satisfy your individual requirements. 
