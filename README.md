@@ -4,16 +4,17 @@
 [![Pub Version](https://img.shields.io/pub/v/flutter_fast_forms)](https://pub.dev/packages/flutter_fast_forms)
 [![codecov](https://codecov.io/gh/udos86/flutter-fast-forms/branch/master/graph/badge.svg)](https://codecov.io/gh/udos86/flutter-fast-forms)
 
-Flutter Fast Forms is the only Dart package you'll ever need to build Flutter forms fast.
+Flutter Fast Forms is the only Dart package you need to build Flutter forms fast.
 
-It adds these essential features to the Flutter SDK: 
+It adds these missing features to the Flutter SDK: 
 
-* `FormField<T>` wrappers for all [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) input widgets **according** to the already built-in [TextFormField](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [DropdownButtonFormField](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
-* **adaptive** and highly **customizable** `FastFormControl<T>` widgets with support for [**validation states**](https://github.com/flutter/flutter/issues/18885).
-* `FastForm` widget that passes current form field values to `onChanged`
-* `FastFormArray` widget that aggregates a flexible list of homogeneous controls similar to `ListView.builder`
+* `FastFormControl<T>` convenience widgets that wrap [Material](https://flutter.dev/docs/development/ui/widgets/material#Input%20and%20selections) / [Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino) form controls in a `FormField<T>` **according** to the already built-in [`TextFormField`](https://api.flutter.dev/flutter/material/TextFormField-class.html) / [`DropdownButtonFormField`](https://api.flutter.dev/flutter/material/DropdownButtonFormField-class.html) 
+* `FastForm` widget that wraps the built-in `Form` widget for providing the current form field values in `onChanged` callback
+* `FastFormArray` widget that aggregates a flexible number of homogeneous controls in a single `FormField<T>`
 * `FastChipsInput` widget that converts text input into chips as defined by [Material Design](https://material.io/components/chips#input-chips)  
-* common `FormFieldValidator<T>` functions
+* Conditional form fields
+* `touched` [**validation state**](https://github.com/flutter/flutter/issues/18885).
+* Common `FormFieldValidator<T>` functions
 
 ---
 
@@ -105,32 +106,36 @@ child: FastForm(
 
 ## Widget Catalog
 
-| adaptive<br>`FastFormControl<T>` |            adopts<br>Material           |                         adopts <br>Cupertino                         | requires <br>Material Widget ancestor<br>when `adaptive: true` |
-|:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------:|
-|        `FastAutocomplete`        |              `Autocomplete`             |                                  no                                  |                               yes                              |
-|          `FastCheckbox`          |            `CheckboxListTile`           |                         `CupertinoCheckbox`                          |                               yes                              |
-|        `FastChoiceChips`         |               `ChoiceChip`              |                                  no                                  |                               yes                              |
-|          `FastCalendar`          |           `CalendarDatePicker`          |                                  no                                  |                               yes                              |
-|         `FastDatePicker`         |             `showDatePicker`            |                        `CupertinoDatePicker`                         |                               no                               |
-|      `FastDateRangePicker`       |          `showDateRangePicker`          |                                  no                                  |                               yes                              |
-|          `FastDropdown`          | `DropdownButtonFormField`<br>`<String>` |                                  no                                  |                               yes                              |
-|         `FastChipsInput`         |       `Autocomplete` + `InputChip`      |                                  no                                  |                               yes                              |
-|         `FastRadioGroup`         |             `RadioListTile`             |                                  no                                  |                               yes                              |
-|        `FastRangeSlider`         |              `RangeSlider`              |                                  no                                  |                               yes                              |
-|      `FastSegmentedControl`      |                    no                   |                `SlidingSegmenteControl`<br>`<String>`                |                               no                               |
-|           `FastSlider`           |            `Slider.adaptive`            |                          `CupertinoSlider`                           |                               no                               |
-|           `FastSwitch`           |             `SwitchListTile`            |                          `CupertinoSwitch`                           |                               no                               |
-|         `FastTextField`          |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |                               no                               |
-|         `FastTimePicker`         |             `showTimePicker`            | no / use `FastDatePicker`<br>with <br>`CupertinoDatePickerMode.time` |                               yes                              |
+| adaptive<br>`FastFormControl<T>` |            wraps<br>Material            |                          wraps<br>Cupertino                          |
+|:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|
+|        `FastAutocomplete`        |             `Autocomplete`              |                                  no                                  |
+|          `FastCheckbox`          |           `CheckboxListTile`            |                         `CupertinoCheckbox`                          |
+|        `FastChoiceChips`         |              `ChoiceChip`               |                                  no                                  |
+|          `FastCalendar`          |          `CalendarDatePicker`           |                                  no                                  |
+|         `FastDatePicker`         |            `showDatePicker`             |                        `CupertinoDatePicker`                         |
+|      `FastDateRangePicker`       |          `showDateRangePicker`          |                                  no                                  |
+|          `FastDropdown`          | `DropdownButtonFormField`<br>`<String>` |                                  no                                  |
+|         `FastChipsInput`         |      `Autocomplete` + `InputChip`       |                                  no                                  |
+|         `FastRadioGroup`         |             `RadioListTile`             |                                  no                                  |
+|        `FastRangeSlider`         |              `RangeSlider`              |                                  no                                  |
+|      `FastSegmentedButton`       |            `SegmentedButton`            |                                  no                                  |
+|      `FastSegmentedControl`      |                   no                    |                `CupertinoSlidingSegmentedControl<T>`                 |
+|           `FastSlider`           |            `Slider.adaptive`            |                          `CupertinoSlider`                           |
+|           `FastSwitch`           |            `SwitchListTile`             |                          `CupertinoSwitch`                           |
+|         `FastTextField`          |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |
+|         `FastTimePicker`         |            `showTimePicker`             | no / use `FastDatePicker`<br>with <br>`CupertinoDatePickerMode.time` |
+
+## Conditional Form Fields
 
 
-## Custom Form Field Widgets
 
-Transforming any custom widget into a form field is easy to do with Flutter Fast Forms.
+## Custom Form Fields
+
+With Flutter Fast Forms you're free to wrap any custom widget into a form field.
 
 Let's assume a simple sample widget that provides a random integer whenever a button is pressed.
 
-1. Create a stateful widget extending `FastFormField<T>` with a corresponding `FastFormFieldState<T>`:
+1. Create a new widget class extending `FastFormField<T>` with a corresponding `FastFormFieldState<T>`:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
@@ -171,7 +176,7 @@ Widget myCustomFormFieldBuilder(FormFieldState<int> field) {
 }
 ```
 
-3. Add optional super-initializer parameters to your constructor as you like:
+3. Add all super-initializer `FastFormField` parameters that the form field should support:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
