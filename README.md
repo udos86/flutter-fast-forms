@@ -129,7 +129,7 @@ FastForm(
 
 ## Conditional Form Fields
 
-Not all controls in a form are autonomous and act independant of each other. 
+Not all controls in a form are autonomous and act independent of each other. 
 
 The state of a form field might be directly related to the state of some other form field as well.
 
@@ -137,9 +137,134 @@ Flutter Fast Forms allows you to define such conditions declaratively.
 
 <hr>
 
-📓 **Example**: A `FastTextField` should be disabled when a `FastSwitch` is selected.
+📓 **Example**: A `FastTextField` that is disabled when a `FastSwitch` is selected.
 
 <hr>
+
+1. Add the `conditions` property to the conditional form field and assign an empty `Map`:
+```dart
+const FastSwitch(
+  name: 'switch',
+  titleText: 'Disable text field',
+),
+FastTextField(
+  name: 'text_field',
+  labelText: 'Just some sample text field',
+  conditions: {},
+),
+```
+
+2. Choose a suitable `FastConditionHandler` as `Map` key and assign an empty `List`:
+```dart
+const FastSwitch(
+  name: 'switch',
+  titleText: 'Disable text field when selected',
+),
+FastTextField(
+  name: 'text_field',
+  labelText: 'Just some sample text field',
+  conditions: {
+    FastCondition.disabled: [],
+  },
+)
+```
+> [!NOTE]
+> A `FastConditionHandler` is a function that runs whenever a `FastCondition` is checked and determines what happens when the `condition` is either met or not.
+
+3. Add a `FastCondition` relating the field to another field:
+```dart
+const FastSwitch(
+  name: 'switch',
+  titleText: 'Disable text field when selected',
+),
+FastTextField(
+  name: 'text_field',
+  labelText: 'Just some sample text field',
+  conditions: {
+    FastCondition.disabled: [
+      FastCondition(
+        target: 'switch',
+        validator: (value, field) => value is bool && value,
+      ),
+    ],
+  },
+),
+```
+> [!NOTE]
+> * `target` is the `name` of the `FastFormField` that the form field depends on.
+> * `validator` is a `FastConditionValidator` function that returns wether the `FastCondition` is met or not.
+
+<hr>
+
+📓 **Example**: A `FastTextField` that is disabled when both a `FastSwitch` **and** a `FastCheckbox` are selected.
+
+<hr>
+
+```dart
+const FastCheckbox(
+  name: 'checkbox',
+  titleText: 'Disable text field when selected',
+),
+const FastSwitch(
+  name: 'switch',
+  titleText: 'Disable text field when selected',
+),
+FastTextField(
+  name: 'text_field',
+  labelText: 'Just some sample text field',
+  conditions: {
+    FastCondition.disabled: [
+      FastCondition(
+        required: true,
+        target: 'switch',
+        validator: (value, field) => value is bool && value,
+      ),
+      FastCondition(
+        target: 'checkbox',
+        validator: (value, field) => value is bool && value,
+      ),
+    ],
+  },
+),
+```
+> [!NOTE]
+> `required: true` on any `FastCondition` forces  a logical `AND` connection between all conditions in the `List`.
+
+<hr>
+
+📓 **Example**: A `FastTextField` that is enabled when a `FastSwitch` **or** a `FastCheckbox` is selected.
+
+<hr>
+
+```dart
+const FastCheckbox(
+  name: 'checkbox',
+  titleText: 'Enable text field when selected',
+),
+const FastSwitch(
+  required: true,
+  name: 'switch',
+  titleText: 'Enable text field when selected',
+),
+FastTextField(
+  name: 'text_field',
+  enabled: false,
+  labelText: 'Just some sample text field',
+  conditions: {
+    FastCondition.enabled: [
+      FastCondition(
+        target: 'switch',
+        validator: (value, field) => value is bool && value,
+      ),
+      FastCondition(
+        target: 'checkbox',
+        validator: (value, field) => value is bool && value,
+      ),
+    ],
+  },
+)
+```
+
 
 ## Custom Form Fields
 
