@@ -115,24 +115,24 @@ FastForm(
 
 ## Widget Catalog
 
-|       `FastFormControl<T>`       |           wraps Material widget         |              wraps Cupertino widget<br> when `adaptive:true`         |
-|:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|
-|        `FastAutocomplete`        |             `Autocomplete`              |                                  no                                  |
-|          `FastCheckbox`          |           `CheckboxListTile`            |                         `CupertinoCheckbox`                          |
-|        `FastChoiceChips`         |              `ChoiceChip`               |                                  no                                  |
-|          `FastCalendar`          |          `CalendarDatePicker`           |                                  no                                  |
-|         `FastDatePicker`         |            `showDatePicker`             |                        `CupertinoDatePicker`                         |
-|      `FastDateRangePicker`       |          `showDateRangePicker`          |                                  no                                  |
-|          `FastDropdown`          | `DropdownButtonFormField`<br>`<String>` |                                  no                                  |
-|         `FastChipsInput`         |      `Autocomplete` + `InputChip`       |                                  no                                  |
-|         `FastRadioGroup`         |             `RadioListTile`             |                                  no                                  |
-|        `FastRangeSlider`         |              `RangeSlider`              |                                  no                                  |
-|      `FastSegmentedButton`       |            `SegmentedButton`            |                                  no                                  |
-|      `FastSegmentedControl`      |                   no                    |                `CupertinoSlidingSegmentedControl<T>`                 |
-|           `FastSlider`           |            `Slider.adaptive`            |                          `CupertinoSlider`                           |
-|           `FastSwitch`           |            `SwitchListTile`             |                          `CupertinoSwitch`                           |
-|         `FastTextField`          |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |
-|         `FastTimePicker`         |            `showTimePicker`             | no / use `FastDatePicker`<br>with <br>`CupertinoDatePickerMode.time` |
+|       `FastFormControl<T>`       | field value type |           wraps Material widget         |           wraps Cupertino widget<br> when `adaptive: true`           |
+|:--------------------------------:|:----------------:|:---------------------------------------:|:--------------------------------------------------------------------:|
+|       `FastAutocomplete<O>`      |     `String`     |            `Autocomplete<O>`            |                                  no                                  |
+|          `FastCheckbox`          |      `bool`      |           `CheckboxListTile`            |                         `CupertinoCheckbox`                          |
+|       `FastChoiceChips<T>`       |     `Set<T>`     |              `ChoiceChip`               |                                  no                                  |
+|          `FastCalendar`          |    `DateTime`    |          `CalendarDatePicker`           |                                  no                                  |
+|         `FastChipsInput`         |  `List<String>`  | `RawAutocomplete<String>` + `InputChip` |                                  no                                  |
+|         `FastDatePicker`         |    `DateTime`    |            `showDatePicker`             |                        `CupertinoDatePicker`                         |
+|      `FastDateRangePicker`       |  `DateTimeRange` |          `showDateRangePicker`          |                                  no                                  |
+|        `FastDropdown<T>`         |       `T`        |      `DropdownButtonFormField<T>`       |                                  no                                  |
+|        `FastRadioGroup<T>`       |       `T`        |            `RadioListTile<T>`           |                                  no                                  |
+|        `FastRangeSlider`         |   `RangeValues`  |              `RangeSlider`              |                                  no                                  |
+|     `FastSegmentedButton<T>`     |     `Set<T>`     |           `SegmentedButton<T>`          |                                  no                                  |
+|     `FastSegmentedControl<T>`    |       `T`        |                   no                    |                `CupertinoSlidingSegmentedControl<T>`                 |
+|           `FastSlider`           |     `double`     |            `Slider.adaptive`            |                          `CupertinoSlider`                           |
+|           `FastSwitch`           |      `bool`      |            `SwitchListTile`             |                          `CupertinoSwitch`                           |
+|         `FastTextField`          |     `String`     |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |
+|         `FastTimePicker`         |    `TimeOfDay`   |            `showTimePicker`             | no <br> use `FastDatePicker` with <br>`CupertinoDatePickerMode.time` |
 
 ## Adaptive Form Fields
 
@@ -143,11 +143,11 @@ By default, Flutter Fast Forms uses Material widgets on any platform.
 This behavior is adjustable so that platform-specific Cupertino widgets are automatically rendered on iOS.
 
 > [!TIP]
-> The widget catalog tells you which `FastFormControl` is adaptive. 
+> The [widget catalog](#widget-catalog) tells you which `FastFormControl` is adaptive. 
 
 <br/>
 
-📓 **Example**: Use Cupertino widgets over the entire `FastForm` on iOS.
+📓 **Example**: Always use Cupertino widgets on iOS in a `FastForm`.
 
 ```dart
 FastForm(
@@ -170,7 +170,7 @@ FastForm(
 
 <br/>
 
-📓 **Example**: Use the Cupertino widget on iOS only for a dedicated `FastSwitch`.
+📓 **Example**: Only use the Cupertino widget on iOS for a dedicated `FastSwitch`.
 
 ```dart
 FastForm(
@@ -190,7 +190,7 @@ FastForm(
 
 Not all controls in a form are autonomous and act independent of each other. 
 
-The state of a form field might be directly related to the state of some other form field as well.
+Occasionally, the state of a form field might be directly related to the state of some other form field as well.
 
 Flutter Fast Forms allows you to define such conditions declaratively. 
 
