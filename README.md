@@ -13,10 +13,10 @@ It adds these missing features to the Flutter SDK:
 * `FastFormArray` widget that aggregates a flexible number of homogeneous controls in a single `FormField<T>`
 * `FastChipsInput` widget that converts text input into chips as defined by [Material Design](https://material.io/components/chips#input-chips)  
 * Conditional form fields
-* `touched` [**validation state**](https://github.com/flutter/flutter/issues/18885).
+* `touched` [**validation state**](https://github.com/flutter/flutter/issues/18885)
 * Common `FormFieldValidator<T>` functions
 
----
+<br/>
 
 <img src="https://github.com/udos86/flutter-fast-forms/assets/508325/13708c6d-ac19-4101-bb3a-2ef6fb6a8f54" width="200" 
 /><img src="https://github.com/udos86/flutter-fast-forms/assets/508325/a5537d99-4eba-46ae-a716-d4623d88b714" width="200"
@@ -27,6 +27,15 @@ It adds these missing features to the Flutter SDK:
 /><img src="https://user-images.githubusercontent.com/508325/137577821-454f9bb8-aaf2-4dc5-82e4-c7d70b04f426.png" width="200"
 /><img src="https://user-images.githubusercontent.com/508325/137577765-078ab415-8de3-4ad1-aa87-947603b8279b.png" width="200"/> 
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Widget Catalog](#widget-catalog)
+- [Adaptive Form Fields](#adaptive-form-fields)
+- [Conditional Form Fields](#conditional-form-fields)
+- [Custom Form Fields](#custom-form-fields)
+
+<br/>
 
 ## Getting Started
 
@@ -57,7 +66,7 @@ class MyFormPage extends StatelessWidget {
 }
 ```
 
-**2.** Add `FastFormControl<T>` children to build up your form:
+**2.** Add `FastFormControl<T>` children to the `FastForm`:
 ```dart
 FastForm(
   formKey: formKey,
@@ -79,10 +88,10 @@ FastForm(
       titleText: 'I am travelling for work',
     ),
   ],
-)
+),
 ```
 
-**3.** Wrap children with `FastFormSection` for grouping and consistent padding:
+**3.** Wrap the children in a `FastFormSection` for visual grouping and consistent padding:
 ```dart
 FastForm(
   formKey: formKey,
@@ -100,7 +109,7 @@ FastForm(
       ],
     ),
   ]
-)
+),
 ```
 
 
@@ -127,6 +136,53 @@ FastForm(
 
 ## Adaptive Form Fields
 
+Various form controls have a distinct visual representation per design language.
+
+By default, Flutter Fast Forms uses Material widgets on any platform. 
+
+However, this behavior is adjustable so that platform-specific Cupertino widgets are automatically rendered on iOS.
+
+<br/>
+
+📓 **Example**: Use Cupertino widgets over the entire `FastForm` on iOS.
+
+```dart
+FastForm(
+  formKey: formKey,
+  adaptive: true,
+  children: [
+    const FastSwitch(
+      name: 'switch',
+      titleText: 'Disable text field',
+    ),
+    FastTextField(
+      name: 'text_field',
+      labelText: 'Just some sample text field',
+    ),    
+  ]
+),
+```
+> [!NOTE]
+> * When `adaptive` is set to `true` any built-in `FormFieldBuilder` returns a corresponding Cupertino widget on iOS, if it exists.
+
+<br/>
+
+📓 **Example**: Use the Cupertino widget on iOS only for a dedicated `FastSwitch`.
+
+```dart
+FastForm(
+  formKey: formKey,
+  children: [
+    const FastSwitch(
+      name: 'switch',
+      adaptive: true,
+      titleText: 'Disable text field',
+    ),
+  ]
+),
+```
+
+
 ## Conditional Form Fields
 
 Not all controls in a form are autonomous and act independent of each other. 
@@ -135,13 +191,12 @@ The state of a form field might be directly related to the state of some other f
 
 Flutter Fast Forms allows you to define such conditions declaratively. 
 
-<hr>
+<br/>
 
 📓 **Example**: A `FastTextField` that is disabled when a `FastSwitch` is selected.
 
-<hr>
+**1.** Add the `conditions` property to the conditional form field and assign an empty `Map`:
 
-1. Add the `conditions` property to the conditional form field and assign an empty `Map`:
 ```dart
 const FastSwitch(
   name: 'switch',
@@ -154,7 +209,7 @@ FastTextField(
 ),
 ```
 
-2. Choose a suitable `FastConditionHandler` as `Map` key and assign an empty `List`:
+**2.** Choose a suitable `FastConditionHandler` as `Map` key and assign an empty `List`:
 ```dart
 const FastSwitch(
   name: 'switch',
@@ -171,7 +226,7 @@ FastTextField(
 > [!NOTE]
 > A `FastConditionHandler` is a function that runs whenever a `FastCondition` is checked and determines what happens when the `condition` is either met or not.
 
-3. Add a `FastCondition` relating the field to another field:
+**3.** Add a `FastCondition` relating the field to another field:
 ```dart
 const FastSwitch(
   name: 'switch',
@@ -194,11 +249,9 @@ FastTextField(
 > * `target` is the `name` of the `FastFormField` that the form field depends on.
 > * `validator` is a `FastConditionValidator` function that returns wether the `FastCondition` is met or not.
 
-<hr>
+<br/>
 
 📓 **Example**: A `FastTextField` that is disabled when both a `FastSwitch` **and** a `FastCheckbox` are selected.
-
-<hr>
 
 ```dart
 const FastCheckbox(
@@ -230,11 +283,9 @@ FastTextField(
 > [!NOTE]
 > `required: true` on any `FastCondition` forces  a logical `AND` connection between all conditions in the `List`.
 
-<hr>
+<br/>
 
 📓 **Example**: A `FastTextField` that is enabled when a `FastSwitch` **or** a `FastCheckbox` is selected.
-
-<hr>
 
 ```dart
 const FastCheckbox(
@@ -262,7 +313,7 @@ FastTextField(
       ),
     ],
   },
-)
+),
 ```
 
 
@@ -273,13 +324,12 @@ There are use cases where the widget catalog does not fully satisfy your individ
 As a consequence you have to add non-standard controls to your form.
 
 With Flutter Fast Forms you're free to wrap any custom widget into a form field.
-<hr>
+
+<br/>
 
 📓 **Example**: A simple widget that provides a random integer whenever a button is pressed.
 
-<hr>
-
-1. Create a stateful widget class extending `FastFormField<T>` with a corresponding `FastFormFieldState<T>`:
+**1.** Create a stateful widget class extending `FastFormField<T>` with a corresponding `FastFormFieldState<T>`:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
@@ -301,7 +351,7 @@ class MyCustomFieldState extends FastFormFieldState<int> {
 > * `builder` and `name` are required constructor parameters of `FastFormField`.
 > * `builder` is a standard Flutter `FormFieldBuilder<T>`.
 
-2. Implement the `FormFieldBuilder<T>` returning your custom widget:
+**2.** Implement the `FormFieldBuilder<T>` returning your custom widget:
 ```dart
 Widget myCustomFormFieldBuilder(FormFieldState<int> field) {
   field as MyCustomFieldState;
@@ -329,7 +379,7 @@ Widget myCustomFormFieldBuilder(FormFieldState<int> field) {
 > * Casting `field` is mandatory to access `FastFormField` properties and functions.
 > * Always call `field.didChange()` to update the value of the form field.
 
-3. Add all super-initializer parameters that the form field should support:
+**3.** Add all super-initializer parameters that the form field should support:
 ```dart
 class MyCustomField extends FastFormField<int> {
   const MyCustomField({
@@ -351,3 +401,6 @@ class MyCustomField extends FastFormField<int> {
   MyCustomFieldState createState() => MyCustomFieldState();
 }
 ```
+> [!NOTE]
+> Always make sure that you apply certain super-initializer parameters like `decoration` or `enabled` in your builder functions.
+> Otherwise assigning those arguments when invoking the constructor won't have any effect.
