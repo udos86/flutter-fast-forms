@@ -115,7 +115,7 @@ FastForm(
 
 ## Widget Catalog
 
-| adaptive<br>`FastFormControl<T>` |            wraps<br>Material            |                          wraps<br>Cupertino                          |
+|       `FastFormControl<T>`       |           wraps Material widget         |              wraps Cupertino widget<br> when `adaptive:true`         |
 |:--------------------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|
 |        `FastAutocomplete`        |             `Autocomplete`              |                                  no                                  |
 |          `FastCheckbox`          |           `CheckboxListTile`            |                         `CupertinoCheckbox`                          |
@@ -136,11 +136,14 @@ FastForm(
 
 ## Adaptive Form Fields
 
-Various form controls have a distinct visual representation per design language.
+While some form controls are unique to a certain platform, various others are present in multiple design languages.
 
 By default, Flutter Fast Forms uses Material widgets on any platform. 
 
-However, this behavior is adjustable so that platform-specific Cupertino widgets are automatically rendered on iOS.
+This behavior is adjustable so that platform-specific Cupertino widgets are automatically rendered on iOS.
+
+> [!TIP]
+> The widget catalog tells you which `FastFormControl` is adaptive. 
 
 <br/>
 
