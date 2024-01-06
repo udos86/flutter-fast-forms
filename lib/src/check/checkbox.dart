@@ -145,12 +145,14 @@ Widget? checkboxPrefixBuilder(FastCheckboxState field) {
 Widget? checkboxTitleBuilder(FastCheckboxState field) {
   final FastCheckboxState(:value!) = field;
   final FastCheckbox(:titleText) = field.widget;
+  final theme = Theme.of(field.context);
+  final color = theme.textTheme.titleMedium?.color ?? Colors.black;
 
   if (titleText is String) {
     return Text(
       titleText,
       style: TextStyle(
-        color: value ? Colors.black : Colors.grey,
+        color: value ? color : theme.disabledColor,
       ),
     );
   }

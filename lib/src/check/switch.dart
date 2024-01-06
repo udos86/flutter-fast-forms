@@ -157,12 +157,14 @@ Widget? switchPrefixBuilder(FastSwitchState field) {
 Widget? switchTitleBuilder(FastSwitchState field) {
   final FastSwitchState(:value!, :widget) = field;
   final FastSwitch(:titleText) = widget;
+  final theme = Theme.of(field.context);
+  final color = theme.textTheme.titleMedium?.color ?? Colors.black;
 
   if (titleText is String) {
     return Text(
       titleText,
       style: TextStyle(
-        color: value ? Colors.black : Colors.grey,
+        color: value ? color : theme.disabledColor,
       ),
     );
   }
