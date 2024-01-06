@@ -19,6 +19,7 @@
 * replaces `FastSliderPrefixBuilder` and `FastSliderSuffixBuilder` with `FastSliderWidgetBuilder` typedef
 * adds `FastDatePickerWidgetBuilder` typedef
 * fixes generic typing in `FastChoiceChips` and `FastSegmentedControl`
+* fixes hard-coded text colors in `checkboxTitleBuilder` and `switchTitleBuilder`
 
 ## [14.1.0] - 12/18/2023
 
