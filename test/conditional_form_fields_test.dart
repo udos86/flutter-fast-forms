@@ -27,19 +27,19 @@ void main() {
     );
 
     checkboxCondition = FastCondition(
-      fieldName: 'checkbox',
-      condition: (value, field) => value is bool && value,
+      target: 'checkbox',
+      validator: (value, field) => value is bool && value,
     );
 
     switchCondition = FastCondition(
-      fieldName: 'switch',
-      condition: (value, field) => value is bool && value,
+      target: 'switch',
+      validator: (value, field) => value is bool && value,
     );
 
     switchRequiredCondition = FastCondition(
-      fieldName: 'switch',
       required: true,
-      condition: (value, field) => value is bool && value,
+      target: 'switch',
+      validator: (value, field) => value is bool && value,
     );
   });
 

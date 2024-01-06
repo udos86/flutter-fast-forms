@@ -115,20 +115,23 @@ class _FastFormScope extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 }
 
+typedef FastConditionValidator = bool Function(
+    dynamic value, FastFormFieldState field);
+
 typedef FastConditionHandler = void Function(
     bool isMet, FastFormFieldState field);
 
 @immutable
 class FastCondition {
   const FastCondition({
-    required this.fieldName,
     this.required = false,
-    required this.condition,
+    required this.target,
+    required this.validator,
   });
 
-  final String fieldName;
   final bool required;
-  final bool Function(dynamic value, FastFormFieldState field) condition;
+  final String target;
+  final FastConditionValidator validator;
 
   static void disabled(bool isMet, FastFormFieldState field) {
     field.enabled = !isMet;
@@ -313,11 +316,11 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     for (final MapEntry(key: handler, :value) in conditions.entries) {
       map[handler] = false;
 
-      for (final FastCondition(:condition, :fieldName, :required) in value) {
-        final field = form?.getFieldByName(fieldName);
+      for (final FastCondition(:required, :target, :validator) in value) {
+        final field = form?.getFieldByName(target);
         if (field == null) continue;
 
-        final isMet = condition(field.value, field);
+        final isMet = validator(field.value, field);
 
         if (isMet && required) {
           map.update(handler, (value) => true);

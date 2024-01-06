@@ -235,10 +235,11 @@ class FormPage extends StatelessWidget {
             conditions: {
               FastCondition.disabled: [
                 FastCondition(
-                    fieldName: 'segmented_button',
-                    condition: (value, field) {
-                      return value is Set<String> && value.isNotEmpty;
-                    }),
+                  target: 'segmented_button',
+                  validator: (value, field) {
+                    return value is Set<String> && value.isNotEmpty;
+                  },
+                ),
               ]
             },
             validator: (value) => value == null || value.isEmpty
@@ -260,13 +261,15 @@ class FormPage extends StatelessWidget {
             prefix: const Icon(Icons.calendar_today),
             buildCounter: inputCounterWidgetBuilder,
             inputFormatters: const [],
-            validator: Validators.compose([
-              Validators.required((value) => 'Field is required'),
-              Validators.minLength(
-                  7,
-                  (value, minLength) =>
-                      'Field must contain at least $minLength characters')
-            ]),
+            validator: Validators.compose(
+              [
+                Validators.required((value) => 'Field is required'),
+                Validators.minLength(
+                    7,
+                    (value, minLength) =>
+                        'Field must contain at least $minLength characters')
+              ],
+            ),
           ),
           const FastDropdown(
             name: 'dropdown',
