@@ -115,24 +115,24 @@ FastForm(
 
 ## Widget Catalog
 
-|       `FastFormControl<T>`       | field value type |           wraps Material widget         |           wraps Cupertino widget<br> when `adaptive: true`           |
+|       `FastFormControl<T>`       | field value type |          wraps Material widget          |           wraps Cupertino widget<br> when `adaptive: true`           |
 |:--------------------------------:|:----------------:|:---------------------------------------:|:--------------------------------------------------------------------:|
-|       `FastAutocomplete<O>`      |     `String`     |            `Autocomplete<O>`            |                                  no                                  |
+|      `FastAutocomplete<O>`       |     `String`     |            `Autocomplete<O>`            |                                  no                                  |
 |          `FastCheckbox`          |      `bool`      |           `CheckboxListTile`            |                         `CupertinoCheckbox`                          |
 |       `FastChoiceChips<T>`       |     `Set<T>`     |              `ChoiceChip`               |                                  no                                  |
 |          `FastCalendar`          |    `DateTime`    |          `CalendarDatePicker`           |                                  no                                  |
 |         `FastChipsInput`         |  `List<String>`  | `RawAutocomplete<String>` + `InputChip` |                                  no                                  |
 |         `FastDatePicker`         |    `DateTime`    |            `showDatePicker`             |                        `CupertinoDatePicker`                         |
-|      `FastDateRangePicker`       |  `DateTimeRange` |          `showDateRangePicker`          |                                  no                                  |
+|      `FastDateRangePicker`       | `DateTimeRange`  |          `showDateRangePicker`          |                                  no                                  |
 |        `FastDropdown<T>`         |       `T`        |      `DropdownButtonFormField<T>`       |                                  no                                  |
-|        `FastRadioGroup<T>`       |       `T`        |            `RadioListTile<T>`           |                                  no                                  |
-|        `FastRangeSlider`         |   `RangeValues`  |              `RangeSlider`              |                                  no                                  |
-|     `FastSegmentedButton<T>`     |     `Set<T>`     |           `SegmentedButton<T>`          |                                  no                                  |
-|     `FastSegmentedControl<T>`    |       `T`        |                   no                    |                `CupertinoSlidingSegmentedControl<T>`                 |
+|       `FastRadioGroup<T>`        |       `T`        |           `RadioListTile<T>`            |                                  no                                  |
+|        `FastRangeSlider`         |  `RangeValues`   |              `RangeSlider`              |                                  no                                  |
+|     `FastSegmentedButton<T>`     |     `Set<T>`     |          `SegmentedButton<T>`           |                                  no                                  |
+|    `FastSegmentedControl<T>`     |       `T`        |                   no                    |                `CupertinoSlidingSegmentedControl<T>`                 |
 |           `FastSlider`           |     `double`     |            `Slider.adaptive`            |                          `CupertinoSlider`                           |
 |           `FastSwitch`           |      `bool`      |            `SwitchListTile`             |                          `CupertinoSwitch`                           |
 |         `FastTextField`          |     `String`     |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |
-|         `FastTimePicker`         |    `TimeOfDay`   |            `showTimePicker`             | no <br> use `FastDatePicker` with <br>`CupertinoDatePickerMode.time` |
+|         `FastTimePicker`         |   `TimeOfDay`    |            `showTimePicker`             | no <br> use `FastDatePicker` with <br>`CupertinoDatePickerMode.time` |
 
 ## Adaptive Form Fields
 
@@ -212,7 +212,7 @@ FastTextField(
 ),
 ```
 
-**2.** Choose a suitable `FastConditionHandler` as `Map` key and assign an empty `List`:
+**2.** Choose a suitable `FastConditionHandler` as `Map` key and assign a `FastConditionList`:
 ```dart
 const FastSwitch(
   name: 'switch',
@@ -222,12 +222,12 @@ FastTextField(
   name: 'text_field',
   labelText: 'Just some sample text field',
   conditions: {
-    FastCondition.disabled: [],
+    FastCondition.disabled: FastConditionList([]),
   },
 )
 ```
 > [!NOTE]
-> A `FastConditionHandler` is a function that runs whenever a `FastCondition` is checked and determines what happens when the `condition` is either met or not.
+> A `FastConditionHandler` is a function that runs whenever a `FastConditionList` is checked and determines what happens when the condition is either met or not.
 
 **3.** Add a `FastCondition` relating the field to another field:
 ```dart
@@ -239,18 +239,49 @@ FastTextField(
   name: 'text_field',
   labelText: 'Just some sample text field',
   conditions: {
-    FastCondition.disabled: [
+    FastCondition.disabled: FastConditionList([
       FastCondition(
         target: 'switch',
-        validator: (value, field) => value is bool && value,
+        test: (value, field) => value is bool && value,
       ),
-    ],
+    ]),
   },
 ),
 ```
 > [!NOTE]
-> * `target` is the `name` of the `FastFormField` that the form field depends on.
-> * `validator` is a `FastConditionValidator` function that returns wether the `FastCondition` is met or not.
+> `target` is the `name` of the `FastFormField` that the form field depends on.
+
+<br/>
+
+📓 **Example**: A `FastTextField` that is enabled when a `FastSwitch` **or** a `FastCheckbox` is selected.
+
+```dart
+const FastCheckbox(
+  name: 'checkbox',
+  titleText: 'Enable text field when selected',
+),
+const FastSwitch(
+  name: 'switch',
+  titleText: 'Enable text field when selected',
+),
+FastTextField(
+  name: 'text_field',
+  enabled: false,
+  labelText: 'Just some sample text field',
+  conditions: {
+    FastCondition.enabled: FastConditionList([
+      FastCondition(
+        target: 'switch',
+        test: (value, field) => value is bool && value,
+      ),
+      FastCondition(
+        target: 'checkbox',
+        test: (value, field) => value is bool && value,
+      ),
+    ]),
+  },
+),
+```
 
 <br/>
 
@@ -269,52 +300,19 @@ FastTextField(
   name: 'text_field',
   labelText: 'Just some sample text field',
   conditions: {
-    FastCondition.disabled: [
-      FastCondition(
-        required: true,
-        target: 'switch',
-        validator: (value, field) => value is bool && value,
-      ),
-      FastCondition(
-        target: 'checkbox',
-        validator: (value, field) => value is bool && value,
-      ),
-    ],
-  },
-),
-```
-> [!NOTE]
-> `required: true` on any `FastCondition` forces  a logical `AND` connection between all conditions in the `List`.
-
-<br/>
-
-📓 **Example**: A `FastTextField` that is enabled when a `FastSwitch` **or** a `FastCheckbox` is selected.
-
-```dart
-const FastCheckbox(
-  name: 'checkbox',
-  titleText: 'Enable text field when selected',
-),
-const FastSwitch(
-  required: true,
-  name: 'switch',
-  titleText: 'Enable text field when selected',
-),
-FastTextField(
-  name: 'text_field',
-  enabled: false,
-  labelText: 'Just some sample text field',
-  conditions: {
-    FastCondition.enabled: [
-      FastCondition(
-        target: 'switch',
-        validator: (value, field) => value is bool && value,
-      ),
-      FastCondition(
-        target: 'checkbox',
-        validator: (value, field) => value is bool && value,
-      ),
-    ],
+    FastCondition.enabled: FastConditionList(
+      [
+        FastCondition(
+          target: 'switch',
+          test: (value, field) => value is bool && value,
+        ),
+        FastCondition(
+          target: 'checkbox',
+          test: (value, field) => value is bool && value,
+        ),
+      ],
+      match: FastConditionMatch.every,
+    ),
   },
 ),
 ```
