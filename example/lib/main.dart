@@ -233,14 +233,14 @@ class FormPage extends StatelessWidget {
               ),
             ],
             conditions: {
-              FastCondition.disabled: [
+              FastCondition.disabled: FastConditionList([
                 FastCondition(
                   target: 'segmented_button',
-                  validator: (value, field) {
+                  test: (value, field) {
                     return value is Set<String> && value.isNotEmpty;
                   },
                 ),
-              ]
+              ]),
             },
             validator: (value) => value == null || value.isEmpty
                 ? 'Please select at least one chip'
