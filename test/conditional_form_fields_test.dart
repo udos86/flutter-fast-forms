@@ -8,7 +8,6 @@ void main() {
   late FastSwitch fastSwitch;
   late FastCondition checkboxCondition;
   late FastCondition switchCondition;
-  late FastCondition switchRequiredCondition;
 
   const Map<FastConditionHandler, bool> cases = {
     FastCondition.disabled: false,
@@ -27,19 +26,13 @@ void main() {
     );
 
     checkboxCondition = FastCondition(
-      fieldName: 'checkbox',
-      condition: (value, field) => value is bool && value,
+      target: 'checkbox',
+      test: (value, field) => value is bool && value,
     );
 
     switchCondition = FastCondition(
-      fieldName: 'switch',
-      condition: (value, field) => value is bool && value,
-    );
-
-    switchRequiredCondition = FastCondition(
-      fieldName: 'switch',
-      required: true,
-      condition: (value, field) => value is bool && value,
+      target: 'switch',
+      test: (value, field) => value is bool && value,
     );
   });
 
@@ -53,7 +46,7 @@ void main() {
           enabled: !enabled,
           name: 'text_field',
           conditions: {
-            handler: [switchCondition],
+            handler: FastConditionList([switchCondition]),
           },
         ),
       ]));
@@ -77,7 +70,7 @@ void main() {
           enabled: !enabled,
           name: 'text_field',
           conditions: {
-            handler: [checkboxCondition, switchCondition],
+            handler: FastConditionList([checkboxCondition, switchCondition]),
           },
         ),
       ]));
@@ -108,7 +101,10 @@ void main() {
           enabled: !enabled,
           name: 'text_field',
           conditions: {
-            handler: [checkboxCondition, switchRequiredCondition],
+            handler: FastConditionList(
+              [checkboxCondition, switchCondition],
+              match: FastConditionMatch.every,
+            ),
           },
         ),
       ]));

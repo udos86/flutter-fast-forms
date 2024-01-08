@@ -77,7 +77,7 @@ class FastFormState extends State<FastForm> {
   void onChanged() {
     widget.onChanged?.call(values);
     for (final field in _fields.values) {
-      field.condition();
+      field.testConditions();
     }
   }
 
@@ -115,28 +115,74 @@ class _FastFormScope extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 }
 
+/// A [Function] that tests whether a single [FastCondition] is met.
+typedef FastConditionTest = bool Function(
+    dynamic value, FastFormFieldState field);
+
+/// A [Function] that defines a conditional state of a [FastFormField].
+///
+/// Implements, what happens when a condition is met or not.
+///
+/// Typically linked to [FastConditionList].
+///
+/// Called at the end of every [FastFormFieldState.testConditions] run.
 typedef FastConditionHandler = void Function(
     bool isMet, FastFormFieldState field);
 
+/// A single condition to be met for a conditional state to occur.
 @immutable
 class FastCondition {
   const FastCondition({
-    required this.fieldName,
-    this.required = false,
-    required this.condition,
+    required this.target,
+    required this.test,
   });
 
-  final String fieldName;
-  final bool required;
-  final bool Function(dynamic value, FastFormFieldState field) condition;
+  /// The name of the [FastFormField] this [test] should be called upon.
+  final String target;
 
+  final FastConditionTest test;
+
+  /// A [FastConditionHandler] that disables a [FastFormField] based
+  /// on whether a [FastCondition] is met.
   static void disabled(bool isMet, FastFormFieldState field) {
     field.enabled = !isMet;
   }
 
+  /// A [FastConditionHandler] that enables a [FastFormField] based
+  /// on whether a [FastCondition] is met.
   static void enabled(bool isMet, FastFormFieldState field) {
     field.enabled = isMet;
   }
+}
+
+/// An enum to define a match logic for a [List] of multiple [FastCondition]
+/// elements.
+///
+/// Typically specifies how all individual [FastCondition.test] results in a
+/// [FastConditionList] are evaluated to determine whether a condition in
+/// [FastFormField.conditions] is met.
+enum FastConditionMatch {
+  /// Every [FastCondition.test] in a [FastConditionList] must be true to met
+  /// the condition.
+  every,
+
+  /// At least one [FastCondition.test] in a [FastConditionList] must be true to
+  /// met the condition.
+  any,
+}
+
+/// A wrapper class for a [List] of [FastCondition] elements.
+@immutable
+class FastConditionList {
+  const FastConditionList(
+    this.conditions, {
+    this.match = FastConditionMatch.any,
+  });
+
+  final List<FastCondition> conditions;
+
+  /// Defaults to [FastConditionMatch.any].
+  final FastConditionMatch match;
 }
 
 /// A single fast form field.
@@ -169,7 +215,7 @@ abstract class FastFormField<T> extends FormField<T> {
 
   /// null represents a non-adaptive form field widget
   final bool? adaptive;
-  final Map<FastConditionHandler, List<FastCondition>>? conditions;
+  final Map<FastConditionHandler, FastConditionList>? conditions;
   final EdgeInsetsGeometry? contentPadding;
   final InputDecoration? decoration;
   final String? helperText;
@@ -304,37 +350,38 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     });
   }
 
-  void condition() {
+  /// Determines for every [MapEntry] in [FastFormField.conditions] if the
+  /// respective condition is met.
+  ///
+  /// Finally calls the corresponding [FastConditionHandler], passing the
+  /// result of the condition matching.
+  void testConditions() {
     final FastFormField<T>(:conditions) = widget;
     if (conditions == null || conditions.isEmpty) return;
 
-    final Map<FastConditionHandler, bool> map = {};
+    for (final MapEntry(key: handler, value: list) in conditions.entries) {
+      final FastConditionList(:conditions, match: logic) = list;
+      final bool isMet;
 
-    for (final MapEntry(key: handler, :value) in conditions.entries) {
-      map[handler] = false;
+      test(condition) => _testCondition(condition);
 
-      for (final FastCondition(:condition, :fieldName, :required) in value) {
-        final field = form?.getFieldByName(fieldName);
-        if (field == null) continue;
-
-        final isMet = condition(field.value, field);
-
-        if (isMet && required) {
-          map.update(handler, (value) => true);
-        } else if (isMet && !required) {
-          map.update(handler, (value) => true);
-        } else if (!isMet && required) {
-          map.update(handler, (value) => false);
-          break;
-        } else if (!isMet && !required) {
-          map.update(handler, (value) => value || false);
-        }
+      switch (logic) {
+        case FastConditionMatch.any:
+          isMet = conditions.any(test);
+        case FastConditionMatch.every:
+          isMet = conditions.every(test);
       }
-    }
 
-    for (final MapEntry(key: handler, value: isMet) in map.entries) {
       handler(isMet, this);
     }
+  }
+
+  bool _testCondition(FastCondition condition) {
+    final FastCondition(:target, :test) = condition;
+    final field = form?.getFieldByName(target);
+    if (field == null) throw ArgumentError('Target $target is null.');
+
+    return test(field.value, field);
   }
 
   void _onFocusChanged() {

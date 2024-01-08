@@ -1,9 +1,12 @@
-## [15.0.0] - 01/xx/2024
+## [15.0.0] - 01/08/2024
 
 * upgrades to Flutter `3.16.5`
 * adds new feature **Conditional Form Fields**
   * adds `conditions` property to `FastFormField`
-  * adds `FastCondition` class
+  * adds `FastCondition`, `FastConditionList` classes
+  * adds `FastConditionMatch` enum
+  * adds `FastConditionHandler` and `FastConditionTest` typedefs
+  * adds `testConditions` function to `FastformFieldState`
 * adds new `FastSegmentendButton` that wraps Material [`SegmentedButton`](https://api.flutter.dev/flutter/material/SegmentedButton-class.html?gclid=CjwKCAiAs6-sBhBmEiwA1Nl8s5c8wRhB056CtAeuZP1-m_XUYi-jYGrVMh1lMnkwRmvKwlTelErtixoCAS4QAvD_BwE&gclsrc=aw.ds)
 * adds `showInputDecoration` property to `FastCheckbox`, `FastSwitch`, `FastCalendar`, `FastChoiceChips`, `FastRadioGroup`, `FastRangeSlider` and `FastSlider`
 * adds `canPop` and `onPopInvoked` properties to `FastForm`
@@ -19,6 +22,7 @@
 * replaces `FastSliderPrefixBuilder` and `FastSliderSuffixBuilder` with `FastSliderWidgetBuilder` typedef
 * adds `FastDatePickerWidgetBuilder` typedef
 * fixes generic typing in `FastChoiceChips` and `FastSegmentedControl`
+* fixes hard-coded text colors in `checkboxTitleBuilder` and `switchTitleBuilder`
 
 ## [14.1.0] - 12/18/2023
 
