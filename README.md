@@ -316,6 +316,8 @@ FastTextField(
   },
 ),
 ```
+> [!NOTE]
+> `match` specifies how all individual test results in the list are evaluated to determine whether the condition is met.
 
 
 ## Custom Form Fields

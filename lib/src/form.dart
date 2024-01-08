@@ -155,8 +155,19 @@ class FastCondition {
   }
 }
 
+/// An enum to define a match logic for a [List] of multiple [FastCondition]
+/// elements.
+///
+/// Typically specifies how all individual [FastCondition.test] results in a
+/// [FastConditionList] are evaluated to determine whether a condition in
+/// [FastFormField.conditions] is met.
 enum FastConditionMatch {
+  /// Every [FastCondition.test] in a [FastConditionList] must be true to met
+  /// the condition.
   every,
+
+  /// At least one [FastCondition.test] in a [FastConditionList] must be true to
+  /// met the condition.
   any,
 }
 
@@ -170,9 +181,6 @@ class FastConditionList {
 
   final List<FastCondition> conditions;
 
-  /// Specifies how to derive from all individual [FastCondition.test] results
-  /// in [conditions] whether the condition is met.
-  ///
   /// Defaults to [FastConditionMatch.any].
   final FastConditionMatch match;
 }
