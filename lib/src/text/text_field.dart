@@ -40,6 +40,7 @@ class FastTextField extends FastFormField<String> {
     this.contentInsertionConfiguration,
     this.contextMenuBuilder,
     this.cursorColor,
+    this.cursorErrorColor,
     this.cursorHeight,
     this.cursorOpacityAnimates,
     this.cursorRadius,
@@ -66,6 +67,7 @@ class FastTextField extends FastFormField<String> {
     this.onEditingComplete,
     this.onFieldSubmitted,
     this.onTap,
+    this.onTapAlwaysCalled = false,
     this.onTapOutside,
     this.padding,
     this.placeholder,
@@ -112,6 +114,7 @@ class FastTextField extends FastFormField<String> {
   final ContentInsertionConfiguration? contentInsertionConfiguration;
   final EditableTextContextMenuBuilder? contextMenuBuilder;
   final Color? cursorColor;
+  final Color? cursorErrorColor;
   final double? cursorHeight;
   final Radius? cursorRadius;
   final bool? cursorOpacityAnimates;
@@ -138,6 +141,7 @@ class FastTextField extends FastFormField<String> {
   final VoidCallback? onEditingComplete;
   final ValueChanged<String>? onFieldSubmitted;
   final GestureTapCallback? onTap;
+  final bool onTapAlwaysCalled;
   final void Function(PointerDownEvent)? onTapOutside;
   final EdgeInsetsGeometry? padding;
   final String? placeholder;
@@ -249,6 +253,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     contentInsertionConfiguration: widget.contentInsertionConfiguration,
     contextMenuBuilder: widget.contextMenuBuilder,
     cursorColor: widget.cursorColor,
+    cursorErrorColor: widget.cursorErrorColor,
     cursorHeight: widget.cursorHeight,
     cursorOpacityAnimates: widget.cursorOpacityAnimates,
     cursorRadius: widget.cursorRadius,
@@ -279,6 +284,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     onFieldSubmitted: widget.onFieldSubmitted,
     onSaved: widget.onSaved,
     onTap: widget.onTap,
+    onTapAlwaysCalled: widget.onTapAlwaysCalled,
     onTapOutside: widget.onTapOutside,
     readOnly: widget.readOnly,
     scribbleEnabled: widget.scribbleEnabled,

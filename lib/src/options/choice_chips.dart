@@ -15,6 +15,7 @@ class FastChoiceChip<T>
     this.autofocus = false,
     this.avatar,
     this.avatarBorder = const CircleBorder(),
+    this.avatarBoxConstraints,
     this.backgroundColor,
     this.checkmarkColor,
     this.clipBehavior = Clip.none,
@@ -48,6 +49,8 @@ class FastChoiceChip<T>
   @override
   final Widget? avatar;
   @override
+  final BoxConstraints? avatarBoxConstraints;
+  @override
   final ShapeBorder avatarBorder;
   @override
   final Color? backgroundColor;
@@ -56,7 +59,7 @@ class FastChoiceChip<T>
   @override
   final Clip clipBehavior;
   @override
-  final MaterialStateProperty<Color?>? color;
+  final WidgetStateProperty<Color?>? color;
   @override
   final Color? disabledColor;
   @override
@@ -210,6 +213,7 @@ ChoiceChip choiceChipBuilder<T>(
     autofocus: chip.autofocus,
     avatar: chip.avatar,
     avatarBorder: chip.avatarBorder,
+    avatarBoxConstraints: chip.avatarBoxConstraints,
     backgroundColor: chip.backgroundColor,
     checkmarkColor: chip.checkmarkColor,
     clipBehavior: chip.clipBehavior,

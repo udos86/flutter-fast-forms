@@ -103,7 +103,7 @@ class FastSwitch extends FastFormField<bool> {
   final void Function(bool)? onFocusChange;
   final void Function(Object, StackTrace?)? onInactiveThumbImageError;
   final Color? onLabelColor;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final Widget? secondary;
   final Color? selectedTileColor;
   final ShapeBorder? shapeBorder;
@@ -111,11 +111,11 @@ class FastSwitch extends FastFormField<bool> {
   final double? splashRadius;
   final Widget? subtitle;
   final dynamic thumbColor;
-  final MaterialStateProperty<Icon?>? thumbIcon;
+  final WidgetStateProperty<Icon?>? thumbIcon;
   final Color? tileColor;
   final String? titleText;
-  final MaterialStateProperty<Color?>? trackColor;
-  final MaterialStateProperty<Color?>? trackOutlineColor;
+  final WidgetStateProperty<Color?>? trackColor;
+  final WidgetStateProperty<Color?>? trackOutlineColor;
   final FastSwitchWidgetBuilder titleBuilder;
   final VisualDensity? visualDensity;
 
@@ -180,7 +180,7 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
   final FastSwitchState(:decoration, :didChange, :enabled, :value!, :widget) =
       field;
   assert(widget.thumbColor == null ||
-      widget.thumbColor is MaterialStateProperty<Color?>);
+      widget.thumbColor is WidgetStateProperty<Color?>);
 
   final switchListTile = SwitchListTile.adaptive(
     activeColor: widget.activeColor,
