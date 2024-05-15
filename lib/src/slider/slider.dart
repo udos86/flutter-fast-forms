@@ -74,7 +74,7 @@ class FastSlider extends FastFormField<double> {
   final MouseCursor? mouseCursor;
   final ValueChanged<double>? onChangeEnd;
   final ValueChanged<double>? onChangeStart;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final FastSliderWidgetBuilder? prefixBuilder;
   final Color? secondaryActiveColor;
   final double? secondaryTrackValue;

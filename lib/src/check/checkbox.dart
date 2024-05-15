@@ -81,7 +81,7 @@ class FastCheckbox extends FastFormField<bool> {
   final FastCheckboxWidgetBuilder cupertinoPrefixBuilder;
   final bool? dense;
   final bool? enableFeedback;
-  final MaterialStateProperty<Color?>? fillColor;
+  final WidgetStateProperty<Color?>? fillColor;
   final Color? focusColor;
   final FocusNode? focusNode;
   final Color? hoverColor;
@@ -91,7 +91,7 @@ class FastCheckbox extends FastFormField<bool> {
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
   final void Function(bool)? onFocusChange;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final Widget? secondary;
   final Color? selectedTileColor;
   final OutlinedBorder? shape;

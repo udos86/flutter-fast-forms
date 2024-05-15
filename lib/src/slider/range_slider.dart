@@ -49,10 +49,10 @@ class FastRangeSlider extends FastFormField<RangeValues> {
   final FastRangeSliderLabelsBuilder? labelsBuilder;
   final double max;
   final double min;
-  final MaterialStateProperty<MouseCursor?>? mouseCursor;
+  final WidgetStateProperty<MouseCursor?>? mouseCursor;
   final void Function(RangeValues)? onChangeEnd;
   final void Function(RangeValues)? onChangeStart;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final FastRangeSliderWidgetBuilder? prefixBuilder;
   final String Function(double)? semanticFormatterCallback;
   final bool showInputDecoration;

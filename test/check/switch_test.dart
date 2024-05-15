@@ -10,7 +10,7 @@ void main() {
     final widget = FastSwitch(
       name: 'switch',
       titleText: 'title',
-      thumbColor: MaterialStateProperty.resolveWith((states) => Colors.green),
+      thumbColor: WidgetStateProperty.resolveWith((states) => Colors.green),
     );
     await tester.pumpWidget(buildMaterialTestApp([widget]));
 

@@ -1,3 +1,10 @@
+## [16.0.0] - 05/15/2024
+
+* upgrades to Flutter `3.22.0`
+* replaces deprecated `MaterialStateProperty<T>` type with `WidgetStateProperty<T>`
+* adds `avatarBoxConstraints` to `FastChoice Chip`
+* adds `cursorErrorColor` and `onTapAlwaysCalled` properties to `FastTextField`
+
 ## [15.0.0] - 01/08/2024
 
 * upgrades to Flutter `3.16.5`

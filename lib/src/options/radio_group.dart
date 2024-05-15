@@ -78,7 +78,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
         );
   final Color? activeColor;
   final ListTileControlAffinity controlAffinity;
-  final MaterialStateProperty<Color?>? fillColor;
+  final WidgetStateProperty<Color?>? fillColor;
   final Color? hoverColor;
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
@@ -86,7 +86,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
   final FastRadioOptionBuilder<T> optionBuilder;
   final FastRadioOptionsBuilder<T> optionsBuilder;
   final FastRadioGroupOrientation orientation;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final Color? selectedTileColor;
   final ShapeBorder? shapeBorder;
   final bool showInputDecoration;
