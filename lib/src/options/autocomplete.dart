@@ -66,6 +66,27 @@ class FastAutocompleteState<O extends Object>
     extends FastFormFieldState<String> {
   @override
   FastAutocomplete<O> get widget => super.widget as FastAutocomplete<O>;
+
+  FocusNode? _autocompleteFocusNode;
+
+  set autocompleteFocusNode (FocusNode focusNode) {
+    if (_autocompleteFocusNode is FocusNode) {
+      _autocompleteFocusNode?.removeListener(onAutocompleteFocusNodeChanged);
+    }
+
+    _autocompleteFocusNode = focusNode;
+    _autocompleteFocusNode!.addListener(onAutocompleteFocusNodeChanged);
+  }
+
+  void onAutocompleteFocusNodeChanged() {
+    touched = !_autocompleteFocusNode!.hasFocus;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _autocompleteFocusNode?.removeListener(onAutocompleteFocusNodeChanged);
+  }
 }
 
 /// A [FastAutocompleteWillDisplayOption] that is the default
@@ -97,6 +118,8 @@ AutocompleteFieldViewBuilder _fieldViewBuilder<O extends Object>(
       FocusNode focusNode, VoidCallback onFieldSubmitted) {
     final FastAutocompleteState<O>(:decoration, :didChange, :enabled, :widget) =
         field;
+
+    field.autocompleteFocusNode = focusNode;
 
     return TextFormField(
       controller: textEditingController,
