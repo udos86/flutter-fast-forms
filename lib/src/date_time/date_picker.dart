@@ -23,13 +23,6 @@ typedef FastDatePickerIconButtonBuilder = IconButton Function(
 @immutable
 class FastDatePicker extends FastFormField<DateTime> {
   FastDatePicker({
-    @Deprecated('Use cupertinoErrorBuilder instead.')
-    FastDatePickerWidgetBuilder? errorBuilder,
-    @Deprecated('Use cupertinoHelperBuilder instead.')
-    FastDatePickerWidgetBuilder? helperBuilder,
-    FastDatePickerWidgetBuilder cupertinoErrorBuilder = datePickerErrorBuilder,
-    FastDatePickerWidgetBuilder cupertinoHelperBuilder =
-        datePickerHelperBuilder,
     DateTime? initialValue,
     super.adaptive,
     super.autovalidateMode,
@@ -45,6 +38,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.anchorPoint,
@@ -54,6 +48,8 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.barrierLabel,
     this.cancelText,
     this.confirmText,
+    this.cupertinoErrorBuilder = datePickerErrorBuilder,
+    this.cupertinoHelperBuilder = datePickerHelperBuilder,
     this.cupertinoPrefixBuilder = datePickerPrefixBuilder,
     this.currentDate,
     this.dateFormat,
@@ -91,9 +87,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.textStyle,
     this.use24hFormat = false,
     this.useRootNavigator = true,
-  })  : cupertinoErrorBuilder = helperBuilder ?? cupertinoErrorBuilder,
-        cupertinoHelperBuilder = helperBuilder ?? cupertinoHelperBuilder,
-        super(initialValue: initialValue ?? DateTime.now());
+  }) : super(initialValue: initialValue ?? DateTime.now());
 
   final Offset? anchorPoint;
   final Color? backgroundColor;
@@ -300,8 +294,9 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
   final FastDatePickerState(
     :context,
     :decoration,
-    :enabled,
     :didChange,
+    :enabled,
+    :wasTouched,
     :widget
   ) = field;
 
@@ -336,6 +331,7 @@ Widget materialDatePickerBuilder(FormFieldState<DateTime> field) {
       textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
+      wasTouched();
       if (value != null) didChange(value);
       return value;
     });

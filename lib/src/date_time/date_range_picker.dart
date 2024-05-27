@@ -31,6 +31,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.anchorPoint,
@@ -157,6 +158,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
     :didChange,
     :enabled,
     :value,
+    :wasTouched,
     :widget
   ) = field as FastDateRangePickerState;
 
@@ -192,6 +194,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
       textDirection: widget.textDirection,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
+      wasTouched();
       if (value != null) didChange(value);
       return value;
     });

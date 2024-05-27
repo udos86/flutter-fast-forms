@@ -28,6 +28,7 @@ class FastTextField extends FastFormField<String> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.autocorrect = true,

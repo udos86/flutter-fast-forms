@@ -34,6 +34,7 @@ class FastFormArray<T> extends FastFormField<List<T?>> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.emptyBuilder,

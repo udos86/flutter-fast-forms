@@ -20,11 +20,12 @@ void main() {
       const FastTextField(name: 'text_field'),
     ]));
 
-    final fieldState = tester.state<FastTextFieldState>(findFastTextField());
-    final formState = FastForm.of(fieldState.context);
+    final field = tester.state<FastTextFieldState>(findFastTextField());
+    final form = FastForm.of(field.context);
 
-    expect(formState?.values.containsKey(fieldState.widget.name), true);
-    expect(formState?.values.containsValue(fieldState.value), true);
+    final fieldStatus = form?.status[field.widget.name];
+    expect(fieldStatus is FastFormFieldStatus, true);
+    expect(fieldStatus?.value, field.value);
   });
 
   testWidgets('updates form fields', (tester) async {
@@ -32,34 +33,39 @@ void main() {
       const FastTextField(name: 'text_field'),
     ]));
 
-    final fieldState = tester.state<FastTextFieldState>(findFastTextField());
-    final formState = FastForm.of(fieldState.context);
+    final field = tester.state<FastTextFieldState>(findFastTextField());
+    final form = FastForm.of(field.context);
 
     const text = 'Hello Test';
 
     await tester.enterText(findTextFormField(), text);
     await tester.pumpAndSettle();
 
-    expect(formState?.values.containsKey(fieldState.widget.name), true);
-    expect(formState?.values.containsValue(fieldState.value), true);
+    final fieldStatus = form?.status[field.widget.name];
+
+    expect(fieldStatus is FastFormFieldStatus, true);
+    expect(fieldStatus?.value, field.value);
   });
 
   testWidgets('calls callback on change', (tester) async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    const fieldName = 'text_field';
 
     var onChangedCalled = false;
-    late Map<String, dynamic> onChangedValues;
+    late Map<String, FastFormFieldStatus<dynamic>> onChangedStatus;
 
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
         body: FastForm(
           formKey: formKey,
-          onChanged: (values) {
+          onChanged: (status) {
             onChangedCalled = true;
-            onChangedValues = values;
+            onChangedStatus = status;
           },
           children: const [
-            FastTextField(name: 'text_field'),
+            FastTextField(
+              name: fieldName,
+            ),
           ],
         ),
       ),
@@ -73,7 +79,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(onChangedCalled, true);
-    expect(onChangedValues.containsValue(text), true);
+    expect(onChangedStatus[fieldName]?.value, text);
   });
 
   testWidgets('resets FastForm', (tester) async {

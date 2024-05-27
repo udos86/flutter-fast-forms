@@ -55,6 +55,7 @@ class FastChipsInput extends FastFormField<List<String>> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.alignment = WrapAlignment.start,
@@ -200,6 +201,8 @@ class FastChipsInputState extends FastFormFieldState<List<String>> {
         selectedChipIndex = null;
         backspaceRemove = false;
       });
+    } else {
+      wasTouched();
     }
   }
 }

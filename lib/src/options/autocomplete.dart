@@ -28,6 +28,7 @@ class FastAutocomplete<O extends Object> extends FastFormField<String> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.displayStringForOption = RawAutocomplete.defaultStringForOption,
@@ -69,17 +70,16 @@ class FastAutocompleteState<O extends Object>
 
   FocusNode? _autocompleteFocusNode;
 
-  set autocompleteFocusNode (FocusNode focusNode) {
-    if (_autocompleteFocusNode is FocusNode) {
-      _autocompleteFocusNode?.removeListener(onAutocompleteFocusNodeChanged);
-    }
+  FocusNode? get autocompleteFocusNode => _autocompleteFocusNode;
 
+  set autocompleteFocusNode(FocusNode? focusNode) {
+    _autocompleteFocusNode?.removeListener(onAutocompleteFocusNodeChanged);
     _autocompleteFocusNode = focusNode;
-    _autocompleteFocusNode!.addListener(onAutocompleteFocusNodeChanged);
+    _autocompleteFocusNode?.addListener(onAutocompleteFocusNodeChanged);
   }
 
   void onAutocompleteFocusNodeChanged() {
-    touched = !_autocompleteFocusNode!.hasFocus;
+    if (!_autocompleteFocusNode!.hasFocus) wasTouched();
   }
 
   @override

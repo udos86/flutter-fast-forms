@@ -12,12 +12,6 @@ typedef FastSwitchWidgetBuilder = FastWidgetBuilder<FastSwitchState>;
 @immutable
 class FastSwitch extends FastFormField<bool> {
   const FastSwitch({
-    @Deprecated('Use cupertinoErrorBuilder instead.')
-    FastSwitchWidgetBuilder? errorBuilder,
-    @Deprecated('Use cupertinoHelperBuilder instead.')
-    FastSwitchWidgetBuilder? helperBuilder,
-    FastSwitchWidgetBuilder cupertinoErrorBuilder = switchErrorBuilder,
-    FastSwitchWidgetBuilder cupertinoHelperBuilder = switchHelperBuilder,
     super.adaptive,
     super.autovalidateMode,
     super.builder = switchBuilder,
@@ -33,6 +27,7 @@ class FastSwitch extends FastFormField<bool> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.activeColor,
@@ -41,6 +36,8 @@ class FastSwitch extends FastFormField<bool> {
     this.applyTheme,
     this.autofocus = false,
     this.controlAffinity = ListTileControlAffinity.platform,
+    this.cupertinoErrorBuilder = switchErrorBuilder,
+    this.cupertinoHelperBuilder = switchHelperBuilder,
     this.cupertinoPrefixBuilder = switchPrefixBuilder,
     this.dragStartBehavior = DragStartBehavior.start,
     this.dense,
@@ -74,8 +71,7 @@ class FastSwitch extends FastFormField<bool> {
     this.trackColor,
     this.trackOutlineColor,
     this.visualDensity,
-  })  : cupertinoErrorBuilder = helperBuilder ?? cupertinoErrorBuilder,
-        cupertinoHelperBuilder = helperBuilder ?? cupertinoHelperBuilder;
+  });
 
   final Color? activeColor;
   final ImageProvider<Object>? activeThumbImage;

@@ -45,6 +45,7 @@ class FormPage extends StatelessWidget {
   FormPage({super.key, required this.title});
 
   final formKey = GlobalKey<FormState>();
+  final fastFormKey = GlobalKey<FastFormState>();
   final String title;
 
   @override
@@ -63,9 +64,9 @@ class FormPage extends StatelessWidget {
                     adaptive: true,
                     formKey: formKey,
                     children: _buildCupertinoForm(context),
-                    onChanged: (value) {
+                    onChanged: (status) {
                       // ignore: avoid_print
-                      print('Form changed: ${value.toString()}');
+                      print('Form changed: ${status.toString()}');
                     },
                   ),
                   CupertinoButton(
@@ -91,10 +92,12 @@ class FormPage extends StatelessWidget {
               child: Column(
                 children: [
                   FastForm(
+                    key: fastFormKey,
                     formKey: formKey,
                     inputDecorationTheme: InputDecorationTheme(
-                      disabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(width: 1),
+                      disabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.grey[300]!, width: 1),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
@@ -114,14 +117,20 @@ class FormPage extends StatelessWidget {
                       fillColor: Colors.white,
                     ),
                     children: _buildForm(context),
-                    onChanged: (value) {
+                    onChanged: (status) {
+                      final touchedFields =
+                          status.entries.where((entry) => entry.value.touched);
                       // ignore: avoid_print
-                      print('Form changed: ${value.toString()}');
+                      print('Form changed: ${touchedFields.toString()}');
                     },
                   ),
                   ElevatedButton(
                     child: const Text('Reset'),
                     onPressed: () => formKey.currentState?.reset(),
+                  ),
+                  ElevatedButton(
+                    child: const Text('Validate Granually'),
+                    onPressed: () => formKey.currentState?.validateGranularly(),
                   ),
                 ],
               ),
@@ -173,8 +182,8 @@ class FormPage extends StatelessWidget {
             labelText: 'Time Picker',
           ),
           const FastChipsInput(
-            name: 'input_chips',
-            labelText: 'Input Chips',
+            name: 'chips_input',
+            labelText: 'Chips Input',
             options: ['Angular', 'React', 'Vue', 'Svelte', 'Flutter'],
             initialValue: [
               'HTML',

@@ -19,6 +19,7 @@ class FastCalendar extends FastFormField<DateTime> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.currentDate,

@@ -2,11 +2,24 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+/// A record type to aggregate information about the current state of a
+/// [FastFormField].
+typedef FastFormFieldStatus<T> = ({
+  T? value,
+  bool enabled,
+  bool touched,
+  bool interacted,
+  bool invalid,
+});
+
 typedef FastInputDecorationBuilder = InputDecoration Function(
     FastFormFieldState field);
 
-typedef FastFormChanged = void Function(
-    UnmodifiableMapView<String, dynamic> values);
+/// A map whose entries associate a [FastFormFieldState.name] with a
+/// [FastFormFieldStatus].
+typedef FastFormStatus = Map<String, FastFormFieldStatus<dynamic>>;
+
+typedef FastFormChanged = void Function(FastFormStatus status);
 
 /// Wraps a [Form] widget and passes [FastFormField] widgets as [children] to
 /// it.
@@ -56,16 +69,33 @@ class FastForm extends StatefulWidget {
 /// Works identical to built-in [FormState].
 ///
 /// Enhances [FormState] by triggering [FastForm.onChanged] whenever a
-/// [FastFormField] changes and passing an [UnmodifiableMapView] of all current
-/// [values].
+/// [FastFormField] changes and passing an [UnmodifiableMapView] of the current
+/// [status] of the [FastForm].
 ///
 /// Typically obtained via [FastForm.of].
 class FastFormState extends State<FastForm> {
   final Map<String, FastFormFieldState<dynamic>> _fields = {};
 
+  /// Returns an [UnmodifiableMapView] which holds an entry for any
+  /// descendant [FastFormField] of this [FastForm].
+  ///
+  /// Every entry holds a [FastFormFieldState.name] as key and the corresponding
+  /// [FastFormFieldState.value] as value.
+  @Deprecated('use status instead')
   UnmodifiableMapView<String, dynamic> get values {
     final map = _fields.map((name, field) => MapEntry(name, field.value));
     return UnmodifiableMapView(map);
+  }
+
+  /// Exposes a [FastFormStatus] map which holds a status entry for any
+  /// descendant [FastFormField] of this [FastForm].
+  ///
+  /// The key of every entry is a [FastFormFieldState.name] and the value the
+  /// corresponding [FastFormFieldState.status].
+  FastFormStatus get status {
+    final entries =
+        _fields.entries.map((entry) => MapEntry(entry.key, entry.value.status));
+    return Map.fromEntries(entries);
   }
 
   void register(FastFormFieldState field) => _fields[field.name] = field;
@@ -74,11 +104,42 @@ class FastFormState extends State<FastForm> {
 
   FastFormFieldState? getFieldByName(String name) => _fields[name];
 
+  /// A function for conveniently scrolling to any descendant [FastFormField] of
+  /// this [FastForm].
+  ///
+  /// Typically used to scroll to an invalid [FastFormField].
+  void scrollToField(
+    String name, {
+    Duration duration = Duration.zero,
+    Curve curve = Curves.ease,
+    double alignment = 0.5,
+    ScrollPositionAlignmentPolicy alignmentPolicy =
+        ScrollPositionAlignmentPolicy.explicit,
+  }) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final field = getFieldByName(name);
+      if (field == null) {
+        throw ArgumentError('Field with name $name does not exist.');
+      }
+
+      final FastFormFieldState<dynamic>(:context) = field;
+      if (context.mounted) {
+        Scrollable.ensureVisible(
+          context,
+          alignment: alignment,
+          alignmentPolicy: alignmentPolicy,
+          duration: duration,
+          curve: curve,
+        );
+      }
+    });
+  }
+
   void onChanged() {
-    widget.onChanged?.call(values);
     for (final field in _fields.values) {
       field.testConditions();
     }
+    widget.onChanged?.call(status);
   }
 
   @override
@@ -117,7 +178,9 @@ class _FastFormScope extends InheritedWidget {
 
 /// A [Function] that tests whether a single [FastCondition] is met.
 typedef FastConditionTest = bool Function(
-    dynamic value, FastFormFieldState field);
+  dynamic value,
+  FastFormFieldState field,
+);
 
 /// A [Function] that defines a conditional state of a [FastFormField].
 ///
@@ -127,7 +190,9 @@ typedef FastConditionTest = bool Function(
 ///
 /// Called at the end of every [FastFormFieldState.testConditions] run.
 typedef FastConditionHandler = void Function(
-    bool isMet, FastFormFieldState field);
+  bool isMet,
+  FastFormFieldState field,
+);
 
 /// A single condition to be met for a conditional state to occur.
 @immutable
@@ -210,6 +275,7 @@ abstract class FastFormField<T> extends FormField<T> {
     this.labelText,
     required this.name,
     this.onChanged,
+    this.onTouched,
     this.onReset,
   });
 
@@ -222,6 +288,7 @@ abstract class FastFormField<T> extends FormField<T> {
   final String? labelText;
   final String name;
   final ValueChanged<T?>? onChanged;
+  final void Function()? onTouched;
   final VoidCallback? onReset;
 }
 
@@ -232,18 +299,22 @@ abstract class FastFormField<T> extends FormField<T> {
 /// Enhances [FormFieldState] by tracking [touched] state via [focusNode].
 ///
 abstract class FastFormFieldState<T> extends FormFieldState<T> {
-  /// Indicates if the [FastFormField] is currently focused.
-  bool focused = false;
+  bool? _enabled;
 
   /// Indicates if the user has touched the [FastFormField].
   ///
   /// The [FastFormField] must have been both focused and unfocused at least
   /// once to be marked as touched.
-  bool touched = false;
+  ///
+  /// This is not identical to [FormFieldState.hasInteractedByUser]
+  /// which indicates that the value of the field has been changed at least once
+  /// by the user.
+  bool _touched = false;
+
+  /// Indicates if the [FastFormField] is currently focused.
+  bool focused = false;
 
   late FocusNode focusNode;
-
-  bool? _enabled;
 
   /// Returns the [FastFormField] widget for this [FastFormFieldState] instance.
   /// Must be overridden in the concrete child class.
@@ -252,7 +323,7 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   FastFormField<T> get widget;
 
   /// Returns if the [FastFormField.builder] should adapt to the
-  /// [TargetPlatform] provided that the [FastFormField] type does support it
+  /// [TargetPlatform] provided that the [FastFormField] type does support it.
   bool get adaptive => widget.adaptive ?? form?.widget.adaptive ?? false;
 
   set enabled(bool value) {
@@ -261,13 +332,23 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
 
   bool get enabled => _enabled ?? widget.enabled;
 
+  bool get touched => _touched;
+
   String get name => widget.name;
 
-  /// Returns the [FastFormState] of the parent [FastForm]
+  FastFormFieldStatus<T> get status => (
+        value: value,
+        enabled: enabled,
+        touched: touched,
+        interacted: hasInteractedByUser,
+        invalid: !isValid
+      );
+
+  /// Returns the [FastFormState] of the parent [FastForm].
   FastFormState? get form => FastForm.of(context);
 
   /// Creates the [InputDecoration] based on the current theme and the
-  /// corresponding [FastFormField] widget configuration
+  /// corresponding [FastFormField] widget configuration.
   InputDecoration get decoration {
     final theme = form?.widget.inputDecorationTheme ??
         Theme.of(context).inputDecorationTheme;
@@ -278,7 +359,7 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
           contentPadding: widget.contentPadding ??
               const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
           enabled: enabled,
-          errorText: errorText,
+          errorText: enabled ? errorText : null,
           helperText: widget.helperText,
           labelText: widget.labelText,
         );
@@ -332,8 +413,25 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     onReset();
   }
 
+  /// A function that sets [FastFormFieldState.touched] to true and calls
+  /// [FastFormField.onTouched] if provided.
+  ///
+  /// Should only be called when the [FastFormField] is to be considered
+  /// touched.
+  ///
+  /// Typically used when the touched state of a [FastFormField] cannot directly
+  /// be tracked via [FastFormFieldState.focusNode].
+  void wasTouched() {
+    if (!_touched) {
+      setState(() {
+        _touched = true;
+        widget.onTouched?.call();
+      });
+    }
+  }
+
   void onChanged(T? value) {
-    if (!touched) setState(() => touched = true);
+    wasTouched();
     setValue(value);
     widget.onChanged?.call(value);
     form?.onChanged();
@@ -343,7 +441,7 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     setState(() {
       _enabled = null;
       focused = false;
-      touched = false;
+      _touched = false;
       setValue(widget.initialValue);
       widget.onChanged?.call(widget.initialValue);
       form?.onChanged();
@@ -390,7 +488,7 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
         focused = true;
       } else {
         focused = false;
-        touched = true;
+        wasTouched();
       }
     });
   }
