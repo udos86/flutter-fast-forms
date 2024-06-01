@@ -24,6 +24,22 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('shows CalendarDateRangePicker on GestureDetector tap',
+      (tester) async {
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastDateRangePicker(
+        name: 'date_picker',
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now().add(const Duration(days: 365)),
+      ),
+    ]));
+    
+    await tester.tap(findInkWell().first);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(DateRangePickerDialog), findsOneWidget);
+  });
+
   testWidgets('updates FastDateRangerPicker', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp([
       FastDateRangePicker(
