@@ -33,7 +33,7 @@ void main() {
         lastDate: DateTime.now().add(const Duration(days: 365)),
       ),
     ]));
-    
+
     await tester.tap(findInkWell().first);
     await tester.pumpAndSettle();
 
