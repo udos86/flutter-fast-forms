@@ -5,7 +5,8 @@ import 'form.dart';
 
 enum FastFormSectionOrientation { horizontal, vertical }
 
-/// A widget for visually dividing a [FastForm] into multiple sections.
+/// A widget for visually (not logically) dividing a [FastForm] into multiple
+/// sections.
 ///
 /// Builds a [CupertinoFormSection] when [adaptive] is true and platform is
 /// [TargetPlatform.iOS].

@@ -72,4 +72,31 @@ void main() {
     expect(spy.calledWith, testValue);
     expect(state.value, testValue);
   });
+
+  testWidgets('updates touched state', (tester) async {
+    final spy = VoidCallbackSpy();
+
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastAutocomplete<String>(
+        name: 'autocomplete',
+        options: options,
+        onTouched: spy.fn,
+      ),
+    ]));
+
+    final autocompleteFinder = findFastAutocomplete<String>();
+    final textFieldFinder =
+        find.descendant(of: autocompleteFinder, matching: findTextFormField());
+    final state =
+        tester.state<FastAutocompleteState<String>>(autocompleteFinder);
+
+    expect(state.status.touched, false);
+
+    await tester.tap(textFieldFinder);
+    state.autocompleteFocusNode?.unfocus();
+    await tester.pumpAndSettle();
+
+    expect(spy.called, true);
+    expect(state.status.touched, true);
+  });
 }

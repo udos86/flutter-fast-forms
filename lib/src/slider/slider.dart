@@ -13,12 +13,6 @@ typedef FastSliderWidgetBuilder = FastWidgetBuilder<FastSliderState>;
 @immutable
 class FastSlider extends FastFormField<double> {
   const FastSlider({
-    @Deprecated('Use cupertinoErrorBuilder instead.')
-    FastSliderWidgetBuilder? errorBuilder,
-    @Deprecated('Use cupertinoHelperBuilder instead.')
-    FastSliderWidgetBuilder? helperBuilder,
-    FastSliderWidgetBuilder cupertinoErrorBuilder = sliderErrorBuilder,
-    FastSliderWidgetBuilder cupertinoHelperBuilder = sliderHelperBuilder,
     double? initialValue,
     super.adaptive,
     super.autovalidateMode,
@@ -34,11 +28,14 @@ class FastSlider extends FastFormField<double> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.activeColor,
     this.allowedInteraction,
     this.autofocus = false,
+    this.cupertinoErrorBuilder = sliderErrorBuilder,
+    this.cupertinoHelperBuilder = sliderHelperBuilder,
     this.cupertinoPrefixBuilder = sliderPrefixBuilder,
     this.divisions,
     this.inactiveColor,
@@ -56,9 +53,7 @@ class FastSlider extends FastFormField<double> {
     this.showInputDecoration = true,
     this.suffixBuilder,
     this.thumbColor,
-  })  : cupertinoErrorBuilder = helperBuilder ?? cupertinoErrorBuilder,
-        cupertinoHelperBuilder = helperBuilder ?? cupertinoHelperBuilder,
-        super(initialValue: initialValue ?? min);
+  }) : super(initialValue: initialValue ?? min);
 
   final Color? activeColor;
   final SliderInteraction? allowedInteraction;

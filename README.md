@@ -397,6 +397,7 @@ class MyCustomField extends FastFormField<int> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.validator,
   });
 

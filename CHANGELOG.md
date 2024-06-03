@@ -1,8 +1,25 @@
+## [17.0.0] - 06/03/2024
+
+* fixes several `touched` state issues
+* deprecates `values` function of `FastFormState`
+* adds `scrollToField` function to `FastFormState`
+* adds `onTouched` callback to `FastFormField`
+* adds `wasTouched` function to `FastFormFieldState`
+* adds `FastFormStatus` and `FastFormFieldStatus` record typedefs
+* updates native Android example project
+
+**Breaking Changes**
+
+* removes deprecated `errorBuilder` and `helperBuilder` from `FastCheckbox`, `FastSwitch`, `FastDatePicker`, `FastSegmentendControl` and `FastSlider`
+* sets `errorText` of `InputDecoration` to `null` when a field is disabled
+* changes signature of `FastFormChanged` function typedef to `void Function(FastFormStatus status)`
+* `onChanged` callback function of `FastForm` now passes a fine-grained `FastFormStatus`
+
 ## [16.0.0] - 05/15/2024
 
 * upgrades to Flutter `3.22.0`
 * replaces deprecated `MaterialStateProperty<T>` type with `WidgetStateProperty<T>`
-* adds `avatarBoxConstraints` to `FastChoice Chip`
+* adds `avatarBoxConstraints` to `FastChoiceChip`
 * adds `cursorErrorColor` and `onTapAlwaysCalled` properties to `FastTextField`
 
 ## [15.0.0] - 01/08/2024

@@ -53,6 +53,7 @@ class FastRadioGroup<T> extends FastFormField<T> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.activeColor,

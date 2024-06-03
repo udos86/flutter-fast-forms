@@ -74,6 +74,29 @@ void main() {
     expect(state.value, text);
   });
 
+  testWidgets('updates touched state', (tester) async {
+    final spy = VoidCallbackSpy();
+
+    await tester.pumpWidget(buildMaterialTestApp([
+      FastTextField(
+        name: 'text_field',
+        onTouched: spy.fn,
+      ),
+    ]));
+
+    final textFieldFinder = findFastTextField();
+    final state = tester.state<FastTextFieldState>(textFieldFinder);
+
+    expect(state.status.touched, false);
+
+    await tester.tap(textFieldFinder);
+    state.focusNode.unfocus();
+    await tester.pumpAndSettle();
+
+    expect(spy.called, true);
+    expect(state.status.touched, true);
+  });
+
   testWidgets('validates FastTextField on touched', (tester) async {
     const errorText = 'Field is required';
 

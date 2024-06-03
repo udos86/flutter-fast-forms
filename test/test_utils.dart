@@ -147,6 +147,14 @@ CupertinoApp buildCupertinoTestApp(List<Widget> testWidgets,
   );
 }
 
+class VoidCallbackSpy {
+  bool _called = false;
+
+  bool get called => _called;
+
+  void fn() => _called = true;
+}
+
 class OnChangedSpy<T> {
   T? _arg;
 

@@ -10,10 +10,6 @@ typedef FastSegmentedControlWidgetBuilder<T>
 class FastSegmentedControl<T> extends FastFormField<T> {
   FastSegmentedControl({
     FormFieldBuilder<T>? builder,
-    @Deprecated('Use cupertinoErrorBuilder instead.')
-    FastSegmentedControlWidgetBuilder<T>? errorBuilder,
-    @Deprecated('Use cupertinoHelperBuilder instead.')
-    FastSegmentedControlWidgetBuilder<T>? helperBuilder,
     FastSegmentedControlWidgetBuilder<T>? cupertinoErrorBuilder,
     FastSegmentedControlWidgetBuilder<T>? cupertinoHelperBuilder,
     FastSegmentedControlWidgetBuilder<T>? cupertinoPrefixBuilder,
@@ -30,6 +26,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.backgroundColor = CupertinoColors.tertiarySystemFill,
@@ -37,12 +34,10 @@ class FastSegmentedControl<T> extends FastFormField<T> {
     this.padding = const EdgeInsets.symmetric(vertical: 2, horizontal: 3),
     this.thumbColor,
   })  : assert(children.length >= 2),
-        cupertinoErrorBuilder = errorBuilder ??
-            cupertinoErrorBuilder ??
-            segmentedControlErrorBuilder,
-        cupertinoHelperBuilder = errorBuilder ??
-            cupertinoHelperBuilder ??
-            segmentedControlHelperBuilder,
+        cupertinoErrorBuilder =
+            cupertinoErrorBuilder ?? segmentedControlErrorBuilder,
+        cupertinoHelperBuilder =
+            cupertinoHelperBuilder ?? segmentedControlHelperBuilder,
         cupertinoPrefixBuilder =
             cupertinoPrefixBuilder ?? segmentedControlPrefixBuilder,
         super(

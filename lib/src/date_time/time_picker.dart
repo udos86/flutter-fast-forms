@@ -29,6 +29,7 @@ class FastTimePicker extends FastFormField<TimeOfDay> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.anchorPoint,
@@ -128,6 +129,7 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
     :didChange,
     :enabled,
     :value,
+    :wasTouched,
     :widget
   ) = field as FastTimePickerState;
 
@@ -152,6 +154,7 @@ Widget timePickerBuilder(FormFieldState<TimeOfDay> field) {
       routeSettings: widget.routeSettings,
       useRootNavigator: widget.useRootNavigator,
     ).then((value) {
+      wasTouched();
       if (value != null) didChange(value);
       return value;
     });

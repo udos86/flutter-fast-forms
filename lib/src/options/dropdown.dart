@@ -23,6 +23,7 @@ class FastDropdown<T> extends FastFormField<T> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.alignment = AlignmentDirectional.centerStart,
@@ -102,6 +103,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     :decoration,
     :didChange,
     :enabled,
+    :focusNode,
     :value,
     :widget
   ) = field as FastDropdownState<T>;
@@ -122,7 +124,7 @@ Widget dropdownBuilder<T>(FormFieldState<T> field) {
     elevation: widget.elevation,
     enableFeedback: widget.enableFeedback,
     focusColor: widget.focusColor,
-    focusNode: widget.focusNode,
+    focusNode: widget.focusNode ?? focusNode,
     hint: widget.hint,
     icon: widget.icon,
     iconDisabledColor: widget.iconDisabledColor,

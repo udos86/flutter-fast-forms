@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 
 import '../form.dart';
 
@@ -11,12 +12,6 @@ typedef FastCheckboxWidgetBuilder = FastWidgetBuilder<FastCheckboxState>;
 @immutable
 class FastCheckbox extends FastFormField<bool> {
   const FastCheckbox({
-    @Deprecated('Use cupertinoErrorBuilder instead.')
-    FastCheckboxWidgetBuilder? errorBuilder,
-    @Deprecated('Use cupertinoHelperBuilder instead.')
-    FastCheckboxWidgetBuilder? helperBuilder,
-    FastCheckboxWidgetBuilder cupertinoErrorBuilder = checkboxErrorBuilder,
-    FastCheckboxWidgetBuilder cupertinoHelperBuilder = checkboxHelperBuilder,
     super.adaptive,
     super.autovalidateMode,
     super.builder = checkboxBuilder,
@@ -32,6 +27,7 @@ class FastCheckbox extends FastFormField<bool> {
     super.onChanged,
     super.onReset,
     super.onSaved,
+    super.onTouched,
     super.restorationId,
     super.validator,
     this.activeColor,
@@ -40,6 +36,8 @@ class FastCheckbox extends FastFormField<bool> {
     this.checkboxShape,
     this.checkColor,
     this.controlAffinity = ListTileControlAffinity.platform,
+    this.cupertinoErrorBuilder = checkboxErrorBuilder,
+    this.cupertinoHelperBuilder = checkboxHelperBuilder,
     this.cupertinoPrefixBuilder = checkboxPrefixBuilder,
     this.dense,
     this.enableFeedback,
@@ -67,8 +65,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.titleBuilder = checkboxTitleBuilder,
     this.tristate = false,
     this.visualDensity,
-  })  : cupertinoErrorBuilder = helperBuilder ?? cupertinoErrorBuilder,
-        cupertinoHelperBuilder = helperBuilder ?? cupertinoHelperBuilder;
+  });
 
   final bool autofocus;
   final Color? activeColor;
