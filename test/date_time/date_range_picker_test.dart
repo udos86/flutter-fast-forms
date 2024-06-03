@@ -80,7 +80,7 @@ void main() {
     expect(find.byType(DateRangePickerDialog), findsOneWidget);
   });
 
-  testWidgets('updates state when touched', (tester) async {
+  testWidgets('tracks touched state', (tester) async {
     await tester.pumpWidget(buildMaterialTestApp([
       FastDateRangePicker(
         name: 'date_range_picker',

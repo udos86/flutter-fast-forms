@@ -45,7 +45,6 @@ class FormPage extends StatelessWidget {
   FormPage({super.key, required this.title});
 
   final formKey = GlobalKey<FormState>();
-  final fastFormKey = GlobalKey<FastFormState>();
   final String title;
 
   @override
@@ -92,7 +91,6 @@ class FormPage extends StatelessWidget {
               child: Column(
                 children: [
                   FastForm(
-                    key: fastFormKey,
                     formKey: formKey,
                     inputDecorationTheme: InputDecorationTheme(
                       disabledBorder: OutlineInputBorder(

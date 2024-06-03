@@ -1,11 +1,12 @@
-## [17.0.0] - 05/xx/2024
+## [17.0.0] - 06/03/2024
 
 * fixes several `touched` state issues
 * deprecates `values` function of `FastFormState`
-* adds `FastFormStatus` and `FastFormFieldStatus` record typedefs
-* adds `wasTouched` function to `FastFormFieldState`
+* adds `scrollToField` function to `FastFormState`
 * adds `onTouched` callback to `FastFormField`
-* updates Android example project
+* adds `wasTouched` function to `FastFormFieldState`
+* adds `FastFormStatus` and `FastFormFieldStatus` record typedefs
+* updates native Android example project
 
 **Breaking Changes**
 

@@ -74,7 +74,7 @@ class FastForm extends StatefulWidget {
 ///
 /// Typically obtained via [FastForm.of].
 class FastFormState extends State<FastForm> {
-  final Map<String, FastFormFieldState<dynamic>> _fields = {};
+  final Map<String, FastFormFieldState> _fields = {};
 
   /// Returns an [UnmodifiableMapView] which holds an entry for any
   /// descendant [FastFormField] of this [FastForm].
@@ -98,7 +98,10 @@ class FastFormState extends State<FastForm> {
     return Map.fromEntries(entries);
   }
 
-  void register(FastFormFieldState field) => _fields[field.name] = field;
+  void register(FastFormFieldState field) {
+    if (_fields[field.name] == field) return;
+    _fields[field.name] = field;
+  }
 
   void unregister(FastFormFieldState field) => _fields.remove(field.name);
 
@@ -275,8 +278,8 @@ abstract class FastFormField<T> extends FormField<T> {
     this.labelText,
     required this.name,
     this.onChanged,
-    this.onTouched,
     this.onReset,
+    this.onTouched,
   });
 
   /// null represents a non-adaptive form field widget
@@ -288,8 +291,8 @@ abstract class FastFormField<T> extends FormField<T> {
   final String? labelText;
   final String name;
   final ValueChanged<T?>? onChanged;
-  final void Function()? onTouched;
   final VoidCallback? onReset;
+  final void Function()? onTouched;
 }
 
 /// State associated with a [FastFormField] widget.
@@ -327,7 +330,7 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   bool get adaptive => widget.adaptive ?? form?.widget.adaptive ?? false;
 
   set enabled(bool value) {
-    setState(() => _enabled = value);
+    if (value != _enabled) setState(() => _enabled = value);
   }
 
   bool get enabled => _enabled ?? widget.enabled;
@@ -440,8 +443,8 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
   void onReset() {
     setState(() {
       _enabled = null;
-      focused = false;
       _touched = false;
+      focused = false;
       setValue(widget.initialValue);
       widget.onChanged?.call(widget.initialValue);
       form?.onChanged();
@@ -458,16 +461,14 @@ abstract class FastFormFieldState<T> extends FormFieldState<T> {
     if (conditions == null || conditions.isEmpty) return;
 
     for (final MapEntry(key: handler, value: list) in conditions.entries) {
-      final FastConditionList(:conditions, match: logic) = list;
+      final FastConditionList(:conditions, :match) = list;
       final bool isMet;
 
-      test(condition) => _testCondition(condition);
-
-      switch (logic) {
+      switch (match) {
         case FastConditionMatch.any:
-          isMet = conditions.any(test);
+          isMet = conditions.any(_testCondition);
         case FastConditionMatch.every:
-          isMet = conditions.every(test);
+          isMet = conditions.every(_testCondition);
       }
 
       handler(isMet, this);
