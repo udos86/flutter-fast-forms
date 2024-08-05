@@ -40,6 +40,7 @@ class FastChoiceChip<T>
     this.side,
     this.surfaceTintColor,
     this.tooltip,
+    this.chipAnimationStyle,
     required this.value,
     this.visualDensity,
   }) : label = label is Widget ? label : Text(value.toString());
@@ -102,7 +103,8 @@ class FastChoiceChip<T>
   final String? tooltip;
   @override
   final VisualDensity? visualDensity;
-
+  @override
+  final ChipAnimationStyle? chipAnimationStyle;
   final bool enabled;
   final T value;
 
