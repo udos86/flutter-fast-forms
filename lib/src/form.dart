@@ -152,6 +152,7 @@ class FastFormState extends State<FastForm> {
     return Form(
       key: widget.formKey,
       canPop: widget.canPop,
+      // ignore: deprecated_member_use
       onPopInvoked: widget.onPopInvoked,
       onPopInvokedWithResult: widget.onPopInvokedWithResult,
       child: _FastFormScope(
