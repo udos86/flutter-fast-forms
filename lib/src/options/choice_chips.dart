@@ -18,6 +18,7 @@ class FastChoiceChip<T>
     this.avatarBoxConstraints,
     this.backgroundColor,
     this.checkmarkColor,
+    this.chipAnimationStyle,
     this.clipBehavior = Clip.none,
     this.color,
     this.disabledColor,
@@ -56,6 +57,8 @@ class FastChoiceChip<T>
   final Color? backgroundColor;
   @override
   final Color? checkmarkColor;
+  @override
+  final ChipAnimationStyle? chipAnimationStyle;
   @override
   final Clip clipBehavior;
   @override
