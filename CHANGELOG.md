@@ -1,3 +1,9 @@
+## [17.1.0] - 08/18/2024
+
+* upgrades to Flutter `3.24.0`
+* adds `chipAnimationStyle` property to `FastChoiceChip` according to `ChipAttributes` as of `3.24.0`
+* deprecates `onPopInvoked` function on `FastForm` according to `Form` as of `3.24.0`
+
 ## [17.0.0] - 06/03/2024
 
 * fixes several `touched` state issues

@@ -40,7 +40,8 @@ class FastForm extends StatefulWidget {
     this.inputDecorationBuilder,
     this.inputDecorationTheme,
     this.onChanged,
-    this.onPopInvoked,
+    @Deprecated('Use onPopInvokedWithResult instead.') this.onPopInvoked,
+    this.onPopInvokedWithResult,
   });
 
   final bool adaptive;
@@ -51,6 +52,7 @@ class FastForm extends StatefulWidget {
   final InputDecorationTheme? inputDecorationTheme;
   final FastFormChanged? onChanged;
   final void Function(bool)? onPopInvoked;
+  final void Function(bool, Object?)? onPopInvokedWithResult;
 
   /// Returns the [FastFormState] instance for this [FastForm] widget via
   /// [_FastFormScope] inherited widget.
@@ -151,6 +153,7 @@ class FastFormState extends State<FastForm> {
       key: widget.formKey,
       canPop: widget.canPop,
       onPopInvoked: widget.onPopInvoked,
+      onPopInvokedWithResult: widget.onPopInvokedWithResult,
       child: _FastFormScope(
         formState: this,
         child: Column(
