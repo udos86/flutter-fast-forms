@@ -74,7 +74,7 @@ Finder findFastRangeSlider() => find.byType(FastRangeSlider);
 Finder findFastSegmentedButton<T>() =>
     find.byType(typeOf<FastSegmentedButton<T>>());
 
-Finder findFastSegmentedControl<T>() =>
+Finder findFastSegmentedControl<T extends Object>() =>
     find.byType(typeOf<FastSegmentedControl<T>>());
 
 Finder findFastSlider() => find.byType(FastSlider);
@@ -105,10 +105,10 @@ Finder findRow() => find.byType(Row);
 
 Finder findSegmentedButton<T>() => find.byType(typeOf<SegmentedButton<T>>());
 
-Finder findSegmentedControlButton<T>() =>
+Finder findSegmentedControlButton<T extends Object>() =>
     find.descendant(of: findSegmentedControl<T>(), matching: find.byType(Text));
 
-Finder findSegmentedControl<T>() =>
+Finder findSegmentedControl<T extends Object>() =>
     find.byType(typeOf<CupertinoSlidingSegmentedControl<T>>());
 
 Finder findSlider() => find.byType(Slider);
