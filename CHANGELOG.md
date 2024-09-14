@@ -1,3 +1,7 @@
+## [17.1.1] - 09/14/2024
+
+* adds `extends Object` to `<T>` of `FastSegmentedControl` according to latest Cupertino changes  
+
 ## [17.1.0] - 08/18/2024
 
 * upgrades to Flutter `3.24.0`

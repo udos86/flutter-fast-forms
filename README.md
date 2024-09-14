@@ -115,24 +115,24 @@ FastForm(
 
 ## Widget Catalog
 
-|       `FastFormControl<T>`       | field value type |          wraps Material widget          |           wraps Cupertino widget<br> when `adaptive: true`           |
-|:--------------------------------:|:----------------:|:---------------------------------------:|:--------------------------------------------------------------------:|
-|      `FastAutocomplete<O>`       |     `String`     |            `Autocomplete<O>`            |                                  no                                  |
-|          `FastCheckbox`          |      `bool`      |           `CheckboxListTile`            |                         `CupertinoCheckbox`                          |
-|       `FastChoiceChips<T>`       |     `Set<T>`     |              `ChoiceChip`               |                                  no                                  |
-|          `FastCalendar`          |    `DateTime`    |          `CalendarDatePicker`           |                                  no                                  |
-|         `FastChipsInput`         |  `List<String>`  | `RawAutocomplete<String>` + `InputChip` |                                  no                                  |
-|         `FastDatePicker`         |    `DateTime`    |            `showDatePicker`             |                        `CupertinoDatePicker`                         |
-|      `FastDateRangePicker`       | `DateTimeRange`  |          `showDateRangePicker`          |                                  no                                  |
-|        `FastDropdown<T>`         |       `T`        |      `DropdownButtonFormField<T>`       |                                  no                                  |
-|       `FastRadioGroup<T>`        |       `T`        |           `RadioListTile<T>`            |                                  no                                  |
-|        `FastRangeSlider`         |  `RangeValues`   |              `RangeSlider`              |                                  no                                  |
-|     `FastSegmentedButton<T>`     |     `Set<T>`     |          `SegmentedButton<T>`           |                                  no                                  |
-|    `FastSegmentedControl<T>`     |       `T`        |                   no                    |                `CupertinoSlidingSegmentedControl<T>`                 |
-|           `FastSlider`           |     `double`     |            `Slider.adaptive`            |                          `CupertinoSlider`                           |
-|           `FastSwitch`           |      `bool`      |            `SwitchListTile`             |                          `CupertinoSwitch`                           |
-|         `FastTextField`          |     `String`     |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |
-|         `FastTimePicker`         |   `TimeOfDay`    |            `showTimePicker`             | no <br> use `FastDatePicker` with <br>`CupertinoDatePickerMode.time` |
+|       `FastFormControl<T>`       |  field value type  |          wraps Material widget          |           wraps Cupertino widget<br> when `adaptive: true`           |
+|:--------------------------------:|:------------------:|:---------------------------------------:|:--------------------------------------------------------------------:|
+|      `FastAutocomplete<O>`       |      `String`      |            `Autocomplete<O>`            |                                  no                                  |
+|          `FastCheckbox`          |       `bool`       |           `CheckboxListTile`            |                         `CupertinoCheckbox`                          |
+|       `FastChoiceChips<T>`       |      `Set<T>`      |              `ChoiceChip`               |                                  no                                  |
+|          `FastCalendar`          |     `DateTime`     |          `CalendarDatePicker`           |                                  no                                  |
+|         `FastChipsInput`         |   `List<String>`   | `RawAutocomplete<String>` + `InputChip` |                                  no                                  |
+|         `FastDatePicker`         |     `DateTime`     |            `showDatePicker`             |                        `CupertinoDatePicker`                         |
+|      `FastDateRangePicker`       |  `DateTimeRange`   |          `showDateRangePicker`          |                                  no                                  |
+|        `FastDropdown<T>`         |        `T`         |      `DropdownButtonFormField<T>`       |                                  no                                  |
+|       `FastRadioGroup<T>`        |        `T`         |           `RadioListTile<T>`            |                                  no                                  |
+|        `FastRangeSlider`         |   `RangeValues`    |              `RangeSlider`              |                                  no                                  |
+|     `FastSegmentedButton<T>`     |      `Set<T>`      |          `SegmentedButton<T>`           |                                  no                                  |
+|    `FastSegmentedControl<T>`     | `T extends Object` |                   no                    |                `CupertinoSlidingSegmentedControl<T>`                 |
+|           `FastSlider`           |      `double`      |            `Slider.adaptive`            |                          `CupertinoSlider`                           |
+|           `FastSwitch`           |       `bool`       |            `SwitchListTile`             |                          `CupertinoSwitch`                           |
+|         `FastTextField`          |      `String`      |             `TextFormField`             |                     `CupertinoTextFormFieldRow`                      |
+|         `FastTimePicker`         |    `TimeOfDay`     |            `showTimePicker`             | no <br> use `FastDatePicker` with <br>`CupertinoDatePickerMode.time` |
 
 ## Adaptive Form Fields
 
