@@ -58,7 +58,8 @@ class FastSegmentedControl<T extends Object> extends FastFormField<T> {
 }
 
 /// State associated with a [FastSegmentedControl] widget.
-class FastSegmentedControlState<T extends Object> extends FastFormFieldState<T> {
+class FastSegmentedControlState<T extends Object>
+    extends FastFormFieldState<T> {
   @override
   FastSegmentedControl<T> get widget => super.widget as FastSegmentedControl<T>;
 }
@@ -66,21 +67,24 @@ class FastSegmentedControlState<T extends Object> extends FastFormFieldState<T> 
 /// A function that is the default [FastSegmentedControl.cupertinoErrorBuilder].
 ///
 /// Uses [cupertinoErrorBuilder].
-Widget? segmentedControlErrorBuilder<T extends Object>(FastSegmentedControlState<T> field) {
+Widget? segmentedControlErrorBuilder<T extends Object>(
+    FastSegmentedControlState<T> field) {
   return cupertinoErrorBuilder(field);
 }
 
 /// A function that is the default [FastSegmentedControl.cupertinoHelperBuilder].
 ///
 /// Uses [cupertinoHelperBuilder].
-Widget? segmentedControlHelperBuilder<T extends Object>(FastSegmentedControlState<T> field) {
+Widget? segmentedControlHelperBuilder<T extends Object>(
+    FastSegmentedControlState<T> field) {
   return cupertinoHelperBuilder(field);
 }
 
 /// A function that is the default [FastSegmentedControl.cupertinoPrefixBuilder].
 ///
 /// Uses [cupertinoPrefixBuilder].
-Widget? segmentedControlPrefixBuilder<T extends Object>(FastSegmentedControlState<T> field) {
+Widget? segmentedControlPrefixBuilder<T extends Object>(
+    FastSegmentedControlState<T> field) {
   return cupertinoPrefixBuilder(field);
 }
 
