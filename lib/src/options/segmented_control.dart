@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 
 import '../form.dart';
 
-typedef FastSegmentedControlWidgetBuilder<T>
+typedef FastSegmentedControlWidgetBuilder<T extends Object>
     = FastWidgetBuilder<FastSegmentedControlState<T>>;
 
 /// A [FastFormField] that contains a [CupertinoSlidingSegmentedControl].
 @immutable
-class FastSegmentedControl<T> extends FastFormField<T> {
+class FastSegmentedControl<T extends Object> extends FastFormField<T> {
   FastSegmentedControl({
     FormFieldBuilder<T>? builder,
     FastSegmentedControlWidgetBuilder<T>? cupertinoErrorBuilder,
@@ -41,7 +41,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
         cupertinoPrefixBuilder =
             cupertinoPrefixBuilder ?? segmentedControlPrefixBuilder,
         super(
-          builder: builder ?? segmentedControlBuilder,
+          builder: builder ?? segmentedControlBuilder<T>,
           initialValue: initialValue ?? children.keys.first,
         );
 
@@ -58,7 +58,7 @@ class FastSegmentedControl<T> extends FastFormField<T> {
 }
 
 /// State associated with a [FastSegmentedControl] widget.
-class FastSegmentedControlState<T> extends FastFormFieldState<T> {
+class FastSegmentedControlState<T extends Object> extends FastFormFieldState<T> {
   @override
   FastSegmentedControl<T> get widget => super.widget as FastSegmentedControl<T>;
 }
@@ -66,21 +66,21 @@ class FastSegmentedControlState<T> extends FastFormFieldState<T> {
 /// A function that is the default [FastSegmentedControl.cupertinoErrorBuilder].
 ///
 /// Uses [cupertinoErrorBuilder].
-Widget? segmentedControlErrorBuilder<T>(FastSegmentedControlState<T> field) {
+Widget? segmentedControlErrorBuilder<T extends Object>(FastSegmentedControlState<T> field) {
   return cupertinoErrorBuilder(field);
 }
 
 /// A function that is the default [FastSegmentedControl.cupertinoHelperBuilder].
 ///
 /// Uses [cupertinoHelperBuilder].
-Widget? segmentedControlHelperBuilder<T>(FastSegmentedControlState<T> field) {
+Widget? segmentedControlHelperBuilder<T extends Object>(FastSegmentedControlState<T> field) {
   return cupertinoHelperBuilder(field);
 }
 
 /// A function that is the default [FastSegmentedControl.cupertinoPrefixBuilder].
 ///
 /// Uses [cupertinoPrefixBuilder].
-Widget? segmentedControlPrefixBuilder<T>(FastSegmentedControlState<T> field) {
+Widget? segmentedControlPrefixBuilder<T extends Object>(FastSegmentedControlState<T> field) {
   return cupertinoPrefixBuilder(field);
 }
 
@@ -88,7 +88,7 @@ Widget? segmentedControlPrefixBuilder<T>(FastSegmentedControlState<T> field) {
 ///
 /// Returns a [CupertinoFormRow] that contains a
 /// [CupertinoSlidingSegmentedControl] on any [TargetPlatform].
-Widget segmentedControlBuilder<T>(FormFieldState<T> field) {
+Widget segmentedControlBuilder<T extends Object>(FormFieldState<T> field) {
   field as FastSegmentedControlState<T>;
   final FastSegmentedControlState<T>(:didChange, :value, :widget) = field;
 
