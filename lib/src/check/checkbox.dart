@@ -32,6 +32,7 @@ class FastCheckbox extends FastFormField<bool> {
     super.validator,
     this.activeColor,
     this.autofocus = false,
+    this.checkboxScaleFactor = 1.0,
     this.checkboxSemanticLabel,
     this.checkboxShape,
     this.checkColor,
@@ -46,6 +47,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.focusNode,
     this.hoverColor,
     this.inactiveColor,
+    this.internalAddSemanticForOnTap = false,
     this.isError = false,
     this.isThreeLine = false,
     this.materialTapTargetSize,
@@ -69,6 +71,7 @@ class FastCheckbox extends FastFormField<bool> {
 
   final bool autofocus;
   final Color? activeColor;
+  final double checkboxScaleFactor;
   final String? checkboxSemanticLabel;
   final OutlinedBorder? checkboxShape;
   final Color? checkColor;
@@ -83,6 +86,7 @@ class FastCheckbox extends FastFormField<bool> {
   final FocusNode? focusNode;
   final Color? hoverColor;
   final Color? inactiveColor;
+  final bool internalAddSemanticForOnTap;
   final bool isError;
   final bool isThreeLine;
   final MaterialTapTargetSize? materialTapTargetSize;
@@ -169,6 +173,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
     activeColor: widget.activeColor,
     autofocus: widget.autofocus,
     checkColor: widget.checkColor,
+    checkboxScaleFactor: widget.checkboxScaleFactor,
     checkboxSemanticLabel: widget.checkboxSemanticLabel,
     checkboxShape: widget.checkboxShape,
     contentPadding: widget.contentPadding,
@@ -179,6 +184,7 @@ Widget materialCheckboxBuilder(FormFieldState<bool> field) {
     fillColor: widget.fillColor,
     focusNode: widget.focusNode,
     hoverColor: widget.hoverColor,
+    internalAddSemanticForOnTap: widget.internalAddSemanticForOnTap,
     isError: widget.isError,
     isThreeLine: widget.isThreeLine,
     materialTapTargetSize: widget.materialTapTargetSize,
@@ -226,10 +232,14 @@ Widget cupertinoCheckboxBuilder(FormFieldState<bool> field) {
       activeColor: widget.activeColor,
       autofocus: widget.autofocus,
       checkColor: widget.checkColor,
+      fillColor: widget.fillColor,
       focusColor: widget.focusColor,
       focusNode: widget.focusNode,
+      // ignore: deprecated_member_use
       inactiveColor: widget.inactiveColor,
+      mouseCursor: widget.mouseCursor,
       onChanged: enabled ? didChange : null,
+      semanticLabel: widget.checkboxSemanticLabel,
       shape: widget.shape,
       side: widget.side,
       tristate: widget.tristate,

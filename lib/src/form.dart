@@ -269,6 +269,7 @@ abstract class FastFormField<T> extends FormField<T> {
     super.autovalidateMode = AutovalidateMode.onUserInteraction,
     required super.builder,
     super.enabled = true,
+    super.forceErrorText,
     super.initialValue,
     super.key,
     super.onSaved,

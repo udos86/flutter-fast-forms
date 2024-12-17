@@ -20,6 +20,7 @@ class FastTextField extends FastFormField<String> {
     super.contentPadding,
     super.decoration,
     super.enabled,
+    super.forceErrorText,
     super.helperText,
     super.initialValue = '',
     super.key,
@@ -52,6 +53,7 @@ class FastTextField extends FastFormField<String> {
     this.enableSuggestions = true,
     this.expands = false,
     this.focusNode,
+    this.ignorePointers,
     this.inputFormatters,
     this.keyboardAppearance,
     this.keyboardType,
@@ -126,6 +128,7 @@ class FastTextField extends FastFormField<String> {
   final bool enableSuggestions;
   final bool expands;
   final FocusNode? focusNode;
+  final bool? ignorePointers;
   final List<TextInputFormatter>? inputFormatters;
   final Brightness? keyboardAppearance;
   final TextInputType? keyboardType;
@@ -267,6 +270,8 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     enableSuggestions: widget.enableSuggestions,
     expands: widget.expands,
     focusNode: widget.focusNode ?? focusNode,
+    forceErrorText: widget.forceErrorText,
+    ignorePointers: widget.ignorePointers,
     keyboardAppearance: widget.keyboardAppearance,
     keyboardType: widget.keyboardType,
     initialValue: widget.initialValue,

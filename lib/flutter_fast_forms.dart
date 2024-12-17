@@ -1,5 +1,3 @@
-library flutter_fast_forms;
-
 export 'src/check/checkbox.dart';
 export 'src/check/switch.dart';
 export 'src/date_time/calendar.dart';

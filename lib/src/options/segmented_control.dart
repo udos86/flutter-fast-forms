@@ -31,7 +31,9 @@ class FastSegmentedControl<T extends Object> extends FastFormField<T> {
     super.validator,
     this.backgroundColor = CupertinoColors.tertiarySystemFill,
     required this.children,
+    this.disabledChildren = const {},
     this.padding = const EdgeInsets.symmetric(vertical: 2, horizontal: 3),
+    this.proportionalWidth = false,
     this.thumbColor,
   })  : assert(children.length >= 2),
         cupertinoErrorBuilder =
@@ -47,10 +49,12 @@ class FastSegmentedControl<T extends Object> extends FastFormField<T> {
 
   final Color backgroundColor;
   final Map<T, Widget> children;
+  final Set<T> disabledChildren;
   final FastSegmentedControlWidgetBuilder<T> cupertinoErrorBuilder;
   final FastSegmentedControlWidgetBuilder<T> cupertinoHelperBuilder;
   final FastSegmentedControlWidgetBuilder<T> cupertinoPrefixBuilder;
   final EdgeInsetsGeometry padding;
+  final bool proportionalWidth;
   final Color? thumbColor;
 
   @override
@@ -104,9 +108,11 @@ Widget segmentedControlBuilder<T extends Object>(FormFieldState<T> field) {
     child: CupertinoSlidingSegmentedControl<T>(
       backgroundColor: widget.backgroundColor,
       children: widget.children,
+      disabledChildren: widget.disabledChildren,
       groupValue: value,
       onValueChanged: didChange,
       padding: widget.padding,
+      proportionalWidth: widget.proportionalWidth,
       thumbColor: widget.thumbColor ??
           const CupertinoDynamicColor.withBrightness(
             color: Color(0xFFFFFFFF),

@@ -66,6 +66,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.iconButtonBuilder = datePickerIconButtonBuilder,
     this.initialDatePickerMode = DatePickerMode.day,
     this.initialEntryMode = DatePickerEntryMode.calendar,
+    this.itemExtent = 32.0,
     this.keyboardType,
     required this.lastDate,
     this.locale,
@@ -78,6 +79,7 @@ class FastDatePicker extends FastFormField<DateTime> {
     this.onDatePickerModeChange,
     this.routeSettings,
     this.selectableDayPredicate,
+    this.selectionOverlayBuilder,
     this.showDayOfWeek = false,
     this.showModalPopup = false,
     this.switchToCalendarEntryModeIcon,
@@ -113,6 +115,7 @@ class FastDatePicker extends FastFormField<DateTime> {
   final Icon? icon;
   final FastDatePickerIconButtonBuilder iconButtonBuilder;
   final DatePickerMode initialDatePickerMode;
+  final double itemExtent;
   final DatePickerEntryMode initialEntryMode;
   final TextInputType? keyboardType;
   final DateTime lastDate;
@@ -126,6 +129,9 @@ class FastDatePicker extends FastFormField<DateTime> {
   final void Function(DatePickerEntryMode)? onDatePickerModeChange;
   final RouteSettings? routeSettings;
   final SelectableDayPredicate? selectableDayPredicate;
+  final Widget? Function(BuildContext,
+      {required int columnCount,
+      required int selectedIndex})? selectionOverlayBuilder;
   final bool showDayOfWeek;
   final bool showModalPopup;
   final Icon? switchToCalendarEntryModeIcon;
@@ -267,6 +273,7 @@ Container cupertinoDatePickerModalPopupBuilder(
             backgroundColor: widget.backgroundColor,
             dateOrder: widget.dateOrder,
             initialDateTime: value,
+            itemExtent: widget.itemExtent,
             maximumDate: widget.lastDate,
             maximumYear: widget.maximumYear,
             minimumDate: widget.firstDate,
@@ -274,6 +281,7 @@ Container cupertinoDatePickerModalPopupBuilder(
             minuteInterval: widget.minuteInterval,
             mode: widget.mode,
             onDateTimeChanged: (DateTime value) => modalValue = value,
+            selectionOverlayBuilder: widget.selectionOverlayBuilder,
             showDayOfWeek: widget.showDayOfWeek,
             use24hFormat: widget.use24hFormat,
           ),
@@ -415,6 +423,8 @@ Widget cupertinoDatePickerBuilder(FormFieldState<DateTime> field) {
               backgroundColor: widget.backgroundColor,
               dateOrder: widget.dateOrder,
               initialDateTime: widget.initialValue,
+              itemExtent: widget.itemExtent,
+              selectionOverlayBuilder: widget.selectionOverlayBuilder,
               maximumDate: widget.lastDate,
               maximumYear: widget.maximumYear,
               minimumDate: widget.firstDate,

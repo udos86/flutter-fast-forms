@@ -59,6 +59,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
     required this.lastDate,
     this.routeSettings,
     this.saveText,
+    this.selectableDayPredicate,
     this.switchToCalendarEntryModeIcon,
     this.switchToInputEntryModeIcon,
     this.textBuilder = dateRangPickerTextBuilder,
@@ -93,6 +94,7 @@ class FastDateRangePicker extends FastFormField<DateTimeRange> {
   final Locale? locale;
   final RouteSettings? routeSettings;
   final String? saveText;
+  final SelectableDayForRangePredicate? selectableDayPredicate;
   final Icon? switchToCalendarEntryModeIcon;
   final Icon? switchToInputEntryModeIcon;
   final FastDateRangePickerTextBuilder textBuilder;
@@ -189,6 +191,7 @@ Widget dateRangePickerBuilder(FormFieldState<DateTimeRange> field) {
       locale: widget.locale,
       routeSettings: widget.routeSettings,
       saveText: widget.saveText,
+      selectableDayPredicate: widget.selectableDayPredicate,
       switchToCalendarEntryModeIcon: widget.switchToCalendarEntryModeIcon,
       switchToInputEntryModeIcon: widget.switchToInputEntryModeIcon,
       textDirection: widget.textDirection,
