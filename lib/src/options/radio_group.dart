@@ -57,12 +57,17 @@ class FastRadioGroup<T> extends FastFormField<T> {
     super.restorationId,
     super.validator,
     this.activeColor,
+    this.autofocus = false,
     this.controlAffinity = ListTileControlAffinity.platform,
+    this.dense,
+    this.enableFeedback,
     this.fillColor,
     this.hoverColor,
+    this.internalAddSemanticForOnTap = false,
     this.materialTapTargetSize,
     this.mouseCursor,
     this.orientation = FastRadioGroupOrientation.vertical,
+    this.onFocusChange,
     required this.options,
     this.overlayColor,
     this.selectedTileColor,
@@ -77,12 +82,18 @@ class FastRadioGroup<T> extends FastFormField<T> {
           builder: builder ?? radioGroupBuilder,
           initialValue: initialValue ?? _getInitialValue(options),
         );
+
   final Color? activeColor;
+  final bool autofocus;
   final ListTileControlAffinity controlAffinity;
+  final bool? dense;
+  final bool? enableFeedback;
   final WidgetStateProperty<Color?>? fillColor;
   final Color? hoverColor;
+  final bool internalAddSemanticForOnTap;
   final MaterialTapTargetSize? materialTapTargetSize;
   final MouseCursor? mouseCursor;
+  final void Function(bool)? onFocusChange;
   final List<FastRadioOption<T>> options;
   final FastRadioOptionBuilder<T> optionBuilder;
   final FastRadioOptionsBuilder<T> optionsBuilder;
@@ -129,14 +140,19 @@ Widget radioOptionBuilder<T>(
   final FastRadioGroupState<T>(:didChange, :enabled, :value, :widget) = field;
   final tile = RadioListTile<T>(
     activeColor: widget.activeColor,
+    autofocus: widget.autofocus,
     controlAffinity: widget.controlAffinity,
+    dense: widget.dense,
+    enableFeedback: widget.enableFeedback,
     fillColor: widget.fillColor,
-    hoverColor: widget.hoverColor,
     groupValue: value,
+    hoverColor: widget.hoverColor,
+    internalAddSemanticForOnTap: widget.internalAddSemanticForOnTap,
     isThreeLine: option.isThreeLine,
     materialTapTargetSize: widget.materialTapTargetSize,
     mouseCursor: widget.mouseCursor,
     onChanged: enabled ? didChange : null,
+    onFocusChange: widget.onFocusChange,
     overlayColor: widget.overlayColor,
     secondary: option.secondary,
     selected: option.selected,

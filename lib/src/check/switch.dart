@@ -30,7 +30,7 @@ class FastSwitch extends FastFormField<bool> {
     super.onTouched,
     super.restorationId,
     super.validator,
-    this.activeColor,
+    @Deprecated('Use activeTrackColor instead.') this.activeColor,
     this.activeThumbImage,
     this.activeTrackColor,
     this.applyTheme,
@@ -48,6 +48,7 @@ class FastSwitch extends FastFormField<bool> {
     this.inactiveThumbColor,
     this.inactiveThumbImage,
     this.inactiveTrackColor,
+    this.internalAddSemanticForOnTap = false,
     this.isThreeLine = false,
     this.materialTapTargetSize,
     this.mouseCursor,
@@ -68,8 +69,9 @@ class FastSwitch extends FastFormField<bool> {
     this.tileColor,
     this.titleText,
     this.titleBuilder = switchTitleBuilder,
-    this.trackColor,
+    @Deprecated('Use inactiveTrackColor instead.') this.trackColor,
     this.trackOutlineColor,
+    this.trackOutlineWidth,
     this.visualDensity,
   });
 
@@ -91,9 +93,10 @@ class FastSwitch extends FastFormField<bool> {
   final Color? inactiveThumbColor;
   final ImageProvider<Object>? inactiveThumbImage;
   final Color? inactiveTrackColor;
+  final bool internalAddSemanticForOnTap;
   final bool isThreeLine;
   final MaterialTapTargetSize? materialTapTargetSize;
-  final MouseCursor? mouseCursor;
+  final WidgetStateMouseCursor? mouseCursor;
   final Color? offLabelColor;
   final void Function(Object, StackTrace?)? onActiveThumbImageError;
   final void Function(bool)? onFocusChange;
@@ -112,6 +115,7 @@ class FastSwitch extends FastFormField<bool> {
   final String? titleText;
   final WidgetStateProperty<Color?>? trackColor;
   final WidgetStateProperty<Color?>? trackOutlineColor;
+  final WidgetStateProperty<double?>? trackOutlineWidth;
   final FastSwitchWidgetBuilder titleBuilder;
   final VisualDensity? visualDensity;
 
@@ -194,6 +198,7 @@ Widget materialSwitchBuilder(FormFieldState<bool> field) {
     inactiveThumbColor: widget.inactiveThumbColor,
     inactiveThumbImage: widget.inactiveThumbImage,
     inactiveTrackColor: widget.inactiveTrackColor,
+    internalAddSemanticForOnTap: widget.internalAddSemanticForOnTap,
     isThreeLine: widget.isThreeLine,
     materialTapTargetSize: widget.materialTapTargetSize,
     mouseCursor: widget.mouseCursor,
@@ -242,18 +247,31 @@ Widget cupertinoSwitchBuilder(FormFieldState<bool> field) {
     helper: widget.cupertinoHelperBuilder(field),
     error: widget.cupertinoErrorBuilder(field),
     child: CupertinoSwitch(
-      offLabelColor: widget.offLabelColor,
-      onLabelColor: widget.onLabelColor,
+      // ignore: deprecated_member_use
       activeColor: widget.activeColor,
+      activeThumbImage: widget.activeThumbImage,
+      activeTrackColor: widget.activeTrackColor,
       applyTheme: widget.applyTheme,
       autofocus: widget.autofocus,
       dragStartBehavior: widget.dragStartBehavior,
       focusColor: widget.focusColor,
       focusNode: widget.focusNode,
+      inactiveThumbColor: widget.inactiveThumbColor,
+      inactiveThumbImage: widget.inactiveThumbImage,
+      inactiveTrackColor: widget.inactiveTrackColor,
+      mouseCursor: widget.mouseCursor,
+      offLabelColor: widget.offLabelColor,
+      onActiveThumbImageError: widget.onActiveThumbImageError,
       onChanged: enabled ? didChange : null,
       onFocusChange: widget.onFocusChange,
+      onInactiveThumbImageError: widget.onInactiveThumbImageError,
+      onLabelColor: widget.onLabelColor,
       thumbColor: widget.thumbColor,
+      trackOutlineWidth: widget.trackOutlineWidth,
+      thumbIcon: widget.thumbIcon,
+      // ignore: deprecated_member_use
       trackColor: widget.activeTrackColor,
+      trackOutlineColor: widget.trackOutlineColor,
       value: value,
     ),
   );

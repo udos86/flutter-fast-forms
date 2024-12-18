@@ -69,6 +69,7 @@ class FastChipsInput extends FastFormField<List<String>> {
     this.optionsBuilder,
     this.optionsMaxHeight = 200.0,
     this.optionsViewBuilder,
+    this.optionsViewOpenDirection = OptionsViewOpenDirection.down,
     this.runAlignment = WrapAlignment.start,
     this.runSpacing = 0.0,
     this.spacing = 8.0,
@@ -93,6 +94,7 @@ class FastChipsInput extends FastFormField<List<String>> {
   final AutocompleteOptionsBuilder<String>? optionsBuilder;
   final double optionsMaxHeight;
   final AutocompleteOptionsViewBuilder<String>? optionsViewBuilder;
+  final OptionsViewOpenDirection optionsViewOpenDirection;
   final WrapAlignment runAlignment;
   final double runSpacing;
   final double spacing;
@@ -608,6 +610,7 @@ Widget chipsInputBuilder(FormFieldState<List<String>> field) {
         fieldViewBuilder: fieldViewBuilder(field),
         focusNode: textFieldFocusNode,
         onSelected: _onFieldSubmitted(field, true),
+        optionsViewOpenDirection: widget.optionsViewOpenDirection,
         optionsBuilder:
             widget.optionsBuilder ?? _optionsBuilder(widget.options, field),
         optionsViewBuilder:

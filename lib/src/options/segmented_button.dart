@@ -54,7 +54,9 @@ class FastSegmentedButton<T> extends FastFormField<Set<T>> {
     super.onTouched,
     super.restorationId,
     super.validator,
+    this.direction = Axis.horizontal,
     this.emptySelectionAllowed = false,
+    this.expandedInsets,
     this.multiSelectionEnabled = false,
     required this.segments,
     this.selectedIcon,
@@ -69,7 +71,9 @@ class FastSegmentedButton<T> extends FastFormField<Set<T>> {
               initialValue ?? _getInitialValue(segments, emptySelectionAllowed),
         );
 
+  final Axis direction;
   final bool emptySelectionAllowed;
+  final EdgeInsets? expandedInsets;
   final bool multiSelectionEnabled;
   final FastSegmentedButtonSegmentsBuilder<T> segmentsBuilder;
   final List<FastButtonSegment<T>> segments;
@@ -124,7 +128,9 @@ Widget segmentedButtonBuilder<T>(FormFieldState<Set<T>> field) {
   final FastSegmentedButtonState<T>(:didChange, :value!, :widget) = field;
 
   final segmentedButton = SegmentedButton<T>(
+    direction: widget.direction,
     emptySelectionAllowed: widget.emptySelectionAllowed,
+    expandedInsets: widget.expandedInsets,
     multiSelectionEnabled: widget.multiSelectionEnabled,
     segments: widget.segmentsBuilder(widget.segments, field),
     selectedIcon: widget.selectedIcon,

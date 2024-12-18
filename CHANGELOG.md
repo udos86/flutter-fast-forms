@@ -1,3 +1,22 @@
+# [18.0.0] - 12/18/2024
+
+* upgrades to Flutter `3.27.0`
+* adds `checkboxScaleFactor` and `internalAddSemanticForOnTap` properties to `FastCheckbox`
+* adds `internalAddSemanticForOnTap` and `trackOutlineWidth` properties to `FastSwitch`
+* adds `itemExtent` and `selectionOverlayBuilder` properties to `FastDatePicker`
+* adds `selectableDayPredicate` property to `FastDatePicker`
+* adds `optionsViewOpenDirection` property to `FastChipsInput`
+* adds `autofocus`, `dense`, `enableFeedback`, `internalAddSemanticForOnTap` and `onFocusChange` properties to `FastRadioGroup`
+* adds `direction` and `expandedInsets` properties to `FastSegmentedButton`
+* adds `disabledChildren` and `proportionalWidth` properties to `FastSegmentedControl`
+* adds `forceErrorText` and `ignorePointers` properties to `FastTextField`
+* deprecates `inactiveColor` on `FastCheckbox`
+* deprecates `activeColor` and `trackColor` properties on `FastSwitch`
+
+* **Breaking Changes**
+
+* Due to Flutter API changes `mouseCursor` property of `FastSwitch` is now of type `WidgetStateMouseCursor`
+
 ## [17.1.1] - 09/14/2024
 
 * adds `extends Object` to `<T>` of `FastSegmentedControl` according to latest Cupertino changes  
