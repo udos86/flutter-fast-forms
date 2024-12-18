@@ -46,7 +46,7 @@ class FastCheckbox extends FastFormField<bool> {
     this.focusColor,
     this.focusNode,
     this.hoverColor,
-    this.inactiveColor,
+    @Deprecated('Use fillColor instead.') this.inactiveColor,
     this.internalAddSemanticForOnTap = false,
     this.isError = false,
     this.isThreeLine = false,
