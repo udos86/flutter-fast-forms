@@ -29,6 +29,7 @@ class FastChoiceChip<T>
     this.labelStyle,
     this.labelPadding,
     this.materialTapTargetSize,
+    this.mouseCursor,
     this.onSelected,
     this.padding,
     this.pressElevation,
@@ -79,6 +80,8 @@ class FastChoiceChip<T>
   final TextStyle? labelStyle;
   @override
   final MaterialTapTargetSize? materialTapTargetSize;
+  @override
+  final MouseCursor? mouseCursor;
   @override
   final EdgeInsetsGeometry? padding;
   @override
