@@ -1,3 +1,8 @@
+## [18.1.0] - 03/08/2025
+
+* upgrades to Flutter `3.29.1`
+* adds `mouseCursor` property to `FastChoiceChip` according to `ChipAttributes` as of `3.29.1`
+
 # [18.0.0] - 12/18/2024
 
 * upgrades to Flutter `3.27.0`

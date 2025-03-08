@@ -1,6 +1,6 @@
 name: flutter_fast_forms
 description: Flutter Fast Forms is the only Dart package you need to build Flutter forms fast.
-version: 18.0.0
+version: 18.1.0
 repository: https://github.com/udos86/flutter-fast-forms
 topics:
   - form
@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: ^0.20.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

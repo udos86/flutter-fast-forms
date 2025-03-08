@@ -77,6 +77,7 @@ class FastTextField extends FastFormField<String> {
     this.placeholderStyle,
     this.prefix,
     this.readOnly = false,
+    @Deprecated('use stylusHandwritingEnabled instead')
     this.scribbleEnabled = true,
     this.scrollController,
     this.scrollPadding = const EdgeInsets.all(20.0),
@@ -90,6 +91,7 @@ class FastTextField extends FastFormField<String> {
     this.spellCheckConfiguration,
     this.strutStyle,
     this.style,
+    this.stylusHandwritingEnabled = EditableText.defaultStylusHandwritingEnabled,
     this.suffix,
     this.textAlign = TextAlign.start,
     this.textAlignVertical,
@@ -165,6 +167,7 @@ class FastTextField extends FastFormField<String> {
   final SpellCheckConfiguration? spellCheckConfiguration;
   final StrutStyle? strutStyle;
   final TextStyle? style;
+  final bool stylusHandwritingEnabled;
   final Widget? suffix;
   final TextAlign textAlign;
   final TextAlignVertical? textAlignVertical;
@@ -293,6 +296,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     onTapAlwaysCalled: widget.onTapAlwaysCalled,
     onTapOutside: widget.onTapOutside,
     readOnly: widget.readOnly,
+    // ignore: deprecated_member_use
     scribbleEnabled: widget.scribbleEnabled,
     scrollController: widget.scrollController,
     scrollPadding: widget.scrollPadding,
@@ -306,6 +310,7 @@ Widget materialTextFieldBuilder(FormFieldState<String> field) {
     spellCheckConfiguration: widget.spellCheckConfiguration,
     strutStyle: widget.strutStyle,
     style: widget.style,
+    stylusHandwritingEnabled: widget.stylusHandwritingEnabled,
     textAlign: widget.textAlign,
     textAlignVertical: widget.textAlignVertical,
     textCapitalization: widget.textCapitalization,
