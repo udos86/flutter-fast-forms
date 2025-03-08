@@ -91,7 +91,8 @@ class FastTextField extends FastFormField<String> {
     this.spellCheckConfiguration,
     this.strutStyle,
     this.style,
-    this.stylusHandwritingEnabled = EditableText.defaultStylusHandwritingEnabled,
+    this.stylusHandwritingEnabled =
+        EditableText.defaultStylusHandwritingEnabled,
     this.suffix,
     this.textAlign = TextAlign.start,
     this.textAlignVertical,
